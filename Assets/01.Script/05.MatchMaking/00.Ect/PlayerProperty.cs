@@ -18,6 +18,24 @@ public class PlayerProperty : MonoBehaviour
         getOut.onClick.AddListener(GetOut); //추방 버튼에 추방 함수 연결
         teamChange.onClick.AddListener(TeamChange); //팀 변경 버튼에 빔 변경 함수 연결
     }
+
+    private void Start()
+    {
+        chat ??= FindObjectOfType<Chat>();
+    }
+    public void SetChat(Chat _chat)
+    {
+        chat = _chat; //대화창 연결
+    }
+    public void SetPlayer(Player _player)
+    {
+        if (_player != null) //우클릭 객체가 비어있는지 확인
+            player = _player; //있다면 대입
+        else
+            gameObject.SetActive(false); //없다면 오류기때문에 비활성화
+    }
+
+
     private void OnEnable()
     {
         if(PhotonNetwork.IsMasterClient)
@@ -37,17 +55,7 @@ public class PlayerProperty : MonoBehaviour
                 teamChange.gameObject.SetActive(false);
         }
     }
-    public void SetPlayer(Player _player)
-    {
-        if (_player != null) //우클릭 객체가 비어있는지 확인
-            player = _player; //있다면 대입
-        else
-            gameObject.SetActive(false); //없다면 오류기때문에 비활성화
-    }
-    public void SetChat(Chat _chat)
-    {
-        chat = _chat; //대화창 연결
-    }
+
 
     void Whisper()
     {
