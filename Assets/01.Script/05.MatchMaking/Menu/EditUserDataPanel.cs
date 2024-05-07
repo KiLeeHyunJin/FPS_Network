@@ -12,13 +12,18 @@ public class EditUserDataPanel : MonoBehaviourShowInfo
 {
     [SerializeField] TMP_InputField passInputField;
     [SerializeField] TMP_InputField confirmInputField;
-    [SerializeField] Button passApplyButton;
-    [SerializeField] Button cancleButton;
+
+    [SerializeField] Button passApplyButton;  //비밀번호 재설정 버튼
+    [SerializeField] Button cancleButton; //창닫기 버튼
 
     private void Awake()
     {
         passApplyButton.onClick.AddListener(PassApply);
-        cancleButton.onClick.AddListener(() => { gameObject.SetActive(false); });
+        cancleButton.onClick.AddListener(Cancel);
+    }
+    void Cancel()
+    {
+        gameObject.SetActive(false);
     }
     private void PassApply()
     {
@@ -45,29 +50,6 @@ public class EditUserDataPanel : MonoBehaviourShowInfo
             }
             ShowInfo("비밀번호 변경이 완료되었습니다.");
             SetInteractable(true);
-        });
-    }
-
-    private void Delete()
-    {
-        SetInteractable(false);
-        FireBaseManager.Auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCanceled)
-            {
-                ShowInfo("계정 삭제가 취소되었습니다.");
-                SetInteractable(true);
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                ShowError(task.Exception.InnerExceptions, "계정 삭제가 실패하였습니다..");
-                SetInteractable(true);
-                return;
-            }
-            ShowInfo("계정 삭제가 완료되었습니다.");
-            SetInteractable(true);
-            FireBaseManager.Auth.SignOut();
         });
     }
     private void SetInteractable(bool interactable)

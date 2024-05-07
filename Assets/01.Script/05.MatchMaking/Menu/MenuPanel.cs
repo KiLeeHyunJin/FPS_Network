@@ -7,11 +7,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Firebase.Database;
+using System.Collections.Generic;
+using UnityEditor.Playables;
+using System;
 public class MenuPanel : MonoBehaviour
 {
     [SerializeField] GameObject PlayButton;
     [SerializeField] GameObject PlayButtons;
     [SerializeField] GameObject userInfoWindow;
+
     [SerializeField] Button userInfoButton;
     [SerializeField] Button openButton;
     [SerializeField] Button closeButton;
@@ -30,44 +34,13 @@ public class MenuPanel : MonoBehaviour
         lobbyButton.onClick.AddListener(JoinLobby);
         randomButton.onClick.AddListener(RandomMatching);
     }
+    [Serializable]
+    public class NickNames
+    {
+        public string[] nickNames;
+    }
     private void Start()
     {
-        data = FindObjectOfType<LobbyData>();
-        PhotonNetwork.EnableCloseConnection = true;
-        UserData userData = new UserData("sad");
-        FireBaseManager.DB
-            .GetReference("UserData")
-            .Child("id")
-            .SetRawJsonValueAsync(JsonUtility.ToJson(userData));
-        //FireBaseManager.DB
-        //  .GetReference("UserData")
-        //  .Child("LHJ")
-        //  .GetValueAsync()
-        //  .ContinueWithOnMainThread(task =>
-        //  {
-        //      if (task.IsCanceled)
-        //      {
-        //          return;
-        //      }
-        //      if (task.IsFaulted)
-        //      {
-        //          return;
-        //      }
-        //      if (task.IsCompleted)
-        //      {
-        //          DataSnapshot snapShot = task.Result;
-        //          if (snapShot.Exists)
-        //          {
-        //              string json = snapShot.GetRawJsonValue();
-        //              UserData userData = JsonUtility.FromJson<UserData>(json);
-        //          }
-        //          else
-        //          {
-        //              UserData userData = new UserData();
-        //          }
-        //      }
-        //  });
-
 
 
     }

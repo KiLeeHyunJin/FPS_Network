@@ -9,13 +9,14 @@ using System;
 
 public class LoginPanel : MonoBehaviourShowInfo
 {
-    [SerializeField] LoginPanelController panelController;
-    [SerializeField] TMP_InputField emailInputField;
-    [SerializeField] TMP_InputField passInputField;
+    [SerializeField] LoginPanelController panelController; 
 
-    [SerializeField] Button signUpButton;
-    [SerializeField] Button loginButton;
-    [SerializeField] Button resetPasswordButton;
+    [SerializeField] TMP_InputField emailInputField;
+    [SerializeField] TMP_InputField passInputField; 
+
+    [SerializeField] Button signUpButton; //회원가입 버튼
+    [SerializeField] Button loginButton; //로그인 버튼
+    [SerializeField] Button resetPasswordButton; //비밀번호 재설정 버튼
 
 
     private void Awake()
@@ -42,7 +43,7 @@ public class LoginPanel : MonoBehaviourShowInfo
     {
         string id = emailInputField.text;
         string pw = passInputField.text;
-        passInputField.text = "";
+        passInputField.text = ""; //비밀번호 입력란 초기화
 
         SetInteractable(false);
 

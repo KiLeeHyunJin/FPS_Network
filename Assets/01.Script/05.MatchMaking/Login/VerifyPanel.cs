@@ -26,8 +26,6 @@ public class VerifyPanel : MonoBehaviourShowInfo
         panelController.SetActivePanel(LoginPanelController.Panel.Login);
     }
 
-  
-
     private void SendVerifyMail()
     {
         SetInteractable(false);
@@ -55,12 +53,12 @@ public class VerifyPanel : MonoBehaviourShowInfo
     {
         if (FireBaseManager.Auth == null)
             return;
-        /*verifyCo = */
-        StartCoroutine(VerifyCheckRoutine());
+        /*verifyCo = */StartCoroutine(VerifyCheckRoutine()); //인증 확인 코루틴
+        SendVerifyMail(); //이메일 전송 함수
     }
     void OnDisable()
     {
-        StopAllCoroutines();
+        StopAllCoroutines(); //인증 확인 코루틴 종료
         //StopCoroutine(verifyCo);
     }
     IEnumerator VerifyCheckRoutine()

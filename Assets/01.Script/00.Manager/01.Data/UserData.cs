@@ -10,7 +10,7 @@ public class UserData
     public int PlayCount;
     public UserData ()
     {
-        this.NickName = "nickName";
+        this.NickName = "non";
     }
     public UserData(string _nickName,int _level = 0,int _playCount = 0,int _killCount = 0, int _deathCount = 0)
     {

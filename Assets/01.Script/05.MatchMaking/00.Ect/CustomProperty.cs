@@ -13,19 +13,24 @@ public static class DefinePropertyKey
 }
 public static class CustomProperty
 {
+    
     public static T GetProperty<T>(this Player player, string key)
     {
         PhotonHashtable property = player.CustomProperties;
+        //key값이 있으면 해당 해시테이블에서 값을 가져와 T타입으로 변환해서 반환
+        //없을 경우 해당 타입의 디폴트 값을 반환
         return property.ContainsKey(key) ? (T)property[key] : default(T);
     }
     public static void SetProperty<T>(this Player player, string str, T value)
     {
-        PhotonHashtable property = player.CustomProperties;//new PhotonHashtable();
-        if (property.ContainsKey(str) == false)
-            /*PhotonHashtable*/ property = new PhotonHashtable { { str, value } };
+        PhotonHashtable property = player.CustomProperties;
+        if (property.ContainsKey(str) == false) 
+            //해당 프로퍼티가 포함되어있지 않을 경우 해시테이블을 생성
+            property = new PhotonHashtable { { str, value } };
         else
+            //포함되어있을 경우 값을 변경
             property[str] = value;
-        // property.Add(str, value);
+        //프로퍼티를 저장
         player.SetCustomProperties(property);
     }
 

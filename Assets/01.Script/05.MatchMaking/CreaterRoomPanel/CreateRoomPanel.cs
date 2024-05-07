@@ -14,7 +14,6 @@ public class CreateRoomPanel : MonoBehaviour
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Dropdown maxPlayerDropdown;
 
-    //[SerializeField] TMP_InputField maxPlayerInputField;
 
     void Awake()
     {
@@ -28,10 +27,10 @@ public class CreateRoomPanel : MonoBehaviour
         if (roomName == "")
             roomName = Random.Range(1000, 10000).ToString();
 
-        int halfNum = int.Parse(maxPlayerDropdown.captionText.text[0].ToString());
-        int maxPlayer = halfNum << 1;
+        int halfNum = int.Parse(maxPlayerDropdown.captionText.text[0].ToString()); //첫번째 글자의 값을 정수로 변환
+        int maxPlayer = halfNum << 1; //값을 2배로 설정
 
-        RoomOptions roomOptions = new RoomOptions { MaxPlayers = maxPlayer };
+        RoomOptions roomOptions = new RoomOptions { MaxPlayers = maxPlayer }; //최대인원으로 옵션 설정
         PhotonNetwork.CreateRoom(roomName, roomOptions);
     }
     void CreateRoomCancel()

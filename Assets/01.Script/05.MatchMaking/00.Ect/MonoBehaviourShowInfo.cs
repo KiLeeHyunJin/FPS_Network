@@ -9,16 +9,16 @@ public class MonoBehaviourShowInfo : MonoBehaviour
     [SerializeField] InfoPanel info;
     protected virtual void Start()
     {
-        infoParent = GetComponentInParent<Canvas>();
+        infoParent = GetComponentInParent<Canvas>(); //최 상위 부모 객체를 가져온다.(UI는 Canvas안에서만 출력 가능하기때문)
     }
     InfoPanel GetInfo()
     {
-        PooledObject obj = Manager.Pool.GetPool(info, Vector3.zero, Quaternion.identity);
-        obj.transform.SetParent(infoParent.transform, true);
-        RectTransform rect = obj.transform as RectTransform;
+        PooledObject obj = Manager.Pool.GetPool(info, Vector3.zero, Quaternion.identity);//객체를 가져온다.
+        obj.transform.SetParent(infoParent.transform, true); //Canvas의 자식으로 설정
+        RectTransform rect = obj.transform as RectTransform; 
         if (rect != null)
-            rect.offsetMin = rect.offsetMax = Vector2.zero;
-        InfoPanel infoPanel = obj as InfoPanel;
+            rect.offsetMin = rect.offsetMax = Vector2.zero; //최대 사이즈로 설정
+        InfoPanel infoPanel = obj as InfoPanel;//언박싱 후 반환
         return infoPanel;
     }
     protected void ShowInfo(string str)

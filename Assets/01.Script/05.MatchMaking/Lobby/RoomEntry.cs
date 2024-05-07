@@ -15,10 +15,11 @@ public class RoomEntry : MonoBehaviour
         this.roomInfo = info;
         roomName.text = roomInfo.Name;
         currentPlayer.text = $"{roomInfo.PlayerCount} / {roomInfo.MaxPlayers}";
-        joinRoomButton.interactable = roomInfo.PlayerCount < roomInfo.MaxPlayers; 
+        joinRoomButton.interactable = roomInfo.PlayerCount < roomInfo.MaxPlayers;
+        joinRoomButton.onClick.AddListener(JoinRoom);
     }
 
-    public void JoinRoom()
+    void JoinRoom()
     {
         PhotonNetwork.LeaveLobby();
         PhotonNetwork.JoinRoom(roomInfo.Name);

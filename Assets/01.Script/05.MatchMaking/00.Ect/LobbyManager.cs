@@ -65,7 +65,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
-        if(data.GetLobbyState(LobbyData.LobbyState.Random))
+        if(data.GetLobbyState(LobbyData.LobbyState.Random)) //·£´ý ¸ÅÄªÀÏ °æ¿ì ·£´ý È­¸é Ãâ·Â
             SetActivePanel(Panel.Random);
         else
             SetActivePanel(Panel.Lobby);
@@ -86,29 +86,29 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false) //·£´ý ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·Îºñ ¾÷µ¥ÀÌÆ®
             lobbyPanel.UpdateRoomList(roomList);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false) //·£´ý ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆÐ³Î ³»¿ë ½ÇÇà
             roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
 
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//·£´ý ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆÐ³Î ³»¿ë ½ÇÇà
             roomPanel.PlayerEnterRoom(newPlayer);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//·£´ý ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆÐ³Î ³»¿ë ½ÇÇà
             roomPanel.PlayerLeftRoom(otherPlayer);
     }
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//·£´ý ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆÐ³Î ³»¿ë ½ÇÇà
             roomPanel.MasterClientSwitched(newMasterClient);
     }
     public override void OnDisconnected(DisconnectCause cause)

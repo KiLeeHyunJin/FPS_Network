@@ -10,28 +10,29 @@ public class Chat : MonoBehaviourPun
 {
     public enum ChatType { ALL, TARGET, TEAM, NEW, END }
 
-    [SerializeField] Button chatResetButton;
-    [SerializeField] TMP_InputField inputField;
-    [SerializeField] RectTransform content;
-    [SerializeField] ScrollRect scrollRect;
-    [SerializeField] TMP_Text chatTextPrefab;
-    [SerializeField] ChatType chatTarget;
-    Player currentMessageTarget;
+    [SerializeField] Button chatResetButton; //대화창 초기화 버튼
+    [SerializeField] TMP_InputField inputField; //입력창
+    [SerializeField] RectTransform content; //대화목록 부모
+    [SerializeField] ScrollRect scrollRect; //스크롤
+    [SerializeField] TMP_Text chatTextPrefab; //대화를 복사할 객체
+    [SerializeField] ChatType chatTarget; //전송 타입
+    Player currentMessageTarget; //전송 타겟
 
     private void Awake()
     {
-        inputField.onSubmit.AddListener(SendChat);
-        gameObject.GetOrAddComponent<PhotonView>();
-        chatResetButton.onClick.AddListener(RemoveMessageEntry);
+        inputField.onSubmit.AddListener(SendChat); //엔터할때 전송하도록 이벤트 붙여넣는다.
+        gameObject.GetOrAddComponent<PhotonView>(); //포톤뷰가 없을 경우 포톤뷰를 붙인다.
+        chatResetButton.onClick.AddListener(RemoveEntry); //초기화 버튼에 초기화 함수 이벤트를 붙여넣는다.
     }
     private void OnEnable()
     {
-        chatTarget = ChatType.ALL;
+        chatTarget = ChatType.ALL; //전송타입을 전채로 설정
+        //합류 메시지 전송
         photonView.RPC("AddMessage", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.NickName}이 합류하였습니다.", ChatType.NEW, (byte)0);
     }
     private void OnDisable()
     {
-        RemoveMessageEntry();
+        RemoveEntry();  //모든 대화목록 삭제(대화 객체 파괴)
     }
 
     public void LeftPlayer(Player otherPlayer)
@@ -67,17 +68,15 @@ public class Chat : MonoBehaviourPun
     [PunRPC]
     public void AddMessage(string message, ChatType chatType, byte teamCode = 0)
     {
-        //대화창을 복사한다.
-        TMP_Text newMessage = Instantiate(chatTextPrefab);
-        //ui transform컴포넌트를 가져온다.
-        RectTransform rect = newMessage.transform as RectTransform;
-        //
-        if (rect != null)
-            rect.localScale = Vector3.one;
+        //if (chatTarget == ChatType.TEAM) //팀 대화 목록이고
+        //    if((int)teamCode != (int)PhotonNetwork.LocalPlayer.GetPhotonTeam().Code) //팀이 다르다면 종료
+        //        return;
 
-        switch (chatType)
+        TMP_Text newMessage = Instantiate(chatTextPrefab);
+
+        switch (chatType) //타입에 따라 폰트 색상 변경
         {
-            case ChatType.ALL:
+            case ChatType.ALL: 
                 newMessage.color = Color.black;
                 break;
             case ChatType.TARGET:
@@ -88,12 +87,15 @@ public class Chat : MonoBehaviourPun
                 break;
             case ChatType.NEW:
                 newMessage.color = Color.yellow;
-                newMessage.fontStyle |= FontStyles.Bold;
+                newMessage.fontStyle |= FontStyles.Bold; //폰트를 두껍게 설정
                 break;
         }
-        newMessage.text = message;
-        newMessage.transform.SetParent(content);
-        scrollRect.verticalScrollbar.value = 0;
+        newMessage.text = message;  //내용 입력
+        newMessage.transform.SetParent(content); //객체를 콘텐츠의 자식으로 설정
+        RectTransform rect = newMessage.transform as RectTransform;
+        if (rect != null) // 스케일을 1로 변경
+            rect.localScale = Vector3.one;
+        scrollRect.verticalScrollbar.value = 0; //스크롤 뷰를 맨 밑으로 설정
     }
 
 
@@ -116,18 +118,20 @@ public class Chat : MonoBehaviourPun
     }
     void SendTeam(string chat)
     {
+        //팀 코드를 가져온다.
         byte code = PhotonNetwork.LocalPlayer.GetPhotonTeam().Code;
+        //해당 코드의 팀 맴버를 가져온다.
         PhotonTeamsManager.Instance.TryGetTeamMembers(code, out Player[] teams);
         if (teams != null)
         {
-            foreach (Player target in teams)
+            foreach (Player target in teams) //팀원 목록을 돌며 전송을 한다.
             {
                 photonView.RPC("AddMessage", target, chat, ChatType.TEAM, code);
             }
         }
     }
 
-    void RemoveMessageEntry()
+    void RemoveEntry()
     {
         for (int i = 0; i < content.childCount; i++)
             Destroy(content.GetChild(i).gameObject);

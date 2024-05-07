@@ -7,22 +7,18 @@ using UnityEngine.UI;
 
 public class PlayerProperty : MonoBehaviour
 {
-    Chat chat;
-    Player player;
-    [SerializeField] RoomPanel roomManager;
-    [SerializeField] Button whisper;
-    [SerializeField] Button getOut;
-    [SerializeField] Button teamChange;
-    public bool isMaster { get { return roomManager.isMaster; } }
+    Chat chat; //대화창
+    Player player; //우클릭한 대상
+    [SerializeField] RoomPanel roomManager; //룸패널
+    [SerializeField] Button whisper; //귓속말 버튼
+    [SerializeField] Button getOut; //추방 버튼
+    [SerializeField] Button teamChange; //팀 이동 버튼
+    bool isMaster { get { return roomManager.isMaster; } }
     private void Awake()
     {
-        whisper.onClick.AddListener(Whisper);
-        getOut.onClick.AddListener(GetOut);
-        teamChange.onClick.AddListener(TeamChange);
-    }
-    private void Start()
-    {
-        chat = chat != null ? chat : FindObjectOfType<Chat>();
+        whisper.onClick.AddListener(Whisper); //귓속말 버튼에 귓속말 함수 연결
+        getOut.onClick.AddListener(GetOut); //추방 버튼에 추방 함수 연결
+        teamChange.onClick.AddListener(TeamChange); //팀 변경 버튼에 빔 변경 함수 연결
     }
     private void OnEnable()
     {
@@ -45,20 +41,21 @@ public class PlayerProperty : MonoBehaviour
     }
     public void SetPlayer(Player _player)
     {
-        if (_player != null)
-            player = _player;
+        if (_player != null) //우클릭 객체가 비어있는지 확인
+            player = _player; //있다면 대입
         else
-            gameObject.SetActive(false);
+            gameObject.SetActive(false); //없다면 오류기때문에 비활성화
     }
     public void SetChat(Chat _chat)
     {
-        chat = _chat;
+        chat = _chat; //대화창 연결
     }
 
     void Whisper()
     {
-        //채팅을 보낼 상대를 저장한다.
+        //채팅을 보낼 상대를 설정한다.
         chat.SendTarget(player);
+        //임무를 마쳤기에 비활성화
         gameObject.SetActive(false);
     }
 
@@ -66,6 +63,7 @@ public class PlayerProperty : MonoBehaviour
     {
         //추방시킨다.
         PhotonNetwork.CloseConnection(player);
+        //임무를 마쳤기에 비활성화
         gameObject.SetActive(false);
     }
 
@@ -83,6 +81,7 @@ public class PlayerProperty : MonoBehaviour
         //팀의 인원이 안찼으면 팀 변경을 시도한다.
         if (halfCount > teamCount)
             player.SwitchTeam((byte)num);
+        //임무를 마쳤기에 비활성화
         gameObject.SetActive(false);
     }
 }

@@ -13,12 +13,12 @@ public class SignUpPanel : MonoBehaviourShowInfo
     [SerializeField] TMP_InputField passInputField;
     [SerializeField] TMP_InputField confirmInputField;
 
-    [SerializeField] Button cancelButton;
-    [SerializeField] Button signUpButton;
+    [SerializeField] Button cancelButton; //창 닫기 버튼
+    [SerializeField] Button signUpButton; //아이디 생성 버튼
 
     private void Awake()
     {
-        cancelButton.onClick.AddListener(Cancel);
+        cancelButton.onClick.AddListener(Cancel); 
         signUpButton.onClick.AddListener(SignUp);
     }
     public void OnEnable()
@@ -30,9 +30,11 @@ public class SignUpPanel : MonoBehaviourShowInfo
         string email = emailInputField.text;
         string password = passInputField.text;
         string confirm = confirmInputField.text;
+
         if (confirm != password)
         {
             ShowInfo($"비밀번호가 불일치합니다.");
+
             return;
         }
         SetInteractable(false);

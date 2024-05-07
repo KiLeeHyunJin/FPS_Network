@@ -15,13 +15,14 @@ public class MainPanel : MonoBehaviourShowInfo
     [SerializeField] TMP_Text nameText;
     [SerializeField] TMP_Text emailText;
     [SerializeField] TMP_Text idText;
-    [SerializeField] Button logoutButton;
-    [SerializeField] Button editButton;
-    [SerializeField] Button cancleButton;
+
+    [SerializeField] Button deleteButton; //로그아웃 버튼
+    [SerializeField] Button editButton; //사용자 설정 수정 버튼
+    [SerializeField] Button cancleButton; //창 닫기 버튼
 
     private void Awake()
     {
-        logoutButton.onClick.AddListener(Delete);
+        deleteButton.onClick.AddListener(Delete);
         editButton.onClick.AddListener(Edit);
         cancleButton.onClick.AddListener(Cancle);
     }
@@ -40,13 +41,12 @@ public class MainPanel : MonoBehaviourShowInfo
     {
         editPanel.SetActive(true);
     }
-
     void Cancle()
     {
         gameObject.SetActive(false);
     }
 
-    private void Delete()
+    void Delete()
     {
         SetInteractable(false);
         FireBaseManager.Auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task =>
@@ -72,7 +72,7 @@ public class MainPanel : MonoBehaviourShowInfo
 
     void SetInteractable(bool state)
     {
-        logoutButton.interactable = state;
+        deleteButton.interactable = state;
         editButton.interactable = state;
         cancleButton.interactable = state;
     }

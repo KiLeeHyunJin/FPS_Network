@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LobbyPanel : MonoBehaviour
 {
-    [SerializeField] CreateRoomPanel createRoomPanel;
+    [SerializeField] CreateRoomPanel createRoomPanel; //
     [SerializeField] Button createButton;
     [SerializeField] Button leaveButton;
 
@@ -18,8 +18,8 @@ public class LobbyPanel : MonoBehaviour
     private void Awake()
     {
         roomDictionary = new Dictionary<string, RoomEntry>();
-        createButton.onClick.AddListener(CreateRoomMenu);
-        leaveButton.onClick.AddListener(LeaveLobby);
+        createButton.onClick.AddListener(CreateRoomMenu); //방 생성 버튼에 해당 이벤트 연결
+        leaveButton.onClick.AddListener((LeaveLobby)); //로비 나가기 버튼에 로비 나가기 이벤트 연결
     }
     private void OnDisable()
     {
@@ -30,6 +30,10 @@ public class LobbyPanel : MonoBehaviour
     void LeaveLobby()
     {
         PhotonNetwork.LeaveLobby();
+    }
+    void CreateRoomMenu()
+    {
+        createRoomPanel.gameObject.SetActive(true);
     }
     public void UpdateRoomList(List<RoomInfo> roomList)
     {
@@ -56,8 +60,5 @@ public class LobbyPanel : MonoBehaviour
         }
     }
 
-    void CreateRoomMenu()
-    {
-        createRoomPanel.gameObject.SetActive(true);
-    }
+
 }

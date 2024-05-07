@@ -5945,7 +5945,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.23}
   m_AnchorMax: {x: 1, y: 0.23}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &985030835
 MonoBehaviour:
@@ -6660,9 +6660,9 @@ RectTransform:
   - {fileID: 1346986685}
   m_Father: {fileID: 985030833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 509, y: -25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1052863414
@@ -7890,9 +7890,9 @@ RectTransform:
   - {fileID: 252520455}
   m_Father: {fileID: 985030833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 259, y: -25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1163438221
@@ -8607,7 +8607,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBC1C\uC1A1"
+  m_text: "\uC7AC\uC804\uC1A1"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c66b88e17cc250f41b5f7797542e22d7, type: 2}
   m_sharedMaterial: {fileID: -2276028608179396842, guid: c66b88e17cc250f41b5f7797542e22d7, type: 2}
@@ -9593,7 +9593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1491741043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10873,6 +10873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   photonServer: {fileID: 11400000, guid: 2e21371048826bd4db1220462bf42d55, type: 2}
+  serverId: []
 --- !u!1 &1634101388
 GameObject:
   m_ObjectHideFlags: 0
@@ -23083,7 +23084,7 @@ VideoPlayer:
   m_AudioOutputMode: 2
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
-  m_Url: https://rr2---sn-3u-bh2s7.googlevideo.com/videoplayback?expire=1715064305&ei=kXk5ZoH5FKCH1d8P1J2KWA&ip=59.9.212.167&id=o-AJi0-DZFnfwPPs-d_NDBshs_K0CYSmGpRUDWsJ5fzFc7&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&mh=Rz&mm=31%2C26&mn=sn-3u-bh2s7%2Csn-oguelnzr&ms=au%2Conr&mv=m&mvi=2&pcm2cms=yes&pl=20&initcwndbps=666250&bui=AWRWj2QqbdoD80iTuMRvObGeBEjFzwLxIYReClYckC5jwvl2lLjJ9EVPOp92llZLcjA02Wxx8bQHGJDj&spc=UWF9f2ncN2E-Wz-otb48-4APk7YIu628g831vknvKYgXvO2faxyimJVZMJye&vprv=1&svpuc=1&mime=video%2Fmp4&ns=px9MITUFhAVSTN950hNO0e4Q&cnr=14&ratebypass=yes&dur=227.694&lmt=1664165736155404&mt=1715042441&fvip=3&c=WEB&sefc=1&txp=5438434&n=kMULGJK_DND0DA&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRAIgFhRPd08hH3Az88YzGvdmSGBA5iZk5Mjkrw1RVGf3EqgCIDpfFyk38it1Y0TVMb1NSkb15ExV_ZB0XNjDIZGi4bWN&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpcm2cms%2Cpl%2Cinitcwndbps&lsig=AHWaYeowRQIgDZ40jWtpGu2W1lDMGTK7NF301-vZh7xrWqLTWHOaX5UCIQCFGZePpwzD1R1D_QkK_Fv8Bcc47UU1-W_u8WfsC7t6kA%3D%3D
+  m_Url: https://rr2---sn-3u-bh2s7.googlevideo.com/videoplayback?expire=1715070453&ei=lZE5ZpiZF4nPs8IP4eeYyAM&ip=59.9.212.167&id=o-AM8s6c001iCVqHB_-ca3_mhmu2SIv3RHQsg2XTkW_-8P&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&mh=Rz&mm=31%2C26&mn=sn-3u-bh2s7%2Csn-oguesn6s&ms=au%2Conr&mv=m&mvi=2&pcm2cms=yes&pl=20&initcwndbps=556250&bui=AWRWj2Qy6aqiMY-eJ84XVQ6MUUvLeb6kUxpD8fehYzzLUNXDtXbaqOHMxqMUP-yrLsgtDCxTXmxrmgU8&spc=UWF9f0-AnLHWo1lV1eOjnBTs5x_YGvIb0Dna7D-rjJniL53QP8vVpieEq_1y&vprv=1&svpuc=1&mime=video%2Fmp4&ns=ZDXnNrCz-wJAzdAZOS9aNaEQ&cnr=14&ratebypass=yes&dur=227.694&lmt=1664165736155404&mt=1715048215&fvip=4&c=WEB&sefc=1&txp=5438434&n=CtleDcTI5GeWPA&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRQIgZ9cK7HwE02ehoTT2UGVBovD7haABv_bJ5RWFz0utz1oCIQDooaX6Ufsk_hvIy7DW5J8-AKT9POIvNUiaBKCc-jxgYQ%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpcm2cms%2Cpl%2Cinitcwndbps&lsig=AHWaYeowRQIgMnblAcdE8qvX_132fRlOqY0PR0QPFM2lzVj9KmmZwW8CIQCKlFQHFcSCWcN4Vv5d9i5-j-jpGXvSTbUwuvwVGncO4A%3D%3D
   m_EnabledAudioTracks: 
   m_DirectAudioMutes: 
   m_ControlledAudioTrackCount: 0

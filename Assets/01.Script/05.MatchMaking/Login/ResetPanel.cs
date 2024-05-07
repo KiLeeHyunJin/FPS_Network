@@ -9,10 +9,11 @@ using UnityEngine.UI;
 public class ResetPanel : MonoBehaviourShowInfo
 {
     [SerializeField] LoginPanelController panelController;
-    [SerializeField] TMP_InputField emailInputField;
 
-    [SerializeField] Button sendButton;
-    [SerializeField] Button cancelButton;
+    [SerializeField] TMP_InputField emailInputField; //이메일 입력란
+
+    [SerializeField] Button sendButton; //이메일 전송 버튼
+    [SerializeField] Button cancelButton; //나가기 버튼
 
     private void Awake()
     {

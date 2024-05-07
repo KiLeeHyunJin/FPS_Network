@@ -36,15 +36,5 @@ public class GameData
         public int atck;
         [XmlAttribute]
         public float critical;
-
-
     }
-
-    public class UserData
-    {
-        public string userName;
-        public int level;
-        public int money;
-    }
-
 }
