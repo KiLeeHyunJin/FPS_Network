@@ -9,11 +9,9 @@ public class PlayerProperty : MonoBehaviour
 {
     Chat chat; //대화창
     Player player; //우클릭한 대상
-    [SerializeField] RoomPanel roomManager; //룸패널
     [SerializeField] Button whisper; //귓속말 버튼
     [SerializeField] Button getOut; //추방 버튼
     [SerializeField] Button teamChange; //팀 이동 버튼
-    bool isMaster { get { return roomManager.isMaster; } }
     private void Awake()
     {
         whisper.onClick.AddListener(Whisper); //귓속말 버튼에 귓속말 함수 연결
@@ -22,7 +20,7 @@ public class PlayerProperty : MonoBehaviour
     }
     private void OnEnable()
     {
-        if(isMaster)
+        if(PhotonNetwork.IsMasterClient)
         {
             //속성버튼을 클릭한 클라이언트가 마스터라면 추방과 팀 변경 버튼이 비활성화되어있다면 활성화한다.
             if (getOut.gameObject.activeSelf == false)

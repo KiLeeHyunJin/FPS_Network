@@ -33,7 +33,7 @@ public class PlayerEntry : MonoBehaviour
         team = teamType; //팀 타입 설정
 
         ChangeReady(ReadyState); //준비상태인지 업데이트
-        property = buttons;//우클릭 버튼
+        property = buttons;//클릭 버튼
         if (teamType != 0) //팀 타입이 0이 아니라면  팀 매니저에 업데이트 
             player.JoinTeam((byte)teamType);
     }

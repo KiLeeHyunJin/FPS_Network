@@ -1,12 +1,10 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.GridLayoutGroup;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomPanel : MonoBehaviour
@@ -20,19 +18,20 @@ public class RoomPanel : MonoBehaviour
 
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] TextMeshProUGUI roomNameTxt;
-    List<PlayerEntry> playerList;
     [SerializeField] PlayerProperty playerProperty;
-    Room currentRoom;
     [SerializeField] Chat chat;
-    int halfCount;
+
+    List<PlayerEntry> playerList;
+    Room currentRoom;
+
     const int RED = 2;
     const int BLUE = 1;
+    int halfCount;
     bool isEnterGame;
     public bool isMaster { get; private set; }
     private void Awake()
     {
         playerList = new List<PlayerEntry>();
-        
         startButton.onClick.AddListener(StartGame);
         leaveButton.onClick.AddListener(LeaveRoom);
     }
@@ -61,7 +60,8 @@ public class RoomPanel : MonoBehaviour
         //우클릭 목록에 채팅 연결
         playerProperty.SetChat(chat);
         //우클릭 목록 비활성화
-        playerProperty.gameObject.SetActive(false);
+        if (playerProperty.gameObject.activeSelf)
+            playerProperty.gameObject.SetActive(false);
 
     }
     private void OnDisable()
@@ -70,7 +70,7 @@ public class RoomPanel : MonoBehaviour
         ClearRoomData(redTeam);
         ClearRoomData(blueTeam);
     }
-    void ClearRoomData( RectTransform team)
+    void ClearRoomData(RectTransform team)
     {
         for (int i = 0; i < team.childCount; i++)
             Destroy(team.GetChild(i).gameObject);
@@ -86,7 +86,7 @@ public class RoomPanel : MonoBehaviour
         if (newPlayer.IsLocal) //본인 플레이어인지 확인
         {
             if (PhotonNetwork.IsMasterClient) //방장인지 확인
-                newPlayer.JoinTeam(new PhotonTeam() { Code = BLUE}); //블루팀으로 설정
+                newPlayer.JoinTeam(new PhotonTeam() { Code = BLUE }); //블루팀으로 설정
         }
         else
         {
@@ -159,7 +159,7 @@ public class RoomPanel : MonoBehaviour
         if (num == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
             return;
         int teamCount = PhotonTeamsManager.Instance.GetTeamMembersCount((byte)num);
-        if(halfCount > teamCount)
+        if (halfCount > teamCount)
             PhotonNetwork.LocalPlayer.SwitchTeam((byte)num);
     }
 
