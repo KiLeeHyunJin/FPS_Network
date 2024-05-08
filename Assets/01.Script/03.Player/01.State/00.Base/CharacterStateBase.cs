@@ -22,7 +22,6 @@ public abstract  class  CharacterStateBase : BaseState<Define.State>
     {
         if(isTansition && nextState != Define.State.END)
         {
-            NextState();
         }
     }
     public abstract void ChangeAnimParameter();

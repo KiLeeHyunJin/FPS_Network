@@ -66,7 +66,6 @@ public class CharacterController : MonoBehaviourPun
 
     private void Awake()
     {
-
         animController = gameObject.GetOrAddComponent<CharacterAnimationController>();
         dataProcess = gameObject.GetOrAddComponent<CharacterDataController>();
 
@@ -145,7 +144,7 @@ public class CharacterController : MonoBehaviourPun
         {
             if (isStop)
                 isStop = false;
-            animController.moveValue = inputController.MoveValue;
+            animController.MoveValue = inputController.MoveValue;
             if (inputController.Run)
                 animController.MoveRun();
             else
@@ -185,8 +184,8 @@ public class CharacterController : MonoBehaviourPun
                     animController.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.2f, 1);
                     float dir = runCycle < 0.5f ? 1 : -1;
                     float jumpLeg = dir * inputController.MoveValue.y;
-                    animController.jumpLeg = jumpLeg;
-                    animController.velocityY = rigid.velocity.y;
+                    animController.JumpLeg = jumpLeg;
+                    animController.VelocityY = rigid.velocity.y;
                     animController.JumpMove();
                 }
             }

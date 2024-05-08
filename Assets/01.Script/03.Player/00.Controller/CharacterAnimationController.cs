@@ -22,9 +22,9 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
     int RunId;
     int TurnId;
 
-    public Vector2 moveValue { get; set; }
-    public float jumpLeg { get; set; }
-    public float velocityY { get; set; }
+    public Vector2 MoveValue { get; set; }
+    public float JumpLeg { get; set; }
+    public float VelocityY { get; set; }
 
     private void Awake()
     {
@@ -48,6 +48,7 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
     private void Start()
     {
         capsuleRadius = controller.Capsule.radius;
+        anim.applyRootMotion = photonView.IsMine;
     }
     public void JumpStart()
     {
@@ -91,8 +92,8 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
     [PunRPC]
     void JumpMoveRPC()
     {
-        anim.SetFloat(ForwardId, jumpLeg);
-        anim.SetFloat(JumpId, velocityY);
+        anim.SetFloat(ForwardId, JumpLeg);
+        anim.SetFloat(JumpId, VelocityY);
     }
 
     [PunRPC]
@@ -125,8 +126,8 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
             isRun = false;
             anim.SetBool(RunId, false);
         }
-        anim.SetFloat(ForwardId, moveValue.y, dampingValue, Time.deltaTime);
-        anim.SetFloat(TurnId, moveValue.x, dampingValue, Time.deltaTime);
+        anim.SetFloat(ForwardId, MoveValue.y, dampingValue, Time.deltaTime);
+        anim.SetFloat(TurnId, MoveValue.x, dampingValue, Time.deltaTime);
     }
 
     [PunRPC]
@@ -142,8 +143,8 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
             isRun = true;
             anim.SetBool(RunId, true);
         }
-        anim.SetFloat(ForwardId, moveValue.y, dampingValue, Time.deltaTime);
-        anim.SetFloat(TurnId, moveValue.x, dampingValue, Time.deltaTime);
+        anim.SetFloat(ForwardId, MoveValue.y, dampingValue, Time.deltaTime);
+        anim.SetFloat(TurnId, MoveValue.x, dampingValue, Time.deltaTime);
     }
 
     [PunRPC]
@@ -173,15 +174,15 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(moveValue);
-            stream.SendNext(jumpLeg);
-            stream.SendNext(velocityY);
+            stream.SendNext(MoveValue);
+            stream.SendNext(JumpLeg);
+            stream.SendNext(VelocityY);
         }
         else
         {
-            moveValue = (Vector2)stream.ReceiveNext();
-            jumpLeg = (float)stream.ReceiveNext();
-            velocityY = (float)stream.ReceiveNext();
+            MoveValue = (Vector2)stream.ReceiveNext();
+            JumpLeg = (float)stream.ReceiveNext();
+            VelocityY = (float)stream.ReceiveNext();
         }
     }
 }
