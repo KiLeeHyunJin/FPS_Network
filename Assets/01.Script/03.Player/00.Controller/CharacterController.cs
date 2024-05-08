@@ -9,6 +9,7 @@ public class CharacterController : MonoBehaviourPun
     [SerializeField] float groundCheckLength;
     [Range(2, 10f)]
     [SerializeField] float jumpPower;
+    [SerializeField] LayerMask groundLayer;
 
 
     [SerializeField] GameObject rootBone;
@@ -18,7 +19,6 @@ public class CharacterController : MonoBehaviourPun
 
     int maxHp;
     int hp;
-    int groundLayer;
 
     bool mine;
     bool isGround;
@@ -73,9 +73,8 @@ public class CharacterController : MonoBehaviourPun
         rigid = gameObject.GetOrAddComponent<Rigidbody>();
         capsule = GetComponent<CapsuleCollider>();
 
-        groundLayer = 1 << LayerMask.NameToLayer("Ground");
-
-       
+        if(groundLayer == 0)
+            groundLayer = 1 << LayerMask.NameToLayer("Ground");
     }
 
     
@@ -170,6 +169,7 @@ public class CharacterController : MonoBehaviourPun
         if (isGround)
         {
             float angle = Vector3.Angle(hitInfo.normal, Vector3.up);
+            
             //Debug.DrawLine(foot.transform.position, foot.transform.position + Vector3.up, Color.red);
             //Debug.DrawLine(foot.transform.position, foot.transform.position + hitInfo.normal, Color.blue);
             if (isJumping)

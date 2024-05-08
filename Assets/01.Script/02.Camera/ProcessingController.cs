@@ -29,7 +29,7 @@ public class ProcessingController : MonoBehaviour
     Coroutine lensCo;
     public void Start()
     {
-        volume = volume != null ? volume : FindObjectOfType<Volume>();
+        volume ??= FindObjectOfType<Volume>();
         VolumeProfile profile = volume.sharedProfile;
 
         if (!profile.TryGet<Vignette>(out vignette))

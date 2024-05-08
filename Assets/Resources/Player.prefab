@@ -5940,6 +5940,9 @@ MonoBehaviour:
   limitAngle: 35
   groundCheckLength: 0.249
   jumpPower: 8
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 512
   rootBone: {fileID: 3529253217596478610}
   foot: {fileID: 6579088011749923023}
   leftHand: {fileID: 3204037897197038457}

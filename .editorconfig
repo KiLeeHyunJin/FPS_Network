@@ -3,6 +3,7 @@ root = true
 
 # C# 파일
 [*.cs]
+charset = utf-8
 
 #### 코어 EditorConfig 옵션 ####
 

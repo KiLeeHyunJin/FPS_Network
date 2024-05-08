@@ -1,17 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using UnityEngine;
-
 public class Define
 {
     public enum PlayerProperty
-    { 
-        Ready, Team, Load, 
+    {
+        Ready, Team, Load,
     }
     public enum RoomProperty
     {
-        LoadTime, 
+        LoadTime,
     }
 
     public enum TeamType
@@ -20,13 +15,13 @@ public class Define
     }
 
     public enum Weapon
-    { 
+    {
         Gun, Sword,
         END
     }
 
     public enum Heal
-    { 
+    {
         Drink, FirstAde,
         END
     }
@@ -48,7 +43,7 @@ public class Define
     }
 
     public enum Item
-    { 
+    {
         Heal, Bullet, Part, Equip,
         END
     }
@@ -86,13 +81,6 @@ public class Define
         Pressed,
         PointerDown,
         PointerUp,
-    }
-
-    public enum Scene
-    {
-        Unknown,
-        Dev,
-        Game,
     }
 
     public enum Sound
