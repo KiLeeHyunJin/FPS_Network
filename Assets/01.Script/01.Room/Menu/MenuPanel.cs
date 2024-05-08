@@ -41,8 +41,7 @@ public class MenuPanel : MonoBehaviour
     }
     private void Start()
     {
-
-
+        data = GetComponentInParent<LobbyData>();
     }
     private void OnEnable()
     {

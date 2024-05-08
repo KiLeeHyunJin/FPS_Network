@@ -6,7 +6,7 @@ using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 
-public class LobbyManager : MonoBehaviourPunCallbacks
+public class ConnectManager : MonoBehaviourPunCallbacks
 {
     public enum Panel { Login, Menu, Lobby, Room, Random }
 
