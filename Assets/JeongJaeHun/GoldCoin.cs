@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class GoldCoin : MonoBehaviour,IInteractable
 {
+    public GoldManager GoldManager;
+
     public enum coinPrice //코인들의 가치를 enum으로 분류
     {
         coin10=10,
@@ -24,7 +26,7 @@ public class GoldCoin : MonoBehaviour,IInteractable
     {
         int coinPrce = (int)GetRandomEnumValue();
 
-        GoldManager.Instance.GetCoin(coinPrce); 
+        GoldManager.GetCoin(coinPrce); 
     }
 
 

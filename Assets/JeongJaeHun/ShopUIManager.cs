@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ShopUIManager : Singleton<ShopUIManager>
+public class ShopUIManager : MonoBehaviour
 {
     public LayerMask startPosLayer;
 
@@ -16,10 +16,12 @@ public class ShopUIManager : Singleton<ShopUIManager>
 
     private Coroutine notPurchaseText;
 
+    public GoldManager goldManager;
+
     void Start()
     {
         shopPanel.SetActive(shopFlag); //게임 시작 시에는 상점 패널이 꺼져 있어야한다. 
-        goldText.text = $"{GoldManager.Instance.Gold}"; // start 시점에서 GoldManager의 Gold에 접근한다. (0으로 초기화되어있음)
+        goldText.text = $"{goldManager.Gold}"; // start 시점에서 GoldManager의 Gold에 접근한다. (0으로 초기화되어있음)
     }
 
     private void OnTriggerStay(Collider other) //시작 지점에 있는 동안만 상점창을 열 수 있도록한다. 
