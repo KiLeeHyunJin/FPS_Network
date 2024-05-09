@@ -126,26 +126,6 @@ public class PlayerInputController : MonoBehaviour
         inputMap.Enable();
     }
 
-
-
-
-    void OnChangeFire()
-    {
-        inputMap.Disable();
-        switch (Fire)
-        {
-            case Define.FireType.One:
-                fireOne.Enable();
-                fireRepeat.Disable();
-                break;
-            case Define.FireType.Repeat:
-                fireOne.Disable();
-                fireRepeat.Enable();
-                break;
-        }
-        inputMap.Enable();
-    }
-
     private void OnDestroy()
     {
         PlayerInput input = GetComponent<PlayerInput>();
