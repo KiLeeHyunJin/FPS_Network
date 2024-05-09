@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class TimeRewind : MonoBehaviour
+public class TimeRewind : MonoBehaviour, IDamagable
 {
     public CharacterController characterController;
     public float rewindDuration = 3.0f; // 되감기 지속 시간 (초)
@@ -25,7 +24,7 @@ public class TimeRewind : MonoBehaviour
 
     void Update()
     {
-        // 되감기 중이 아니면 위치와 체력을 주기적으로 기록
+        // 역행 중이 아니면 위치와 체력을 주기적으로 기록
         if (!isRewinding)
         {
             recordTimer += Time.deltaTime;
