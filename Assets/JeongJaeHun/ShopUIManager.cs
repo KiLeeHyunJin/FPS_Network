@@ -59,8 +59,6 @@ public class ShopUIManager : MonoBehaviour
         notPurchaseText=StartCoroutine(notPurchaseTextOnRoutine());
     }
 
-    
-
     IEnumerator notPurchaseTextOnRoutine()
     // 어차피 물품 구매 불가 text는 상점창이 떠 있는 상황에서만 뜰 수 있어야 한다. 
     // 
@@ -75,12 +73,5 @@ public class ShopUIManager : MonoBehaviour
         notPurchaseItemText.gameObject.SetActive(false);
 
     }
-
-
-
-
-
-
-
 
 }

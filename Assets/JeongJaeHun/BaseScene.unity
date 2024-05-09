@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &111341117
 Transform:
   m_ObjectHideFlags: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   goldText: {fileID: 0}
   shopFlag: 0
   startPos: 0
+  goldManager: {fileID: 0}
 --- !u!114 &111341119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,7 +238,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &125306669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,9 +364,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 249856774}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 276443dfbc504394b864ff4f20940369, type: 3}
+  m_Script: {fileID: 11500000, guid: b5036d25e927d874eb4e0a816bf6a045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  armorType: 0
 --- !u!1 &702171745
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,6 +1060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b92c576160c034f8cc208037174085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShopUIManager: {fileID: 0}
   gold: 0
 --- !u!1 &2009526645
 GameObject:
