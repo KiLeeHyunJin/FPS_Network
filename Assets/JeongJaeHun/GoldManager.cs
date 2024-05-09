@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class GoldManager : Singleton<GoldManager>
+public class GoldManager : MonoBehaviour
 {
     //골드를 여기다 저장할 수 있게 하자.
     // 그리고 상점에서 클릭할 때 여기에 접근해서
@@ -11,6 +11,11 @@ public class GoldManager : Singleton<GoldManager>
     // 구매 가능하도록 하고 구매하고 골드 차감해주는 거까지 여기서 관리해주자. 
     // 관련된 ui는 shopui에 밀어넣어서 거기에 접근해서 ui를 띄워주자. 
 
+    // 네트워크 게임이니까 나중에 PHOTON ISMINE 추가해서 자기 일 때만 GOLD 변동하고 아이템 사고 할 수 있게 해야함. 
+
+
+
+    public ShopUIManager ShopUIManager;
 
     public int gold;
 
@@ -30,7 +35,7 @@ public class GoldManager : Singleton<GoldManager>
     public void GetCoin(int plusGold) //골드를 추가해준다. 
     {
         gold += plusGold;
-        ShopUIManager.Instance.goldText.text = $"{gold}";
+        ShopUIManager.goldText.text = $"{gold}";
         
     }
 
@@ -39,7 +44,7 @@ public class GoldManager : Singleton<GoldManager>
        
         gold -= MinusCoin;
         if(gold < 0) gold = 0; //gold가 0 보다 작아지면 0으로 유지해준다. 
-        ShopUIManager.Instance.goldText.text = $"{gold}";
+        ShopUIManager.goldText.text = $"{gold}";
 
     }
 
@@ -48,12 +53,12 @@ public class GoldManager : Singleton<GoldManager>
         //클릭 시에 클릭하는 아이템이 이 함수를 불러야한다. 
         if(gold<ItemPrice) //현재 가지고 있는 골드가 아이템 가격보다 적다면 구입할 수 없습니다 popup을 띄운다. 
         {
-            ShopUIManager.Instance.OnNotPurchaseText();
+            ShopUIManager.OnNotPurchaseText();
         }
         else //구매에 성공한다면.
         {
             gold -= ItemPrice; //골드에서 아이템 가격을 빼준다.
-            ShopUIManager.Instance.goldText.text = $"{gold}"; //gold text를 업데이트 해준다. 
+            ShopUIManager.goldText.text = $"{gold}"; //gold text를 업데이트 해준다. 
 
             // 그리고 구매에 성공하면 그 아이템 종류에 따라서 작업을 진행해줘야하는데 
             
