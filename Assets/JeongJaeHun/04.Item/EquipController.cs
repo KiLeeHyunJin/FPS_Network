@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
+public class EquipController : MonoBehaviourPun
+{
 
 //데이터 보관해주기. 
 public static class EquipData
-{
+    {
     public enum ArmorTypeEnum
     {
         StandardArmor,
@@ -18,7 +20,7 @@ public static class EquipData
 
     public struct ArmorType
     {
-
+    
     }
 
 
@@ -29,7 +31,7 @@ public static class EquipData
 
 
 public class EquipController : MonoBehaviourPun
-{
+    {
 
     // 캐릭터마다 하나씩 들어야 되는 것들은 singleton을 하면 안된다. 
 
@@ -39,7 +41,7 @@ public class EquipController : MonoBehaviourPun
 
     // 상점 구매 할 때 여기에 있는 함수를 가져오기? --> 구매하는 장비의 타입을 여기서 만드니까 
     // 그 부분을 구매하는 스크립트에서 이용해야함. 
-    
+
 
 
     private void Start()
@@ -47,7 +49,7 @@ public class EquipController : MonoBehaviourPun
         
     }
 
-    
+
 
     public void Fire()
     {

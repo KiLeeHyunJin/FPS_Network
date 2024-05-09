@@ -83,11 +83,11 @@ public class Controller : MonoBehaviourPun
 
     void Check()
     {
-        GetView(); //포톤 컴포넌트 가져오기
-        CheckMine(); //본인 객체가 아니라면 입력키 삭제
-        SetData(); //데이터 초기화
-        CollidersSetting(); //충돌범위 지정
-        SetKeyAction(); //입력에 따른 함수 연결
+        GetView(); //���� ������Ʈ ��������
+        CheckMine(); //���� ��ü�� �ƴ϶�� �Է�Ű ����
+        SetData(); //������ �ʱ�ȭ
+        CollidersSetting(); //�浹���� ����
+        SetKeyAction(); //�Է¿� ���� �Լ� ����
     }
 
     void SetData()
@@ -139,12 +139,12 @@ public class Controller : MonoBehaviourPun
 
     public void ScaleCapsule(bool state)
     {
-        if (state) //앉기
+        if (state) //�ɱ�
         {
             capsule.height = capsuleHeight * 0.5f;
             capsule.center = capsuleCenter * 0.5f;
         }
-        else //일어서기
+        else //�Ͼ��
         {
             capsule.height = capsuleHeight;
             capsule.center = capsuleCenter;

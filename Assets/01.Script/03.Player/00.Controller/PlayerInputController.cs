@@ -109,7 +109,22 @@ public class PlayerInputController : MonoBehaviour
         Around = inputValue.isPressed ? true : false;
         actions[(int)Define.Key.Alt]?.Invoke();
     }
-
+    void OnChangeFire()
+    {
+        inputMap.Disable();
+        switch (Fire)
+        {
+            case Define.FireType.One:
+                fireOne.Enable();
+                fireRepeat.Disable();
+                break;
+            case Define.FireType.Repeat:
+                fireOne.Disable();
+                fireRepeat.Enable();
+                break;
+        }
+        inputMap.Enable();
+    }
 
 
 
