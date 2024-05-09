@@ -1,0 +1,34 @@
+{
+    "name": "ItemAction",
+    "maps": [
+        {
+            "name": "Shop",
+            "id": "a5a03b8c-2761-4d2c-b512-5e4e055cb069",
+            "actions": [
+                {
+                    "name": "Shop",
+                    "type": "Button",
+                    "id": "3180e469-bc14-4604-bd49-acd3e94463cd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "990bd9dd-17b9-4385-86e4-295ea40af7ec",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
