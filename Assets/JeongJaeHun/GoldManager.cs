@@ -48,22 +48,19 @@ public class GoldManager : MonoBehaviour
 
     }
 
-    public void CompareGold(int ItemPrice) //매개변수로 들어온 item의 가격과 비교하여 돈이 충분한지 아닌지 구분한다.
+    public bool CompareGold(int ItemPrice) //매개변수로 들어온 item의 가격과 비교하여 돈이 충분한지 아닌지 구분한다.
     {
         //클릭 시에 클릭하는 아이템이 이 함수를 불러야한다. 
         if(gold<ItemPrice) //현재 가지고 있는 골드가 아이템 가격보다 적다면 구입할 수 없습니다 popup을 띄운다. 
         {
             ShopUIManager.OnNotPurchaseText();
+            return false;    //가격 부족 
         }
-        else //구매에 성공한다면.
+        else
         {
-            gold -= ItemPrice; //골드에서 아이템 가격을 빼준다.
-            ShopUIManager.goldText.text = $"{gold}"; //gold text를 업데이트 해준다. 
-
-            // 그리고 구매에 성공하면 그 아이템 종류에 따라서 작업을 진행해줘야하는데 
-            
-
+            return true; //가격 부족 하지 않음. 
         }
+        
     }
 
 
