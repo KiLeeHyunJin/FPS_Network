@@ -72,4 +72,5 @@ public class CameraController : MonoBehaviour
     {
         Destroy(FPSCameraRoot.gameObject); //컨트롤 파괴시 시네머신 카메라도 같이 파괴
     }
+
 }

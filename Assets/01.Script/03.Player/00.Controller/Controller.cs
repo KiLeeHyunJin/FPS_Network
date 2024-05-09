@@ -270,5 +270,4 @@ public class Controller : MonoBehaviourPun
             FSM.ChangeState(Define.State.Death);
         }
     }
-
 }
