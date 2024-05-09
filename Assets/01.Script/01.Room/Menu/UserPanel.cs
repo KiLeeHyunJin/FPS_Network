@@ -1,8 +1,3 @@
-using Firebase.Database;
-using Firebase.Extensions;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Playables;
 using UnityEngine;
 
 public class UserPanel : MonoBehaviour
@@ -14,7 +9,7 @@ public class UserPanel : MonoBehaviour
         FireBaseManager.DB
             .GetReference("UserData")
             .Child("id")
-            .SetRawJsonValueAsync( JsonUtility.ToJson(userData));
+            .SetRawJsonValueAsync(JsonUtility.ToJson(userData));
 
         //FireBaseManager.DB
         //    .GetReference("UserData")

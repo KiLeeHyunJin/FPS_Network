@@ -1,16 +1,10 @@
+using Firebase.Database;
 using Firebase.Extensions;
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
-using Photon.Realtime;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-using Firebase.Database;
-using System.Collections.Generic;
-using UnityEditor.Playables;
-using System;
-using System.Text;
 public class MenuPanel : MonoBehaviour
 {
     [SerializeField] Image PlayButton;
@@ -32,10 +26,10 @@ public class MenuPanel : MonoBehaviour
 
     private void Awake()
     {
-        
+
         userInfoButton.onClick.AddListener(() => { userInfoWindow.SetActive(true); });
-        openButton.onClick.AddListener(()=> { OpenPlayButtons(!startButtonBool); });
-        closeButton.onClick.AddListener(()=> { OpenPlayButtons(false); });
+        openButton.onClick.AddListener(() => { OpenPlayButtons(!startButtonBool); });
+        closeButton.onClick.AddListener(() => { OpenPlayButtons(false); });
         logoutButton.onClick.AddListener(Logout);
         lobbyButton.onClick.AddListener(JoinLobby);
         randomButton.onClick.AddListener(RandomMatching);
@@ -48,7 +42,7 @@ public class MenuPanel : MonoBehaviour
     }
     private void Start()
     {
-       
+
 
 
         data = GetComponentInParent<LobbyData>();
@@ -77,8 +71,8 @@ public class MenuPanel : MonoBehaviour
                      //string json = snapshot.GetRawJsonValue();
                      //byte[] asciiBytes = Encoding.ASCII.GetBytes(json);
                      //byte[] unicodeBytes = Encoding.Convert(Encoding.ASCII, Encoding.Unicode, asciiBytes);
-                    //string convertedNoticeText = Encoding.Unicode.GetString(unicodeBytes);
-                    
+                     //string convertedNoticeText = Encoding.Unicode.GetString(unicodeBytes);
+
                      noticeText.text = value;
                      noticeText.enabled = false;
                      noticeText.enabled = true;
@@ -87,7 +81,7 @@ public class MenuPanel : MonoBehaviour
                  {
                      noticeText.text = "NONE";
                  }
-                 
+
              });
         OpenPlayButtons(false);
         startButtonBool = false;
@@ -95,7 +89,7 @@ public class MenuPanel : MonoBehaviour
 
     public void RandomMatching()
     {
-        data.SetLobbyState(LobbyData.LobbyState.Random,true);
+        data.SetLobbyState(LobbyData.LobbyState.Random, true);
         JoinLobby();
     }
 
@@ -112,7 +106,7 @@ public class MenuPanel : MonoBehaviour
 
     public void OpenPlayButtons(bool state)
     {
-        
+
         PlayButton.color = state ? Color.gray : Color.white;
         PlayButtons.SetActive(state);
         startButtonBool = !startButtonBool;

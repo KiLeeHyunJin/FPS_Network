@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using UnityEngine;
 
 public class Controller : MonoBehaviourPun
@@ -11,7 +12,6 @@ public class Controller : MonoBehaviourPun
     [SerializeField] float jumpPower;
     [SerializeField] LayerMask groundLayer;
 
-
     [SerializeField] GameObject rootBone;
     [SerializeField] GameObject foot;
     [SerializeField] GameObject leftHand;
@@ -19,23 +19,17 @@ public class Controller : MonoBehaviourPun
 
     int maxHp;
     int hp;
-
     bool mine;
-
-
     float capsuleHeight;
-
-    
 
     Vector3 capsuleCenter;
 
     CameraController cameraController;
     PlayerInputController inputController;
-    CharacterAnimationController animController;
+    AnimationController animController;
     ProcessingController processingController;
     EquipController equipController;
     CharacterTransformProcess moveProcess;
-    Rigidbody rigid;
 
     CapsuleCollider capsule { get; set; }
     public CapsuleCollider Capsule { get { return capsule; } }
@@ -62,25 +56,29 @@ public class Controller : MonoBehaviourPun
 
     private void Awake()
     {
-        animController = gameObject.GetOrAddComponent<CharacterAnimationController>();
-        rigid = gameObject.GetOrAddComponent<Rigidbody>();
+        animController = gameObject.GetOrAddComponent<AnimationController>();
         capsule = GetComponent<CapsuleCollider>();
-
-        moveProcess = new CharacterTransformProcess(GetComponent<CharacterController>());
-        moveProcess.SetActions(JumpFinish, Jump, Crouch, SlideJump);
-        moveProcess.Init(foot, groundCheckLength, groundLayer, limitAngle);
-
-        groundLayer = groundLayer == 0 ? 1 << LayerMask.NameToLayer("Ground") : groundLayer;
+        groundLayer = 1 << LayerMask.NameToLayer("Ground");
     }
-    
     void Start()
     {
         if (PhotonNetwork.InRoom)
             Check();
         else
+        {
             Destroy(gameObject);
+            return;
+        }
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 start = foot.transform.position + new Vector3(0,1,0) * 0.1f;
+        Vector3 end = start + new Vector3(0, -groundCheckLength, 0);
+
+        Gizmos.DrawLine(start, end);
+    }
     void Check()
     {
         GetView(); //���� ������Ʈ ��������
@@ -88,17 +86,15 @@ public class Controller : MonoBehaviourPun
         SetData(); //������ �ʱ�ȭ
         CollidersSetting(); //�浹���� ����
         SetKeyAction(); //�Է¿� ���� �Լ� ����
+        MoveProcessInit();
     }
 
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
         hp = maxHp;
-        //isCrouch = false;
         capsuleHeight = capsule.height;
         capsuleCenter = capsule.center;
-
-        rigid.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 
     void InitState()
@@ -130,11 +126,11 @@ public class Controller : MonoBehaviourPun
 
     void Update()
     {
-        moveProcess.Update();
+        moveProcess?.Update();
     }
     private void FixedUpdate()
     {
-        moveProcess.FixedUpdate();
+        moveProcess?.FixedUpdate();
     }
 
     public void ScaleCapsule(bool state)
@@ -151,42 +147,6 @@ public class Controller : MonoBehaviourPun
         }
     }
 
-    void JumpFinish()
-    {
-        animController.JumpFinish();
-    }
-    void Jump()
-    {
-        animController.JumpStart();
-    }
-    void SlideJump()
-    {
-        float runCycle =
-                   Mathf.Repeat(
-                   animController.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.2f, 1);
-        float dir = runCycle < 0.5f ? 1 : -1;
-        float jumpLeg = dir * inputController.MoveValue.y;
-        animController.JumpLeg = jumpLeg;
-        animController.VelocityY = rigid.velocity.y;
-        animController.JumpMove();
-    }
-
-
-    void CallCrouch()
-    {
-        if (moveProcess.isGround)
-            Crouch();
-    }
-    void Crouch()
-    {
-        moveProcess.SetCrouch = !moveProcess.isCrouch;
-        animController.Crouch(moveProcess.isCrouch);
-    }
-    void CallJump()
-    {
-        if (moveProcess.isGround && moveProcess.isCrouch == false)
-            rigid.velocity = new Vector3(rigid.velocity.x, jumpPower, rigid.velocity.z);
-    }
     void CallFire()
     {
         equipController?.Fire();
@@ -239,10 +199,43 @@ public class Controller : MonoBehaviourPun
             Destroy(processingController);
             return;
         }
-        else
-        {
-            cameraController.Init();
-        }
+        cameraController.Init();
+    }
+    void MoveProcessInit()
+    {
+        moveProcess = new CharacterTransformProcess(GetComponent<CharacterController>());
+
+        moveProcess.Init(foot, groundCheckLength, groundLayer, limitAngle);
+
+        moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
+        moveProcess.SetMotions(AnimationController.MoveType.Walk, animController.MoveWalk);
+        moveProcess.SetMotions(AnimationController.MoveType.Stop, animController.MoveStop);
+
+        moveProcess.SetMotions(AnimationController.MoveType.JumpFinish, animController.JumpFinish);
+        moveProcess.SetMotions(AnimationController.MoveType.Jump, animController.JumpStart);
+        moveProcess.SetMotions(AnimationController.MoveType.JumpMove, animController.JumpMove);
+
+        moveProcess.SetMotions(AnimationController.MoveType.Crouch, animController.Crouch);
+        moveProcess.SetMotions(AnimationController.MoveType.Stand, animController.Stand);
+        moveProcess.SetMotions(AnimationController.MoveType.JumpSlide, SlideJump);
+        moveProcess.SetMoveActionValue(AnimationController.ValueType.Leg, animController.SetJumpLeg);
+        moveProcess.SetMoveActionValue(AnimationController.ValueType.Velocity, animController.SetVelocityY);
+        moveProcess.SetMoveActionValue( animController.SetMoveValue);
+
+        inputController.SetMoveKey(moveProcess.SetMoveValue);
+        inputController.SetKey(moveProcess.Crouch, Define.Key.C);
+        inputController.SetKey(moveProcess.Jump, Define.Key.Space);
+        inputController.SetMoveType(moveProcess.SetMoveType);
+    }
+    void SlideJump()
+    {
+        float runCycle =
+                   Mathf.Repeat(
+                   animController.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.2f, 1);
+        float dir = runCycle < 0.5f ? 1 : -1;
+        float jumpLeg = dir * inputController.MoveY;
+        animController.SetJumpLeg(jumpLeg);
+        animController.JumpMove();
     }
 
     void SetKeyAction()
@@ -250,15 +243,12 @@ public class Controller : MonoBehaviourPun
         if (mine == false)
             return;
 
-        inputController.SetKey(CallCrouch, Define.Key.C);
-        inputController.SetKey(CallJump, Define.Key.Space);
         inputController.SetKey(CallReload, Define.Key.R);
         inputController.SetKey(CallOne, Define.Key.F1);
         inputController.SetKey(CallTwo, Define.Key.F2);
         inputController.SetKey(CallThree, Define.Key.F3);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
-        inputController.SetMoveKey(moveProcess.Move);
     }
     public void Damage(int _damage)
     {
@@ -270,5 +260,10 @@ public class Controller : MonoBehaviourPun
             FSM.ChangeState(Define.State.Death);
         }
     }
-
+    public void AddHp(int _healValue)
+    {
+        int other = maxHp - hp;
+        _healValue = other < _healValue ? other : _healValue;
+        hp += _healValue;
+    }
 }

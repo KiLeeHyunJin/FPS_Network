@@ -821,7 +821,7 @@ Transform:
   m_GameObject: {fileID: 701296235}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.08715578, z: 0, w: 0.9961947}
-  m_LocalPosition: {x: 4.75, y: 2.6, z: -7.36}
+  m_LocalPosition: {x: 2.1964517, y: 2.03, z: -11.072989}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1506,6 +1506,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2848950838868627797, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: dampingValue
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: m_Name
       value: Player (1)
@@ -1513,6 +1517,26 @@ PrefabInstance:
     - target: {fileID: 3552819859659342744, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: sceneViewId
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694613048074042654, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694613048074042654, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[1].SynchronizeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694613048074042654, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[2].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694613048074042654, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[7].SynchronizeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694613048074042654, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[8].SynchronizeType
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
