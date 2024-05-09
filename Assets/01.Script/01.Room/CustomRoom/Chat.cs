@@ -10,57 +10,57 @@ public class Chat : MonoBehaviourPun
 {
     public enum ChatType { ALL, TARGET, TEAM, NEW, END }
 
-    [SerializeField] Button chatResetButton; //´ëÈ­Ã¢ ÃÊ±âÈ­ ¹öÆ°
-    [SerializeField] TMP_InputField inputField; //ÀÔ·ÂÃ¢
-    [SerializeField] RectTransform content; //´ëÈ­¸ñ·Ï ºÎ¸ğ
-    [SerializeField] ScrollRect scrollRect; //½ºÅ©·Ñ
-    [SerializeField] TMP_Text chatTextPrefab; //´ëÈ­¸¦ º¹»çÇÒ °´Ã¼
-    [SerializeField] ChatType chatTarget; //Àü¼Û Å¸ÀÔ
-    Player currentMessageTarget; //Àü¼Û Å¸°Ù
+    [SerializeField] Button chatResetButton; //ëŒ€í™”ì°½ ì´ˆê¸°í™” ë²„íŠ¼
+    [SerializeField] TMP_InputField inputField; //ì…ë ¥ì°½
+    [SerializeField] RectTransform content; //ëŒ€í™”ëª©ë¡ ë¶€ëª¨
+    [SerializeField] ScrollRect scrollRect; //ìŠ¤í¬ë¡¤
+    [SerializeField] TMP_Text chatTextPrefab; //ëŒ€í™”ë¥¼ ë³µì‚¬í•  ê°ì²´
+    [SerializeField] ChatType chatTarget; //ì „ì†¡ íƒ€ì…
+    Player currentMessageTarget; //ì „ì†¡ íƒ€ê²Ÿ
 
     private void Awake()
     {
-        inputField.onSubmit.AddListener(SendChat); //¿£ÅÍÇÒ¶§ Àü¼ÛÇÏµµ·Ï ÀÌº¥Æ® ºÙ¿©³Ö´Â´Ù.
-        gameObject.GetOrAddComponent<PhotonView>(); //Æ÷Åæºä°¡ ¾øÀ» °æ¿ì Æ÷Åæºä¸¦ ºÙÀÎ´Ù.
-        chatResetButton.onClick.AddListener(RemoveEntry); //ÃÊ±âÈ­ ¹öÆ°¿¡ ÃÊ±âÈ­ ÇÔ¼ö ÀÌº¥Æ®¸¦ ºÙ¿©³Ö´Â´Ù.
+        inputField.onSubmit.AddListener(SendChat); //ì—”í„°í• ë•Œ ì „ì†¡í•˜ë„ë¡ ì´ë²¤íŠ¸ ë¶™ì—¬ë„£ëŠ”ë‹¤.
+        gameObject.GetOrAddComponent<PhotonView>(); //í¬í†¤ë·°ê°€ ì—†ì„ ê²½ìš° í¬í†¤ë·°ë¥¼ ë¶™ì¸ë‹¤.
+        chatResetButton.onClick.AddListener(RemoveEntry); //ì´ˆê¸°í™” ë²„íŠ¼ì— ì´ˆê¸°í™” í•¨ìˆ˜ ì´ë²¤íŠ¸ë¥¼ ë¶™ì—¬ë„£ëŠ”ë‹¤.
     }
     private void OnEnable()
     {
-        chatTarget = ChatType.ALL; //Àü¼ÛÅ¸ÀÔÀ» ÀüÃ¤·Î ¼³Á¤
-        //ÇÕ·ù ¸Ş½ÃÁö Àü¼Û
-        photonView.RPC("AddMessage", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.NickName}ÀÌ ÇÕ·ùÇÏ¿´½À´Ï´Ù.", ChatType.NEW, (byte)0);
+        chatTarget = ChatType.ALL; //ì „ì†¡íƒ€ì…ì„ ì „ì±„ë¡œ ì„¤ì •
+        //í•©ë¥˜ ë©”ì‹œì§€ ì „ì†¡
+        photonView.RPC("AddMessage", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.NickName}ì´ í•©ë¥˜í•˜ì˜€ìŠµë‹ˆë‹¤.", ChatType.NEW, (byte)0);
     }
     private void OnDisable()
     {
-        RemoveEntry();  //¸ğµç ´ëÈ­¸ñ·Ï »èÁ¦(´ëÈ­ °´Ã¼ ÆÄ±«)
+        RemoveEntry();  //ëª¨ë“  ëŒ€í™”ëª©ë¡ ì‚­ì œ(ëŒ€í™” ê°ì²´ íŒŒê´´)
     }
 
     public void LeftPlayer(Player otherPlayer)
     {
-        //ÇöÀç ±Ó¼Ó¸» »ó´ë°¡ ¹æÀ» ³ª°¬´Ù¸é
+        //í˜„ì¬ ê·“ì†ë§ ìƒëŒ€ê°€ ë°©ì„ ë‚˜ê°”ë‹¤ë©´
         if (currentMessageTarget.ActorNumber == otherPlayer.ActorNumber)
         {
-            //Å¸°ÙÀ» ºñ¿ì°í Ã¤ÆÃ Å¸ÀÔÀ» ÀüÃ¼Ã¤ÆÃÀ¸·Î º¯°æÇÑ´Ù.
+            //íƒ€ê²Ÿì„ ë¹„ìš°ê³  ì±„íŒ… íƒ€ì…ì„ ì „ì²´ì±„íŒ…ìœ¼ë¡œ ë³€ê²½í•œë‹¤.
             currentMessageTarget = null;
             chatTarget = ChatType.ALL;
         }
-        AddMessage($"{otherPlayer.NickName}ÀÌ ÅğÀåÇÏ¿´½À´Ï´Ù.", Chat.ChatType.NEW, (byte)0);
+        AddMessage($"{otherPlayer.NickName}ì´ í‡´ì¥í•˜ì˜€ìŠµë‹ˆë‹¤.", Chat.ChatType.NEW, (byte)0);
     }
     public void SendTarget(Player target)
     {
-        //Å¸°ÙÀÌ ºñ¾îÀÖ´Ù¸é µ¤¾î¾´´Ù.
+        //íƒ€ê²Ÿì´ ë¹„ì–´ìˆë‹¤ë©´ ë®ì–´ì“´ë‹¤.
         if (currentMessageTarget == null)
             currentMessageTarget = target;
-        else //Å¸°ÙÀÌ ÇöÀç ¼³Á¤µÇ¾îÀÖ´Â Å¸°Ù°ú µ¿ÀÏÇÏ´Ù¸é ºñ¿î´Ù.
+        else //íƒ€ê²Ÿì´ í˜„ì¬ ì„¤ì •ë˜ì–´ìˆëŠ” íƒ€ê²Ÿê³¼ ë™ì¼í•˜ë‹¤ë©´ ë¹„ìš´ë‹¤.
             currentMessageTarget = currentMessageTarget.ActorNumber == target.ActorNumber ? null : target;
-        //ÇöÀç Å¸°ÙÀÌ ºñ¿öÀúÀÖÀ¸¸é ÀüÃ¼Ã¤ÆÃÀ¸·Î ÀÖ´Ù¸é ±Ó¼Ó¸»·Î ¼³Á¤ÇÑ´Ù.
+        //í˜„ì¬ íƒ€ê²Ÿì´ ë¹„ì›Œì €ìˆìœ¼ë©´ ì „ì²´ì±„íŒ…ìœ¼ë¡œ ìˆë‹¤ë©´ ê·“ì†ë§ë¡œ ì„¤ì •í•œë‹¤.
         chatTarget = currentMessageTarget == null ? ChatType.ALL : ChatType.TARGET;
     }
     void SendChat(string chat)
     {
-        //³»¿ëÀ» º¸³½´Ù.
-        SendMessageToTarget(chat);
-        //ÀÔ·ÂÃ¢À» ºñ¿ì°í ´Ù½Ã È°¼ºÈ­ »óÅÂ·Î º¯°æÇÑ´Ù.
+        //ë‚´ìš©ì„ ë³´ë‚¸ë‹¤.
+        SendMessageToTarget($"{PhotonNetwork.LocalPlayer.NickName} : {chat}");
+        //ì…ë ¥ì°½ì„ ë¹„ìš°ê³  ë‹¤ì‹œ í™œì„±í™” ìƒíƒœë¡œ ë³€ê²½í•œë‹¤.
         inputField.text = "";
         inputField.ActivateInputField();
     }
@@ -68,13 +68,13 @@ public class Chat : MonoBehaviourPun
     [PunRPC]
     public void AddMessage(string message, ChatType chatType, byte teamCode = 0)
     {
-        //if (chatTarget == ChatType.TEAM) //ÆÀ ´ëÈ­ ¸ñ·ÏÀÌ°í
-        //    if((int)teamCode != (int)PhotonNetwork.LocalPlayer.GetPhotonTeam().Code) //ÆÀÀÌ ´Ù¸£´Ù¸é Á¾·á
+        //if (chatTarget == ChatType.TEAM) //íŒ€ ëŒ€í™” ëª©ë¡ì´ê³ 
+        //    if((int)teamCode != (int)PhotonNetwork.LocalPlayer.GetPhotonTeam().Code) //íŒ€ì´ ë‹¤ë¥´ë‹¤ë©´ ì¢…ë£Œ
         //        return;
 
         TMP_Text newMessage = Instantiate(chatTextPrefab);
 
-        switch (chatType) //Å¸ÀÔ¿¡ µû¶ó ÆùÆ® »ö»ó º¯°æ
+        switch (chatType) //íƒ€ì…ì— ë”°ë¼ í°íŠ¸ ìƒ‰ìƒ ë³€ê²½
         {
             case ChatType.ALL: 
                 newMessage.color = Color.black;
@@ -87,19 +87,19 @@ public class Chat : MonoBehaviourPun
                 break;
             case ChatType.NEW:
                 newMessage.color = Color.yellow;
-                newMessage.fontStyle |= FontStyles.Bold; //ÆùÆ®¸¦ µÎ²®°Ô ¼³Á¤
+                newMessage.fontStyle |= FontStyles.Bold; //í°íŠ¸ë¥¼ ë‘ê»ê²Œ ì„¤ì •
                 break;
         }
-        newMessage.text = message;  //³»¿ë ÀÔ·Â
-        newMessage.transform.SetParent(content); //°´Ã¼¸¦ ÄÜÅÙÃ÷ÀÇ ÀÚ½ÄÀ¸·Î ¼³Á¤
+        newMessage.text = message;  //ë‚´ìš© ì…ë ¥
+        newMessage.transform.SetParent(content); //ê°ì²´ë¥¼ ì½˜í…ì¸ ì˜ ìì‹ìœ¼ë¡œ ì„¤ì •
         RectTransform rect = newMessage.transform as RectTransform;
-        if (rect != null) // ½ºÄÉÀÏÀ» 1·Î º¯°æ
+        if (rect != null) // ìŠ¤ì¼€ì¼ì„ 1ë¡œ ë³€ê²½
             rect.localScale = Vector3.one;
-        scrollRect.verticalScrollbar.value = 0; //½ºÅ©·Ñ ºä¸¦ ¸Ç ¹ØÀ¸·Î ¼³Á¤
+        scrollRect.verticalScrollbar.value = 0; //ìŠ¤í¬ë¡¤ ë·°ë¥¼ ë§¨ ë°‘ìœ¼ë¡œ ì„¤ì •
     }
 
 
-    // Å¬¶óÀÌ¾ğÆ® º¯Á¶·Î ÀÎÇÏ¿© µµÃ»ÀÇ À§ÇèÀÌ Á¸Àç
+    // í´ë¼ì´ì–¸íŠ¸ ë³€ì¡°ë¡œ ì¸í•˜ì—¬ ë„ì²­ì˜ ìœ„í—˜ì´ ì¡´ì¬
     void SendMessageToTarget(string chat)
     {
         byte defaultParam = default(byte);
@@ -118,13 +118,13 @@ public class Chat : MonoBehaviourPun
     }
     void SendTeam(string chat)
     {
-        //ÆÀ ÄÚµå¸¦ °¡Á®¿Â´Ù.
+        //íŒ€ ì½”ë“œë¥¼ ê°€ì ¸ì˜¨ë‹¤.
         byte code = PhotonNetwork.LocalPlayer.GetPhotonTeam().Code;
-        //ÇØ´ç ÄÚµåÀÇ ÆÀ ¸É¹ö¸¦ °¡Á®¿Â´Ù.
+        //í•´ë‹¹ ì½”ë“œì˜ íŒ€ ë§´ë²„ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
         PhotonTeamsManager.Instance.TryGetTeamMembers(code, out Player[] teams);
         if (teams != null)
         {
-            foreach (Player target in teams) //ÆÀ¿ø ¸ñ·ÏÀ» µ¹¸ç Àü¼ÛÀ» ÇÑ´Ù.
+            foreach (Player target in teams) //íŒ€ì› ëª©ë¡ì„ ëŒë©° ì „ì†¡ì„ í•œë‹¤.
             {
                 photonView.RPC("AddMessage", target, chat, ChatType.TEAM, code);
             }

@@ -10,9 +10,10 @@ using Firebase.Database;
 using System.Collections.Generic;
 using UnityEditor.Playables;
 using System;
+using System.Text;
 public class MenuPanel : MonoBehaviour
 {
-    [SerializeField] GameObject PlayButton;
+    [SerializeField] Image PlayButton;
     [SerializeField] GameObject PlayButtons;
     [SerializeField] GameObject userInfoWindow;
 
@@ -23,17 +24,23 @@ public class MenuPanel : MonoBehaviour
     [SerializeField] Button lobbyButton;
     [SerializeField] Button randomButton;
 
+    [SerializeField] TMP_Text noticeText;
+
+
+    [SerializeField] bool startButtonBool = false;
     LobbyData data;
 
     private void Awake()
     {
+        
         userInfoButton.onClick.AddListener(() => { userInfoWindow.SetActive(true); });
-        openButton.onClick.AddListener(()=> { OpenPlayButtons(true); });
+        openButton.onClick.AddListener(()=> { OpenPlayButtons(!startButtonBool); });
         closeButton.onClick.AddListener(()=> { OpenPlayButtons(false); });
         logoutButton.onClick.AddListener(Logout);
         lobbyButton.onClick.AddListener(JoinLobby);
         randomButton.onClick.AddListener(RandomMatching);
     }
+
     [Serializable]
     public class NickNames
     {
@@ -41,11 +48,49 @@ public class MenuPanel : MonoBehaviour
     }
     private void Start()
     {
+       
+
+
         data = GetComponentInParent<LobbyData>();
     }
     private void OnEnable()
     {
+        Debug.Log("Start");
+        FireBaseManager.DB
+             .GetReference("Notice")
+             .GetValueAsync().ContinueWithOnMainThread(task =>
+             {
+                 if (task.IsCanceled)
+                 {
+                     Debug.Log("cancle");
+                     return;
+                 }
+                 else if (task.IsFaulted)
+                 {
+                     Debug.Log("fault");
+                     return;
+                 }
+                 DataSnapshot snapshot = task.Result;
+                 if (snapshot.Exists)
+                 {
+                     string value = (string)snapshot.Value;
+                     //string json = snapshot.GetRawJsonValue();
+                     //byte[] asciiBytes = Encoding.ASCII.GetBytes(json);
+                     //byte[] unicodeBytes = Encoding.Convert(Encoding.ASCII, Encoding.Unicode, asciiBytes);
+                    //string convertedNoticeText = Encoding.Unicode.GetString(unicodeBytes);
+                    
+                     noticeText.text = value;
+                     noticeText.enabled = false;
+                     noticeText.enabled = true;
+                 }
+                 else
+                 {
+                     noticeText.text = "NONE";
+                 }
+                 
+             });
         OpenPlayButtons(false);
+        startButtonBool = false;
     }
 
     public void RandomMatching()
@@ -67,7 +112,9 @@ public class MenuPanel : MonoBehaviour
 
     public void OpenPlayButtons(bool state)
     {
-        PlayButton.SetActive(!state);
+        
+        PlayButton.color = state ? Color.gray : Color.white;
         PlayButtons.SetActive(state);
+        startButtonBool = !startButtonBool;
     }
 }
