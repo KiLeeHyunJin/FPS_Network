@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract  class  CharacterStateBase : BaseState<Define.State>
 {
     protected bool isTansition;
-    protected CharacterController controller;
+    protected Controller controller;
     protected Define.State nextState;
-    public CharacterController Controller { set { controller = value; } }
+    public Controller Controller { set { controller = value; } }
     public override void Enter()
     {
         isTansition = false;

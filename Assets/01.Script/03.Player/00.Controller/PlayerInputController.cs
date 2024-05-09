@@ -10,11 +10,11 @@ public class PlayerInputController : MonoBehaviour
     public bool Run { get; private set; }
     public bool Around { get; private set; }
     Action[] actions;
+    Action<Vector3> moveAction;
+
     InputActionMap inputMap;
     InputAction fireOne;
     InputAction fireRepeat;
-    public void SetKey(Action method, Define.Key key)
-    => actions[(int)key] = method;
 
     public Define.FireType Fire { get; private set; }
     public Define.FireType ChangeFireType
@@ -25,6 +25,8 @@ public class PlayerInputController : MonoBehaviour
             OnChangeFire();
         }
     }
+    public void SetKey(Action method, Define.Key key)           => actions[(int)key] = method;
+    public void SetMoveKey(Action<Vector3> moveMethod)          => moveAction = moveMethod;
 
     private void Awake()
     {
@@ -44,9 +46,12 @@ public class PlayerInputController : MonoBehaviour
             //inputs.
         }
     }
+
     void OnMove(InputValue inputValue)
     {
         MoveValue = inputValue.Get<Vector2>().normalized;
+        Vector3 vector3 = new Vector3(MoveValue.x, 0,MoveValue.y);
+        moveAction?.Invoke(vector3);
     }
     void OnJump(InputValue inputValue)
     {
@@ -104,6 +109,11 @@ public class PlayerInputController : MonoBehaviour
         Around = inputValue.isPressed ? true : false;
         actions[(int)Define.Key.Alt]?.Invoke();
     }
+
+
+
+
+
     void OnChangeFire()
     {
         inputMap.Disable();

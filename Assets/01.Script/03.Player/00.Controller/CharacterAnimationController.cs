@@ -5,7 +5,7 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
 {
     Animator anim;
     public Animator Anim { get { return anim; } }
-    CharacterController controller;
+    Controller controller;
     [SerializeField] float dampingValue;
 
     float capsuleRadius;
@@ -30,7 +30,7 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
     {
         SetAnimID();
         anim = GetComponent<Animator>();
-        controller = GetComponent<CharacterController>();
+        controller = GetComponent<Controller>();
         dampingValue = dampingValue <= 0 ? 0.15f : dampingValue;
     }
     void SetAnimID()

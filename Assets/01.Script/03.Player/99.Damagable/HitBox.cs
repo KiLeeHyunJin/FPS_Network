@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HitBox : MonoBehaviour, IDamagable
 {
-    CharacterController controller;
-    public void SetOwner(CharacterController _controller)
+    Controller controller;
+    public void SetOwner(Controller _controller)
         => controller = _controller;
     public void TakeDamage(int _damage)
         => controller.Damage(_damage);

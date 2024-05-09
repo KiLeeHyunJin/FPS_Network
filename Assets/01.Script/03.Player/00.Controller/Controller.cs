@@ -1,7 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviourPun
+public class Controller : MonoBehaviourPun
 {
     [Range(10, 90)]
     [SerializeField] int limitAngle;
@@ -21,15 +21,11 @@ public class CharacterController : MonoBehaviourPun
     int hp;
 
     bool mine;
-    bool isGround;
-    bool isCrouch;
-    bool isStop;
-    public bool isJumping { get; private set; }
-    public bool isRun { get; private set; }
+
 
     float capsuleHeight;
 
-    const float Half = 0.5f;
+    
 
     Vector3 capsuleCenter;
 
@@ -38,7 +34,7 @@ public class CharacterController : MonoBehaviourPun
     CharacterAnimationController animController;
     ProcessingController processingController;
     EquipController equipController;
-
+    CharacterTransformProcess moveProcess;
     Rigidbody rigid;
 
     CapsuleCollider capsule { get; set; }
@@ -67,31 +63,38 @@ public class CharacterController : MonoBehaviourPun
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<CharacterAnimationController>();
-
         rigid = gameObject.GetOrAddComponent<Rigidbody>();
         capsule = GetComponent<CapsuleCollider>();
 
-        if(groundLayer == 0)
-            groundLayer = 1 << LayerMask.NameToLayer("Ground");
-    }
+        moveProcess = new CharacterTransformProcess(GetComponent<CharacterController>());
+        moveProcess.SetActions(JumpFinish, Jump, Crouch, SlideJump);
+        moveProcess.Init(foot, groundCheckLength, groundLayer, limitAngle);
 
+        groundLayer = groundLayer == 0 ? 1 << LayerMask.NameToLayer("Ground") : groundLayer;
+    }
     
     void Start()
     {
-        GetView();
-        CheckMine();
-        //InitState();
-        SetData();
-        CollidersSetting();
-        SetKeyAction();
-        SetSetting();
+        if (PhotonNetwork.InRoom)
+            Check();
+        else
+            Destroy(gameObject);
+    }
+
+    void Check()
+    {
+        GetView(); //포톤 컴포넌트 가져오기
+        CheckMine(); //본인 객체가 아니라면 입력키 삭제
+        SetData(); //데이터 초기화
+        CollidersSetting(); //충돌범위 지정
+        SetKeyAction(); //입력에 따른 함수 연결
     }
 
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
         hp = maxHp;
-        isCrouch = false;
+        //isCrouch = false;
         capsuleHeight = capsule.height;
         capsuleCenter = capsule.center;
 
@@ -127,123 +130,76 @@ public class CharacterController : MonoBehaviourPun
 
     void Update()
     {
-        if (mine)
-        {
-            Move();
-        }
+        moveProcess.Update();
     }
     private void FixedUpdate()
     {
-        GroundCheck();
-    }
-
-    void Move()
-    {
-        if (inputController.MoveValue.x != 0 || inputController.MoveValue.y != 0)
-        {
-            if (isStop)
-                isStop = false;
-            animController.MoveValue = inputController.MoveValue;
-            if (inputController.Run)
-                animController.MoveRun();
-            else
-                animController.MoveWalk();
-        }
-        else if (isStop == false)
-        {
-            animController.MoveStop();
-            isStop = true;
-        }
-    }
-
-    void GroundCheck()
-    {
-        isGround = Physics.Raycast(
-            foot.transform.position + Vector3.up * 0.1f, Vector3.down,
-            out RaycastHit hitInfo,
-            groundCheckLength,
-            groundLayer);
-
-        if (isGround)
-        {
-            float angle = Vector3.Angle(hitInfo.normal, Vector3.up);
-            
-            //Debug.DrawLine(foot.transform.position, foot.transform.position + Vector3.up, Color.red);
-            //Debug.DrawLine(foot.transform.position, foot.transform.position + hitInfo.normal, Color.blue);
-            if (isJumping)
-            {
-                if (angle < limitAngle)
-                {
-                    JumpFinish();
-                }
-                else
-                {
-                    float runCycle =
-                    Mathf.Repeat(
-                    animController.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.2f, 1);
-                    float dir = runCycle < 0.5f ? 1 : -1;
-                    float jumpLeg = dir * inputController.MoveValue.y;
-                    animController.JumpLeg = jumpLeg;
-                    animController.VelocityY = rigid.velocity.y;
-                    animController.JumpMove();
-                }
-            }
-            else if (angle > limitAngle)
-            {
-                Jump();
-            }
-        }
-        else
-        {
-            if (isJumping == false)
-            {
-                if (isCrouch)
-                    Crouch();
-                Jump();
-            }
-        }
-    }
-    void JumpFinish()
-    {
-        animController.JumpFinish();
-        isJumping = false;
-    }
-    void Jump()
-    {
-        animController.JumpStart();
-        isJumping = true;
+        moveProcess.FixedUpdate();
     }
 
     public void ScaleCapsule(bool state)
     {
-        if (state)
+        if (state) //앉기
         {
-            capsule.height = capsule.height * 0.5f;
-            capsule.center = capsule.center * 0.5f;
+            capsule.height = capsuleHeight * 0.5f;
+            capsule.center = capsuleCenter * 0.5f;
         }
-        else
+        else //일어서기
         {
-            Ray crouchRay = new Ray(rigid.position + Vector3.up * capsule.radius * Half, Vector3.up);
-            float crouchRayLength = capsuleHeight - capsule.radius * Half;
-            if (Physics.SphereCast(crouchRay, capsule.radius * Half, crouchRayLength, Physics.AllLayers, QueryTriggerInteraction.Ignore))
-                return;
             capsule.height = capsuleHeight;
             capsule.center = capsuleCenter;
         }
     }
+
+    void JumpFinish()
+    {
+        animController.JumpFinish();
+    }
+    void Jump()
+    {
+        animController.JumpStart();
+    }
+    void SlideJump()
+    {
+        float runCycle =
+                   Mathf.Repeat(
+                   animController.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.2f, 1);
+        float dir = runCycle < 0.5f ? 1 : -1;
+        float jumpLeg = dir * inputController.MoveValue.y;
+        animController.JumpLeg = jumpLeg;
+        animController.VelocityY = rigid.velocity.y;
+        animController.JumpMove();
+    }
+
+
+    void CallCrouch()
+    {
+        if (moveProcess.isGround)
+            Crouch();
+    }
+    void Crouch()
+    {
+        moveProcess.SetCrouch = !moveProcess.isCrouch;
+        animController.Crouch(moveProcess.isCrouch);
+    }
+    void CallJump()
+    {
+        if (moveProcess.isGround && moveProcess.isCrouch == false)
+            rigid.velocity = new Vector3(rigid.velocity.x, jumpPower, rigid.velocity.z);
+    }
     void CallFire()
     {
-        equipController.Fire();
+        equipController?.Fire();
     }
     void CallReload()
     {
-        equipController.Reload();
+        equipController?.Reload();
     }
     void CallChangeFireType()
     {
-        inputController.ChangeFireType = equipController.FireTypeChange();
+        if (equipController != null)
+            inputController.ChangeFireType = equipController.FireTypeChange();
     }
-
     void CallOne()
     {
     }
@@ -253,27 +209,7 @@ public class CharacterController : MonoBehaviourPun
     void CallThree()
     {
     }
-
-
-    void CallCrouch()
-    {
-        if (isGround)
-            Crouch();
-    }
-    void Crouch()
-    {
-        isCrouch = !isCrouch;
-        animController.Crouch(isCrouch);
-        if (mine)
-            cameraController.CrouchState(isCrouch);
-    }
-    void CallJump()
-    {
-        if (isGround && isCrouch == false)
-            rigid.velocity = new Vector3(rigid.velocity.x, jumpPower, rigid.velocity.z);
-    }
-
-    void CollidersSetting()
+    void CollidersSetting() //하위 객체를 돌며 충돌체가 있다면 6번 레이어로 변경 및 히트박스 부착
     {
         Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
         for (int i = 0; i < colliders.Length; i++)
@@ -291,7 +227,7 @@ public class CharacterController : MonoBehaviourPun
 
     void CheckMine()
     {
-        mine = photonView.IsMine;//view.IsMine;
+        mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
         cameraController = GetComponent<CameraController>();
@@ -301,18 +237,19 @@ public class CharacterController : MonoBehaviourPun
             Destroy(inputController);
             Destroy(cameraController);
             Destroy(processingController);
+            return;
+        }
+        else
+        {
+            cameraController.Init();
         }
     }
-    void SetSetting()
-    {
-        if (mine == false)
-            return;
-        cameraController.CrouchState(isCrouch);
-    }
+
     void SetKeyAction()
     {
         if (mine == false)
             return;
+
         inputController.SetKey(CallCrouch, Define.Key.C);
         inputController.SetKey(CallJump, Define.Key.Space);
         inputController.SetKey(CallReload, Define.Key.R);
@@ -321,6 +258,7 @@ public class CharacterController : MonoBehaviourPun
         inputController.SetKey(CallThree, Define.Key.F3);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
+        inputController.SetMoveKey(moveProcess.Move);
     }
     public void Damage(int _damage)
     {

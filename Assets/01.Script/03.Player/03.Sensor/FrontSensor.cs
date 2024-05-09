@@ -5,7 +5,6 @@ using UnityEngine;
 public class FrontSensor : MonoBehaviour
 {
     [SerializeField] List<Collider> colliders;
-    TabSensor owner;
     Coroutine co;
     public Collider FrontObj 
     { 
@@ -24,11 +23,6 @@ public class FrontSensor : MonoBehaviour
     {
         colliders = new List<Collider>(5);
     }
-    private void Start()
-    {
-        owner = GetComponentInParent<TabSensor>();
-    }
-
 
     IEnumerator NullCheckRoutine()
     {

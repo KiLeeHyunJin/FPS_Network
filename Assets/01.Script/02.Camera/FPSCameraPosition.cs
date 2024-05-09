@@ -7,10 +7,10 @@ public class FPSCameraPosition : MonoBehaviour
 {
     [SerializeField] Transform cameraRoot;
     CinemachineVirtualCamera cam;
-    CameraController cameraController;
+    [SerializeField] float front = -0.1f;
+    [SerializeField] float up = 0.1f;
     private void Start()
     {
-        cameraController = GetComponentInParent<CameraController>();
         cam = GetComponentInChildren<CinemachineVirtualCamera>();
         if(cam != null)
         {
@@ -22,14 +22,9 @@ public class FPSCameraPosition : MonoBehaviour
 
     void Update()
     {
-        if(cameraController.POVType == CameraController.PointOfView.FPS)
-        {
-            transform.position = Vector3.Lerp(transform.position, cameraRoot.position, 0.5f);
-            float front = -
-                0.1f;
-            float up = 0.1f;
-            transform.position += transform.forward * 0.1f;
-            transform.localPosition += new Vector3(0, up, front);
-        }
+        transform.position = Vector3.Lerp(transform.position, cameraRoot.position, 0.5f);
+        transform.localPosition += new Vector3(0, up, front);
     }
+
+
 }

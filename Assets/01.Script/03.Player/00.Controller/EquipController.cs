@@ -9,6 +9,7 @@ public class EquipController : MonoBehaviourPun
 
     public void Fire()
     {
+
     }
 
     public void Reload()
