@@ -8,30 +8,21 @@ public class EquipController : MonoBehaviourPun
 {
 
 //데이터 보관해주기. 
-public static class EquipData
+    public static class EquipData
     {
-    public enum ArmorTypeEnum
-    {
-        StandardArmor,
-        LightArmor,
-        MiddleArmor,
-        HeavyArmor
+        public enum ArmorTypeEnum
+        {
+            StandardArmor,
+            LightArmor,
+            MiddleArmor,
+            HeavyArmor
+        }
+
+        public struct ArmorType
+        {
+        
+        }
     }
-
-    public struct ArmorType
-    {
-    
-    }
-
-
-
-}
-
-
-
-
-public class EquipController : MonoBehaviourPun
-    {
 
     // 캐릭터마다 하나씩 들어야 되는 것들은 singleton을 하면 안된다. 
 
