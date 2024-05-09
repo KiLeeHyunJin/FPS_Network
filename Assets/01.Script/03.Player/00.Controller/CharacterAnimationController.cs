@@ -78,6 +78,10 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
     {
         photonView.RPC("MoveStopRPC", RpcTarget.AllViaServer);
     }
+    public void Die()
+    {
+        photonView.RPC("DieRPC", RpcTarget.AllViaServer);
+    }
     [PunRPC]
     void JumpStartRPC()
     {
@@ -165,7 +169,7 @@ public class CharacterAnimationController : MonoBehaviourPun,IPunObservable
     }
 
     [PunRPC]
-    public void Die()
+    void DieRPC()
     {
 
     }

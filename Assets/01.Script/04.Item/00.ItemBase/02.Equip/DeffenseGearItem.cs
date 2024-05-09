@@ -8,6 +8,13 @@ public abstract class DeffenseGearItem : EquipItem
     public Define.Wearable wearType { get; protected set; }
     public int value { get; protected set; }
     public int lv { get; protected set; }
+    private void Start()
+    {
+        ItemType = Define.Item.Equip;
+        equipType = Define.Equip.Wearable;
+        wearType = Define.Wearable.Helmet;
+
+    }
     public override void Dequip()
     {
     }

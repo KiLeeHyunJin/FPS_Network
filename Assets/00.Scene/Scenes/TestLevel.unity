@@ -3854,6 +3854,15 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.1454107
     - serializedVersion: 3
+      time: 0.5063223
+      value: 0.21615718
+      inSlope: 0.017608533
+      outSlope: 0.017608533
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 0.652446
       value: 0.20047036
       inSlope: -0.2338456
@@ -5276,7 +5285,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4740310400880496479}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
   m_Name: 
@@ -7961,7 +7970,75 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1b9e0ab4-4032-4898-b6df-61a774cea3f6
+    m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 41a223a5-26ab-414f-b36f-e0dd30476ebb
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 83d7d3d5-4fb5-45a0-ac14-c1bc67fe90d9
+    m_ActionName: Player/FirstWeapon[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 89df048a-2b5a-4064-b933-55e5bf909e5d
+    m_ActionName: Player/SecondWeapon[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9931c441-6df0-4fd6-88d7-78249dd8318f
+    m_ActionName: Player/OtherWeapon[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0c185b48-23c5-412f-8017-f639d548a045
+    m_ActionName: Player/Interaction[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 316f1208-0657-43c5-aeb3-2a69c2c04e94
+    m_ActionName: Player/C[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fb3e21c7-8e06-48a7-85df-43094ae800a4
+    m_ActionName: Player/X[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9e3bf92c-8207-41cf-81f9-57dacfde8938
+    m_ActionName: Player/Z[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 60a26bc6-bf6c-456f-a059-fd2db7188976
+    m_ActionName: Player/Shift[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a2857564-81aa-4b71-9bba-fe22b7cb4559
+    m_ActionName: Player/Look[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6f3f6b88-d855-4c40-83b8-5cf97b2bc8bf
+    m_ActionName: Player/V[/Keyboard/v]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 32bfc999-0efc-42ce-9b5e-6cbbc09052a6
+    m_ActionName: Player/Alt[/Keyboard/leftAlt]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f4e42906-67d3-4824-8956-c70b206af461
+    m_ActionName: Player/FirePress[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 21607c7d-fa0b-4022-8af2-eee46c5f2921
+    m_ActionName: Player/FireOne[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c72034e5-e381-4d77-abf6-7be01c93dad2
+    m_ActionName: UI/Tab[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e75571b7-bcdd-4a84-ad87-d61d87abd31b
+    m_ActionName: Camera/MousePos[/Mouse/delta]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -15708,6 +15785,7 @@ GameObject:
   - component: {fileID: 1070446790354911717}
   - component: {fileID: 3449525081614184165}
   - component: {fileID: 2275123125002173157}
+  - component: {fileID: 6598656675434918062}
   - component: {fileID: 6598656675434918061}
   - component: {fileID: 895822696139364997}
   - component: {fileID: 5743696793530396955}
@@ -25772,6 +25850,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 19f2e1cbe9a7bdc4e869af401751a25a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6598656675434918062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4740310400880496479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e84d2aa485622ea41a84741f90b3d9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6601351960365868724

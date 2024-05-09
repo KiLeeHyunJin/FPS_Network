@@ -48,9 +48,9 @@ public class CharacterDataController : MonoBehaviour
     public Action Reload()
         => data.Reload;
     void ActionCancled()
-        => useItemCallBackMethod[0]?.Invoke();
-    void ActionSuccessed()
         => useItemCallBackMethod[1]?.Invoke();
+    void ActionSuccessed()
+        => useItemCallBackMethod[0]?.Invoke();
     IEnumerator UsingItemRoutine(float useTime)
     {
         float time = 0;

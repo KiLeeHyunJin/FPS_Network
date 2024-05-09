@@ -41,6 +41,10 @@ public class Define
         Wearable, Weapon,
         END
     }
+    public enum FireType
+    {
+        One, Repeat,END
+    }
 
     public enum Item
     {

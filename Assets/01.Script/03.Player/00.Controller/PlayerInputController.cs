@@ -10,13 +10,40 @@ public class PlayerInputController : MonoBehaviour
     public bool Run { get; private set; }
     public bool Around { get; private set; }
     Action[] actions;
+    InputActionMap inputMap;
+    InputAction fireOne;
+    InputAction fireRepeat;
     public void SetKey(Action method, Define.Key key)
     => actions[(int)key] = method;
+
+    public Define.FireType Fire { get; private set; }
+    public Define.FireType ChangeFireType
+    {
+        set
+        {
+            Fire = value;
+            OnChangeFire();
+        }
+    }
+
     private void Awake()
     {
         actions = new Action[(int)Define.Key.END];
-    }
+        InputActionAsset inputs = GetComponent<PlayerInput>().actions;
 
+        inputMap = inputs.FindActionMap("Player");
+        fireOne = inputMap.FindAction("FireOne");
+        fireRepeat = inputMap.FindAction("FirePress");
+    }
+    void MakeKeyActions()
+    {
+        InputActionAsset inputs = GetComponent<PlayerInput>().actions;
+        inputs.AddActionMap("PlayerKeyMap");
+        for (int i = 0; i < actions.Length; i++)
+        {
+            //inputs.
+        }
+    }
     void OnMove(InputValue inputValue)
     {
         MoveValue = inputValue.Get<Vector2>().normalized;
@@ -26,6 +53,14 @@ public class PlayerInputController : MonoBehaviour
         actions[(int)Define.Key.Space]?.Invoke();
     }
 
+    void OnFirePress(InputValue inputValue)
+    {
+        actions[(int)Define.Key.Press]?.Invoke();
+    }
+    void OnFireOne(InputValue inputValue)
+    {
+        actions[(int)Define.Key.Press]?.Invoke();
+    }
     void OnFirstWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F1]?.Invoke();
@@ -69,7 +104,22 @@ public class PlayerInputController : MonoBehaviour
         Around = inputValue.isPressed ? true : false;
         actions[(int)Define.Key.Alt]?.Invoke();
     }
-
+    void OnChangeFire()
+    {
+        inputMap.Disable();
+        switch (Fire)
+        {
+            case Define.FireType.One:
+                fireOne.Enable();
+                fireRepeat.Disable();
+                break;
+            case Define.FireType.Repeat:
+                fireOne.Disable();
+                fireRepeat.Enable();
+                break;
+        }
+        inputMap.Enable();
+    }
 
     private void OnDestroy()
     {

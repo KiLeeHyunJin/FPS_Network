@@ -35,9 +35,9 @@ public class CharacterController : MonoBehaviourPun
 
     CameraController cameraController;
     PlayerInputController inputController;
-    CharacterDataController dataProcess;
     CharacterAnimationController animController;
     ProcessingController processingController;
+    EquipController equipController;
 
     Rigidbody rigid;
 
@@ -67,7 +67,6 @@ public class CharacterController : MonoBehaviourPun
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<CharacterAnimationController>();
-        dataProcess = gameObject.GetOrAddComponent<CharacterDataController>();
 
         rigid = gameObject.GetOrAddComponent<Rigidbody>();
         capsule = GetComponent<CapsuleCollider>();
@@ -81,7 +80,7 @@ public class CharacterController : MonoBehaviourPun
     {
         GetView();
         CheckMine();
-        InitState();
+        //InitState();
         SetData();
         CollidersSetting();
         SetKeyAction();
@@ -90,7 +89,7 @@ public class CharacterController : MonoBehaviourPun
 
     void SetData()
     {
-        maxHp = maxHp == 0 ? 100 : maxHp;
+        maxHp = maxHp <= 0 ? 100 : maxHp;
         hp = maxHp;
         isCrouch = false;
         capsuleHeight = capsule.height;
@@ -232,18 +231,30 @@ public class CharacterController : MonoBehaviourPun
             capsule.center = capsuleCenter;
         }
     }
+    void CallFire()
+    {
+        equipController.Fire();
+    }
+    void CallReload()
+    {
+        equipController.Reload();
+    }
+    void CallChangeFireType()
+    {
+        inputController.ChangeFireType = equipController.FireTypeChange();
+    }
+
     void CallOne()
     {
-        dataProcess.SetCurrentWeaponNum = 0;
     }
     void CallTwo()
     {
-        dataProcess.SetCurrentWeaponNum = 1;
     }
     void CallThree()
     {
-        dataProcess.SetCurrentWeaponNum = 2;
     }
+
+
     void CallCrouch()
     {
         if (isGround)
@@ -261,34 +272,7 @@ public class CharacterController : MonoBehaviourPun
         if (isGround && isCrouch == false)
             rigid.velocity = new Vector3(rigid.velocity.x, jumpPower, rigid.velocity.z);
     }
-    void CallAroundView()
-    {
-        cameraController.Around = inputController.Around;
-    }
-    void CallChangePointView()
-    {
-        cameraController.ChangeView();
-    }
-    void CallReload()
-    {
-        if (dataProcess.IsAction)
-            return;
-        if (dataProcess.GetCurrentWeapon == Define.Weapon.Gun)
-        {
-            dataProcess.StartAction(2, dataProcess.Reload());
-        }
-    }
-    void CallFire()
-    {
-        photonView.RPC("Fire", RpcTarget.AllViaServer, transform.position, transform.rotation);
-    }
-    [PunRPC]
-    void Fire(Vector3 pos, Quaternion rot,PhotonMessageInfo info)
-    {
-        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
-        GameObject bullet = PhotonNetwork.Instantiate("bulletPrefab", pos, rot);
-        transform.position += rigid.velocity * lag;
-    }
+
     void CollidersSetting()
     {
         Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
@@ -311,6 +295,7 @@ public class CharacterController : MonoBehaviourPun
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
         cameraController = GetComponent<CameraController>();
+        equipController = GetComponent<EquipController>();
         if (mine == false)
         {
             Destroy(inputController);
@@ -330,19 +315,20 @@ public class CharacterController : MonoBehaviourPun
             return;
         inputController.SetKey(CallCrouch, Define.Key.C);
         inputController.SetKey(CallJump, Define.Key.Space);
-        inputController.SetKey(CallChangePointView, Define.Key.V);
-        inputController.SetKey(CallAroundView, Define.Key.Alt);
         inputController.SetKey(CallReload, Define.Key.R);
         inputController.SetKey(CallOne, Define.Key.F1);
         inputController.SetKey(CallTwo, Define.Key.F2);
         inputController.SetKey(CallThree, Define.Key.F3);
+        inputController.SetKey(CallFire, Define.Key.Press);
+        inputController.SetKey(CallChangeFireType, Define.Key.V);
     }
     public void Damage(int _damage)
     {
-        hp -= _damage;
+        hp -= equipController.ShieldCheck(_damage);
         if (hp <= 0)
         {
             animController.Die();
+            Destroy(inputController.gameObject);
             FSM.ChangeState(Define.State.Death);
         }
     }
