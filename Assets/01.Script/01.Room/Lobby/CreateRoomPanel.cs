@@ -19,6 +19,7 @@ public class CreateRoomPanel : MonoBehaviour
     {
         createCancleButton.onClick.AddListener(CreateRoomCancel);
         createRoomButton.onClick.AddListener(CreateRoomConfirm);
+        roomNameInputField.characterLimit = 15;
     }
 
     void CreateRoomConfirm()

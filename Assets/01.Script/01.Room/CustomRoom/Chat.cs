@@ -107,7 +107,7 @@ public class Chat : MonoBehaviourPun
         switch (chatTarget)
         {
             case ChatType.ALL:
-                photonView.RPC("AddMessage", RpcTarget.All, chat, ChatType.ALL, defaultParam);
+                photonView.RPC("AddMessage", RpcTarget.Others, chat, ChatType.ALL, defaultParam);
                 break;
             case ChatType.TARGET:
                 photonView.RPC("AddMessage", currentMessageTarget, chat, ChatType.TARGET, defaultParam);
@@ -116,6 +116,7 @@ public class Chat : MonoBehaviourPun
                 SendTeam(chat);
                 break;
         }
+        AddMessage(chat, chatTarget);
     }
     void SendTeam(string chat)
     {
