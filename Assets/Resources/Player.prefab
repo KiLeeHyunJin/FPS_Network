@@ -5726,6 +5726,9 @@ GameObject:
   - component: {fileID: 6694613048074042654}
   - component: {fileID: 1490060514008551445}
   - component: {fileID: 1404201885252024400}
+  - component: {fileID: 1615252558522227048}
+  - component: {fileID: 5614201057355916056}
+  - component: {fileID: -8042496997136724339}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6284,6 +6287,52 @@ MonoBehaviour:
   - {fileID: 3698329442651796312}
   - {fileID: 0}
   - {fileID: 4280448145748883065}
+--- !u!114 &1615252558522227048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1faa5de0b8fe348b3ae5cd01a9efcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 8544027938743297954}
+  rewindDuration: 3
+  positionRecordInterval: 0.1
+  rewindKey: 122
+  maxHealth: 100
+--- !u!114 &5614201057355916056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a3a778ba1eb37479ec3e580df3a3f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 100
+--- !u!114 &-8042496997136724339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e11535c06310cc84e8a1da68059f28e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minePrefab: {fileID: 6250664462136523070, guid: 9a9c049da191af34d9d7d4b6ee455ccc, type: 3}
+  numberOfMines: 1
+  baseDamageAmount: 50
+  damageIncrement: 10
 --- !u!1 &3204037897197038457
 GameObject:
   m_ObjectHideFlags: 0

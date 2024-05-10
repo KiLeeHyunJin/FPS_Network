@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
-public class TimeRewind : MonoBehaviour, IDamagable
+public class TimeRewind : MonoBehaviourPun, IDamagable
 {
-    public CharacterController characterController;
+    public Controller Controller;
     public float rewindDuration = 3.0f; // 되감기 지속 시간 (초)
     public float positionRecordInterval = 0.1f; // 위치 기록 간격
-    public KeyCode rewindKey = KeyCode.E; // 되감기 활성화 키
+    public KeyCode rewindKey = KeyCode.Z; // 되감기 활성화 키
     public int maxHealth = 100;
 
     private float rewindTime;
@@ -18,7 +19,7 @@ public class TimeRewind : MonoBehaviour, IDamagable
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
+        Controller = GetComponent<Controller>();
         currentHealth = maxHealth;
     }
 
@@ -46,6 +47,7 @@ public class TimeRewind : MonoBehaviour, IDamagable
         // 되감기 시작
         if (Input.GetKeyDown(rewindKey) && positionHistory.Count > 0)
         {
+            Debug.Log("시간 역행 시작");
             StartRewind();
         }
 
@@ -60,10 +62,10 @@ public class TimeRewind : MonoBehaviour, IDamagable
             }
             else
             {
-                characterController.enabled = false; // 수동 위치 업데이트를 위해 CharacterController 비활성화
+                Controller.enabled = false; // 수동 위치 업데이트를 위해 Controller 비활성화
                 transform.position = positionHistory[rewindIndex];
                 currentHealth = healthHistory[rewindIndex];
-                characterController.enabled = true;
+                Controller.enabled = true;
             }
         }
     }
@@ -91,5 +93,4 @@ public class TimeRewind : MonoBehaviour, IDamagable
             }
         }
     }
-
 }
