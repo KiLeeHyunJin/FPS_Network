@@ -99,6 +99,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         }
         //객체를 복사해서 해당 부모객체의 자식으로 설정
         PlayerEntry playerEntry = Instantiate(playerEntryPrefab, parent);
+        
         //객체에 초기 데이터를 설정
         playerEntry.SetPlayer(newPlayer, playerProperty, ChangeTeam, teamType);
         //플레이어 목록에 추가
@@ -109,7 +110,13 @@ public class RoomPanel : MonoBehaviourShowInfo
         //플레이어 리스트에서 플레이어 제거
         RemovePlayer(otherPlayer, playerList);
         //플레이어가 나갔다는 메시지 출력
+        Debug.Log(otherPlayer.NickName);
         chat.LeftPlayer(otherPlayer);
+        foreach (PlayerEntry player in playerList)
+        {
+            player.isMasterSymbol.gameObject.SetActive(player.Player == PhotonNetwork.MasterClient);
+
+        }
     }
 
     public void PlayerEnterRoom(Player newPlayer)
@@ -184,9 +191,11 @@ public class RoomPanel : MonoBehaviourShowInfo
     }
     public void PlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
+        Debug.Log("UpdateList");
         //플레이어 리스트를 돌면서 
         foreach (PlayerEntry player in playerList)
         {
+            player.isMasterSymbol.gameObject.SetActive(player.Player == PhotonNetwork.MasterClient);
             //플레이어 액터가 같을 경우
             if (player.Player.ActorNumber == targetPlayer.ActorNumber)
             {
@@ -212,6 +221,7 @@ public class RoomPanel : MonoBehaviourShowInfo
             {
                 //비활성화 및 종료
                 startButton.interactable = false;
+                
                 return;
             }
         }

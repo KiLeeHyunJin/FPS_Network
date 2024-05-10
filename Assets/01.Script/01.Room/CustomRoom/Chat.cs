@@ -39,7 +39,7 @@ public class Chat : MonoBehaviourPun
     public void LeftPlayer(Player otherPlayer)
     {
         //현재 귓속말 상대가 방을 나갔다면
-        if (currentMessageTarget.ActorNumber == otherPlayer.ActorNumber)
+        if (currentMessageTarget!=null && currentMessageTarget.ActorNumber == otherPlayer.ActorNumber)
         {
             //타겟을 비우고 채팅 타입을 전체채팅으로 변경한다.
             currentMessageTarget = null;

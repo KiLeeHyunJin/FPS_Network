@@ -16,6 +16,7 @@ public class PlayerEntry : MonoBehaviour
     [SerializeField] int team;
 
     [SerializeField] Image readyOn;
+    [SerializeField] public Image isMasterSymbol;
 
     public int Team { get { return team; } }
     public bool ReadyState { get; private set; }
