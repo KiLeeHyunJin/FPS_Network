@@ -1,77 +1,56 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class ShopUIManager : MonoBehaviour
 {
-    public LayerMask startPosLayer;
+    public PopUpUI purChasePanelPrefab;
+    public GameObject shopCanvas;
 
-    public GameObject shopPanel;
-    public TextMeshProUGUI notPurchaseItemText;
-    public TextMeshProUGUI goldText;
+    public Inventory inventory;
 
-    public bool shopFlag;
-    public bool startPos;
+    Button[] shopBtn;
+    
 
-    private Coroutine notPurchaseText;
 
-    public GoldManager goldManager;
+    //버튼 클릭 시 나오는 -> 구매 yes / no 팝업은 --> 팝업 ui 매니저 이용하기. 
+    //no하면 그냥 팝업 꺼주면 되는데 yes 하면 여러 작업을 진행해야함. 
 
-    void Start()
+    //시작시에 canvas 꺼버려야함. 
+    private void Start()
     {
-        shopPanel.SetActive(shopFlag); //게임 시작 시에는 상점 패널이 꺼져 있어야한다. 
-        goldText.text = $"{goldManager.Gold}"; // start 시점에서 GoldManager의 Gold에 접근한다. (0으로 초기화되어있음)
+        //shopCanvas.gameObject.SetActive(false);
+
+        shopBtn=shopCanvas.GetComponentsInChildren<Button>(true); //button 컴포넌트와 매치되는
+        // 모든 자식 오브젝트들을 찾아옴 ( button이 안 달려있으면 안가져옴. )
+
+        for(int i=0;i<shopBtn.Length;i++)
+        {
+            shopBtn[i].onClick.AddListener(onItemPanelClick);
+        }
+        
+
     }
 
-    private void OnTriggerStay(Collider other) //시작 지점에 있는 동안만 상점창을 열 수 있도록한다. 
+    public void onItemPanelClick() //Item 버튼에 부여할 이벤트 
     {
-        if (((1 << other.gameObject.layer) & startPosLayer) != 0)
+        Manager.UI.ShowPopUpUI(purChasePanelPrefab);
+    }
+
+
+    // input을 이용한 상점 창 열기 -->임시임. 
+    public void OnX(InputValue value)
+    {
+        if (value.isPressed)
         {
-            startPos = true;
+            shopCanvas.SetActive(!shopCanvas.activeSelf);
         }
 
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (((1 << other.gameObject.layer) & startPosLayer) != 0)
-        {
-            startPos = false;
-        }
-
-    }
-
-    //하나의 키를 쓰니까 이 부분을 그냥 분리를 하는게 맞는것 같다. 
-    public void OnShop(InputValue value)
-    {
-        if (value.isPressed) //실제로는  startpos 가 true 인 상황에서만 열리도록 해주면된다. 
-        {
-            shopFlag = !shopFlag;
-            shopPanel.SetActive(shopFlag);
-        }
-
-    }
 
 
-    public void OnNotPurchaseText()
-    {
-        notPurchaseText=StartCoroutine(notPurchaseTextOnRoutine());
-    }
+    
 
-    IEnumerator notPurchaseTextOnRoutine()
-    // 어차피 물품 구매 불가 text는 상점창이 떠 있는 상황에서만 뜰 수 있어야 한다. 
-    // 
-    {
-        if(notPurchaseText!=null) //코루틴이 실행중이라면 중지시키고 실행해야 한다. 
-        {
-            StopCoroutine(notPurchaseText);
-        }
-
-        notPurchaseItemText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        notPurchaseItemText.gameObject.SetActive(false);
-
-    }
 
 }

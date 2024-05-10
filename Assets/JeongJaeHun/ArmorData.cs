@@ -1,80 +1,18 @@
-using JJH;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class ArmorData : ItemDataSet, IInteractable
+public class ArmorData : MonoBehaviour
 {
-    private int _defense;
-    private int _durability;
-
-    //추후에 추가적으로 가격이나 프리팹 형태 등 들어가야 되면 넣으면 된다. 
-
-    public int Defense  //방어구 아이템의 방어도. 
-    {
-        get { return _defense; }
-        set { _defense = value; }
-    }
-
-    public int Durability  //방어구 아이템의 내구도 
-    {
-        get { return _durability; }
-        set { _durability = value; }
-    }
-
-    public ArmorType armorType; //public enum을 통해 실제로 inspector 창에서 아머 구분해주기. 
-
-    private void Start()
-    {
-
-        if (armorType == ItemDataSet.ArmorType.Standard_Armor) //아머가 기본 아머
-        {
-
-            Price = 0; //기본으로 주어짐. ++ 상속 받은 price 임
-            Defense = 1;
-            Durability = 5;
-
-        }
-        else if (armorType == ItemDataSet.ArmorType.Light_Armor) //경량 아머 
-        {
-            Price = 100;
-            Defense = 2;
-            Durability = 10;
-
-        }
-        else if (armorType == ItemDataSet.ArmorType.Middle_Armor) //중간 아머 
-        {
-            Price = 200;
-            Defense = 3;
-            Durability = 15;
-
-        }
-        else if (armorType == ItemDataSet.ArmorType.Heavy_Armor) //무거운 아머 
-        {
-
-            Price = 300;
-            Defense = 4;
-            Durability = 20;
-
-        }
+    // 아머는 인벤토리에 들어가지 않고 그냥 방어도랑 내구도만 있으면된다. 
+    // 장착된 상태인지 확인해야 하고 그 장착된 방어도에 따라 받는 데미지가 달라짐 
+    // 결국 핵심은 
+    // 1. 상점에서 price 비교에 따라 구입 성공/실패를 구현한다.
+    // 2. 구입에 성공하면 자동으로 장착된다.
+    // 3. 방어구의 종류에 따라 내구도와 방어력이 달라진다. --> 이를 플레이어에게 반영해준다.
+    // 4. 방어구 관련된 이미지 등 ui를 업데이트 해준다. 
+    // 5. 인벤토리에 직접 들어가지는 않으나 장착중이라는 표시를 해야하기 때문에 따로 저장을 해줘야한다. 
 
 
-    }
-
-    public void Interaction() //아머 같은 경우는 바닥에서 줍는 경우가 없으니까 일단 구현 x 
-    {
-
-    }
-
-    private void Update()
-    {
-
-    }
-
-
-
-    public ArmorData(ArmorType armorType)
-    {
-        Price = Price;
-        _defense = Defense;
-        _durability = Durability;
-    }
 
 }
