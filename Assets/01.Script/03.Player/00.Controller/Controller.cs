@@ -10,6 +10,9 @@ public class Controller : MonoBehaviourPun
     [SerializeField] float groundCheckLength;
     [Range(2, 10f)]
     [SerializeField] float jumpPower;
+    [SerializeField] float walkSpeed;
+    [SerializeField] float runSpeed;
+    [SerializeField] float crouchSpeed;
     [SerializeField] LayerMask groundLayer;
 
     [SerializeField] GameObject rootBone;
@@ -161,6 +164,8 @@ public class Controller : MonoBehaviourPun
         inputController.SetKey(moveProcess.Crouch, Define.Key.C);
         inputController.SetKey(moveProcess.Jump, Define.Key.Space);
         inputController.SetMoveType(moveProcess.SetMoveType);
+
+        moveProcess.SetMoveSpeed(walkSpeed, runSpeed, crouchSpeed);
     }
 
 
@@ -211,10 +216,12 @@ public class Controller : MonoBehaviourPun
 
 
     PhotonView view;
+    PhotonAnimatorView animatorView;
     PhotonTransformView transformView;
     void GetView()
     {
         view = gameObject.GetOrAddComponent<PhotonView>();
+        animatorView = gameObject.GetOrAddComponent<PhotonAnimatorView>();
         transformView = gameObject.GetOrAddComponent<PhotonTransformView>();
     }
 

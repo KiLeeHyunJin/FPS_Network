@@ -2370,10 +2370,10 @@ SkinnedMeshRenderer:
   - {fileID: 6992288609508519438}
   - {fileID: 4726459049785959070}
   m_BlendShapeWeights: []
-  m_RootBone: {fileID: 5902519895747997299}
+  m_RootBone: {fileID: 5819182542138014547}
   m_AABB:
-    m_Center: {x: -0.04660046, y: -0.052196514, z: -0.49458295}
-    m_Extent: {x: 0.10774508, y: 0.09094338, z: 0.08729483}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.10774508, y: 0.16670246, z: 0.14293647}
   m_DirtyAABB: 0
 --- !u!1 &2352292783762459242
 GameObject:
@@ -5712,7 +5712,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2121747480424366495}
   - component: {fileID: 5045083684308435195}
-  - component: {fileID: 145086687019663604}
   - component: {fileID: 8693427242519498167}
   - component: {fileID: 8544027938743297954}
   - component: {fileID: 2848950838868627797}
@@ -5787,29 +5786,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!136 &145086687019663604
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3162171735836929336}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.15
-  m_Height: 1.85
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.95, z: 0}
 --- !u!114 &8693427242519498167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5837,6 +5813,9 @@ MonoBehaviour:
   limitAngle: 35
   groundCheckLength: 0.249
   jumpPower: 8
+  walkSpeed: 2
+  runSpeed: 3.5
+  crouchSpeed: 1.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -6051,7 +6030,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 2848950838868627797}
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   sceneViewId: 0
@@ -10299,10 +10277,10 @@ SkinnedMeshRenderer:
   - {fileID: 102324242048204090}
   - {fileID: 5125593583077363278}
   m_BlendShapeWeights: []
-  m_RootBone: {fileID: 5902519895747997299}
+  m_RootBone: {fileID: 2336189913754951904}
   m_AABB:
-    m_Center: {x: -0.046600543, y: -0.05219651, z: 0.49458292}
-    m_Extent: {x: 0.10774509, y: 0.09094345, z: 0.08729467}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.10774509, y: 0.17312008, z: 0.12833855}
   m_DirtyAABB: 0
 --- !u!1 &5218932127024984273
 GameObject:
@@ -14329,8 +14307,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraRoot: {fileID: 3303732465516620629}
-  front: -0.1
-  up: 0.1
+  front: 0.04
+  up: -0.05
 --- !u!1 &7322839291418061859
 GameObject:
   m_ObjectHideFlags: 0

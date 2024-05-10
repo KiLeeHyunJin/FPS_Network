@@ -14,9 +14,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
 
     //byte[] Pos;
     //byte layer;
-    Vector3 motionValue;
+    //short[] changedBitPos;
 
-    short[] changedBitPos;
     int[] layerId;
     int[] floatId;
     Coroutine[] dampingCo;
@@ -101,6 +100,16 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     {
         SetState(AnimatorState.JumpFinish, true);
     }
+    [PunRPC]
+    void CrouchRPC()
+    {
+        anim.SetTrigger(ChangeEnterId);
+    }
+    [PunRPC]
+    void JumpRPC()
+    {
+        anim.SetTrigger(JumpEnterId);
+    }
     void SetState(AnimatorState type, bool state)
     {
         anim.SetBool(layerId[(int)type], state);
@@ -118,13 +127,14 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         JumpEnterId = Animator.StringToHash("JumpEnter");
         ChangeEnterId = Animator.StringToHash("ChangeEnter");
 
-        int JumpFinishId = Animator.StringToHash("JumpFinish");
         int ForwardId = Animator.StringToHash("Forward");
+        int TurnId = Animator.StringToHash("Turn");
         int JumpId = Animator.StringToHash("Jump");
+
+        int JumpFinishId = Animator.StringToHash("JumpFinish");
         int CrouchId = Animator.StringToHash("Crouch");
         int MoveId = Animator.StringToHash("Move");
         int RunId = Animator.StringToHash("Run");
-        int TurnId = Animator.StringToHash("Turn");
 
         floatId = new int[] { TurnId, JumpId, ForwardId };
         layerId = new int[] { MoveId, RunId, CrouchId, JumpFinishId };
@@ -181,16 +191,7 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     //    return value * 0.01f;
     //}
 
-    [PunRPC]
-    void CrouchRPC()
-    {
-        anim.SetTrigger(ChangeEnterId);
-    }
-    [PunRPC]
-    void JumpRPC()
-    {
-        anim.SetTrigger(JumpEnterId);
-    }
+
     //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     //{
     //    if (stream.IsWriting)
@@ -211,7 +212,7 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
 
     IEnumerator DampingAnimationRoutine(float value, AnimatorFloatValue type)
     {
-        float startValue = anim.GetFloat((int)type);
+        float startValue = anim.GetFloat(floatId[(int)type]);
         float time = 0;
         float currentValue;
         while (time <= 1)
