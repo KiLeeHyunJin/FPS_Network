@@ -1,39 +1,51 @@
 using UnityEngine;
 using Photon.Pun;
+using Firebase.Database;
+using System.Collections.Generic;
 
 public class MineSkill : MonoBehaviourPun
 {
     public GameObject minePrefab;
-    public Transform mineSpawnPoint;
-    public int maxMines = 3;
-    private int currentMines;
+    public int numberOfMines;
+    public int baseDamageAmount = 50;
+    public int damageIncrement = 10;
+
+    private DatabaseReference dbReference;
 
     void Start()
     {
-        currentMines = maxMines;
+        // Firebase Database 초기화
+        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
-    void Update()
+    public void DeployMines(Vector3 position)
     {
-        // 지뢰 설치
-        if (Input.GetKeyDown(KeyCode.G) && currentMines > 0)
+        List<Dictionary<string, object>> mineDataList = new List<Dictionary<string, object>>();
+
+        for (int i = 0; i < numberOfMines; i++)
         {
-            PlaceMine();
-        }
-    }
+            Vector3 minePosition = position + new Vector3(i, 0, 0); // 위치
+            GameObject mine = PhotonNetwork.Instantiate(minePrefab.name, minePosition, Quaternion.identity);
+            Mine mineScript = mine.GetComponent<Mine>();
 
-    void PlaceMine()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GameObject mine = PhotonNetwork.Instantiate(minePrefab.name, mineSpawnPoint.position, mineSpawnPoint.rotation, 0);
-            currentMines--;
-        }
-    }
+            if (mineScript != null)
+            {
+                mineScript.damageAmount = baseDamageAmount + (damageIncrement * i);
+            }
 
-    // 지뢰 충전 메서드
-    public void RechargeMines()
-    {
-        currentMines = maxMines;
+            // Firebase용 데이터 생성
+            Dictionary<string, object> mineData = new Dictionary<string, object>
+            {
+                { "positionX", minePosition.x },
+                { "positionY", minePosition.y },
+                { "positionZ", minePosition.z },
+                { "damageAmount", mineScript.damageAmount }
+            };
+            mineDataList.Add(mineData);
+        }
+
+        // Firebase에 지뢰 배치 데이터 저장
+        string userId = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+        dbReference.Child("mineDeployments").Child(userId).SetValueAsync(mineDataList);
     }
 }

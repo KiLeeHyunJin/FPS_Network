@@ -3,53 +3,37 @@ using Photon.Pun;
 
 public class Mine : MonoBehaviourPun
 {
-    public float explosionRadius = 5f;
-    public float explosionForce = 700f;
-    public int damage = 50;
-    public GameObject explosionEffect;
+    public int damageAmount = 50;
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && PhotonNetwork.IsMasterClient)
+        // Photon을 통한 네트워크 동기화
+        if (photonView.IsMine)
         {
-            Explode();
+            PhotonView targetPhotonView = other.GetComponent<PhotonView>();
+            if (targetPhotonView != null)
+            {
+                // 모든 클라이언트에 피해를 전달
+                photonView.RPC("ApplyDamage", RpcTarget.All, targetPhotonView.ViewID);
+            }
+
+            // 지뢰 파괴
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
     [PunRPC]
-    private void Explode()
+    void ApplyDamage(int targetViewID)
     {
-        // 폭발 이펙트 생성
-        GameObject effect = Instantiate(explosionEffect, transform.position, transform.rotation);
-        Destroy(effect, 2f);
-
-        // 주변의 모든 콜라이더에 충격 및 피해 적용
-        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
-        foreach (Collider nearbyObject in colliders)
+        PhotonView targetView = PhotonView.Find(targetViewID);
+        if (targetView != null)
         {
-            /*
-            PlayerHp hp = nearbyObject.GetComponent<PlayerHp>();
-            if (hp != null)
+            IDamagable target = targetView.GetComponent<IDamagable>();
+            if (target != null)
             {
-                hp.TakeDamage(damage);
-            }
-            */
-
-            // 물리 효과
-            Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+                target.TakeDamage(damageAmount);
+                Debug.Log($"Mine triggered and dealt {damageAmount} damage to {targetView.Owner.NickName}");
             }
         }
-
-        // 지뢰 파괴
-        PhotonNetwork.Destroy(gameObject);
-    }
-
-    // 다른 플레이어에게 폭발 신호를 보내는 함수
-    public void Detonate()
-    {
-        photonView.RPC("Explode", RpcTarget.All);
     }
 }
