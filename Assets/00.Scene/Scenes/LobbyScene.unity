@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -26326,7 +26326,7 @@ MonoBehaviour:
   createButton: {fileID: 1552416205}
   leaveButton: {fileID: 6814877930457568820}
   roomContent: {fileID: 8309145696329165074}
-  roomEntryPrefab: {fileID: 3248006562069627343, guid: 03c5e15309335324fba99d68e38cb08b, type: 3}
+  roomEntryPrefab: {fileID: 3248006562069627343, guid: 0ffe936307c883b4bbb66cd93d876813, type: 3}
 --- !u!1 &8309145697464431688
 GameObject:
   m_ObjectHideFlags: 0
