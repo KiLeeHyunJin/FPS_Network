@@ -1,46 +1,59 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerProperty : MonoBehaviour
 {
-    Chat chat; //´ëÈ­Ã¢
-    Player player; //¿ìÅ¬¸¯ÇÑ ´ë»ó
-    [SerializeField] Button whisper; //±Ó¼Ó¸» ¹öÆ°
-    [SerializeField] Button getOut; //Ãß¹æ ¹öÆ°
-    [SerializeField] Button teamChange; //ÆÀ ÀÌµ¿ ¹öÆ°
+    Chat chat; //ëŒ€í™”ì°½
+    [SerializeField] Player player; //ìš°í´ë¦­í•œ ëŒ€ìƒ
+    [SerializeField] Button whisper; //ê·“ì†ë§ ë²„íŠ¼
+    [SerializeField] Button getOut; //ì¶”ë°© ë²„íŠ¼
+    [SerializeField] Button teamChange; //íŒ€ ì´ë™ ë²„íŠ¼
+    [SerializeField] Button windowClick;
+
+    [SerializeField] TMP_Text whisperText;
     private void Awake()
     {
-        whisper.onClick.AddListener(Whisper); //±Ó¼Ó¸» ¹öÆ°¿¡ ±Ó¼Ó¸» ÇÔ¼ö ¿¬°á
-        getOut.onClick.AddListener(GetOut); //Ãß¹æ ¹öÆ°¿¡ Ãß¹æ ÇÔ¼ö ¿¬°á
-        teamChange.onClick.AddListener(TeamChange); //ÆÀ º¯°æ ¹öÆ°¿¡ ºö º¯°æ ÇÔ¼ö ¿¬°á
+        windowClick.onClick.AddListener(Close);
+        whisper.onClick.AddListener(Whisper); //ê·“ì†ë§ ë²„íŠ¼ì— ê·“ì†ë§ í•¨ìˆ˜ ì—°ê²°
+        getOut.onClick.AddListener(GetOut); //ì¶”ë°© ë²„íŠ¼ì— ì¶”ë°© í•¨ìˆ˜ ì—°ê²°
+        teamChange.onClick.AddListener(TeamChange); //íŒ€ ë³€ê²½ ë²„íŠ¼ì— ë¹” ë³€ê²½ í•¨ìˆ˜ ì—°ê²°
     }
-
+    public bool isisTest(Player player)
+    {
+        return chat.isTest(player);
+    }
     private void Start()
     {
         chat ??= FindObjectOfType<Chat>();
     }
     public void SetChat(Chat _chat)
     {
-        chat = _chat; //´ëÈ­Ã¢ ¿¬°á
+        chat = _chat; //ëŒ€í™”ì°½ ì—°ê²°
     }
     public void SetPlayer(Player _player)
     {
-        if (_player != null) //¿ìÅ¬¸¯ °´Ã¼°¡ ºñ¾îÀÖ´ÂÁö È®ÀÎ
-            player = _player; //ÀÖ´Ù¸é ´ëÀÔ
+        if (_player != null) //ìš°í´ë¦­ ê°ì²´ê°€ ë¹„ì–´ìˆëŠ”ì§€ í™•ì¸
+            player = _player; //ìˆë‹¤ë©´ ëŒ€ì…
         else
-            gameObject.SetActive(false); //¾ø´Ù¸é ¿À·ù±â¶§¹®¿¡ ºñÈ°¼ºÈ­
+            gameObject.SetActive(false); //ì—†ë‹¤ë©´ ì˜¤ë¥˜ê¸°ë•Œë¬¸ì— ë¹„í™œì„±í™”
     }
-
-
+    public void isWhispering(bool b)
+    {
+        if(b)
+        whisperText.text = "í•´ì œ";
+        else
+            whisperText.text = "ê·“ì†ë§";
+    }
     private void OnEnable()
     {
         if(PhotonNetwork.IsMasterClient)
         {
-            //¼Ó¼º¹öÆ°À» Å¬¸¯ÇÑ Å¬¶óÀÌ¾ğÆ®°¡ ¸¶½ºÅÍ¶ó¸é Ãß¹æ°ú ÆÀ º¯°æ ¹öÆ°ÀÌ ºñÈ°¼ºÈ­µÇ¾îÀÖ´Ù¸é È°¼ºÈ­ÇÑ´Ù.
+            //ì†ì„±ë²„íŠ¼ì„ í´ë¦­í•œ í´ë¼ì´ì–¸íŠ¸ê°€ ë§ˆìŠ¤í„°ë¼ë©´ ì¶”ë°©ê³¼ íŒ€ ë³€ê²½ ë²„íŠ¼ì´ ë¹„í™œì„±í™”ë˜ì–´ìˆë‹¤ë©´ í™œì„±í™”í•œë‹¤.
             if (getOut.gameObject.activeSelf == false)
                 getOut.gameObject.SetActive(true);
             if (teamChange.gameObject.activeSelf == false)
@@ -48,7 +61,7 @@ public class PlayerProperty : MonoBehaviour
         }
         else
         {
-            //¼Ó¼º¹öÆ°À» Å¬¸¯ÇÑ Å¬¶óÀÌ¾ğÆ®°¡ ¸¶½ºÅÍ°¡ ¾Æ´Ï¶ó¸é Ãß¹æ°ú ÆÀ º¯°æ ¹öÆ°ÀÌ È°¼ºÈ­µÇ¾îÀÖ´Ù¸é ºñÈ°¼ºÈ­ÇÑ´Ù.
+            //ì†ì„±ë²„íŠ¼ì„ í´ë¦­í•œ í´ë¼ì´ì–¸íŠ¸ê°€ ë§ˆìŠ¤í„°ê°€ ì•„ë‹ˆë¼ë©´ ì¶”ë°©ê³¼ íŒ€ ë³€ê²½ ë²„íŠ¼ì´ í™œì„±í™”ë˜ì–´ìˆë‹¤ë©´ ë¹„í™œì„±í™”í•œë‹¤.
             if (getOut.gameObject.activeSelf)
                 getOut.gameObject.SetActive(false);
             if (teamChange.gameObject.activeSelf)
@@ -56,38 +69,42 @@ public class PlayerProperty : MonoBehaviour
         }
     }
 
-
-    void Whisper()
+    void Close()
     {
-        //Ã¤ÆÃÀ» º¸³¾ »ó´ë¸¦ ¼³Á¤ÇÑ´Ù.
-        chat.SendTarget(player);
-        //ÀÓ¹«¸¦ ¸¶ÃÆ±â¿¡ ºñÈ°¼ºÈ­
         gameObject.SetActive(false);
     }
-
+    void Whisper()
+    {
+        //ì±„íŒ…ì„ ë³´ë‚¼ ìƒëŒ€ë¥¼ ì„¤ì •í•œë‹¤.
+        chat.SendTarget(player);
+        //ì„ë¬´ë¥¼ ë§ˆì³¤ê¸°ì— ë¹„í™œì„±í™”
+       
+        gameObject.SetActive(false);
+    }
+  
     void GetOut()
     {
-        //Ãß¹æ½ÃÅ²´Ù.
+        //ì¶”ë°©ì‹œí‚¨ë‹¤.
         PhotonNetwork.CloseConnection(player);
-        //ÀÓ¹«¸¦ ¸¶ÃÆ±â¿¡ ºñÈ°¼ºÈ­
+        //ì„ë¬´ë¥¼ ë§ˆì³¤ê¸°ì— ë¹„í™œì„±í™”
         gameObject.SetActive(false);
     }
 
     void TeamChange()
     {
-        //ÃÖ´ë ¼³Á¤ÀÎ¿øÀÇ ¹İÀ» ÀúÀåÇÑ´Ù.
+        //ìµœëŒ€ ì„¤ì •ì¸ì›ì˜ ë°˜ì„ ì €ì¥í•œë‹¤.
         int halfCount = PhotonNetwork.CurrentRoom.MaxPlayers >> 1;
         int num = 1;
-        //ÇöÀç ÆÀ ÄÚµå°¡ 1ÀÌ¸é º¯°æÇÒ ÆÀ ÄÚµå¸¦ 2·Î ÀúÀåÇÑ´Ù.
+        //í˜„ì¬ íŒ€ ì½”ë“œê°€ 1ì´ë©´ ë³€ê²½í•  íŒ€ ì½”ë“œë¥¼ 2ë¡œ ì €ì¥í•œë‹¤.
         if (num == player.GetPhotonTeam().Code)
             num = 2;
-        //º¯°æÇÒ ÆÀÀÇ ÀÎ¿øÀ» °¡Á®¿Â´Ù.
+        //ë³€ê²½í•  íŒ€ì˜ ì¸ì›ì„ ê°€ì ¸ì˜¨ë‹¤.
         int teamCount = PhotonTeamsManager.Instance.GetTeamMembersCount((byte)num);
-        //º¯°æÇÒ ÆÀÀÇ ÀÎ¿øÀÌ Ã¡À¸¸é ÆÀ º¯°æÀ» ½ÃµµÇÏÁö ¾Ê´Â´Ù.
-        //ÆÀÀÇ ÀÎ¿øÀÌ ¾ÈÃ¡À¸¸é ÆÀ º¯°æÀ» ½ÃµµÇÑ´Ù.
+        //ë³€ê²½í•  íŒ€ì˜ ì¸ì›ì´ ì°¼ìœ¼ë©´ íŒ€ ë³€ê²½ì„ ì‹œë„í•˜ì§€ ì•ŠëŠ”ë‹¤.
+        //íŒ€ì˜ ì¸ì›ì´ ì•ˆì°¼ìœ¼ë©´ íŒ€ ë³€ê²½ì„ ì‹œë„í•œë‹¤.
         if (halfCount > teamCount)
             player.SwitchTeam((byte)num);
-        //ÀÓ¹«¸¦ ¸¶ÃÆ±â¿¡ ºñÈ°¼ºÈ­
+        //ì„ë¬´ë¥¼ ë§ˆì³¤ê¸°ì— ë¹„í™œì„±í™”
         gameObject.SetActive(false);
     }
 }

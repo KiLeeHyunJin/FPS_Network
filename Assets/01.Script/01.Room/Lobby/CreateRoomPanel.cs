@@ -33,6 +33,7 @@ public class CreateRoomPanel : MonoBehaviour
 
         RoomOptions roomOptions = new RoomOptions { MaxPlayers = maxPlayer }; //�ִ��ο����� �ɼ� ����
         PhotonNetwork.CreateRoom(roomName, roomOptions);
+        gameObject.SetActive(false);
     }
     void CreateRoomCancel()
     {

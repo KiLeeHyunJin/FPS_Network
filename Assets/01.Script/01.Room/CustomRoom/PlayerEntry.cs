@@ -56,7 +56,10 @@ public class PlayerEntry : MonoBehaviour
             //속성창 출력
             property.gameObject.SetActive(true);
             //속성 대상 설정
+           
             property.SetPlayer(player);
+            property.isWhispering(property.isisTest(player));
+            
             //위치를 마우스 위치로 설정
             RectTransform rect = property.transform as RectTransform;
             if(rect != null)

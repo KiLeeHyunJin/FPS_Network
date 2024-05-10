@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Chat : MonoBehaviourPun
 {
-    public enum ChatType { ALL, TARGET, TEAM, NEW, END }
+    public enum ChatType { ALL, TARGET, TEAM, NEW, MY, END }
 
     [SerializeField] Button chatResetButton; //대화창 초기화 버튼
     [SerializeField] TMP_InputField inputField; //입력창
@@ -46,6 +46,13 @@ public class Chat : MonoBehaviourPun
             chatTarget = ChatType.ALL;
         }
         AddMessage($"{otherPlayer.NickName}이 퇴장하였습니다.", Chat.ChatType.NEW, (byte)0);
+    }
+    public bool isTest(Player player)
+    {
+        if (player == currentMessageTarget)
+            return true;
+        else
+            return false;
     }
     public void SendTarget(Player target)
     {
@@ -86,6 +93,9 @@ public class Chat : MonoBehaviourPun
             case ChatType.TEAM:
                 newMessage.color = Color.blue;
                 break;
+            case ChatType.MY:
+                newMessage.color = Color.green;
+                break;
             case ChatType.NEW:
                 newMessage.color = Color.yellow;
                 newMessage.fontStyle |= FontStyles.Bold; //폰트를 두껍게 설정
@@ -108,15 +118,21 @@ public class Chat : MonoBehaviourPun
         {
             case ChatType.ALL:
                 photonView.RPC("AddMessage", RpcTarget.Others, chat, ChatType.ALL, defaultParam);
+               
                 break;
             case ChatType.TARGET:
-                photonView.RPC("AddMessage", currentMessageTarget, chat, ChatType.TARGET, defaultParam);
+                photonView.RPC("AddMessage", currentMessageTarget, $"[Whisper]  {chat}", ChatType.TARGET, defaultParam);
+                
                 break;
             case ChatType.TEAM:
                 SendTeam(chat);
                 break;
         }
-        AddMessage(chat, chatTarget);
+        if(chatTarget != ChatType.TARGET)
+            AddMessage(chat, chatTarget);
+        else
+            AddMessage(chat, ChatType.MY);
+
     }
     void SendTeam(string chat)
     {
