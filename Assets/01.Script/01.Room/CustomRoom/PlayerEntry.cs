@@ -15,6 +15,8 @@ public class PlayerEntry : MonoBehaviour
     [SerializeField] TMP_Text buttonName;
     [SerializeField] int team;
 
+    [SerializeField] Image readyOn;
+
     public int Team { get { return team; } }
     public bool ReadyState { get; private set; }
     public Player Player { get { return player; } }
@@ -25,48 +27,51 @@ public class PlayerEntry : MonoBehaviour
     public void SetPlayer(Player player , PlayerProperty buttons, Action<PlayerEntry, int> _changeTeam , int teamType = 0)
     {
         this.player = player;
-        playerName.text = player.NickName; //ÇÃ·¹ÀÌ¾î ´Ğ³×ÀÓ Ãâ·Â
-        changeTeamMethod = _changeTeam; //¾×¼Ç ÇÔ¼ö ¿¬°á
-        isMine = player.IsLocal; //º»ÀÎ °´Ã¼ÀÎÁö È®ÀÎ
-        buttonName.text = isMine ? "ÁØºñ" : "¼Ó¼º"; //º»ÀÎ °´Ã¼¶ó¸é ÁØºñ Ç¥±â, ¾Æ´Ï¶ó¸é ¼Ó¼º Ç¥±â
-        ReadyState = player.GetProperty<bool>(DefinePropertyKey.READY);  //·¹µğÀÎÁö ¼³Á¤ 
-        team = teamType; //ÆÀ Å¸ÀÔ ¼³Á¤
+        playerName.text = player.NickName; //í”Œë ˆì´ì–´ ë‹‰ë„¤ì„ ì¶œë ¥
+        changeTeamMethod = _changeTeam; //ì•¡ì…˜ í•¨ìˆ˜ ì—°ê²°
+        isMine = player.IsLocal; //ë³¸ì¸ ê°ì²´ì¸ì§€ í™•ì¸
+        buttonName.text = isMine ? "ì¤€ë¹„" : "ì†ì„±"; //ë³¸ì¸ ê°ì²´ë¼ë©´ ì¤€ë¹„ í‘œê¸°, ì•„ë‹ˆë¼ë©´ ì†ì„± í‘œê¸°
+        ReadyState = player.GetProperty<bool>(DefinePropertyKey.READY);  //ë ˆë””ì¸ì§€ ì„¤ì • 
+        team = teamType; //íŒ€ íƒ€ì… ì„¤ì •
 
-        ChangeReady(ReadyState); //ÁØºñ»óÅÂÀÎÁö ¾÷µ¥ÀÌÆ®
-        property = buttons;//Å¬¸¯ ¹öÆ°
-        if (teamType != 0) //ÆÀ Å¸ÀÔÀÌ 0ÀÌ ¾Æ´Ï¶ó¸é  ÆÀ ¸Å´ÏÀú¿¡ ¾÷µ¥ÀÌÆ® 
+        ChangeReady(ReadyState); //ì¤€ë¹„ìƒíƒœì¸ì§€ ì—…ë°ì´íŠ¸
+        property = buttons;//í´ë¦­ ë²„íŠ¼
+        if (teamType != 0) //íŒ€ íƒ€ì…ì´ 0ì´ ì•„ë‹ˆë¼ë©´  íŒ€ ë§¤ë‹ˆì €ì— ì—…ë°ì´íŠ¸ 
             player.JoinTeam((byte)teamType);
     }
     public void Ready()
     {
-        //ÁØºñ ¹öÆ°À» Å¬¸¯ÇÒ °æ¿ì
-
-        if (isMine) //º»ÀÎ °´Ã¼¸¦ ´­·¶´Ù¸é
+        //ì¤€ë¹„ ë²„íŠ¼ì„ í´ë¦­í•  ê²½ìš°
+      
+        if (isMine) //ë³¸ì¸ ê°ì²´ë¥¼ ëˆŒë €ë‹¤ë©´
         {
             bool ready = player.GetProperty<bool>(DefinePropertyKey.READY);
             ready = !ready;
             player.SetProperty(DefinePropertyKey.READY, ready);
             PhotonNetwork.AutomaticallySyncScene = ready;
+           
         }
-        else //»ó´ë °´Ã¼¸¦ ´­·¶´Ù¸é
+        else //ìƒëŒ€ ê°ì²´ë¥¼ ëˆŒë €ë‹¤ë©´
         {
-            //¼Ó¼ºÃ¢ Ãâ·Â
+            //ì†ì„±ì°½ ì¶œë ¥
             property.gameObject.SetActive(true);
-            //¼Ó¼º ´ë»ó ¼³Á¤
+            //ì†ì„± ëŒ€ìƒ ì„¤ì •
             property.SetPlayer(player);
-            //À§Ä¡¸¦ ¸¶¿ì½º À§Ä¡·Î ¼³Á¤
+            //ìœ„ì¹˜ë¥¼ ë§ˆìš°ìŠ¤ ìœ„ì¹˜ë¡œ ì„¤ì •
             RectTransform rect = property.transform as RectTransform;
             if(rect != null)
                 rect.position = Input.mousePosition;
+           
         }
+       
     }
 
     public void UpdateProperty(PhotonHashtable property)
     {
-        //ÆÀÀÌ Á¸ÀçÇÑ´Ù¸é
-        if (player.GetPhotonTeam() != null) //ÆÀ ¾÷µ¥ÀÌÆ®
+        
+        if (player.GetPhotonTeam() != null) //íŒ€ ì—…ë°ì´íŠ¸
             ChangeTeam(player.GetPhotonTeam().Code);
-        //ÁØºñ »óÅÂ ¾÷µ¥ÀÌÆ®
+        //ì¤€ë¹„ ìƒíƒœ ì—…ë°ì´íŠ¸
         bool ready = property.ContainsKey(DefinePropertyKey.READY) ?
            (bool)property[DefinePropertyKey.READY] : player.GetProperty<bool>(DefinePropertyKey.READY);
         ChangeReady(ready);
@@ -75,12 +80,16 @@ public class PlayerEntry : MonoBehaviour
     {
         playerReady.text = ready ? "Ready" : "";
         ReadyState = ready;
+        readyOn.gameObject.SetActive(ready);
+        Color color = team == 1 ? new Color(0f, 0f, 1f, 0.118f) : new Color(1f, 0f, 0f, 0.118f);
+        readyOn.color = color;
+            
     }
     void ChangeTeam(int changeTeamValue)
     {
-        //¾×¼Ç ÇÔ¼ö È£Ãâ
+        //ì•¡ì…˜ í•¨ìˆ˜ í˜¸ì¶œ
         changeTeamMethod.Invoke(this, changeTeamValue);
-        //ÆÀÀÌ º¯°æµÇ¾ú´Ù¸é »õ·Î¿î °ª ´ëÀÔ
+        //íŒ€ì´ ë³€ê²½ë˜ì—ˆë‹¤ë©´ ìƒˆë¡œìš´ ê°’ ëŒ€ì…
         if(team != changeTeamValue)
             team = changeTeamValue;
     }

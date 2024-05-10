@@ -7,30 +7,64 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class EditUserDataPanel : MonoBehaviourShowInfo
 {
     [SerializeField] TMP_InputField passInputField;
     [SerializeField] TMP_InputField confirmInputField;
+    [SerializeField] TMP_InputField nickNameInputField;
 
-    [SerializeField] Button passApplyButton;  //ºñ¹Ğ¹øÈ£ Àç¼³Á¤ ¹öÆ°
-    [SerializeField] Button cancleButton; //Ã¢´İ±â ¹öÆ°
+    [SerializeField] TMP_Text NameText;
+
+
+    [SerializeField] Button passApplyButton;  //ë¹„ë°€ë²ˆí˜¸ ì¬ì„¤ì • ë²„íŠ¼
+    [SerializeField] Button nickApplyButton;
+    [SerializeField] Button cancleButton; //ì°½ë‹«ê¸° ë²„íŠ¼
 
     private void Awake()
     {
+        nickApplyButton.onClick.AddListener(NickApply);
         passApplyButton.onClick.AddListener(PassApply);
         cancleButton.onClick.AddListener(Cancel);
+        nickNameInputField.characterLimit = 10;
     }
     void Cancel()
     {
         gameObject.SetActive(false);
+    }
+    private void NickApply()
+    {
+        SetInteractable(false);
+
+        UserProfile userProfile = new UserProfile();
+        userProfile.DisplayName = nickNameInputField.text;
+        FireBaseManager.Auth.CurrentUser.UpdateUserProfileAsync(userProfile).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled)
+            {
+                ShowInfo("ë‹‰ë„¤ì„ ë³€ê²½ì´ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+                SetInteractable(true);
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                ShowError(task.Exception.InnerExceptions, "ë‹‰ë„¤ì„ë³€ê²½ì´ ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
+                SetInteractable(true);
+                return;
+            }
+            ShowInfo("ë‹‰ë„¤ì„ ë³€ê²½ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
+            SetInteractable(true);
+            NameText.text = userProfile.DisplayName;
+            PhotonNetwork.LocalPlayer.NickName = userProfile.DisplayName;
+        });
     }
     private void PassApply()
     {
         SetInteractable(false);
         if (passInputField.text != confirmInputField.text)
         {
-            ShowInfo("ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+            ShowInfo("ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
             SetInteractable(true);
         }
         string newPassword = passInputField.text;
@@ -38,17 +72,17 @@ public class EditUserDataPanel : MonoBehaviourShowInfo
         {
             if (task.IsCanceled)
             {
-                ShowInfo("ºñ¹Ğ¹øÈ£ Àç¼³Á¤ÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù.");
+                ShowInfo("ë¹„ë°€ë²ˆí˜¸ ì¬ì„¤ì •ì´ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.");
                 SetInteractable(true);
                 return;
             }
             if (task.IsFaulted)
             {
-                ShowError(task.Exception.InnerExceptions, "ºñ¹Ğ¹øÈ£ º¯°æÀÌ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+                ShowError(task.Exception.InnerExceptions, "ë¹„ë°€ë²ˆí˜¸ ë³€ê²½ì´ ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
                 SetInteractable(true);
                 return;
             }
-            ShowInfo("ºñ¹Ğ¹øÈ£ º¯°æÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
+            ShowInfo("ë¹„ë°€ë²ˆí˜¸ ë³€ê²½ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
             SetInteractable(true);
         });
     }

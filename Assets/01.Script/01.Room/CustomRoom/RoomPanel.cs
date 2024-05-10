@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
-public class RoomPanel : MonoBehaviour
+public class RoomPanel : MonoBehaviourShowInfo
 {
     [SerializeField] string gameSceneName;
     [SerializeField] Button startButton;
@@ -39,34 +39,34 @@ public class RoomPanel : MonoBehaviour
     {
         isEnterGame = false;
         currentRoom = PhotonNetwork.CurrentRoom;
-        //¹æ ÀÌ¸§ Ç¥±â
+        //ë°© ì´ë¦„ í‘œê¸°
         roomNameTxt.text = currentRoom.Name;
-        //ÆÀº° ÃÖ´ë ÀÎ¿øÀ» °è»êÇØ¼­ °¡Á®¿Â´Ù.
+        //íŒ€ë³„ ìµœëŒ€ ì¸ì›ì„ ê³„ì‚°í•´ì„œ ê°€ì ¸ì˜¨ë‹¤.
         halfCount = (currentRoom.MaxPlayers >> 1);
         isMaster = PhotonNetwork.IsMasterClient;
-        //°ÔÀÓ ÇÃ·¹ÀÌ ¹öÆ° ¼ÒÀ¯±ÇÀÚÀÏ °æ¿ì È°¼ºÈ­
+        //ê²Œì„ í”Œë ˆì´ ë²„íŠ¼ ì†Œìœ ê¶Œìì¼ ê²½ìš° í™œì„±í™”
         startButton.gameObject.SetActive(isMaster);
-        //ÇÃ·¹ÀÌ¾î ¸®½ºÆ® ÃÊ±âÈ­
+        //í”Œë ˆì´ì–´ ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”
         playerList.Clear();
 
-        //·ÎÄÃ ÇÃ·¹ÀÌ¾î ÇÁ·ÎÆÛÆ¼ ÃÊ±âÈ­
+        //ë¡œì»¬ í”Œë ˆì´ì–´ í”„ë¡œí¼í‹° ì´ˆê¸°í™”
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.READY, false);
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOAD, false);
 
-        //ÇÃ·¹ÀÌ¾î ¸®½ºÆ®¸¦ µ¹¸é¼­ ÇÃ·¹ÀÌ¾î ¿£Æ®¸® »ı¼º
+        //í”Œë ˆì´ì–´ ë¦¬ìŠ¤íŠ¸ë¥¼ ëŒë©´ì„œ í”Œë ˆì´ì–´ ì—”íŠ¸ë¦¬ ìƒì„±
         foreach (Player player in PhotonNetwork.PlayerList)
             PlayerSet(player);
 
-        //¿ìÅ¬¸¯ ¸ñ·Ï¿¡ Ã¤ÆÃ ¿¬°á
+        //ìš°í´ë¦­ ëª©ë¡ì— ì±„íŒ… ì—°ê²°
         playerProperty.SetChat(chat);
-        //¿ìÅ¬¸¯ ¸ñ·Ï ºñÈ°¼ºÈ­
+        //ìš°í´ë¦­ ëª©ë¡ ë¹„í™œì„±í™”
         if (playerProperty.gameObject.activeSelf)
             playerProperty.gameObject.SetActive(false);
 
     }
     private void OnDisable()
     {
-        //ÆÀº°·Î µ¹¸é¼­ ÇÃ·¹ÀÌ¾î ¿£Æ®¸® ÆÄ±«
+        //íŒ€ë³„ë¡œ ëŒë©´ì„œ í”Œë ˆì´ì–´ ì—”íŠ¸ë¦¬ íŒŒê´´
         ClearRoomData(redTeam);
         ClearRoomData(blueTeam);
     }
@@ -78,74 +78,74 @@ public class RoomPanel : MonoBehaviour
 
     void PlayerSet(Player newPlayer)
     {
-        //ºÎ¸ğ°´Ã¼¸¦ ºí·çÆÀÀ¸·Î ¼³Á¤(ÀÓ½Ã·Î)
+        //ë¶€ëª¨ê°ì²´ë¥¼ ë¸”ë£¨íŒ€ìœ¼ë¡œ ì„¤ì •(ì„ì‹œë¡œ)
         Transform parent = blueTeam;
-        //ÀÓ½Ã ÆÀÄÚµå ¼³Á¤
+        //ì„ì‹œ íŒ€ì½”ë“œ ì„¤ì •
         int teamType = 0;
 
-        if (newPlayer.IsLocal) //º»ÀÎ ÇÃ·¹ÀÌ¾îÀÎÁö È®ÀÎ
+        if (newPlayer.IsLocal) //ë³¸ì¸ í”Œë ˆì´ì–´ì¸ì§€ í™•ì¸
         {
-            if (PhotonNetwork.IsMasterClient) //¹æÀåÀÎÁö È®ÀÎ
-                newPlayer.JoinTeam(new PhotonTeam() { Code = BLUE }); //ºí·çÆÀÀ¸·Î ¼³Á¤
+            if (PhotonNetwork.IsMasterClient) //ë°©ì¥ì¸ì§€ í™•ì¸
+                newPlayer.JoinTeam(new PhotonTeam() { Code = BLUE }); //ë¸”ë£¨íŒ€ìœ¼ë¡œ ì„¤ì •
         }
         else
         {
-            //ÆÀ ÄÚµå¸¦ °¡Á®¿Â´Ù.
+            //íŒ€ ì½”ë“œë¥¼ ê°€ì ¸ì˜¨ë‹¤.
             teamType = newPlayer.GetPhotonTeam().Code;
-            //ÆÀÀÌ ºí·çÆÀÀÌ¸é ºÎ¸ğ°´Ã¼¸¦ ºí·çÆÀÀ¸·Î ¾Æ´Ï¸é ·¹µåÆÀÀ¸·Î ¼³Á¤
+            //íŒ€ì´ ë¸”ë£¨íŒ€ì´ë©´ ë¶€ëª¨ê°ì²´ë¥¼ ë¸”ë£¨íŒ€ìœ¼ë¡œ ì•„ë‹ˆë©´ ë ˆë“œíŒ€ìœ¼ë¡œ ì„¤ì •
             parent = (teamType == BLUE) ? blueTeam : redTeam;
-            //ÆÀÀ» °¡Á®¿Í¼­ ÆÀÀ¸·Î ¼³Á¤(ÀÌ·¡¾ß ÀÌÈÄ¿¡ µé¾î¿Â À¯Àú ÆÀ ¸Å´ÏÀú¿¡ µ¥ÀÌÅÍ°¡ ¾÷µ¥ÀÌÆ®µÊ(ÀÚµ¿ µ¿±âÈ­¸¦ Áö¿ø ¾ÈÇÔ))
+            //íŒ€ì„ ê°€ì ¸ì™€ì„œ íŒ€ìœ¼ë¡œ ì„¤ì •(ì´ë˜ì•¼ ì´í›„ì— ë“¤ì–´ì˜¨ ìœ ì € íŒ€ ë§¤ë‹ˆì €ì— ë°ì´í„°ê°€ ì—…ë°ì´íŠ¸ë¨(ìë™ ë™ê¸°í™”ë¥¼ ì§€ì› ì•ˆí•¨))
             newPlayer.JoinTeam(newPlayer.GetPhotonTeam());
         }
-        //°´Ã¼¸¦ º¹»çÇØ¼­ ÇØ´ç ºÎ¸ğ°´Ã¼ÀÇ ÀÚ½ÄÀ¸·Î ¼³Á¤
+        //ê°ì²´ë¥¼ ë³µì‚¬í•´ì„œ í•´ë‹¹ ë¶€ëª¨ê°ì²´ì˜ ìì‹ìœ¼ë¡œ ì„¤ì •
         PlayerEntry playerEntry = Instantiate(playerEntryPrefab, parent);
-        //°´Ã¼¿¡ ÃÊ±â µ¥ÀÌÅÍ¸¦ ¼³Á¤
+        //ê°ì²´ì— ì´ˆê¸° ë°ì´í„°ë¥¼ ì„¤ì •
         playerEntry.SetPlayer(newPlayer, playerProperty, ChangeTeam, teamType);
-        //ÇÃ·¹ÀÌ¾î ¸ñ·Ï¿¡ Ãß°¡
+        //í”Œë ˆì´ì–´ ëª©ë¡ì— ì¶”ê°€
         playerList.Add(playerEntry);
     }
     public void PlayerLeftRoom(Player otherPlayer)
     {
-        //ÇÃ·¹ÀÌ¾î ¸®½ºÆ®¿¡¼­ ÇÃ·¹ÀÌ¾î Á¦°Å
+        //í”Œë ˆì´ì–´ ë¦¬ìŠ¤íŠ¸ì—ì„œ í”Œë ˆì´ì–´ ì œê±°
         RemovePlayer(otherPlayer, playerList);
-        //ÇÃ·¹ÀÌ¾î°¡ ³ª°¬´Ù´Â ¸Ş½ÃÁö Ãâ·Â
+        //í”Œë ˆì´ì–´ê°€ ë‚˜ê°”ë‹¤ëŠ” ë©”ì‹œì§€ ì¶œë ¥
         chat.LeftPlayer(otherPlayer);
     }
 
     public void PlayerEnterRoom(Player newPlayer)
     {
-        //ÇÃ·¹ÀÌ¾î °´Ã¼ º¹»çÇØ¼­ ºí·çÆÀ¿¡ Ãß°¡
+        //í”Œë ˆì´ì–´ ê°ì²´ ë³µì‚¬í•´ì„œ ë¸”ë£¨íŒ€ì— ì¶”ê°€
         PlayerEntry playerEntry = Instantiate(playerEntryPrefab, blueTeam);
-        //ÇÃ·¹ÀÌ¾î °´Ã¼¿¡ ÃÊ±â µ¥ÀÌÅÍ ¼³Á¤
+        //í”Œë ˆì´ì–´ ê°ì²´ì— ì´ˆê¸° ë°ì´í„° ì„¤ì •
         playerEntry.SetPlayer(newPlayer, playerProperty, ChangeTeam);
-        //ÇÃ·¹ÀÌ¾î ¸®½ºÆ®¿¡ Ãß°¡
+        //í”Œë ˆì´ì–´ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
         playerList.Add(playerEntry);
-        //¸¶½ºÅÍ Å¬¶óÀÌ¾ğÆ®¸é ÇÃ·¹ÀÌ¾î°¡ µé¾î°¡¾ßÇÒ ÆÀ ¼±º°
+        //ë§ˆìŠ¤í„° í´ë¼ì´ì–¸íŠ¸ë©´ í”Œë ˆì´ì–´ê°€ ë“¤ì–´ê°€ì•¼í•  íŒ€ ì„ ë³„
         if (PhotonNetwork.IsMasterClient)
             NewPlayerEnterSetTeam(newPlayer);
     }
     void NewPlayerEnterSetTeam(Player newPlayer)
     {
-        //ºí·çÆÀ°ú ·¹µåÆÀÀÇ ÆÀ ÀÎ¿øÀ» Æ©ÇÃ¿¡ Ãß°¡
+        //ë¸”ë£¨íŒ€ê³¼ ë ˆë“œíŒ€ì˜ íŒ€ ì¸ì›ì„ íŠœí”Œì— ì¶”ê°€
         (int blueCount, int redCount) count = (PhotonTeamsManager.Instance.GetTeamMembersCount(BLUE), PhotonTeamsManager.Instance.GetTeamMembersCount(RED));
         int teamType = RED;
-        //ÀÓ½Ã·Î ·¹µåÆÀ ¼³Á¤
-        //·¹µåÆÀ°ú ºí·çÆÀÀÇ ÀÎ¿øÀÌ ´Ù¸¦ °æ¿ì
-        if (count.redCount != count.blueCount) //´õ ÀûÀº ÆÀÀ» ÆÀÅ¸ÀÔÀ¸·Î ¼³Á¤ (ÆÀÀÎ¿øÀÌ °°À» °æ¿ì ·¹µåÆÀÀ¸·Î Ãß°¡)
+        //ì„ì‹œë¡œ ë ˆë“œíŒ€ ì„¤ì •
+        //ë ˆë“œíŒ€ê³¼ ë¸”ë£¨íŒ€ì˜ ì¸ì›ì´ ë‹¤ë¥¼ ê²½ìš°
+        if (count.redCount != count.blueCount) //ë” ì ì€ íŒ€ì„ íŒ€íƒ€ì…ìœ¼ë¡œ ì„¤ì • (íŒ€ì¸ì›ì´ ê°™ì„ ê²½ìš° ë ˆë“œíŒ€ìœ¼ë¡œ ì¶”ê°€)
             teamType = (count.redCount > count.blueCount) ? BLUE : RED;
-        //ÇÃ·¹ÀÌ¾îÀÇ ÆÀÀ» ¼³Á¤
+        //í”Œë ˆì´ì–´ì˜ íŒ€ì„ ì„¤ì •
         newPlayer.JoinTeam(new PhotonTeam() { Code = (byte)teamType });
     }
 
     void RemovePlayer(Player otherPlayer, List<PlayerEntry> playerList)
     {
-        //ÇÃ·¹ÀÌ¾î ¸®½ºÆ®¸¦ µ¹¸é¼­ 
+        //í”Œë ˆì´ì–´ ë¦¬ìŠ¤íŠ¸ë¥¼ ëŒë©´ì„œ 
         for (int i = 0; i < playerList.Count; i++)
         {
-            //¾×ÅÍ³Ñ¹ö°¡ °°À» °æ¿ì 
+            //ì•¡í„°ë„˜ë²„ê°€ ê°™ì„ ê²½ìš° 
             if (playerList[i].Player.ActorNumber == otherPlayer.ActorNumber)
             {
-                //¿£Æ®¸® °´Ã¼ ÆÄ±« ¹× ¸®½ºÆ®¿¡¼­ ÇØ´ç °´Ã¼ Á¦°Å
+                //ì—”íŠ¸ë¦¬ ê°ì²´ íŒŒê´´ ë° ë¦¬ìŠ¤íŠ¸ì—ì„œ í•´ë‹¹ ê°ì²´ ì œê±°
                 Destroy(playerList[i].gameObject);
                 playerList.RemoveAt(i);
                 return;
@@ -158,9 +158,20 @@ public class RoomPanel : MonoBehaviour
         num += BLUE;
         if (num == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
             return;
+
         int teamCount = PhotonTeamsManager.Instance.GetTeamMembersCount((byte)num);
         if (halfCount > teamCount)
-            PhotonNetwork.LocalPlayer.SwitchTeam((byte)num);
+            if(PhotonNetwork.LocalPlayer.GetProperty<bool>(DefinePropertyKey.READY))
+            {
+                ShowInfo("ì¤€ë¹„ìƒíƒœì—ì„œëŠ” íŒ€ì„ ë°”ê¿€ ìˆ˜ ì—†ìŠµë‹ˆë‹¤");
+                return;
+            }
+            else
+            {
+                Debug.Log("Change");
+                PhotonNetwork.LocalPlayer.SwitchTeam((byte)num);
+            }
+            
     }
 
     void StartGame()
@@ -173,38 +184,38 @@ public class RoomPanel : MonoBehaviour
     }
     public void PlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
-        //ÇÃ·¹ÀÌ¾î ¸®½ºÆ®¸¦ µ¹¸é¼­ 
+        //í”Œë ˆì´ì–´ ë¦¬ìŠ¤íŠ¸ë¥¼ ëŒë©´ì„œ 
         foreach (PlayerEntry player in playerList)
         {
-            //ÇÃ·¹ÀÌ¾î ¾×ÅÍ°¡ °°À» °æ¿ì
+            //í”Œë ˆì´ì–´ ì•¡í„°ê°€ ê°™ì„ ê²½ìš°
             if (player.Player.ActorNumber == targetPlayer.ActorNumber)
             {
-                //ÇØ´ç ÇÃ·¹ÀÌ¾î ¾÷µ¥ÀÌÆ®
+                //í•´ë‹¹ í”Œë ˆì´ì–´ ì—…ë°ì´íŠ¸
                 player.UpdateProperty(changedProps);
                 break;
             }
         }
-        //¸ğµç ÇÃ·¹ÀÌ¾î°¡ ÁØºñµÇ¾ú´ÂÁö È®ÀÎ
+        //ëª¨ë“  í”Œë ˆì´ì–´ê°€ ì¤€ë¹„ë˜ì—ˆëŠ”ì§€ í™•ì¸
         AllPlayerReadyCheck();
     }
 
     void AllPlayerReadyCheck()
     {
-        //¸¶½ºÅÍ Å¬¶óÀÌ¾ğÆ®°¡ ¾Æ´Ï¸é Á¾·á
+        //ë§ˆìŠ¤í„° í´ë¼ì´ì–¸íŠ¸ê°€ ì•„ë‹ˆë©´ ì¢…ë£Œ
         if (PhotonNetwork.IsMasterClient == false)
             return;
-        //ÇÃ·¹ÀÌ¾î ¸®½ºÆ®¸¦ µ¹¸é¼­
+        //í”Œë ˆì´ì–´ ë¦¬ìŠ¤íŠ¸ë¥¼ ëŒë©´ì„œ
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            //ÁØºñ°¡ ¾ÈµÇ¾îÀÖÀ¸¸é
+            //ì¤€ë¹„ê°€ ì•ˆë˜ì–´ìˆìœ¼ë©´
             if (player.GetProperty<bool>(DefinePropertyKey.READY) == false)
             {
-                //ºñÈ°¼ºÈ­ ¹× Á¾·á
+                //ë¹„í™œì„±í™” ë° ì¢…ë£Œ
                 startButton.interactable = false;
                 return;
             }
         }
-        //È°¼ºÈ­
+        //í™œì„±í™”
         startButton.interactable = true;
     }
     void LeaveRoom()
@@ -213,7 +224,7 @@ public class RoomPanel : MonoBehaviour
     }
     public void MasterClientSwitched(Player newMasterClient)
     {
-        //¸¶½ºÅÍ Å¬¶óÀÌ¾ğÆ®°¡ ÇöÀç ÇÃ·¹ÀÌ¾î¸é ½ÃÀÛ ¹öÆ° È°¼ºÈ­
+        //ë§ˆìŠ¤í„° í´ë¼ì´ì–¸íŠ¸ê°€ í˜„ì¬ í”Œë ˆì´ì–´ë©´ ì‹œì‘ ë²„íŠ¼ í™œì„±í™”
         if (newMasterClient.IsLocal)
         {
             startButton.gameObject.SetActive(true);
@@ -223,28 +234,28 @@ public class RoomPanel : MonoBehaviour
 
     void ChangeTeam(PlayerEntry playerEntry, int team)
     {
-        //ÇÃ·¹ÀÌ¾î °´Ã¼ÀÇ ÆÀ°ú ÀÌµ¿ÇÏ·Á´Â ÆÀÀÌ °°À» °æ¿ì Á¾·á
+        //í”Œë ˆì´ì–´ ê°ì²´ì˜ íŒ€ê³¼ ì´ë™í•˜ë ¤ëŠ” íŒ€ì´ ê°™ì„ ê²½ìš° ì¢…ë£Œ
         if (playerEntry.Team == team)
             return;
 
-        //¸¶½ºÅÍ¸¸ ¼öÇà
+        //ë§ˆìŠ¤í„°ë§Œ ìˆ˜í–‰
         CheckChangedTeamCount(playerEntry, team);
-        //ÀÌµ¿ÇÏ·Á´Â ÆÀÀÌ ºí·çÆÀÀÌ¸é ºÎ¸ğ°´Ã¼¿¡ ºí·ç ¾Æ´Ï¸é ·¹µå ´ëÀÔ
+        //ì´ë™í•˜ë ¤ëŠ” íŒ€ì´ ë¸”ë£¨íŒ€ì´ë©´ ë¶€ëª¨ê°ì²´ì— ë¸”ë£¨ ì•„ë‹ˆë©´ ë ˆë“œ ëŒ€ì…
         Transform teamTransform = (team == BLUE) ? blueTeam : redTeam;
-        //ºÎ¸ğ°´Ã¼ ÇÏÀ§·Î ÀÌµ¿
+        //ë¶€ëª¨ê°ì²´ í•˜ìœ„ë¡œ ì´ë™
         playerEntry.transform.SetParent(teamTransform);
     }
 
     void CheckChangedTeamCount(PlayerEntry player, int team)
     {
-        //¸¶½ºÅÍ Å¬¶óÀÌ¾ğÆ®ÀÏ °æ¿ì
+        //ë§ˆìŠ¤í„° í´ë¼ì´ì–¸íŠ¸ì¼ ê²½ìš°
         if (PhotonNetwork.IsMasterClient)
         {
-            //ÀÌµ¿ÇÏ·Á´Â ÆÀÀÇ ÀÎ¿øÀÌ ÃÊ°úÇß´ÂÁö È®ÀÎ
+            //ì´ë™í•˜ë ¤ëŠ” íŒ€ì˜ ì¸ì›ì´ ì´ˆê³¼í–ˆëŠ”ì§€ í™•ì¸
             int count = PhotonTeamsManager.Instance.GetTeamMembersCount((byte)team);
-            // ÆÀÀÇ ÀÎ¿øÀÌ ±âÁØÀ» ³ÑÀ» °æ¿ì
+            // íŒ€ì˜ ì¸ì›ì´ ê¸°ì¤€ì„ ë„˜ì„ ê²½ìš°
             if (count > halfCount)
-                //¿ø·¡ ÆÀÀ¸·Î ÀÌµ¿
+                //ì›ë˜ íŒ€ìœ¼ë¡œ ì´ë™
                 player.Player.SwitchTeam((byte)player.Team);
         }
     }

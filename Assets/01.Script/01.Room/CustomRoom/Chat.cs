@@ -26,6 +26,7 @@ public class Chat : MonoBehaviourPun
     }
     private void OnEnable()
     {
+        
         chatTarget = ChatType.ALL; //전송타입을 전채로 설정
         //합류 메시지 전송
         photonView.RPC("AddMessage", RpcTarget.All, $"{PhotonNetwork.LocalPlayer.NickName}이 합류하였습니다.", ChatType.NEW, (byte)0);

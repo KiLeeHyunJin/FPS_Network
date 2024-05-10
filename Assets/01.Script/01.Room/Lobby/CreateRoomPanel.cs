@@ -27,10 +27,10 @@ public class CreateRoomPanel : MonoBehaviour
         if (roomName == "")
             roomName = Random.Range(1000, 10000).ToString();
 
-        int halfNum = int.Parse(maxPlayerDropdown.captionText.text[0].ToString()); //Ã¹¹øÂ° ±ÛÀÚÀÇ °ªÀ» Á¤¼ö·Î º¯È¯
-        int maxPlayer = halfNum << 1; //°ªÀ» 2¹è·Î ¼³Á¤
+        int halfNum = int.Parse(maxPlayerDropdown.captionText.text[0].ToString()); //Ã¹ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+        int maxPlayer = halfNum << 1; //ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        RoomOptions roomOptions = new RoomOptions { MaxPlayers = maxPlayer }; //ÃÖ´ëÀÎ¿øÀ¸·Î ¿É¼Ç ¼³Á¤
+        RoomOptions roomOptions = new RoomOptions { MaxPlayers = maxPlayer }; //ï¿½Ö´ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½É¼ï¿½ ï¿½ï¿½ï¿½ï¿½
         PhotonNetwork.CreateRoom(roomName, roomOptions);
     }
     void CreateRoomCancel()

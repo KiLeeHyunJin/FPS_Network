@@ -5,6 +5,12 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+using Firebase.Database;
+using System.Collections.Generic;
+using System;
+using System.Text;
+using System.Collections;
 public class MenuPanel : MonoBehaviour
 {
     [SerializeField] Image PlayButton;
@@ -68,14 +74,8 @@ public class MenuPanel : MonoBehaviour
                  if (snapshot.Exists)
                  {
                      string value = (string)snapshot.Value;
-                     //string json = snapshot.GetRawJsonValue();
-                     //byte[] asciiBytes = Encoding.ASCII.GetBytes(json);
-                     //byte[] unicodeBytes = Encoding.Convert(Encoding.ASCII, Encoding.Unicode, asciiBytes);
-                     //string convertedNoticeText = Encoding.Unicode.GetString(unicodeBytes);
+                     noticeText.SetText(value);
 
-                     noticeText.text = value;
-                     noticeText.enabled = false;
-                     noticeText.enabled = true;
                  }
                  else
                  {

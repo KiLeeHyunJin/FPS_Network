@@ -17,20 +17,22 @@ public static class CustomProperty
     public static T GetProperty<T>(this Player player, string key)
     {
         PhotonHashtable property = player.CustomProperties;
-        //key°ªÀÌ ÀÖÀ¸¸é ÇØ´ç ÇØ½ÃÅ×ÀÌºí¿¡¼­ °ªÀ» °¡Á®¿Í TÅ¸ÀÔÀ¸·Î º¯È¯ÇØ¼­ ¹İÈ¯
-        //¾øÀ» °æ¿ì ÇØ´ç Å¸ÀÔÀÇ µğÆúÆ® °ªÀ» ¹İÈ¯
+        //keyê°’ì´ ìˆìœ¼ë©´ í•´ë‹¹ í•´ì‹œí…Œì´ë¸”ì—ì„œ ê°’ì„ ê°€ì ¸ì™€ Tíƒ€ì…ìœ¼ë¡œ ë³€í™˜í•´ì„œ ë°˜í™˜
+        //ì—†ì„ ê²½ìš° í•´ë‹¹ íƒ€ì…ì˜ ë””í´íŠ¸ ê°’ì„ ë°˜í™˜
         return property.ContainsKey(key) ? (T)property[key] : default(T);
     }
+
     public static void SetProperty<T>(this Player player, string str, T value)
     {
-        PhotonHashtable property = player.CustomProperties;
+       // PhotonHashtable property = player.CustomProperties;                               
+        PhotonHashtable property = new PhotonHashtable();                                    //setí• ë•ŒëŠ” ìƒˆë¡œ ë§Œë“¤ê³  í•´ì•¼í•¨ ì´ìœ ëŠ” ê°ì ì°¾ì•„ë³´ì…ˆ
         if (property.ContainsKey(str) == false) 
-            //ÇØ´ç ÇÁ·ÎÆÛÆ¼°¡ Æ÷ÇÔµÇ¾îÀÖÁö ¾ÊÀ» °æ¿ì ÇØ½ÃÅ×ÀÌºíÀ» »ı¼º
+            //í•´ë‹¹ í”„ë¡œí¼í‹°ê°€ í¬í•¨ë˜ì–´ìˆì§€ ì•Šì„ ê²½ìš° í•´ì‹œí…Œì´ë¸”ì„ ìƒì„±
             property = new PhotonHashtable { { str, value } };
         else
-            //Æ÷ÇÔµÇ¾îÀÖÀ» °æ¿ì °ªÀ» º¯°æ
+            //í¬í•¨ë˜ì–´ìˆì„ ê²½ìš° ê°’ì„ ë³€ê²½
             property[str] = value;
-        //ÇÁ·ÎÆÛÆ¼¸¦ ÀúÀå
+        //í”„ë¡œí¼í‹°ë¥¼ ì €ì¥
         player.SetCustomProperties(property);
     }
 
