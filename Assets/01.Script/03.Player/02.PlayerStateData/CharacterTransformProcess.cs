@@ -16,37 +16,31 @@ public struct CharacterStat
 public class CharacterTransformProcess
 {
     CharacterController controller;
-    Rigidbody rigid;
     GameObject foot;
     float limitAngle;
     int groundLayer;
     float groundCheckLength;
 
-    public float jumpHeight = 2f;
+    public float jumpHeight = 1f;
     public const float gravity = -9.81f;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
 
     private float velocity;
 
     Vector3 moveDirection;
     Vector2 moveValue;
 
-    public bool isRun;
-    public bool isGround { get; private set; }
-    public bool isStop { get; private set; }
-    public bool isJumping { get; private set; }
-    public bool isCrouch { get; private set; }
+    bool isRun;
+    bool isGround { get; set; }
+    bool isJumping { get; set; }
+    bool isCrouch { get; set; }
 
     Action[] motions;
     Action<Vector2> moveActionValue;
-    Action<float>[] jumpActionValue;
+    Action<float> jumpActionValue;
     public CharacterTransformProcess(CharacterController characterController)
     {
         controller = characterController;
         motions = new Action[(int)AnimationController.MoveType.END];
-        jumpActionValue = new Action<float>[(int)AnimationController.ValueType.END];
-        isStop = true;
         isCrouch = false;
         isJumping = false;
     }
@@ -58,9 +52,9 @@ public class CharacterTransformProcess
     {
         isRun = state;
     }
-    public void SetMoveActionValue(AnimationController.ValueType idx,Action<float> action)
+    public void SetMoveActionValue(Action<float> action)
     {
-        jumpActionValue[(int)idx] = action;
+        jumpActionValue = action;
     }
     public void SetMoveActionValue(Action<Vector2> action)
     {
@@ -83,11 +77,7 @@ public class CharacterTransformProcess
             moveDirection = Vector3.zero;
             return;
         }
-        if (isRun)
-            motions[(int)AnimationController.MoveType.Run]?.Invoke();
-        else
-            motions[(int)AnimationController.MoveType.Walk]?.Invoke();
-        moveValue = _moveValue * Time.deltaTime * 7;
+        moveValue = _moveValue * Time.deltaTime * 3;
     }
 
     public void Update()
@@ -103,11 +93,15 @@ public class CharacterTransformProcess
 
     void Direction()
     {
+        moveDirection = new Vector3(0, velocity, 0);
         if (moveValue.x == 0 && moveValue.y == 0)
             return;
+        if (isRun)
+            motions[(int)AnimationController.MoveType.Run]?.Invoke();
+        else
+            motions[(int)AnimationController.MoveType.Walk]?.Invoke();
         (float x, float y) = (moveValue.x, moveValue.y);
-        moveDirection = (x * controller.transform.right) + (y * controller.transform.forward);
-        moveDirection.y += velocity;
+        moveDirection += (x * controller.transform.right) + (y * controller.transform.forward);
     }
 
     void GroundCheck()
@@ -122,7 +116,6 @@ public class CharacterTransformProcess
         if (isGround)
         {
             float angle = Vector3.Angle(hitInfo.normal, Vector3.up);
-
             //Debug.DrawLine(foot.transform.position, foot.transform.position + Vector3.up, Color.red);
             //Debug.DrawLine(foot.transform.position, foot.transform.position + hitInfo.normal, Color.blue);
             if (isJumping) //떨어지고 있는 상태라면
@@ -132,11 +125,6 @@ public class CharacterTransformProcess
                     motions[(int)AnimationController.MoveType.JumpFinish]?.Invoke(); //미끄러지는 각도가 아니라면 착지
                     isJumping = false;
                     Debug.Log("Jump slide Angle");
-                }
-                else //점프 모션 발동
-                {
-                    motions[(int)AnimationController.MoveType.JumpMove]?.Invoke();
-                    Debug.Log("Maybe Jump");
                 }
             }
             else if (angle > limitAngle) //미끄러지는 각도라면
@@ -170,21 +158,43 @@ public class CharacterTransformProcess
     public void Jump()
     {
         if (isGround && isCrouch == false)
-            velocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        {
+            velocity = Mathf.Sqrt(-1f * gravity);
+            motions[(int)AnimationController.MoveType.Jump]?.Invoke();
+            isJumping = true;
+        }
     }
-
+    float jumpTime;
     void Gravity()
     {
+        jumpTime += Time.deltaTime;
         if (isJumping)
         {
-            velocity += gravity * Time.deltaTime;
-            jumpActionValue[(int)AnimationController.ValueType.Velocity]?.Invoke(velocity);
+            SlerpGravity();
         }
         else
         {
+            if(jumpTime != 0)
+                jumpTime = 0;
             if (velocity < 0)
                 velocity = -2f; // Grounded, so reset velocity
         }
+        jumpActionValue?.Invoke(velocity);
+        moveDirection.y = velocity;
     }
 
+    void SlerpGravity()
+    {
+        if (velocity > -2)
+        {
+            if (velocity > 0)
+            {
+                velocity += gravity * jumpTime;
+            }
+            else
+            {
+                velocity += gravity * Time.deltaTime;
+            }
+        }
+    }
 }

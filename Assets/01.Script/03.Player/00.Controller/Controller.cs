@@ -20,9 +20,6 @@ public class Controller : MonoBehaviourPun
     int maxHp;
     int hp;
     bool mine;
-    float capsuleHeight;
-
-    Vector3 capsuleCenter;
 
     CameraController cameraController;
     PlayerInputController inputController;
@@ -31,24 +28,6 @@ public class Controller : MonoBehaviourPun
     EquipController equipController;
     CharacterTransformProcess moveProcess;
 
-    CapsuleCollider capsule { get; set; }
-    public CapsuleCollider Capsule { get { return capsule; } }
-
-    PhotonView view;
-    PhotonAnimatorView animView;
-    PhotonTransformView transformView;
-
-    [SerializeField] CharacterDeath death;
-    [SerializeField] CharacterIdle idle;
-    [SerializeField] CharacterWalk walk;
-    [SerializeField] CharacterRun run;
-    [SerializeField] CharacterCrouch crouch;
-    [SerializeField] CharacterClim clim;
-    [SerializeField] CharacterFire fire;
-    [SerializeField] CharacterReload reload;
-    [SerializeField] CharacterPickUp pick;
-    [SerializeField] CharacterJump jump;
-    [SerializeField] CharacterInteraction interaction;
     public BaseStateMachine<Define.State> FSM
     { get { return mine ? fsm : null; } }
     private BaseStateMachine<Define.State> fsm
@@ -57,7 +36,6 @@ public class Controller : MonoBehaviourPun
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
-        capsule = GetComponent<CapsuleCollider>();
         groundLayer = 1 << LayerMask.NameToLayer("Ground");
     }
     void Start()
@@ -93,29 +71,6 @@ public class Controller : MonoBehaviourPun
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
         hp = maxHp;
-        capsuleHeight = capsule.height;
-        capsuleCenter = capsule.center;
-    }
-
-    void InitState()
-    {
-        if (mine == false)
-            return;
-        fsm = new BaseStateMachine<Define.State>();
-
-        SetState(idle, Define.State.Idle);
-        SetState(death, Define.State.Death);
-        SetState(walk, Define.State.Walk);
-        SetState(run, Define.State.Run);
-        SetState(crouch, Define.State.Crouch);
-        SetState(clim, Define.State.Clim);
-        SetState(fire, Define.State.Fire);
-        SetState(reload, Define.State.Reload);
-        SetState(pick, Define.State.Pick);
-        SetState(jump, Define.State.Jump);
-        SetState(interaction, Define.State.Interaction);
-
-        FSM.Start(Define.State.Idle);
     }
 
     void SetState(CharacterStateBase stateBase, Define.State stateEnum)
@@ -131,20 +86,6 @@ public class Controller : MonoBehaviourPun
     private void FixedUpdate()
     {
         moveProcess?.FixedUpdate();
-    }
-
-    public void ScaleCapsule(bool state)
-    {
-        if (state) //�ɱ�
-        {
-            capsule.height = capsuleHeight * 0.5f;
-            capsule.center = capsuleCenter * 0.5f;
-        }
-        else //�Ͼ��
-        {
-            capsule.height = capsuleHeight;
-            capsule.center = capsuleCenter;
-        }
     }
 
     void CallFire()
@@ -178,12 +119,7 @@ public class Controller : MonoBehaviourPun
             colliders[i].gameObject.AddComponent<HitBox>().SetOwner(this);
         }
     }
-    void GetView()
-    {
-        view = gameObject.GetOrAddComponent<PhotonView>();
-        animView = gameObject.GetOrAddComponent<PhotonAnimatorView>();
-        transformView = gameObject.GetOrAddComponent<PhotonTransformView>();
-    }
+
 
     void CheckMine()
     {
@@ -213,20 +149,21 @@ public class Controller : MonoBehaviourPun
 
         moveProcess.SetMotions(AnimationController.MoveType.JumpFinish, animController.JumpFinish);
         moveProcess.SetMotions(AnimationController.MoveType.Jump, animController.JumpStart);
-        moveProcess.SetMotions(AnimationController.MoveType.JumpMove, animController.JumpMove);
-
-        moveProcess.SetMotions(AnimationController.MoveType.Crouch, animController.Crouch);
-        moveProcess.SetMotions(AnimationController.MoveType.Stand, animController.Stand);
         moveProcess.SetMotions(AnimationController.MoveType.JumpSlide, SlideJump);
-        moveProcess.SetMoveActionValue(AnimationController.ValueType.Leg, animController.SetJumpLeg);
-        moveProcess.SetMoveActionValue(AnimationController.ValueType.Velocity, animController.SetVelocityY);
-        moveProcess.SetMoveActionValue( animController.SetMoveValue);
+
+        moveProcess.SetMotions(AnimationController.MoveType.Crouch,() => animController.Crouch(true));
+        moveProcess.SetMotions(AnimationController.MoveType.Stand, () => animController.Crouch(false));
+
+        moveProcess.SetMoveActionValue( v => animController.VelocityY = v);
+        moveProcess.SetMoveActionValue( v => animController.MoveValue = v);
 
         inputController.SetMoveKey(moveProcess.SetMoveValue);
         inputController.SetKey(moveProcess.Crouch, Define.Key.C);
         inputController.SetKey(moveProcess.Jump, Define.Key.Space);
         inputController.SetMoveType(moveProcess.SetMoveType);
     }
+
+
     void SlideJump()
     {
         float runCycle =
@@ -234,8 +171,7 @@ public class Controller : MonoBehaviourPun
                    animController.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime + 0.2f, 1);
         float dir = runCycle < 0.5f ? 1 : -1;
         float jumpLeg = dir * inputController.MoveY;
-        animController.SetJumpLeg(jumpLeg);
-        animController.JumpMove();
+        animController.VelocityY = jumpLeg;
     }
 
     void SetKeyAction()
@@ -265,5 +201,53 @@ public class Controller : MonoBehaviourPun
         int other = maxHp - hp;
         _healValue = other < _healValue ? other : _healValue;
         hp += _healValue;
+    }
+
+
+
+
+
+
+
+
+    PhotonView view;
+    PhotonTransformView transformView;
+    void GetView()
+    {
+        view = gameObject.GetOrAddComponent<PhotonView>();
+        transformView = gameObject.GetOrAddComponent<PhotonTransformView>();
+    }
+
+    [SerializeField] CharacterDeath death;
+    [SerializeField] CharacterIdle idle;
+    [SerializeField] CharacterWalk walk;
+    [SerializeField] CharacterRun run;
+    [SerializeField] CharacterCrouch crouch;
+    [SerializeField] CharacterClim clim;
+    [SerializeField] CharacterFire fire;
+    [SerializeField] CharacterReload reload;
+    [SerializeField] CharacterPickUp pick;
+    [SerializeField] CharacterJump jump;
+    [SerializeField] CharacterInteraction interaction;
+
+    void InitState()
+    {
+        if (mine == false)
+            return;
+        fsm = new BaseStateMachine<Define.State>();
+
+        SetState(idle, Define.State.Idle);
+        SetState(death, Define.State.Death);
+        SetState(walk, Define.State.Walk);
+        SetState(run, Define.State.Run);
+        SetState(crouch, Define.State.Crouch);
+        SetState(clim, Define.State.Clim);
+        SetState(fire, Define.State.Fire);
+        SetState(reload, Define.State.Reload);
+        SetState(pick, Define.State.Pick);
+        SetState(jump, Define.State.Jump);
+        SetState(interaction, Define.State.Interaction);
+
+        FSM.Start(Define.State.Idle);
     }
 }

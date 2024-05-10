@@ -106,7 +106,6 @@ public class PlayerInputController : MonoBehaviour
 
     void OnAlt(InputValue inputValue)
     {
-        //Around = inputValue.isPressed ? true : false;
         actions[(int)Define.Key.Alt]?.Invoke();
     }
     void OnChangeFire()
