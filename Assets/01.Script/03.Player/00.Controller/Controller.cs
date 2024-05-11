@@ -1,15 +1,14 @@
 using Photon.Pun;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class Controller : MonoBehaviourPun
 {
-    [Range(10, 90)]
-    [SerializeField] int limitAngle;
-    [Range(0.05f, 0.5f)]
+    [Range(0.05f, 3f)]
     [SerializeField] float groundCheckLength;
-    [Range(2, 10f)]
-    [SerializeField] float jumpPower;
+    [Range(0.2f, 3)]
+    [SerializeField] float jumpHeight;
     [SerializeField] float walkSpeed;
     [SerializeField] float runSpeed;
     [SerializeField] float crouchSpeed;
@@ -29,13 +28,8 @@ public class Controller : MonoBehaviourPun
     AnimationController animController;
     ProcessingController processingController;
     EquipController equipController;
-    CharacterTransformProcess moveProcess;
-
-    public BaseStateMachine<Define.State> FSM
-    { get { return mine ? fsm : null; } }
-    private BaseStateMachine<Define.State> fsm
-    { get; set; }
-
+    [SerializeField] CharacterTransformProcess moveProcess;
+    
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
@@ -46,19 +40,16 @@ public class Controller : MonoBehaviourPun
         if (PhotonNetwork.InRoom)
             Check();
         else
-        {
             Destroy(gameObject);
-            return;
-        }
     }
 
-    private void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Vector3 start = foot.transform.position + new Vector3(0,1,0) * 0.1f;
+        Vector3 start = foot.transform.position  + Vector3.up;
         Vector3 end = start + new Vector3(0, -groundCheckLength, 0);
-
-        Gizmos.DrawLine(start, end);
+        //Gizmos.DrawLine(start, end);
+        Gizmos.DrawWireSphere(foot.transform.position , GetComponent<CharacterController>().radius + 1);
     }
     void Check()
     {
@@ -76,17 +67,11 @@ public class Controller : MonoBehaviourPun
         hp = maxHp;
     }
 
-    void SetState(CharacterStateBase stateBase, Define.State stateEnum)
-    {
-        stateBase.Controller = this;
-        FSM.AddState(stateEnum, stateBase);
-    }
-
     void Update()
     {
         moveProcess?.Update();
     }
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         moveProcess?.FixedUpdate();
     }
@@ -140,11 +125,11 @@ public class Controller : MonoBehaviourPun
         }
         cameraController.Init();
     }
+
     void MoveProcessInit()
     {
-        moveProcess = new CharacterTransformProcess(GetComponent<CharacterController>());
-
-        moveProcess.Init(foot, groundCheckLength, groundLayer, limitAngle);
+        moveProcess.Init(GetComponent<CharacterController>());
+        moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, groundLayer, jumpHeight);
 
         moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
         moveProcess.SetMotions(AnimationController.MoveType.Walk, animController.MoveWalk);
@@ -166,6 +151,7 @@ public class Controller : MonoBehaviourPun
         inputController.SetMoveType(moveProcess.SetMoveType);
 
         moveProcess.SetMoveSpeed(walkSpeed, runSpeed, crouchSpeed);
+        moveProcess.Start();
     }
 
 
@@ -198,7 +184,6 @@ public class Controller : MonoBehaviourPun
         {
             animController.Die();
             Destroy(inputController.gameObject);
-            FSM.ChangeState(Define.State.Death);
         }
     }
     public void AddHp(int _healValue)
@@ -225,36 +210,4 @@ public class Controller : MonoBehaviourPun
         transformView = gameObject.GetOrAddComponent<PhotonTransformView>();
     }
 
-    [SerializeField] CharacterDeath death;
-    [SerializeField] CharacterIdle idle;
-    [SerializeField] CharacterWalk walk;
-    [SerializeField] CharacterRun run;
-    [SerializeField] CharacterCrouch crouch;
-    [SerializeField] CharacterClim clim;
-    [SerializeField] CharacterFire fire;
-    [SerializeField] CharacterReload reload;
-    [SerializeField] CharacterPickUp pick;
-    [SerializeField] CharacterJump jump;
-    [SerializeField] CharacterInteraction interaction;
-
-    void InitState()
-    {
-        if (mine == false)
-            return;
-        fsm = new BaseStateMachine<Define.State>();
-
-        SetState(idle, Define.State.Idle);
-        SetState(death, Define.State.Death);
-        SetState(walk, Define.State.Walk);
-        SetState(run, Define.State.Run);
-        SetState(crouch, Define.State.Crouch);
-        SetState(clim, Define.State.Clim);
-        SetState(fire, Define.State.Fire);
-        SetState(reload, Define.State.Reload);
-        SetState(pick, Define.State.Pick);
-        SetState(jump, Define.State.Jump);
-        SetState(interaction, Define.State.Interaction);
-
-        FSM.Start(Define.State.Idle);
-    }
 }

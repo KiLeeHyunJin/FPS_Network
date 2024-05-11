@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1190958646692039786}
   - component: {fileID: 5075823407910496031}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,7 +434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2266415517827274441}
   - component: {fileID: 7393743392937519908}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Teeth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5176,7 +5176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6730831051602042065}
   - component: {fileID: 1370290537507845743}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: EyesBrown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5292,7 +5292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8761836944576857246}
   - component: {fileID: 2207234354956728832}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Eyelash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5504,9 +5504,9 @@ SkinnedMeshRenderer:
   - {fileID: 102324242048204090}
   - {fileID: 5125593583077363278}
   m_BlendShapeWeights: []
-  m_RootBone: {fileID: 5902519895747997299}
+  m_RootBone: {fileID: 5094456864642124436}
   m_AABB:
-    m_Center: {x: -0.14460208, y: 0.012220912, z: 0.403759}
+    m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.15771024, y: 0.13387594, z: 0.16972013}
   m_DirtyAABB: 0
 --- !u!1 &2861796856875548305
@@ -5779,9 +5779,9 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.9
-  m_Radius: 0.2
-  m_SlopeLimit: 45
+  m_Height: 1.6
+  m_Radius: 0.15
+  m_SlopeLimit: 35
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -5810,19 +5810,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0075d30a84b6ec48bf120f6023f2655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  limitAngle: 35
-  groundCheckLength: 0.249
-  jumpPower: 8
+  groundCheckLength: 1.1
+  jumpHeight: 2.5
   walkSpeed: 2
-  runSpeed: 3.5
+  runSpeed: 3.8
   crouchSpeed: 1.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
   rootBone: {fileID: 3529253217596478610}
-  foot: {fileID: 6579088011749923023}
+  foot: {fileID: 1650215173335207400}
   leftHand: {fileID: 3204037897197038457}
   rightHand: {fileID: 7813257405705385384}
+  moveProcess:
+    slideValue: {x: 0, y: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5851,12 +5852,13 @@ MonoBehaviour:
   mouseSensitivity: 5
   distance: 10
   FPSIgnoreObject:
-  - {fileID: 7192948695896616243}
+  - {fileID: 4154358427696398755}
+  - {fileID: 8472029680890605740}
+  - {fileID: 8215194016900448027}
   - {fileID: 7322839291418061859}
   - {fileID: 5610325096811914340}
-  - {fileID: 8215194016900448027}
   target: {fileID: 4501719902224000900}
-  FPSCameraRoot: {fileID: 7381128346349104171}
+  FPSCameraRoot: {fileID: 425567504047030535}
   FPSCam: {fileID: 8114579742163348247}
 --- !u!114 &2242058583393748136
 MonoBehaviour:
@@ -5998,7 +6000,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 110aa7cc4a80c964095ae415eaaa0bbe, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
@@ -6032,7 +6034,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -6057,7 +6059,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: Turn
   - Type: 1
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: Jump
   - Type: 4
     SynchronizeType: 1
@@ -6279,7 +6281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3594652464960816162
 Transform:
   m_ObjectHideFlags: 0
@@ -9022,7 +9024,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7790616987828672678}
   - component: {fileID: 6563255539133647918}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10333,10 +10335,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.06
+  m_Radius: 0.05
   m_Height: 0.24
   m_Direction: 0
-  m_Center: {x: 0.03, y: 0, z: 0}
+  m_Center: {x: 0.03, y: 0.03, z: 0}
 --- !u!1 &5235212094652565162
 GameObject:
   m_ObjectHideFlags: 0
@@ -10347,7 +10349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4042882753094309065}
   - component: {fileID: 8018149830796805790}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: HairB_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10712,7 +10714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &239721155919568650
 Transform:
   m_ObjectHideFlags: 0
@@ -10942,7 +10944,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6215946341916673676}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: HeadBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11012,7 +11014,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2945624718308341230}
   - component: {fileID: 8654126768089687937}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: EyesTear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14307,7 +14309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraRoot: {fileID: 3303732465516620629}
-  front: 0.04
+  front: 0.05
   up: -0.05
 --- !u!1 &7322839291418061859
 GameObject:
@@ -14318,7 +14320,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7349484940930484188}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: HairB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14384,7 +14386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5703856421001293884}
   - component: {fileID: 7384421894732392965}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: HairB_Full
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15140,9 +15142,9 @@ SkinnedMeshRenderer:
   - {fileID: 7064932598648651042}
   - {fileID: 4726459049785959070}
   m_BlendShapeWeights: []
-  m_RootBone: {fileID: 5902519895747997299}
+  m_RootBone: {fileID: 1742639875071856761}
   m_AABB:
-    m_Center: {x: -0.1446422, y: 0.012248661, z: -0.40364388}
+    m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.1576702, y: 0.13384816, z: 0.16960517}
   m_DirtyAABB: 0
 --- !u!1 &8432789037798367127
@@ -15196,10 +15198,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.06
+  m_Radius: 0.05
   m_Height: 0.24
   m_Direction: 0
-  m_Center: {x: -0.03, y: 0, z: 0}
+  m_Center: {x: -0.03, y: -0.03, z: 0}
 --- !u!1 &8472029680890605740
 GameObject:
   m_ObjectHideFlags: 0

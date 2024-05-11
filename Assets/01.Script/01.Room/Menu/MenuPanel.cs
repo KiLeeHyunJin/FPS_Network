@@ -5,12 +5,6 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-using Firebase.Database;
-using System.Collections.Generic;
-using System;
-using System.Text;
-using System.Collections;
 public class MenuPanel : MonoBehaviour
 {
     [SerializeField] Image PlayButton;

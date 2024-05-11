@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float distance;
     [SerializeField] GameObject[] FPSIgnoreObject;
     [SerializeField] Transform target;
-    [SerializeField] Transform FPSCameraRoot;
+    [SerializeField] FPSCameraPosition FPSCameraRoot;
     [SerializeField] CinemachineVirtualCamera FPSCam;
     Vector2 inputDir;
 
@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         transform.Rotate(Vector3.up, inputDir.x * SetValue()); //캐릭터 좌우 회전
-        FPSCameraRoot.localRotation = Quaternion.Euler(yRotation, 0, 0); //카메라 상하 회전
+        FPSCameraRoot.transform.localRotation = Quaternion.Euler(yRotation, 0, 0); //카메라 상하 회전
     }
 
     float SetValue() //감도
