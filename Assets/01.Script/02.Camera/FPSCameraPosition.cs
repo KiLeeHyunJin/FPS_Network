@@ -14,8 +14,7 @@ public class FPSCameraPosition : MonoBehaviour
         cam = GetComponentInChildren<CinemachineVirtualCamera>();
         if(cam != null)
         {
-            cam.transform.localPosition = Vector3.zero;
-            cam.transform.localRotation = Quaternion.identity;
+            cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             cam.transform.SetParent(transform, true);
         }
     }

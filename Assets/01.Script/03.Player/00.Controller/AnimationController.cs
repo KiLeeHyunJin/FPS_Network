@@ -7,7 +7,7 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
 {
     Animator anim;
     public Animator Anim { get { return anim; } }
-    [SerializeField] float dampingValue;
+    [SerializeField] float dampingSpeed;
 
     int JumpEnterId;
     int ChangeEnterId;
@@ -34,8 +34,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         {
             //SetValue(AnimatorFloatValue.X, value.x);
             //SetValue(AnimatorFloatValue.Z, value.y);
-            this.ReStartCoroutine(DampingAnimationRoutine(value.x, AnimatorFloatValue.X), ref dampingCo[(int)AnimatorFloatValue.X]);
-            this.ReStartCoroutine(DampingAnimationRoutine(value.y, AnimatorFloatValue.Z), ref dampingCo[(int)AnimatorFloatValue.Z]);
+            this.ReStartCoroutine(DampingAnimationRoutine(value.x, dampingSpeed, AnimatorFloatValue.X), ref dampingCo[(int)AnimatorFloatValue.X]);
+            this.ReStartCoroutine(DampingAnimationRoutine(value.y, dampingSpeed, AnimatorFloatValue.Z), ref dampingCo[(int)AnimatorFloatValue.Z]);
         }
     }
     public float VelocityY
@@ -43,9 +43,10 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         set
         {
             //SetValue(AnimatorFloatValue.Y, value);
-            this.ReStartCoroutine(DampingAnimationRoutine(value, AnimatorFloatValue.Y), ref dampingCo[(int)AnimatorFloatValue.Y]);
+            this.ReStartCoroutine(DampingAnimationRoutine(value, dampingSpeed, AnimatorFloatValue.Y), ref dampingCo[(int)AnimatorFloatValue.Y]);
         }
     }
+    #region
     //void SaveValue(AnimatorFloatValue type, float _value)
     //{
     //    byte answard;
@@ -66,6 +67,7 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     //    this.ReStartCoroutine(DampingAnimationRoutine(_value, floatId[(int)type], type), ref dampingCo[(int)type]);
     //    SaveValue(type, _value);
     //}
+    #endregion
     public void Crouch(bool state)
     {
         SetState(AnimatorState.Crouch, state);
@@ -119,8 +121,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         SetAnimID();
         anim = GetComponent<Animator>();
         anim.applyRootMotion = false;
-        dampingValue = dampingValue <= 0 ? 0.15f : dampingValue;
-        dampingValue = 1 / dampingValue;
+        dampingSpeed = dampingSpeed <= 0 ? 0.15f : dampingSpeed;
+        dampingSpeed = 1 / dampingSpeed;
     }
     void SetAnimID()
     {
@@ -140,6 +142,7 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         layerId = new int[] { MoveId, RunId, CrouchId, JumpFinishId };
         dampingCo = new Coroutine[(int)AnimatorFloatValue.END];
     }
+    #region
     //private void Start()
     //{
     //    Pos = new byte[(int)AnimatorFloatValue.END];
@@ -209,8 +212,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     //        UpdateState((byte)stream.ReceiveNext());
     //    }
     //}
-
-    IEnumerator DampingAnimationRoutine(float value, AnimatorFloatValue type)
+    #endregion
+    IEnumerator DampingAnimationRoutine(float value,float dampingValue, AnimatorFloatValue type)
     {
         float startValue = anim.GetFloat(floatId[(int)type]);
         float time = 0;

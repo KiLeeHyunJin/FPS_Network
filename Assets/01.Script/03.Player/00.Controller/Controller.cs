@@ -7,11 +7,16 @@ public class Controller : MonoBehaviourPun
 {
     [Range(0.05f, 3f)]
     [SerializeField] float groundCheckLength;
+    [Range(0.05f, 2f)]
+    [SerializeField] float ignoreGroundCheckLength;
     [Range(0.2f, 3)]
     [SerializeField] float jumpHeight;
-    [SerializeField] float walkSpeed;
-    [SerializeField] float runSpeed;
-    [SerializeField] float crouchSpeed;
+    [SerializeField] float walkStandSpeed;
+    [SerializeField] float runStandSpeed;
+    [SerializeField] float walkCrouchSpeed;
+    [SerializeField] float runCrouchSpeed;
+    [Range(1f,3f)]
+    [SerializeField] float gravitySpeed;
     [SerializeField] LayerMask groundLayer;
 
     [SerializeField] GameObject rootBone;
@@ -46,10 +51,7 @@ public class Controller : MonoBehaviourPun
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Vector3 start = foot.transform.position  + Vector3.up;
-        Vector3 end = start + new Vector3(0, -groundCheckLength, 0);
-        //Gizmos.DrawLine(start, end);
-        Gizmos.DrawWireSphere(foot.transform.position , GetComponent<CharacterController>().radius + 1);
+        Gizmos.DrawWireSphere(foot.transform.position, GetComponent<CharacterController>().radius);
     }
     void Check()
     {
@@ -129,7 +131,7 @@ public class Controller : MonoBehaviourPun
     void MoveProcessInit()
     {
         moveProcess.Init(GetComponent<CharacterController>());
-        moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, groundLayer, jumpHeight);
+        moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, jumpHeight, gravitySpeed);
 
         moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
         moveProcess.SetMotions(AnimationController.MoveType.Walk, animController.MoveWalk);
@@ -146,11 +148,12 @@ public class Controller : MonoBehaviourPun
         moveProcess.SetMoveActionValue( v => animController.MoveValue = v);
 
         inputController.SetMoveKey(moveProcess.SetMoveValue);
-        inputController.SetKey(moveProcess.Crouch, Define.Key.C);
-        inputController.SetKey(moveProcess.Jump, Define.Key.Space);
         inputController.SetMoveType(moveProcess.SetMoveType);
 
-        moveProcess.SetMoveSpeed(walkSpeed, runSpeed, crouchSpeed);
+        inputController.SetKey(moveProcess.Crouch, Define.Key.C);
+        inputController.SetKey(moveProcess.Jump, Define.Key.Space);
+
+        moveProcess.SetMoveSpeed(walkStandSpeed, runStandSpeed, walkCrouchSpeed,runCrouchSpeed);
         moveProcess.Start();
     }
 

@@ -1805,7 +1805,7 @@ MonoBehaviour:
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 4501719902224000900}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -5810,11 +5810,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0075d30a84b6ec48bf120f6023f2655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckLength: 1.1
-  jumpHeight: 2.5
-  walkSpeed: 2
-  runSpeed: 3.8
-  crouchSpeed: 1.2
+  groundCheckLength: 1.2
+  ignoreGroundCheckLength: 0.8
+  jumpHeight: 1.5
+  walkStandSpeed: 2.1
+  runStandSpeed: 3.5
+  walkCrouchSpeed: 0.5
+  runCrouchSpeed: 1.7
+  gravitySpeed: 2
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -5822,8 +5825,6 @@ MonoBehaviour:
   foot: {fileID: 1650215173335207400}
   leftHand: {fileID: 3204037897197038457}
   rightHand: {fileID: 7813257405705385384}
-  moveProcess:
-    slideValue: {x: 0, y: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5836,7 +5837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8a9501b8a475c41835dc3660496874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampingValue: 0.15
+  dampingSpeed: 0
 --- !u!114 &5469097632388544337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9797,7 +9798,7 @@ MonoBehaviour:
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 4501719902224000900}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -11695,7 +11696,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3462706624356272330
 Transform:
   m_ObjectHideFlags: 0

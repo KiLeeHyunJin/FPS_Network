@@ -1,20 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Dynamic;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.XInput;
-using UnityEngine.UIElements;
-
-public struct CharacterStat
-{
-    public int maxHp;
-    public float moveSpeed;
-    public float jumpPower;
-}
 [Serializable]
 public class CharacterTransformProcess
 {
@@ -29,20 +14,23 @@ public class CharacterTransformProcess
     int groundLayer;
 
     float groundCheckLength;
+    float ignoreGroundCheckLenth;
     float limitAngle;
     float velocity;
 
     float currentSpeed;
-    float walkSpeed;
-    float runSpeed;
-    float crouchSpeed;
+    float walkStandSpeed;
+    float runStandSpeed;
+    float walkCrouchSpeed;
+    float runCrouchSpeed;
+
     float jumpHeight;
     float checkRadius;
-    const float gravity = -9.81f;
-
+    const float defaultGravity = -9.81f;
+    float gravity;
     Vector3 moveDirection;
     Vector2 moveValue;
-    [SerializeField] Vector2 slideValue;
+    Vector2 slideValue;
 
     bool IsGround;
     bool IsJumping;
@@ -56,19 +44,21 @@ public class CharacterTransformProcess
         motions = new Action[(int)AnimationController.MoveType.END];
     }
 
-    public void InitGroundCheckData(Transform _foot, float _groundCheckLenth, int _groundLayer, float _jumpHeight)
+    public void InitGroundCheckData(Transform _foot, float _groundCheckLenth, float _ignoreGroundCheckLenth, int _groundLayer, float _jumpHeight, float _gravitySpeed)
     {
         foot = _foot;
         groundCheckLength = _groundCheckLenth;
+        ignoreGroundCheckLenth = _ignoreGroundCheckLenth;
         groundLayer = _groundLayer;
         jumpHeight = _jumpHeight;
+        gravity = _gravitySpeed * defaultGravity;
     }
     public void Start()
     {
         IsCrouch = false;
         IsJumping = false;
         walkMotion = motions[(int)AnimationController.MoveType.Walk];
-        currentSpeed = walkSpeed;
+        currentSpeed = walkStandSpeed;
         limitAngle = controller.slopeLimit;
         checkRadius = controller.radius * 0.9f;
     }
@@ -78,19 +68,20 @@ public class CharacterTransformProcess
         walkMotion = state ? motions[(int)AnimationController.MoveType.Run] : motions[(int)AnimationController.MoveType.Walk];
         if (IsCrouch)
         {
-            currentSpeed = crouchSpeed;
+            currentSpeed = state ? runCrouchSpeed : walkCrouchSpeed;
         }
         else
         {
-            currentSpeed = state ? runSpeed : walkSpeed;
+            currentSpeed = state ? runStandSpeed : walkStandSpeed;
         }
     }
 
-    public void SetMoveSpeed(float _walkSpeed, float _runSpeed, float _crouchSpeed)
+    public void SetMoveSpeed(float _walkStandSpeed, float _runStandSpeed, float _walkCrouchSpeed, float _runCrouchSpeed)
     {
-        walkSpeed = _walkSpeed;
-        runSpeed = _runSpeed;
-        crouchSpeed = _crouchSpeed;
+        walkStandSpeed = _walkStandSpeed;
+        runStandSpeed = _runStandSpeed;
+        walkCrouchSpeed = _walkCrouchSpeed;
+        runCrouchSpeed = _runCrouchSpeed;
     }
     public void SetMotions(AnimationController.MoveType type, Action action)
     {
@@ -115,17 +106,17 @@ public class CharacterTransformProcess
             IsMove = false;
             return;
         }
-        if(IsMove == false)
+        if (IsMove == false)
             IsMove = true;
     }
     public void Crouch()
     {
-        SetMoveType(IsRun);
         IsCrouch = !IsCrouch;
         if (IsCrouch)
             motions[(int)AnimationController.MoveType.Crouch]?.Invoke();
         else
             motions[(int)AnimationController.MoveType.Stand]?.Invoke();
+        SetMoveType(IsRun);
     }
     public void Jump()
     {
@@ -137,12 +128,6 @@ public class CharacterTransformProcess
     }
     public void Update()
     {
-        if (Physics.SphereCast(foot.position + new Vector3(0,0.1f,0), controller.radius + 2, Vector3.down, out RaycastHit hitInfo, 0, groundLayer))
-        {
-            Debug.Log(hitInfo.collider.gameObject.name);
-        }
-        else
-            Debug.Log("Non");
         Gravity();
         Direction();
         controller.Move(moveDirection);
@@ -159,56 +144,62 @@ public class CharacterTransformProcess
             groundLayer);
 
         (Vector3 startPos, float checkLength) = IsGround ?
-            (foot.position + Vector3.up , groundCheckLength) : 
-            (foot.position              , groundCheckLength - 0.7f);
+            (foot.position + Vector3.up, groundCheckLength) :
+            (foot.position, ignoreGroundCheckLenth);
 
         IsIgnoreSpace = Physics.Raycast(
             startPos, Vector3.down,
             out RaycastHit hitInfo,
             checkLength,
             groundLayer);
+
+
         bool check = IsGround;
-        if (velocity < 0)
+        if (velocity <= 0)
             check |= IsIgnoreSpace;
 
         SlideCheck(hitInfo, check);
     }
-    void SlideCheck(RaycastHit hitInfo,bool ignoreCheck)
+    void SlideCheck(RaycastHit hitInfo, bool ignoreCheck)
     {
-        if(hitInfo.collider == null)
-        {
-            SlopeCheck();
-            return;
-        }
-        slideValue = Vector2.zero;
+        //if(hitInfo.collider == null)
+        //{
+        //    SlopeCheck();
+        //    return;
+        //}
+        //slideValue = Vector2.zero;
 
         if (ignoreCheck) //높이 상태를 무시해도 되거나 땅이라면
         {
-            float angle = Vector3.Angle(hitInfo.normal, Vector3.up);
-            if (angle < limitAngle) //미끄러지는 각도가 아니라면
-            {
-                if (IsJumping)
-                {
-                    JumpMotion(false);
-                    Debug.Log(1);
-                }
-                return;
-            }
-            else
-            {
-                SlopeCheck();
-                JumpMotion(true);
-            }
+            //Slide(hitInfo);
+            if (velocity < 0)
+                JumpMotion(false);
         }
         else
         {
             JumpMotion(true);
-            Debug.Log(2);
+        }
+    }
+    void Slide(RaycastHit hitInfo)
+    {
+        float angle = Vector3.Angle(hitInfo.normal, Vector3.up);
+        if (angle < limitAngle) //미끄러지는 각도가 아니라면
+        {
+            if (IsJumping)
+            {
+                JumpMotion(false);
+            }
+            return;
+        }
+        else
+        {
+            SlopeCheck();
+            JumpMotion(true);
         }
     }
     void SlopeCheck()
     {
-        if (Physics.SphereCast(foot.position , 3, Vector3.zero, out RaycastHit hitInfo,0,groundLayer))
+        if (Physics.SphereCast(foot.position, 3, Vector3.zero, out RaycastHit hitInfo, 0, groundLayer))
         {
             //Vector3 normal = Vector3.Cross(hitInfo.normal, Vector3.up);
             //Debug.DrawLine(foot.position, foot.position + normal, Color.cyan);
@@ -221,14 +212,14 @@ public class CharacterTransformProcess
             //slideValue = new Vector2(hitInfo.normal.x, hitInfo.normal.z);
             return;
         }
-       // Debug.Log(-1);
+        // Debug.Log(-1);
     }
     void JumpMotion(bool state)
     {
-        if(IsJumping != state) 
+        if (IsJumping != state)
         {
             IsJumping = state;
-            if(IsJumping)
+            if (IsJumping)
             {
                 if (IsCrouch) //앉은 상태라면
                 {
@@ -241,6 +232,10 @@ public class CharacterTransformProcess
                 motions[(int)AnimationController.MoveType.JumpFinish]?.Invoke();
             }
         }
+        else if (state)
+        {
+            motions[(int)AnimationController.MoveType.JumpSlide]?.Invoke();
+        }
     }
 
     void Direction()
@@ -248,7 +243,7 @@ public class CharacterTransformProcess
         moveDirection = new Vector3(slideValue.x, velocity, slideValue.y);
         if (IsMove)
         {
-            if(IsJumping == false)
+            if (IsJumping == false)
                 walkMotion?.Invoke();
             Vector2 value = currentSpeed * moveValue; ;
             moveDirection += ((value.x * controller.transform.right) + (value.y * controller.transform.forward));
@@ -260,7 +255,7 @@ public class CharacterTransformProcess
     {
         if (IsGround && IsJumping == false)
         {
-            if(velocity == 0)
+            if (velocity == 0)
                 return;
             velocity = 0f;
         }
@@ -268,7 +263,6 @@ public class CharacterTransformProcess
         {
             velocity += gravity * Time.deltaTime;
         }
-
         jumpActionValue?.Invoke(velocity);
     }
 }
