@@ -15,27 +15,35 @@ public class CameraController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera FPSCam;
     Vector2 inputDir;
 
+    bool isMine;
     float yRotation;
-
     int FPSIgnoreLayerMask;
+
+    void Awake()
+    {
+        isMine = false;
+    }
+
     public void Init()
     {
         FPSCam.Priority = 10;
         int ignoreLayer = LayerMask.NameToLayer("FPSIgnore"); //무시할 레이어 설정
-
+        ChangeLayer(ignoreLayer);
         FPSIgnoreLayerMask = 1 << ignoreLayer; //쉬프트연산
         Camera.main.cullingMask = ~FPSIgnoreLayerMask; //컬링 레이어 설정
+        Cursor.lockState = CursorLockMode.Locked;
+        isMine = true;
+    }
 
-        if (FPSIgnoreObject == null)
-            return;
-
+    void ChangeLayer(int layerNum)
+    {
         for (int i = 0; i < FPSIgnoreObject.Length; i++) //레이어 재설정
         {
             if (FPSIgnoreObject[i] == null)
                 continue;
             //하위 객체들 또한 전부 레이어 재설정
             foreach (Transform childeGameObject in FPSIgnoreObject[i].GetComponentsInChildren<Transform>())
-                childeGameObject.gameObject.layer = ignoreLayer;
+                childeGameObject.gameObject.layer = layerNum;
         }
     }
 
@@ -55,21 +63,20 @@ public class CameraController : MonoBehaviour
         return value;
     }
 
-    private void OnEnable()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-    private void OnDisable()
-    {
-        Cursor.lockState = CursorLockMode.None;
-    }
     void OnLook(InputValue value)
+        => inputDir = value.Get<Vector2>();
+
+    void OnDestroy()
     {
-        inputDir = value.Get<Vector2>();
+        DestroyMine();
+        Destroy(FPSCameraRoot.gameObject); //컨트롤 파괴시 시네머신 카메라도 같이 파괴
     }
 
-    private void OnDestroy()
+    void DestroyMine()
     {
-        Destroy(FPSCameraRoot.gameObject); //컨트롤 파괴시 시네머신 카메라도 같이 파괴
+        if (isMine == false)
+            return;
+        ChangeLayer(0);
+        Cursor.lockState = CursorLockMode.None;
     }
 }

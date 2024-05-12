@@ -1,5 +1,8 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 
@@ -63,54 +66,6 @@ public class Controller : MonoBehaviourPun
         MoveProcessInit();
     }
 
-    void SetData()
-    {
-        maxHp = maxHp <= 0 ? 100 : maxHp;
-        hp = maxHp;
-    }
-
-    void Update()
-    {
-        moveProcess?.Update();
-    }
-    void FixedUpdate()
-    {
-        moveProcess?.FixedUpdate();
-    }
-
-    void CallFire()
-    {
-        equipController?.Fire();
-    }
-    void CallReload()
-    {
-        equipController?.Reload();
-    }
-    void CallChangeFireType()
-    {
-        if (equipController != null)
-            inputController.ChangeFireType = equipController.FireTypeChange();
-    }
-    void CallOne()
-    {
-    }
-    void CallTwo()
-    {
-    }
-    void CallThree()
-    {
-    }
-    void CollidersSetting() //하위 객체를 돌며 충돌체가 있다면 6번 레이어로 변경 및 히트박스 부착
-    {
-        Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            colliders[i].gameObject.layer = 6;
-            colliders[i].gameObject.AddComponent<HitBox>().SetOwner(this);
-        }
-    }
-
-
     void CheckMine()
     {
         mine = photonView.IsMine;
@@ -127,9 +82,59 @@ public class Controller : MonoBehaviourPun
         }
         cameraController.Init();
     }
+    void SetData()
+    {
+        maxHp = maxHp <= 0 ? 100 : maxHp;
+        hp = maxHp;
+    }
 
+    void CollidersSetting() //하위 객체를 돌며 충돌체가 있다면 6번 레이어로 변경 및 히트박스 부착
+    {
+        //PhotonNetwork.CurrentRoom.
+        Player pl = PhotonNetwork.LocalPlayer;
+        Debug.Log($"LocalPlayer : {pl.ActorNumber},Controller : {photonView.Controller.ActorNumber} ");
+        Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].gameObject.layer = 6;
+            colliders[i].gameObject.AddComponent<HitBox>().SetOwner(this);
+        }
+    }
+
+    void Update() 
+        => moveProcess?.Update();
+    void FixedUpdate() 
+        => moveProcess?.FixedUpdate();
+
+    void CallFire() 
+        => equipController.Fire();
+    void CallReload() 
+        => equipController.Reload();
+    void CallChangeFireType()
+        => inputController.ChangeFireType = equipController.FireTypeChange();
+    void CallOne()
+    {}
+    void CallTwo()
+    {}
+    void CallThree()
+    {}
+    void SetKeyAction()
+    {
+        if (mine == false)
+            return;
+
+        inputController.SetKey(CallReload, Define.Key.R);
+        inputController.SetKey(CallOne, Define.Key.F1);
+        inputController.SetKey(CallTwo, Define.Key.F2);
+        inputController.SetKey(CallThree, Define.Key.F3);
+        inputController.SetKey(CallFire, Define.Key.Press);
+        inputController.SetKey(CallChangeFireType, Define.Key.V);
+    }
     void MoveProcessInit()
     {
+        if (mine == false)
+            return;
+        moveProcess = new CharacterTransformProcess();
         moveProcess.Init(GetComponent<CharacterController>());
         moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, jumpHeight, gravitySpeed);
 
@@ -168,18 +173,7 @@ public class Controller : MonoBehaviourPun
         animController.VelocityY = jumpLeg;
     }
 
-    void SetKeyAction()
-    {
-        if (mine == false)
-            return;
 
-        inputController.SetKey(CallReload, Define.Key.R);
-        inputController.SetKey(CallOne, Define.Key.F1);
-        inputController.SetKey(CallTwo, Define.Key.F2);
-        inputController.SetKey(CallThree, Define.Key.F3);
-        inputController.SetKey(CallFire, Define.Key.Press);
-        inputController.SetKey(CallChangeFireType, Define.Key.V);
-    }
     public void Damage(int _damage)
     {
         hp -= equipController.ShieldCheck(_damage);

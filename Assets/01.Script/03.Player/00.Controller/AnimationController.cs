@@ -10,7 +10,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     [SerializeField] float dampingSpeed;
 
     int JumpEnterId;
-    int ChangeEnterId;
+    int Standing;
+    int Crouching;
 
     //byte[] Pos;
     //byte layer;
@@ -19,6 +20,9 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     int[] layerId;
     int[] floatId;
     Coroutine[] dampingCo;
+    readonly string STAND = "StandRPC";
+    readonly string CROUCH = "CrouchRPC";
+    readonly string JUMP = "JumpRPC";
     //void SetState(AnimatorState type, bool state)
     //{
     //    int idx = (int)type;
@@ -70,14 +74,16 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     #endregion
     public void Crouch(bool state)
     {
-        SetState(AnimatorState.Crouch, state);
-        photonView.RPC("CrouchRPC", RpcTarget.AllViaServer);
+        if(state)
+            photonView.RPC(CROUCH, RpcTarget.AllViaServer);
+        else
+            photonView.RPC(STAND, RpcTarget.AllViaServer);
     }
 
     public void JumpStart()
     {
         SetState(AnimatorState.JumpFinish, false);
-        photonView.RPC("JumpRPC", RpcTarget.AllViaServer);
+        photonView.RPC(JUMP, RpcTarget.AllViaServer);
     }
 
     public void Die()
@@ -103,9 +109,14 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         SetState(AnimatorState.JumpFinish, true);
     }
     [PunRPC]
+    void StandRPC()
+    {
+        anim.SetTrigger(Standing);
+    }
+    [PunRPC]
     void CrouchRPC()
     {
-        anim.SetTrigger(ChangeEnterId);
+        anim.SetTrigger(Crouching);
     }
     [PunRPC]
     void JumpRPC()
@@ -127,7 +138,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     void SetAnimID()
     {
         JumpEnterId = Animator.StringToHash("JumpEnter");
-        ChangeEnterId = Animator.StringToHash("ChangeEnter");
+        Standing = Animator.StringToHash("Standing");
+        Crouching = Animator.StringToHash("Crouching");
 
         int ForwardId = Animator.StringToHash("Forward");
         int TurnId = Animator.StringToHash("Turn");

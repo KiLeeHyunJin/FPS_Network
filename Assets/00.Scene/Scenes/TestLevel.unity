@@ -1852,8 +1852,8 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5966557146677493133, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 6451079822198019901, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[3].SynchronizeType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

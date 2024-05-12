@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-[Serializable]
 public class CharacterTransformProcess
 {
     CharacterController controller;
@@ -41,6 +40,8 @@ public class CharacterTransformProcess
     public void Init(CharacterController characterController)
     {
         controller = characterController;
+        limitAngle = controller.slopeLimit;
+        checkRadius = controller.radius * 0.9f;
         motions = new Action[(int)AnimationController.MoveType.END];
     }
 
@@ -58,9 +59,7 @@ public class CharacterTransformProcess
         IsCrouch = false;
         IsJumping = false;
         walkMotion = motions[(int)AnimationController.MoveType.Walk];
-        currentSpeed = walkStandSpeed;
-        limitAngle = controller.slopeLimit;
-        checkRadius = controller.radius * 0.9f;
+        motions[(int)AnimationController.MoveType.Stand]?.Invoke();
     }
     public void SetMoveType(bool state)
     {
@@ -82,6 +81,7 @@ public class CharacterTransformProcess
         runStandSpeed = _runStandSpeed;
         walkCrouchSpeed = _walkCrouchSpeed;
         runCrouchSpeed = _runCrouchSpeed;
+        currentSpeed = walkStandSpeed;
     }
     public void SetMotions(AnimationController.MoveType type, Action action)
     {

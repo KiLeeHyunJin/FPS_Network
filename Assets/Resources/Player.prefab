@@ -579,6 +579,7 @@ GameObject:
   - component: {fileID: 4501719902224000900}
   - component: {fileID: 8096792822642958175}
   - component: {fileID: 1841509254591097947}
+  - component: {fileID: 4390238531330680963}
   m_Layer: 0
   m_Name: Aim
   m_TagString: Untagged
@@ -651,6 +652,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4390238531330680963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915308586709544943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &965392290863558128
 GameObject:
   m_ObjectHideFlags: 0
@@ -5714,6 +5731,7 @@ GameObject:
   - component: {fileID: 5045083684308435195}
   - component: {fileID: 8693427242519498167}
   - component: {fileID: 8544027938743297954}
+  - component: {fileID: 8626375481722074704}
   - component: {fileID: 2848950838868627797}
   - component: {fileID: 5469097632388544337}
   - component: {fileID: 2242058583393748136}
@@ -5825,6 +5843,18 @@ MonoBehaviour:
   foot: {fileID: 1650215173335207400}
   leftHand: {fileID: 3204037897197038457}
   rightHand: {fileID: 7813257405705385384}
+--- !u!114 &8626375481722074704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e84d2aa485622ea41a84741f90b3d9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6035,7 +6065,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
-  sceneViewId: 1
+  - {fileID: 4390238531330680963}
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
