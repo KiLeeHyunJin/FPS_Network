@@ -6066,7 +6066,7 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -6081,7 +6081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
+  ShowLayerWeightsInspector: 0
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 1
@@ -6094,7 +6094,7 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: Jump
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: Crouch
   - Type: 4
     SynchronizeType: 1
@@ -6107,9 +6107,6 @@ MonoBehaviour:
     Name: JumpFinish
   - Type: 9
     SynchronizeType: 0
-    Name: ChangeEnter
-  - Type: 9
-    SynchronizeType: 0
     Name: JumpEnter
   - Type: 9
     SynchronizeType: 0
@@ -6117,6 +6114,12 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 0
     Name: Reload
+  - Type: 9
+    SynchronizeType: 0
+    Name: Standing
+  - Type: 9
+    SynchronizeType: 0
+    Name: Crouching
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
