@@ -17,6 +17,6 @@ public class WeaponManager : MonoBehaviour
     [SerializeField]
     private Gun[] guns; //모든 종류의 총을 원소로 가지는 배열 
 
-    [SerializeField]
+    
 
 }
