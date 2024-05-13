@@ -1,10 +1,9 @@
+using Cinemachine;
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class Controller : MonoBehaviourPun
 {
@@ -18,7 +17,7 @@ public class Controller : MonoBehaviourPun
     [SerializeField] float runStandSpeed;
     [SerializeField] float walkCrouchSpeed;
     [SerializeField] float runCrouchSpeed;
-    [Range(1f,3f)]
+    [Range(1f, 3f)]
     [SerializeField] float gravitySpeed;
     [SerializeField] LayerMask groundLayer;
 
@@ -27,17 +26,23 @@ public class Controller : MonoBehaviourPun
     [SerializeField] GameObject leftHand;
     [SerializeField] GameObject rightHand;
 
+    [SerializeField] float mouseSensitivity;
+    [SerializeField] GameObject[] FPSIgnoreObject;
+    [SerializeField] Transform target;
+    [SerializeField] FPSCameraPosition cameraRoot;
+    [SerializeField] CinemachineVirtualCamera cam;
+
     int maxHp;
     int hp;
     bool mine;
-
+    AttackProcess attackProcess;
     CameraController cameraController;
     PlayerInputController inputController;
     AnimationController animController;
     ProcessingController processingController;
     EquipController equipController;
-    [SerializeField] CharacterTransformProcess moveProcess;
-    
+    CharacterTransformProcess moveProcess;
+
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
@@ -58,11 +63,11 @@ public class Controller : MonoBehaviourPun
     }
     void Check()
     {
-        GetView(); //���� ������Ʈ ��������
-        CheckMine(); //���� ��ü�� �ƴ϶�� �Է�Ű ����
-        SetData(); //������ �ʱ�ȭ
-        CollidersSetting(); //�浹���� ����
-        SetKeyAction(); //�Է¿� ���� �Լ� ����
+        GetView();
+        CheckMine();
+        SetData();
+        CollidersSetting();
+        SetKeyAction();
         MoveProcessInit();
     }
 
@@ -71,17 +76,18 @@ public class Controller : MonoBehaviourPun
         mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
-        cameraController = GetComponent<CameraController>();
         equipController = GetComponent<EquipController>();
         if (mine == false)
         {
             Destroy(inputController);
-            Destroy(cameraController);
             Destroy(processingController);
             return;
         }
-        cameraController.Init();
+        cameraController = new CameraController(target, gameObject.transform, cameraRoot, mouseSensitivity);
+        attackProcess = new AttackProcess();
+        cameraController.Init(cam, ControllCharacterLayerChange);
     }
+
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
@@ -90,7 +96,6 @@ public class Controller : MonoBehaviourPun
 
     void CollidersSetting() //하위 객체를 돌며 충돌체가 있다면 6번 레이어로 변경 및 히트박스 부착
     {
-        //PhotonNetwork.CurrentRoom.
         Player pl = PhotonNetwork.LocalPlayer;
         Debug.Log($"LocalPlayer : {pl.ActorNumber},Controller : {photonView.Controller.ActorNumber} ");
         Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
@@ -101,21 +106,31 @@ public class Controller : MonoBehaviourPun
         }
     }
 
-    void Update() 
-        => moveProcess?.Update();
-    void FixedUpdate() 
-        => moveProcess?.FixedUpdate();
-
+    void Update()
+    {
+        moveProcess?.Update();
+        cameraController?.Update();
+    }
+    void FixedUpdate()
+    {
+        moveProcess?.FixedUpdate();
+    }
+    Coroutine FireCamShakeCo;
+    IEnumerator FireCamShakeRoutine;
     void CallFire()
     {
         equipController.Fire();
         animController.Fire();
+        FireCamShakeRoutine = cameraController.GetCamShakeRoutine();
+        this.ReStartCoroutine(FireCamShakeRoutine, ref FireCamShakeCo);
+        Collider hitTarget = attackProcess?.Attack();
     }
     void CallReload()
     {
         animController.Reload();
         equipController.Reload();
     }
+
     bool buttonType = false;
     void CallChangeFireType()
     {
@@ -144,13 +159,13 @@ public class Controller : MonoBehaviourPun
     {
         if (mine == false)
             return;
+        inputController.Init();
         inputController.SetKey(CallReload, Define.Key.R);
         inputController.SetKey(CallOne, Define.Key.F1);
         inputController.SetKey(CallTwo, Define.Key.F2);
         inputController.SetKey(CallThree, Define.Key.F3);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
-        inputController.Init();
     }
     void MoveProcessInit()
     {
@@ -168,22 +183,34 @@ public class Controller : MonoBehaviourPun
         moveProcess.SetMotions(AnimationController.MoveType.Jump, animController.JumpStart);
         moveProcess.SetMotions(AnimationController.MoveType.JumpSlide, SlideJump);
 
-        moveProcess.SetMotions(AnimationController.MoveType.Crouch,() => animController.Crouch(true));
+        moveProcess.SetMotions(AnimationController.MoveType.Crouch, () => animController.Crouch(true));
         moveProcess.SetMotions(AnimationController.MoveType.Stand, () => animController.Crouch(false));
 
-        moveProcess.SetMoveActionValue( v => animController.VelocityY = v);
-        moveProcess.SetMoveActionValue( v => animController.MoveValue = v);
+        moveProcess.SetMoveActionValue(v => animController.VelocityY = v);
+        moveProcess.SetMoveActionValue(v => animController.MoveValue = v);
+
+        inputController.SetRot(v => cameraController.inputDir = v);
 
         inputController.SetMoveKey(moveProcess.SetMoveValue);
         inputController.SetMoveType(moveProcess.SetMoveType);
-
         inputController.SetKey(moveProcess.Crouch, Define.Key.C);
         inputController.SetKey(moveProcess.Jump, Define.Key.Space);
 
-        moveProcess.SetMoveSpeed(walkStandSpeed, runStandSpeed, walkCrouchSpeed,runCrouchSpeed);
+        moveProcess.SetMoveSpeed(walkStandSpeed, runStandSpeed, walkCrouchSpeed, runCrouchSpeed);
         moveProcess.Start();
     }
 
+    void ControllCharacterLayerChange(int layerNum)
+    {
+        for (int i = 0; i < FPSIgnoreObject.Length; i++) //레이어 재설정
+        {
+            if (FPSIgnoreObject[i] == null)
+                continue;
+            //하위 객체들 또한 전부 레이어 재설정
+            foreach (Transform childeGameObject in FPSIgnoreObject[i].GetComponentsInChildren<Transform>())
+                childeGameObject.gameObject.layer = layerNum;
+        }
+    }
 
     void SlideJump()
     {
@@ -195,13 +222,15 @@ public class Controller : MonoBehaviourPun
         animController.VelocityY = jumpLeg;
     }
 
-
     public void Damage(int _damage)
     {
         hp -= equipController.ShieldCheck(_damage);
         if (hp <= 0)
         {
             animController.Die();
+            Cursor.lockState = CursorLockMode.None;
+            ControllCharacterLayerChange(0);
+            Destroy(cameraRoot.gameObject); //컨트롤 파괴시 시네머신 카메라도 같이 파괴
             Destroy(inputController.gameObject);
         }
     }

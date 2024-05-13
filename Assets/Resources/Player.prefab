@@ -617,7 +617,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915308586709544943}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -5733,7 +5733,6 @@ GameObject:
   - component: {fileID: 8544027938743297954}
   - component: {fileID: 8626375481722074704}
   - component: {fileID: 2848950838868627797}
-  - component: {fileID: 5469097632388544337}
   - component: {fileID: 2242058583393748136}
   - component: {fileID: 7947324793745910572}
   - component: {fileID: 8731152204208028322}
@@ -5843,6 +5842,16 @@ MonoBehaviour:
   foot: {fileID: 1650215173335207400}
   leftHand: {fileID: 3204037897197038457}
   rightHand: {fileID: 7813257405705385384}
+  mouseSensitivity: 5
+  FPSIgnoreObject:
+  - {fileID: 4154358427696398755}
+  - {fileID: 8472029680890605740}
+  - {fileID: 8215194016900448027}
+  - {fileID: 7322839291418061859}
+  - {fileID: 5610325096811914340}
+  target: {fileID: 4501719902224000900}
+  cameraRoot: {fileID: 425567504047030535}
+  cam: {fileID: 8114579742163348247}
 --- !u!114 &8626375481722074704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5868,29 +5877,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dampingSpeed: 0
---- !u!114 &5469097632388544337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3162171735836929336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93429551b758bfa45b1705513a67e33c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseSensitivity: 5
-  distance: 10
-  FPSIgnoreObject:
-  - {fileID: 4154358427696398755}
-  - {fileID: 8472029680890605740}
-  - {fileID: 8215194016900448027}
-  - {fileID: 7322839291418061859}
-  - {fileID: 5610325096811914340}
-  target: {fileID: 4501719902224000900}
-  FPSCameraRoot: {fileID: 425567504047030535}
-  FPSCam: {fileID: 8114579742163348247}
 --- !u!114 &2242058583393748136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15417,6 +15403,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7585178244436528064}
   - component: {fileID: 4283481588595516493}
+  - component: {fileID: 4701929241154209848}
+  - component: {fileID: 8468988959875808075}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -15451,6 +15439,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4701929241154209848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8679649058575599949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BindingMode: 1
+  m_FollowOffset: {x: 0, y: -0.05, z: 0.05}
+  m_XDamping: 1
+  m_YDamping: 1
+  m_ZDamping: 1
+  m_AngularDampingMode: 0
+  m_PitchDamping: 0
+  m_YawDamping: 0
+  m_RollDamping: 0
+  m_AngularDamping: 0
+--- !u!114 &8468988959875808075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8679649058575599949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 2
+  m_FrequencyGain: 2
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &8770509009673707864
 GameObject:
   m_ObjectHideFlags: 0
@@ -15751,7 +15778,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.87, y: 2.05, z: -4.1}
+  m_LocalPosition: {x: 0.038196422, y: 1.6105912, z: -0.041102737}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15777,9 +15804,9 @@ MonoBehaviour:
   m_Priority: 2
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 3303732465516620629}
   m_Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.01
     FarClipPlane: 100

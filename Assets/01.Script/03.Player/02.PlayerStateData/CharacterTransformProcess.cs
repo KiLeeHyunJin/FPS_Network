@@ -25,8 +25,10 @@ public class CharacterTransformProcess
 
     float jumpHeight;
     float checkRadius;
-    const float defaultGravity = -9.81f;
     float gravity;
+
+    const float defaultGravity = -9.81f;
+
     Vector3 moveDirection;
     Vector2 moveValue;
     Vector2 slideValue;
@@ -214,6 +216,7 @@ public class CharacterTransformProcess
         }
         // Debug.Log(-1);
     }
+
     void JumpMotion(bool state)
     {
         if (IsJumping != state)

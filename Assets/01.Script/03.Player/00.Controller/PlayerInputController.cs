@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,8 +9,9 @@ public class PlayerInputController : MonoBehaviour
     public float MoveY { get; private set; }
     Action[] actions;
     Action<Vector2> moveAction;
+    Action<Vector2> rotateAction;
     Action<bool> moveTypeAction;
-    public InputWeaponType CurrentWeapon { get; private set; }
+    public Define.InputWeaponType CurrentWeapon { get; private set; }
     public Define.FireType MainFireType { get; private set; }
     public Define.FireType Fire { get; private set; }
     public Define.FireType ChangeFireType
@@ -19,22 +19,24 @@ public class PlayerInputController : MonoBehaviour
         set
         {
             Fire = value;
-            if (CurrentWeapon == InputWeaponType.MainWeapon)
+            if (CurrentWeapon == Define.InputWeaponType.MainWeapon)
                 MainFireType = Fire;
         }
     }
-    public void SetKey(Action method, Define.Key key)           => actions[(int)key] = method;
-    public void SetMoveKey(Action<Vector2> moveMethod)          => moveAction = moveMethod;
-    public void SetMoveType(Action<bool> moveTypeMethod)        => moveTypeAction = moveTypeMethod;
-    private void Awake()
-    {
-        actions = new Action[(int)Define.Key.END];
+    public void SetKey(Action method, Define.Key key) => actions[(int)key] = method;
+    public void SetMoveKey(Action<Vector2> moveMethod) => moveAction = moveMethod;
+    public void SetRot(Action<Vector2> rotMethod) => rotateAction = rotMethod;
+    public void SetMoveType(Action<bool> moveTypeMethod) => moveTypeAction = moveTypeMethod;
 
-    }
     public void Init()
     {
-        InputActionAsset inputs = GetComponent<PlayerInput>().actions;
+        //InputActionAsset inputs = GetComponent<PlayerInput>().actions;
         ChangeFireType = Define.FireType.Repeat;
+        actions ??= new Action[(int)Define.Key.END];
+    }
+    void OnLook(InputValue inputValue)
+    {
+        rotateAction?.Invoke(inputValue.Get<Vector2>());
     }
     void OnMove(InputValue inputValue)
     {
@@ -50,18 +52,18 @@ public class PlayerInputController : MonoBehaviour
     void OnFirstWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F1].Invoke();
-        CurrentWeapon = InputWeaponType.MainWeapon;
+        CurrentWeapon = Define.InputWeaponType.MainWeapon;
         ChangeFireType = MainFireType;
     }
     void OnSecondWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F2].Invoke();
-        CurrentWeapon = InputWeaponType.SubWeapon;
+        CurrentWeapon = Define.InputWeaponType.SubWeapon;
     }
     void OnOtherWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F3].Invoke();
-        CurrentWeapon = InputWeaponType.Default;
+        CurrentWeapon = Define.InputWeaponType.Default;
     }
     void OnInteraction(InputValue inputValue)
     {
@@ -110,32 +112,28 @@ public class PlayerInputController : MonoBehaviour
     Coroutine pressCo;
     IEnumerator PressRoutine()
     {
-        while(true)
+        while (true)
         {
             actions[(int)Define.Key.Press]?.Invoke();
-            Debug.Log("Repeat");
             yield return null;
         }
     }
 
     void OnFireOne(InputValue inputValue)
     {
-        if(Define.FireType.One == Fire)
+        if (Define.FireType.One == Fire)
         {
             actions[(int)Define.Key.Press]?.Invoke();
             Debug.Log("One");
         }
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         PlayerInput input = GetComponent<PlayerInput>();
         if (input != null)
             Destroy(input);
     }
 
-    public enum InputWeaponType
-    {
-        MainWeapon, SubWeapon, Default, FlashBang, Grenade, END
-    }
+
 }

@@ -45,7 +45,10 @@ public class Define
     {
         One, Repeat,END
     }
-
+    public enum InputWeaponType
+    {
+        MainWeapon, SubWeapon, Default, FlashBang, Grenade, END
+    }
     public enum Item
     {
         Heal, Bullet, Part, Equip,
