@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CloseSword : MonoBehaviour
+public class CloseWeapon : MonoBehaviour
 {
     //근접 무기 --> 어차피 칼 한종류... 
 

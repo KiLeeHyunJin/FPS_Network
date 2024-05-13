@@ -6,30 +6,34 @@ using UnityEngine.UI;
 
 public class HealPack : MonoBehaviour,IInteractable
 {
-    public float hp = 100;
+
+    
+
     public int heal = 50;
 
     public Slider slider;
     public TextMeshProUGUI text;
 
-    
-    public void Interaction()
+    private void Start()
     {
-        hp += heal; 
-        if(hp>=100) hp = 100;
-        text.text=$"{Mathf.Round(hp)}";
-        slider.value = hp;
-
+        
     }
 
-    public void SkillHeal(object heal)
+    
+    public void Interaction(GameObject player)
     {
-        if (hp >= 100) hp = 100;
-        hp +=(float)heal;
-        text.text = $"{Mathf.Round(hp)}";
-        slider.value = hp;
+        Controller controller= player.GetComponent<Controller>();
+        
+        //Controller 컴포넌트가 있다면
+        if(controller != null)
+        {
+            controller.AddHp(heal);
+        }
+
+        Destroy(gameObject);
     }
 
+   // 스킬 힐은 어떤 식으로?? 
 
-    
+
 }

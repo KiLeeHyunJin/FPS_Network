@@ -28,8 +28,9 @@ public class Coin : MonoBehaviour,IInteractable
         
     }
 
-    public void Interaction()
+    public void Interaction(GameObject player)
     {
+        // 플레이어 인지 체크할 필요없음 --> 어차피 플레이어가 interaction 할거니까. 
         Inventory.GetCoin(coinValue); //랜덤으로 설정된 코인의 가치만큼 인벤토리에 코인에 추가된다. 
     }
 }
