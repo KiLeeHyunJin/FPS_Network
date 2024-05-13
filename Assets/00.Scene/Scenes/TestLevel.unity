@@ -1804,6 +1804,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 915308586709544943, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2121747480424366495, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.68
@@ -1847,19 +1851,6 @@ PrefabInstance:
     - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 3552819859659342744, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8731152204208028322, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'neck_01'\n\tTransform 'spine_02'\n\tTransform
-        'calf_l'\n\tTransform 'pelvis'\n\tTransform 'spine_03'\n\tTransform 'spine_01'\n\tTransform
-        'calf_r'\n\tTransform 'index_03_l'\n\tTransform 'lowerarm_l'\n\tTransform
-        'pinky_03_l'\n\tand more ...\n\tFrom animation clip 'PickUp'"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

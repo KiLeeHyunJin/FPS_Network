@@ -106,8 +106,11 @@ public class Controller : MonoBehaviourPun
     void FixedUpdate() 
         => moveProcess?.FixedUpdate();
 
-    void CallFire() 
-        => equipController.Fire();
+    void CallFire()
+    {
+        equipController.Fire();
+        animController.Fire();
+    }
     void CallReload()
     {
         animController.Reload();
@@ -120,7 +123,9 @@ public class Controller : MonoBehaviourPun
             inputController.ChangeFireType = Define.FireType.Repeat;
         else
             inputController.ChangeFireType = Define.FireType.One;
+        buttonType = !buttonType;
     }
+
     void CallOne()
     {
         animController.ChangeRifle();
@@ -128,22 +133,24 @@ public class Controller : MonoBehaviourPun
     void CallTwo()
     {
         animController.ChangePistol();
+        inputController.ChangeFireType = Define.FireType.One;
     }
     void CallThree()
     {
         animController.ChangeSword();
+        inputController.ChangeFireType = Define.FireType.One;
     }
     void SetKeyAction()
     {
         if (mine == false)
             return;
-
         inputController.SetKey(CallReload, Define.Key.R);
         inputController.SetKey(CallOne, Define.Key.F1);
         inputController.SetKey(CallTwo, Define.Key.F2);
         inputController.SetKey(CallThree, Define.Key.F3);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
+        inputController.Init();
     }
     void MoveProcessInit()
     {

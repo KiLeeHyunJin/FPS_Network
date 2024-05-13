@@ -16,7 +16,7 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     int CrouchId;
     int ChangeWeaponId;
     int ReloadId;
-
+    int FireId;
     //byte[] Pos;
     //byte layer;
     //short[] changedBitPos;
@@ -29,6 +29,7 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     readonly string JUMP = "JumpRPC";
     readonly string CHANGEWEAPON = "ChangeWeaponRPC";
     readonly string RELOAD = "ReloadRPC";
+    readonly string FIRE = "FireRPC";
     Coroutine[] dampingCo;
     
     //void SetState(AnimatorState type, bool state)
@@ -93,6 +94,10 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         SetState(AnimatorState.JumpFinish, false);
         photonView.RPC(JUMP, RpcTarget.AllViaServer);
     }
+    public void Fire()
+    {
+        photonView.RPC(FIRE, RpcTarget.AllViaServer);
+    }
     public void ChangePistol()
     {
         if (anim.GetBool(weaponId[(int)AnimatorWeapon.Pistol]) == false)
@@ -136,6 +141,11 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     public void JumpFinish()
     {
         SetState(AnimatorState.JumpFinish, true);
+    }
+    [PunRPC]
+    void FireRPC()
+    {
+        anim.SetTrigger(FireId);
     }
     [PunRPC]
     void ReloadRPC()
@@ -195,10 +205,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         CrouchId = Animator.StringToHash("Crouching");
         ChangeWeaponId = Animator.StringToHash("ChangeWeapon");
         ReloadId = Animator.StringToHash("Reload");
-        int pistolLayer = anim.GetLayerIndex("PistolUpper");
-        int rifleLayer = anim.GetLayerIndex("RifleUpper");
-        int defaultLayer = anim.GetLayerIndex("DefaultUpper");
-
+        FireId = Animator.StringToHash("Fire");
+        
         int ForwardId = Animator.StringToHash("Forward");
         int TurnId = Animator.StringToHash("Turn");
         int JumpId = Animator.StringToHash("Jump");

@@ -78,3 +78,4 @@ crashlytics-build.properties
 /Assets/StreamingAssets
 *.zip
 /Assets/Plugins.zip.meta
+*.meta

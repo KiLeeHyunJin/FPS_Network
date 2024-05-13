@@ -137,7 +137,7 @@
                     "id": "f4e42906-67d3-4824-8956-c70b206af461",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(pressPoint=0.01)",
+                    "interactions": "Press(pressPoint=1.401298E-45,behavior=2)",
                     "initialStateCheck": false
                 },
                 {
@@ -342,7 +342,7 @@
                     "name": "",
                     "id": "3ef4ca41-4f4a-4eed-bfbc-c2df7c04de06",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "Press(pressPoint=1.401298E-45)",
+                    "interactions": "Press(pressPoint=1.401298E-45,behavior=2)",
                     "processors": "",
                     "groups": "",
                     "action": "FirePress",

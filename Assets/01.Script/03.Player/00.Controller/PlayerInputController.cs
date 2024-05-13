@@ -11,17 +11,16 @@ public class PlayerInputController : MonoBehaviour
     Action[] actions;
     Action<Vector2> moveAction;
     Action<bool> moveTypeAction;
-    InputActionMap inputMap;
-    InputAction fireOne;
-    InputAction fireRepeat;
-
+    public InputWeaponType CurrentWeapon { get; private set; }
+    public Define.FireType MainFireType { get; private set; }
     public Define.FireType Fire { get; private set; }
     public Define.FireType ChangeFireType
     {
         set
         {
             Fire = value;
-            OnChangeFire();
+            if (CurrentWeapon == InputWeaponType.MainWeapon)
+                MainFireType = Fire;
         }
     }
     public void SetKey(Action method, Define.Key key)           => actions[(int)key] = method;
@@ -30,12 +29,11 @@ public class PlayerInputController : MonoBehaviour
     private void Awake()
     {
         actions = new Action[(int)Define.Key.END];
+
+    }
+    public void Init()
+    {
         InputActionAsset inputs = GetComponent<PlayerInput>().actions;
-
-        inputMap = inputs.FindActionMap("Player");
-        fireOne = inputMap.FindAction("FireOne");
-        fireRepeat = inputMap.FindAction("FirePress");
-
         ChangeFireType = Define.FireType.Repeat;
     }
     void OnMove(InputValue inputValue)
@@ -52,14 +50,18 @@ public class PlayerInputController : MonoBehaviour
     void OnFirstWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F1].Invoke();
+        CurrentWeapon = InputWeaponType.MainWeapon;
+        ChangeFireType = MainFireType;
     }
     void OnSecondWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F2].Invoke();
+        CurrentWeapon = InputWeaponType.SubWeapon;
     }
     void OnOtherWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F3].Invoke();
+        CurrentWeapon = InputWeaponType.Default;
     }
     void OnInteraction(InputValue inputValue)
     {
@@ -95,31 +97,34 @@ public class PlayerInputController : MonoBehaviour
     {
         actions[(int)Define.Key.Alt]?.Invoke();
     }
-    void OnFirePress()
+
+    void OnFirePress(InputValue inputValue)
     {
-        actions[(int)Define.Key.Press]?.Invoke();
-        Debug.Log("Two");
+        if (Define.FireType.One == Fire)
+            return;
+        if (inputValue.isPressed)
+            pressCo = StartCoroutine(PressRoutine());
+        else
+            StopCoroutine(pressCo);
     }
-    void OnFireOne()
+    Coroutine pressCo;
+    IEnumerator PressRoutine()
     {
-        actions[(int)Define.Key.Press]?.Invoke();
-        Debug.Log("One");
-    }
-    void OnChangeFire()
-    {
-        inputMap.Disable();
-        switch (Fire)
+        while(true)
         {
-            case Define.FireType.One:
-                fireOne.Enable();
-                fireRepeat.Disable();
-                break;
-            case Define.FireType.Repeat:
-                fireOne.Disable();
-                fireRepeat.Enable();
-                break;
+            actions[(int)Define.Key.Press]?.Invoke();
+            Debug.Log("Repeat");
+            yield return null;
         }
-        inputMap.Enable();
+    }
+
+    void OnFireOne(InputValue inputValue)
+    {
+        if(Define.FireType.One == Fire)
+        {
+            actions[(int)Define.Key.Press]?.Invoke();
+            Debug.Log("One");
+        }
     }
 
     private void OnDestroy()
@@ -127,5 +132,10 @@ public class PlayerInputController : MonoBehaviour
         PlayerInput input = GetComponent<PlayerInput>();
         if (input != null)
             Destroy(input);
+    }
+
+    public enum InputWeaponType
+    {
+        MainWeapon, SubWeapon, Default, FlashBang, Grenade, END
     }
 }
