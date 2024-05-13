@@ -1,9 +1,11 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -21,22 +23,28 @@ public class RoomPanel : MonoBehaviourShowInfo
     [SerializeField] PlayerProperty playerProperty;
     [SerializeField] Chat chat;
 
+    [SerializeField] LoadImage loadImage;
+    [SerializeField] LoadingPlayerEntry loadPlayerEntryPrefab;
     List<PlayerEntry> playerList;
+    List<LoadingPlayerEntry> loadingPlayerList;
     Room currentRoom;
 
     const int RED = 2;
     const int BLUE = 1;
     int halfCount;
     bool isEnterGame;
+    bool isLoaded;
     public bool isMaster { get; private set; }
     private void Awake()
     {
+        loadingPlayerList = new List<LoadingPlayerEntry>();
         playerList = new List<PlayerEntry>();
         startButton.onClick.AddListener(StartGame);
         leaveButton.onClick.AddListener(LeaveRoom);
     }
     private void OnEnable()
     {
+        isLoaded = false;
         isEnterGame = false;
         currentRoom = PhotonNetwork.CurrentRoom;
         //방 이름 표기
@@ -52,6 +60,8 @@ public class RoomPanel : MonoBehaviourShowInfo
         //로컬 플레이어 프로퍼티 초기화
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.READY, false);
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOAD, false);
+        currentRoom.SetProperty(DefinePropertyKey.START, false);
+        
 
         //플레이어 리스트를 돌면서 플레이어 엔트리 생성
         foreach (Player player in PhotonNetwork.PlayerList)
@@ -186,8 +196,107 @@ public class RoomPanel : MonoBehaviourShowInfo
         if (isEnterGame)
             return;
         isEnterGame = true;
-        PhotonNetwork.LoadLevel(gameSceneName);
+        currentRoom.SetProperty(DefinePropertyKey.START, true);
+        StartCoroutine(LoadScene());
 
+    }
+    AsyncOperation oper;
+    IEnumerator LoadScene()
+    {
+        yield return new WaitForSeconds(1f);
+        oper = PhotonNetwork.AsyncLoadLevel(gameSceneName);
+        oper.allowSceneActivation = false;
+
+        while (!oper.isDone)
+        {
+            float progress = oper.progress;
+            Debug.Log(progress);
+           
+            PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOADVALUE, progress);
+            yield return null;
+
+
+            if (progress >= 0.9f)
+            {
+                Debug.Log("i'mDone");
+                break;
+            }
+                
+           
+        }
+        PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOAD, true);
+
+
+        while (!AllLoadComplete(DefinePropertyKey.LOAD))
+        {
+            yield return null;
+        }
+
+
+        Debug.Log("Complete");
+        yield return new WaitForSeconds(1f);
+        oper.allowSceneActivation = true;
+    }
+    public bool AllLoadComplete(string key)
+    {
+        foreach (LoadingPlayerEntry entry in loadingPlayerList)
+        {
+            
+            if (!entry.player.GetProperty<bool>(DefinePropertyKey.LOAD))
+            {
+                Debug.Log($"{entry.player.NickName} is false");
+                return false;
+            }
+        }
+        return true;
+    }
+    public void RoomPropertiesUpdate(PhotonHashtable changedProps)
+    {
+        Debug.Log("RoomUpdate");
+        if (currentRoom.GetProperty<bool>(DefinePropertyKey.START)&&!isLoaded)
+        {
+            loadImage.gameObject.SetActive(true);
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                player.SetProperty<float>(DefinePropertyKey.LOADVALUE, 0);
+                int teamCode = player.GetPhotonTeam().Code;
+                Transform loadTransform = (teamCode == BLUE) ? loadImage.blueTeamLoad : loadImage.redTeamLoad;
+              LoadingPlayerEntry LPEP = Instantiate(loadPlayerEntryPrefab, loadTransform);
+                LPEP.SetPlayer(player);
+                loadingPlayerList.Add(LPEP);
+                Debug.Log($"{player.ActorNumber} is On");
+            }
+            isLoaded = true;
+            foreach(LoadingPlayerEntry loadingPlayerEntry in loadingPlayerList)
+            {
+               
+            }
+        }
+        else
+        {
+            Debug.Log("IsNotStartProperties");
+        }
+    }
+    public void GameLoadPropertiesUpdate(Player targetPlayer,PhotonHashtable changedProps)
+    {
+       if(changedProps.ContainsKey(DefinePropertyKey.LOADVALUE))
+        { 
+
+            float loadValue = (float)changedProps[DefinePropertyKey.LOADVALUE];
+            Debug.Log($"Load Progress is {loadValue}");
+            SetPlayerLoadingProgress(targetPlayer, loadValue);
+        }
+    }
+    void SetPlayerLoadingProgress(Player player,float progress)
+    {
+        foreach(LoadingPlayerEntry entry in loadingPlayerList)
+        {
+            if(entry.player == player)
+            {
+                entry.SetLoadingProgress(progress);
+                break;
+            }
+        }
     }
     public void PlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
@@ -206,6 +315,8 @@ public class RoomPanel : MonoBehaviourShowInfo
         }
         //모든 플레이어가 준비되었는지 확인
         AllPlayerReadyCheck();
+
+
     }
 
     void AllPlayerReadyCheck()

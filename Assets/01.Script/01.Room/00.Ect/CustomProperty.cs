@@ -3,6 +3,7 @@ using System;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public static class DefinePropertyKey
 {
+    
     public static string READY = "Ready";
     public static string LOAD = "Load";
     public static string RED = "Red";
@@ -10,6 +11,8 @@ public static class DefinePropertyKey
     public static string RANDOM_MATCH = "RandomMatch";
     public static string CUSTOMROOM = "CustomRoom";
     public static string CHAT = "Chat";
+    public static string START = "Start";
+    public static string LOADVALUE = "LoadValue";
 }
 public static class CustomProperty
 {

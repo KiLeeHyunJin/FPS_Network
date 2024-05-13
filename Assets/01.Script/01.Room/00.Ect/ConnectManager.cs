@@ -65,7 +65,7 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
-        if(data.GetLobbyState(LobbyData.LobbyState.Random)) //·£´ı ¸ÅÄªÀÏ °æ¿ì ·£´ı È­¸é Ãâ·Â
+        if(data.GetLobbyState(LobbyData.LobbyState.Random)) //ëœë¤ ë§¤ì¹­ì¼ ê²½ìš° ëœë¤ í™”ë©´ ì¶œë ¥
             SetActivePanel(Panel.Random);
         else
             SetActivePanel(Panel.Lobby);
@@ -86,29 +86,35 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false) //·£´ı ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·Îºñ ¾÷µ¥ÀÌÆ®
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false) //ëœë¤ ë§¤ì¹­ì´ ì•„ë‹ ê²½ìš° ë¡œë¹„ ì—…ë°ì´íŠ¸
             lobbyPanel.UpdateRoomList(roomList);
     }
-
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        roomPanel.RoomPropertiesUpdate(propertiesThatChanged);
+    }
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false) //·£´ı ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆĞ³Î ³»¿ë ½ÇÇà
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false) //ëœë¤ ë§¤ì¹­ì´ ì•„ë‹ ê²½ìš° ë£¸íŒ¨ë„ ë‚´ìš© ì‹¤í–‰
             roomPanel.PlayerPropertiesUpdate(targetPlayer, changedProps);
+        if (PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.START))
+            roomPanel.GameLoadPropertiesUpdate(targetPlayer, changedProps);
+            
 
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//·£´ı ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆĞ³Î ³»¿ë ½ÇÇà
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//ëœë¤ ë§¤ì¹­ì´ ì•„ë‹ ê²½ìš° ë£¸íŒ¨ë„ ë‚´ìš© ì‹¤í–‰
             roomPanel.PlayerEnterRoom(newPlayer);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//·£´ı ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆĞ³Î ³»¿ë ½ÇÇà
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//ëœë¤ ë§¤ì¹­ì´ ì•„ë‹ ê²½ìš° ë£¸íŒ¨ë„ ë‚´ìš© ì‹¤í–‰
             roomPanel.PlayerLeftRoom(otherPlayer);
     }
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//·£´ı ¸ÅÄªÀÌ ¾Æ´Ò °æ¿ì ·ëÆĞ³Î ³»¿ë ½ÇÇà
+        if (data.GetLobbyState(LobbyData.LobbyState.Random) == false)//ëœë¤ ë§¤ì¹­ì´ ì•„ë‹ ê²½ìš° ë£¸íŒ¨ë„ ë‚´ìš© ì‹¤í–‰
             roomPanel.MasterClientSwitched(newMasterClient);
     }
     public override void OnDisconnected(DisconnectCause cause)
