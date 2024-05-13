@@ -19,11 +19,12 @@ public class FPSCameraPosition : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        transform.position = Vector3.Lerp(transform.position, cameraRoot.position, 0.5f);
-        transform.localPosition += new Vector3(0, up, front);
-    }
+    //void Update()
+    //{
+    //    transform.position = Vector3.Lerp(transform.position, cameraRoot.position, 0.5f);
+    //    transform.localPosition += new Vector3(0, up, front);
+    //}
+
 
 
 }

@@ -83,7 +83,7 @@ public class Controller : MonoBehaviourPun
             Destroy(processingController);
             return;
         }
-        cameraController = new CameraController(target, gameObject.transform, cameraRoot, mouseSensitivity);
+        cameraController = new CameraController(target, this, cameraRoot, mouseSensitivity);
         attackProcess = new AttackProcess();
         cameraController.Init(cam, ControllCharacterLayerChange);
     }
@@ -121,8 +121,7 @@ public class Controller : MonoBehaviourPun
     {
         equipController.Fire();
         animController.Fire();
-        FireCamShakeRoutine = cameraController.GetCamShakeRoutine();
-        this.ReStartCoroutine(FireCamShakeRoutine, ref FireCamShakeCo);
+        cameraController.GetCamShakeRoutine();
         Collider hitTarget = attackProcess?.Attack();
     }
     void CallReload()
@@ -242,7 +241,10 @@ public class Controller : MonoBehaviourPun
     }
 
 
-
+    public void StartCoroutine(IEnumerator routine, ref Coroutine co)
+    {
+        this.ReStartCoroutine(routine, ref co);
+    }
 
 
 
