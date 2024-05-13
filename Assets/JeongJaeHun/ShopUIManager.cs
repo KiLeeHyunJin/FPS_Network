@@ -19,7 +19,7 @@ public class ShopUIManager : MonoBehaviour
     //시작시에 canvas 꺼버려야함. 
     private void Start()
     {
-        //shopCanvas.gameObject.SetActive(false);
+        shopCanvas.gameObject.SetActive(false);
 
         shopBtn=shopCanvas.GetComponentsInChildren<Button>(true); //button 컴포넌트와 매치되는
         // 모든 자식 오브젝트들을 찾아옴 ( button이 안 달려있으면 안가져옴. )

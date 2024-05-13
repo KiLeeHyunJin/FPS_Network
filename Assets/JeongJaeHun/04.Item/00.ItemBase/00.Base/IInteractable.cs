@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    public abstract void Interaction();
+    public abstract void Interaction(GameObject player);
 
     // 요거 상속하는 친구들은 사용 가능한 아이템 
     // 바닥에 코인 같은거 떨어져 있는 느낌으로 --> 이거 돈 채우고 
