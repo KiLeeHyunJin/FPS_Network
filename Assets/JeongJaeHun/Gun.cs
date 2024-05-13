@@ -12,6 +12,10 @@ public class Gun : MonoBehaviour
         PISTOL,AR,SNIPER
     }
 
+    [Tooltip("ui에 표현될 총의 스프라이트")]
+    public Sprite gunSprite;
+
+
     [Tooltip("총의 종류 -> 권총, AR, 저격총")]
     public GunType gunType;
     [Header("총의 기본 스펙")]
