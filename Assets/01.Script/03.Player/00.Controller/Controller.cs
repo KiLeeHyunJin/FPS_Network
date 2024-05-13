@@ -84,7 +84,8 @@ public class Controller : MonoBehaviourPun
             return;
         }
         cameraController = new CameraController(target, this, cameraRoot, mouseSensitivity);
-        attackProcess = new AttackProcess();
+        attackProcess = new AttackProcess(this);
+
         cameraController.Init(cam, ControllCharacterLayerChange);
     }
 
@@ -122,7 +123,7 @@ public class Controller : MonoBehaviourPun
         equipController.Fire();
         animController.Fire();
         cameraController.GetCamShakeRoutine();
-        Collider hitTarget = attackProcess?.Attack();
+        Controller hitTarget = attackProcess?.Attack();
     }
     void CallReload()
     {
