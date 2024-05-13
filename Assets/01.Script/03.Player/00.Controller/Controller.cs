@@ -108,16 +108,31 @@ public class Controller : MonoBehaviourPun
 
     void CallFire() 
         => equipController.Fire();
-    void CallReload() 
-        => equipController.Reload();
+    void CallReload()
+    {
+        animController.Reload();
+        equipController.Reload();
+    }
+    bool buttonType = false;
     void CallChangeFireType()
-        => inputController.ChangeFireType = equipController.FireTypeChange();
+    {
+        if (buttonType)
+            inputController.ChangeFireType = Define.FireType.Repeat;
+        else
+            inputController.ChangeFireType = Define.FireType.One;
+    }
     void CallOne()
-    {}
+    {
+        animController.ChangeRifle();
+    }
     void CallTwo()
-    {}
+    {
+        animController.ChangePistol();
+    }
     void CallThree()
-    {}
+    {
+        animController.ChangeSword();
+    }
     void SetKeyAction()
     {
         if (mine == false)

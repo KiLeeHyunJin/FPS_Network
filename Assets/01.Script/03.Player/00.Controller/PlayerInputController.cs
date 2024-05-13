@@ -35,47 +35,31 @@ public class PlayerInputController : MonoBehaviour
         inputMap = inputs.FindActionMap("Player");
         fireOne = inputMap.FindAction("FireOne");
         fireRepeat = inputMap.FindAction("FirePress");
-    }
-    void MakeKeyActions()
-    {
-        InputActionAsset inputs = GetComponent<PlayerInput>().actions;
-        inputs.AddActionMap("PlayerKeyMap");
-        for (int i = 0; i < actions.Length; i++)
-        {
-            //inputs.
-        }
-    }
 
+        ChangeFireType = Define.FireType.Repeat;
+    }
     void OnMove(InputValue inputValue)
     {
         Vector2 MoveValue = inputValue.Get<Vector2>().normalized;
-        moveAction?.Invoke(MoveValue);
+        moveAction.Invoke(MoveValue);
         MoveY = MoveValue.y;
     }
     void OnJump(InputValue inputValue)
     {
-        actions[(int)Define.Key.Space]?.Invoke();
+        actions[(int)Define.Key.Space].Invoke();
     }
 
-    void OnFirePress(InputValue inputValue)
-    {
-        actions[(int)Define.Key.Press]?.Invoke();
-    }
-    void OnFireOne(InputValue inputValue)
-    {
-        actions[(int)Define.Key.Press]?.Invoke();
-    }
     void OnFirstWeapon(InputValue inputValue)
     {
-        actions[(int)Define.Key.F1]?.Invoke();
+        actions[(int)Define.Key.F1].Invoke();
     }
     void OnSecondWeapon(InputValue inputValue)
     {
-        actions[(int)Define.Key.F2]?.Invoke();
+        actions[(int)Define.Key.F2].Invoke();
     }
     void OnOtherWeapon(InputValue inputValue)
     {
-        actions[(int)Define.Key.F3]?.Invoke();
+        actions[(int)Define.Key.F3].Invoke();
     }
     void OnInteraction(InputValue inputValue)
     {
@@ -83,7 +67,7 @@ public class PlayerInputController : MonoBehaviour
     }
     void OnC(InputValue inputValue)
     {
-        actions[(int)Define.Key.C]?.Invoke();
+        actions[(int)Define.Key.C].Invoke();
     }
     void OnX(InputValue inputValue)
     {
@@ -97,16 +81,29 @@ public class PlayerInputController : MonoBehaviour
     {
         actions[(int)Define.Key.V]?.Invoke();
     }
-
+    void OnR(InputValue inputValue)
+    {
+        actions[(int)Define.Key.R].Invoke();
+    }
     void OnShift(InputValue inputValue)
     {
         bool value = inputValue.isPressed ? true : false;
-        moveTypeAction?.Invoke(value);
+        moveTypeAction.Invoke(value);
     }
 
     void OnAlt(InputValue inputValue)
     {
         actions[(int)Define.Key.Alt]?.Invoke();
+    }
+    void OnFirePress()
+    {
+        actions[(int)Define.Key.Press]?.Invoke();
+        Debug.Log("Two");
+    }
+    void OnFireOne()
+    {
+        actions[(int)Define.Key.Press]?.Invoke();
+        Debug.Log("One");
     }
     void OnChangeFire()
     {

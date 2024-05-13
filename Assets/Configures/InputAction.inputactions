@@ -105,6 +105,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "R",
+                    "type": "Button",
+                    "id": "eee97c75-3e5a-403e-a820-9264e28d1d3b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "V",
                     "type": "Button",
                     "id": "6f3f6b88-d855-4c40-83b8-5cf97b2bc8bf",
@@ -128,7 +137,7 @@
                     "id": "f4e42906-67d3-4824-8956-c70b206af461",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(pressPoint=0.2,behavior=2)",
+                    "interactions": "Press(pressPoint=0.01)",
                     "initialStateCheck": false
                 },
                 {
@@ -333,7 +342,7 @@
                     "name": "",
                     "id": "3ef4ca41-4f4a-4eed-bfbc-c2df7c04de06",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Press(pressPoint=1.401298E-45)",
                     "processors": "",
                     "groups": "",
                     "action": "FirePress",
@@ -348,6 +357,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "FireOne",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3746253-de12-4ce7-b70f-272bb73bf1cd",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "R",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,6 +1,8 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using UnityEngine;
+using static Define;
 
 
 public class AnimationController : MonoBehaviourPun//, IPunObservable
@@ -10,8 +12,10 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     [SerializeField] float dampingSpeed;
 
     int JumpEnterId;
-    int Standing;
-    int Crouching;
+    int StandId;
+    int CrouchId;
+    int ChangeWeaponId;
+    int ReloadId;
 
     //byte[] Pos;
     //byte layer;
@@ -19,10 +23,14 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
 
     int[] layerId;
     int[] floatId;
-    Coroutine[] dampingCo;
+    int[] weaponId;
     readonly string STAND = "StandRPC";
     readonly string CROUCH = "CrouchRPC";
     readonly string JUMP = "JumpRPC";
+    readonly string CHANGEWEAPON = "ChangeWeaponRPC";
+    readonly string RELOAD = "ReloadRPC";
+    Coroutine[] dampingCo;
+    
     //void SetState(AnimatorState type, bool state)
     //{
     //    int idx = (int)type;
@@ -85,6 +93,27 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         SetState(AnimatorState.JumpFinish, false);
         photonView.RPC(JUMP, RpcTarget.AllViaServer);
     }
+    public void ChangePistol()
+    {
+        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Pistol]) == false)
+            Equip(AnimatorWeapon.Pistol);
+    }
+    public void ChangeRifle()
+    {
+        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Rifle]) == false)
+            Equip(AnimatorWeapon.Rifle);
+    }
+    public void ChangeSword()
+    {
+        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Sword]) == false)
+            Equip(AnimatorWeapon.Sword);
+    }
+    public void Reload()
+    {
+        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Rifle]) ||
+            anim.GetBool(weaponId[(int)AnimatorWeapon.Pistol]))
+            photonView.RPC(RELOAD, RpcTarget.AllViaServer);
+    }
 
     public void Die()
     {
@@ -109,14 +138,24 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
         SetState(AnimatorState.JumpFinish, true);
     }
     [PunRPC]
+    void ReloadRPC()
+    {
+        anim.SetTrigger(ReloadId);
+    }
+    [PunRPC]
+    void ChangeWeaponRPC()
+    {
+        anim.SetTrigger(ChangeWeaponId);
+    }
+    [PunRPC]
     void StandRPC()
     {
-        anim.SetTrigger(Standing);
+        anim.SetTrigger(StandId);
     }
     [PunRPC]
     void CrouchRPC()
     {
-        anim.SetTrigger(Crouching);
+        anim.SetTrigger(CrouchId);
     }
     [PunRPC]
     void JumpRPC()
@@ -130,29 +169,54 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     private void Awake()
     {
         SetAnimID();
-        anim = GetComponent<Animator>();
-        anim.applyRootMotion = false;
         dampingSpeed = dampingSpeed <= 0 ? 0.15f : dampingSpeed;
         dampingSpeed = 1 / dampingSpeed;
     }
+    void Equip(AnimatorWeapon type)
+    {
+        OnWeapon(type);
+        photonView.RPC(CHANGEWEAPON, RpcTarget.All);
+    }
+    void OnWeapon(AnimatorWeapon type)
+    {
+        for (int i = 0; i < weaponId.Length; i++)
+        {
+            bool state = i == (int)type ? true : false;
+            anim.SetBool(weaponId[i], state);
+        }
+    }
     void SetAnimID()
     {
+        anim = GetComponent<Animator>();
+        anim.applyRootMotion = false;
+
         JumpEnterId = Animator.StringToHash("JumpEnter");
-        Standing = Animator.StringToHash("Standing");
-        Crouching = Animator.StringToHash("Crouching");
+        StandId = Animator.StringToHash("Standing");
+        CrouchId = Animator.StringToHash("Crouching");
+        ChangeWeaponId = Animator.StringToHash("ChangeWeapon");
+        ReloadId = Animator.StringToHash("Reload");
+        int pistolLayer = anim.GetLayerIndex("PistolUpper");
+        int rifleLayer = anim.GetLayerIndex("RifleUpper");
+        int defaultLayer = anim.GetLayerIndex("DefaultUpper");
 
         int ForwardId = Animator.StringToHash("Forward");
         int TurnId = Animator.StringToHash("Turn");
         int JumpId = Animator.StringToHash("Jump");
 
+        //int CrouchId = Animator.StringToHash("Crouch");
         int JumpFinishId = Animator.StringToHash("JumpFinish");
-        int CrouchId = Animator.StringToHash("Crouch");
         int MoveId = Animator.StringToHash("Move");
         int RunId = Animator.StringToHash("Run");
+        int rifleId = Animator.StringToHash("Rifle");
+        int pistolId = Animator.StringToHash("Pistol");
+        int swordId = Animator.StringToHash("Sword");
 
         floatId = new int[] { TurnId, JumpId, ForwardId };
-        layerId = new int[] { MoveId, RunId, CrouchId, JumpFinishId };
+        layerId = new int[] { MoveId, RunId,/* CrouchId,*/ JumpFinishId };
+        weaponId = new int[] { pistolId, rifleId , swordId };
         dampingCo = new Coroutine[(int)AnimatorFloatValue.END];
+
+        anim.SetBool(pistolId, true);
     }
     #region
     //private void Start()
@@ -225,6 +289,8 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     //    }
     //}
     #endregion
+
+
     IEnumerator DampingAnimationRoutine(float value,float dampingValue, AnimatorFloatValue type)
     {
         float startValue = anim.GetFloat(floatId[(int)type]);
@@ -243,13 +309,19 @@ public class AnimationController : MonoBehaviourPun//, IPunObservable
     {
         Move,
         Run,
-        Crouch,
+       // Crouch,
         JumpFinish,
         END
+    }
+    public enum AnimatorWeapon
+    {
+        Pistol, Rifle, Sword, END
     }
 
     public enum AnimatorFloatValue
     { X, Y, Z, END }
+
+
     public enum MoveType
     {
         Walk,

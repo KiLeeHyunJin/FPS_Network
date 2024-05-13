@@ -6094,9 +6094,6 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: Jump
   - Type: 4
-    SynchronizeType: 0
-    Name: Crouch
-  - Type: 4
     SynchronizeType: 1
     Name: Move
   - Type: 4
@@ -6120,6 +6117,21 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 0
     Name: Crouching
+  - Type: 9
+    SynchronizeType: 0
+    Name: ChangeWeapon
+  - Type: 4
+    SynchronizeType: 0
+    Name: Rifle
+  - Type: 4
+    SynchronizeType: 0
+    Name: Pistol
+  - Type: 4
+    SynchronizeType: 0
+    Name: Sword
+  - Type: 9
+    SynchronizeType: 0
+    Name: Fire
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
