@@ -94,6 +94,8 @@ public class GunController : MonoBehaviour
 
     private void Shoot() //실제 발사되는 과정 
     {
+        //muzzleEffect 생성 필요. + renderer 필요 시 추가 + 화염효과 추가 
+
         currentGun.currentBulletCount--; //총알 감소 
         currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
 
@@ -144,7 +146,7 @@ public class GunController : MonoBehaviour
 
     IEnumerator ReloadCoroutine() //재장전 코루틴. 
     {
-        if (currentGun.currentBulletCount < currentGun.maxBulletCount)
+        if (currentGun.currentBulletCount < currentGun.maxBulletCount) //max숫자는 변동없음. 
         {
             //현재 총탄의 갯수가 최대 총탄의 갯수보다 적으면 리로딩 진행
             isReload = true;
