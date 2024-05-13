@@ -32,4 +32,26 @@ public class ResourceManager : Singleton<ResourceManager>
         resourceDic[type].Add(key, resource);
         return resource;
     }
+
+    
+    //정재훈 : 추가 버전 (기본 리소스 매니저 버전 )
+    private Dictionary<string,Object> basicResources=new Dictionary<string,Object>();
+
+    public T basicLoad<T>(string path) where T: Object
+    {
+        string key = $"{path}_{typeof(T)}";
+
+        if (basicResources.TryGetValue(key, out Object obj))
+        {
+            return obj as T;
+        }
+        else
+        {
+            T resource = Resources.Load<T>(path);
+            basicResources.Add(key, resource);
+            return resource;
+        }
+    }
+
+
 }

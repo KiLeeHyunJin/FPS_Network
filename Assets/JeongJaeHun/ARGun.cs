@@ -9,8 +9,9 @@ public class ARGun : MonoBehaviour, IInteractable
     public GunData gunData;
     public GunBase gunBase;
 
-    public void Interaction()
+    public void Interaction(GameObject player)
     {
+        // 이 부분 생각해보자. 
         //줍기 구현해주면 된다. 
         gunBase.PickUp(gameObject); //자신이 들어가야 함. 
     }
