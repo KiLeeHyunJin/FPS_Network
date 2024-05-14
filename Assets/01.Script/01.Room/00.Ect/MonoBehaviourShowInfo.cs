@@ -9,16 +9,17 @@ public class MonoBehaviourShowInfo : MonoBehaviour
     [SerializeField] InfoPanel info;
     protected virtual void Start()
     {
-        infoParent = GetComponentInParent<Canvas>(); //ÃÖ »óÀ§ ºÎ¸ğ °´Ã¼¸¦ °¡Á®¿Â´Ù.(UI´Â Canvas¾È¿¡¼­¸¸ Ãâ·Â °¡´ÉÇÏ±â¶§¹®)
+        infoParent = GetComponentInParent<Canvas>(); //ìµœ ìƒìœ„ ë¶€ëª¨ ê°ì²´ë¥¼ ê°€ì ¸ì˜¨ë‹¤.(UIëŠ” Canvasì•ˆì—ì„œë§Œ ì¶œë ¥ ê°€ëŠ¥í•˜ê¸°ë•Œë¬¸)
     }
     InfoPanel GetInfo()
     {
-        PooledObject obj = Manager.Pool.GetPool(info, Vector3.zero, Quaternion.identity);//°´Ã¼¸¦ °¡Á®¿Â´Ù.
-        obj.transform.SetParent(infoParent.transform, true); //CanvasÀÇ ÀÚ½ÄÀ¸·Î ¼³Á¤
+        PooledObject obj = Manager.Pool.GetPool(info, Vector3.zero, Quaternion.identity);//ê°ì²´ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
+        obj.transform.SetParent(infoParent.transform, true); //Canvasì˜ ìì‹ìœ¼ë¡œ ì„¤ì •
         RectTransform rect = obj.transform as RectTransform; 
         if (rect != null)
-            rect.offsetMin = rect.offsetMax = Vector2.zero; //ÃÖ´ë »çÀÌÁî·Î ¼³Á¤
-        InfoPanel infoPanel = obj as InfoPanel;//¾ğ¹Ú½Ì ÈÄ ¹İÈ¯
+            rect.offsetMin = rect.offsetMax = Vector2.zero; //ìµœëŒ€ ì‚¬ì´ì¦ˆë¡œ ì„¤ì •
+        InfoPanel infoPanel = obj as InfoPanel;//ì–¸ë°•ì‹± í›„ ë°˜í™˜
+        infoPanel.transform.localScale = Vector3.one;
         return infoPanel;
     }
     protected void ShowInfo(string str)
