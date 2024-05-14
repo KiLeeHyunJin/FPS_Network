@@ -11,7 +11,8 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using System.Collections;
-public class MenuPanel : MonoBehaviour
+using UnityEngine.EventSystems;
+public class MenuPanel : MonoBehaviour,IPointerEnterHandler
 {
     [SerializeField] Image PlayButton;
     [SerializeField] GameObject PlayButtons;
@@ -32,7 +33,7 @@ public class MenuPanel : MonoBehaviour
 
     private void Awake()
     {
-
+        
         userInfoButton.onClick.AddListener(() => { userInfoWindow.SetActive(true); });
         openButton.onClick.AddListener(() => { OpenPlayButtons(!startButtonBool); });
         closeButton.onClick.AddListener(() => { OpenPlayButtons(false); });
@@ -40,7 +41,7 @@ public class MenuPanel : MonoBehaviour
         lobbyButton.onClick.AddListener(JoinLobby);
         randomButton.onClick.AddListener(RandomMatching);
     }
-
+    
     [Serializable]
     public class NickNames
     {
@@ -110,5 +111,16 @@ public class MenuPanel : MonoBehaviour
         PlayButton.color = state ? Color.gray : Color.white;
         PlayButtons.SetActive(state);
         startButtonBool = !startButtonBool;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ((IPointerEnterHandler)userInfoButton).OnPointerEnter(eventData);
+        ((IPointerEnterHandler)openButton).OnPointerEnter(eventData);
+        ((IPointerEnterHandler)closeButton).OnPointerEnter(eventData);
+        ((IPointerEnterHandler)logoutButton).OnPointerEnter(eventData);
+        ((IPointerEnterHandler)lobbyButton).OnPointerEnter(eventData);
+        ((IPointerEnterHandler)randomButton).OnPointerEnter(eventData);
+
     }
 }

@@ -191,40 +191,53 @@ public class RoomPanel : MonoBehaviourShowInfo
             
     }
 
+    #region load
+    
     void StartGame()
     {
         if (isEnterGame)
             return;
         isEnterGame = true;
-        currentRoom.SetProperty(DefinePropertyKey.START, true);
-        StartCoroutine(LoadScene());
+        StartCoroutine(LoadProcess());
+
 
     }
-    AsyncOperation oper;
-    IEnumerator LoadScene()
+
+  IEnumerator LoadProcess()
+    {
+        currentRoom.SetProperty(DefinePropertyKey.START, true);
+        yield return new WaitForSeconds(1);
+        PhotonNetwork.LoadLevel(gameSceneName);
+    }
+    IEnumerator LoadScene(Player player)
     {
         yield return new WaitForSeconds(1f);
-        oper = PhotonNetwork.AsyncLoadLevel(gameSceneName);
-        oper.allowSceneActivation = false;
 
-        while (!oper.isDone)
+        
+        PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = false;
+
+        while (PhotonNetwork.LevelLoadingProgress<1f)
         {
-            float progress = oper.progress;
-            Debug.Log(progress);
+
+            float progress = PhotonNetwork.LevelLoadingProgress;
+            
            
-            PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOADVALUE, progress);
+            player.SetProperty(DefinePropertyKey.LOADVALUE, progress);
+            Debug.Log($"loadProgress player {player.ActorNumber} : {(progress)}");
+
             yield return null;
 
 
             if (progress >= 0.9f)
             {
                 Debug.Log("i'mDone");
+                player.SetProperty(DefinePropertyKey.LOADVALUE,1f);
                 break;
             }
                 
            
         }
-        PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOAD, true);
+        player.SetProperty(DefinePropertyKey.LOAD, true);
 
 
         while (!AllLoadComplete(DefinePropertyKey.LOAD))
@@ -234,43 +247,50 @@ public class RoomPanel : MonoBehaviourShowInfo
 
 
         Debug.Log("Complete");
-        yield return new WaitForSeconds(1f);
-        oper.allowSceneActivation = true;
+        yield return new WaitForSeconds(2f);
+        PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = true;
     }
     public bool AllLoadComplete(string key)
     {
-        foreach (LoadingPlayerEntry entry in loadingPlayerList)
+        foreach (PlayerEntry entry in playerList)
         {
             
-            if (!entry.player.GetProperty<bool>(DefinePropertyKey.LOAD))
+            if (!entry.Player.GetProperty<bool>(key))
             {
-                Debug.Log($"{entry.player.NickName} is false");
+                Debug.Log(entry.Player.ActorNumber);
+                Debug.Log($"{entry.Player.NickName} is false");
                 return false;
             }
         }
         return true;
     }
+    #endregion
     public void RoomPropertiesUpdate(PhotonHashtable changedProps)
     {
+        
         Debug.Log("RoomUpdate");
+        Debug.Log(currentRoom.GetProperty<bool>(DefinePropertyKey.START));
         if (currentRoom.GetProperty<bool>(DefinePropertyKey.START)&&!isLoaded)
         {
-            loadImage.gameObject.SetActive(true);
-            foreach (Player player in PhotonNetwork.PlayerList)
-            {
-                player.SetProperty<float>(DefinePropertyKey.LOADVALUE, 0);
-                int teamCode = player.GetPhotonTeam().Code;
-                Transform loadTransform = (teamCode == BLUE) ? loadImage.blueTeamLoad : loadImage.redTeamLoad;
-              LoadingPlayerEntry LPEP = Instantiate(loadPlayerEntryPrefab, loadTransform);
-                LPEP.SetPlayer(player);
-                loadingPlayerList.Add(LPEP);
-                Debug.Log($"{player.ActorNumber} is On");
-            }
+                loadImage.gameObject.SetActive(true);
+                foreach (Player player in PhotonNetwork.PlayerList)
+                {
+                
+                    player.SetProperty<float>(DefinePropertyKey.LOADVALUE, 0);
+                    int teamCode = player.GetPhotonTeam().Code;
+                    Transform loadTransform = (teamCode == BLUE) ? loadImage.blueTeamLoad : loadImage.redTeamLoad;
+                    LoadingPlayerEntry LPEP = Instantiate(loadPlayerEntryPrefab, loadTransform);
+                    LPEP.SetPlayer(player);
+                    loadingPlayerList.Add(LPEP);
+                    Debug.Log($"{player.ActorNumber} is On");
+
+                    if(PhotonNetwork.LocalPlayer.ActorNumber == player.ActorNumber)
+                    StartCoroutine(LoadScene(player));
+                }
             isLoaded = true;
-            foreach(LoadingPlayerEntry loadingPlayerEntry in loadingPlayerList)
-            {
-               
-            }
+                
+                
+            
         }
         else
         {
@@ -279,6 +299,7 @@ public class RoomPanel : MonoBehaviourShowInfo
     }
     public void GameLoadPropertiesUpdate(Player targetPlayer,PhotonHashtable changedProps)
     {
+        Debug.Log("loadProPerties");
        if(changedProps.ContainsKey(DefinePropertyKey.LOADVALUE))
         { 
 
@@ -286,12 +307,16 @@ public class RoomPanel : MonoBehaviourShowInfo
             Debug.Log($"Load Progress is {loadValue}");
             SetPlayerLoadingProgress(targetPlayer, loadValue);
         }
+        else
+        {
+            Debug.Log("loadFalse");
+        }
     }
-    void SetPlayerLoadingProgress(Player player,float progress)
+    void SetPlayerLoadingProgress(Player loadPlayer,float progress)
     {
         foreach(LoadingPlayerEntry entry in loadingPlayerList)
         {
-            if(entry.player == player)
+            if(entry.player == loadPlayer)
             {
                 entry.SetLoadingProgress(progress);
                 break;
@@ -304,6 +329,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         //플레이어 리스트를 돌면서 
         foreach (PlayerEntry player in playerList)
         {
+            if(player.isMasterSymbol.gameObject !=null)
             player.isMasterSymbol.gameObject.SetActive(player.Player == PhotonNetwork.MasterClient);
             //플레이어 액터가 같을 경우
             if (player.Player.ActorNumber == targetPlayer.ActorNumber)
