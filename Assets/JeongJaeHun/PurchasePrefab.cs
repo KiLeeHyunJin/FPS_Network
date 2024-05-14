@@ -63,6 +63,9 @@ public class PurchasePrefab : MonoBehaviour
                 StopCoroutine(coroutine); //만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 
             }
             coroutine= StartCoroutine(SucessPurchase());
+            inventory.AddItem(item, item.itemID);
+            Debug.Log($"{item},{item.itemID}");
+
             Manager.UI.ClosePopUpUI(); //구매 창 닫아주기. 
             // 프리팹을 인벤토리에 추가해줘야함. --> 내가 보유중인 아이템 목록의 최신화 
             
@@ -90,5 +93,12 @@ public class PurchasePrefab : MonoBehaviour
 
     }
 
-    //버튼을 눌렀을 때 호출될 함수. 
+    //버튼을 눌렀을 때 호출될 함수. ( 임시 )
+
+    public void Btn()
+    {
+        inventory.AddItem(item, item.itemID);
+    }
+
+
 }

@@ -13,50 +13,7 @@ public class Slot : MonoBehaviour
     public int slotIndex;
 
 
-    public void AddItem(Item _item, int ID) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
-    {
-        item = _item;
-
-        if (item.itemType == Item.ItemType.Gun) //상점에서 주력총 구입 시 
-        {
-            // 슬롯중 아이디가 1번인거를 찾아서 거기의 자식의 id를 체크 
-            GameObject obj1=transform.GetChild(0).gameObject; //0번 자식 --> 첫번째 자식 
-
-            //자식은 모두 Gun을 가지고 있을 예정이기 때문에 그 Gun을 찾고 ID가 같은거를 찾아보자. 
-
-            foreach(Transform child in obj1.transform)
-            {
-                if(child.gameObject.AddComponent<Gun>().gunID==ID) //id가 일치하면 
-                {
-                    child.gameObject.SetActive(true); 
-                }
-            }
-        }
-        else if (item.itemType == Item.ItemType.Pistol) // 상점에서 권총 구입 시 
-        {
-            // 슬롯 중 아이디가 2번인거를 찾아서 거기의 자식의 id 체크
-
-
-        }
-        else if (item.itemType == Item.ItemType.Armor) //상점에서 아머 구입 시 
-        {
-            // 아머는 실제 holder로 가는게 아니라 자신의 방어력을 체크해주는 방법으로 증가시켜주면된다.
-
-
-
-            if (ID == 1) //1번 --> 애기 아머
-            {
-
-            }
-            else if (ID == 2) // 2번 --> 고급 아머 
-            {
-
-            }
-        }
-
-
-    }
-
+    
 
 
 

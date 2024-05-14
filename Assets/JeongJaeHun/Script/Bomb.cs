@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Bomb : IKWeapon
 {
+
     public enum BombType
     {
         GRENADE, FLASHBANG
@@ -56,7 +57,11 @@ public class Bomb : MonoBehaviour
 
     }
 
-    
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
 
 
 

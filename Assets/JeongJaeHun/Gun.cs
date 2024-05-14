@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class Gun : IKWeapon
 {
     // 모든 종류의 총들이 공통적으로 갖고 있는 속성들 
 
@@ -57,7 +57,11 @@ public class Gun : MonoBehaviour
     public ParticleSystem muzzleFlash; //화염구 이펙트 재생 담당 -->파티클 시스템 
     public AudioClip fire_Sound; //총 발사 소리 오디오클립 
 
-    
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
 
 
