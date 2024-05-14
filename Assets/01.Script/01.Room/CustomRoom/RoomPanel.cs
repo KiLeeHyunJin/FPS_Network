@@ -58,6 +58,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         isLoaded = false;
         isEnterGame = false;
         currentRoom = PhotonNetwork.CurrentRoom;
+        PhotonNetwork.EnableCloseConnection = true;
         //방 이름 표기
         roomNameTxt.text = currentRoom.Name;
         //팀별 최대 인원을 계산해서 가져온다.
