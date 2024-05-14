@@ -30,26 +30,64 @@ public class GunController : MonoBehaviour
     [Header("PooledObject 이펙트 관리 스크립트연결")]
     public PoolContainer poolContainer;
 
-
+    [Tooltip("스크립트의 활성화 여부")]
+    public static bool isActivate = true;
     private void Awake()
     {
-        poolContainer = gameObject.AddComponent<PoolContainer>();
+        poolContainer = GameObject.FindObjectOfType<PoolContainer>();
     }
 
 
     private void Start()
     {
+        originPos = Vector3.zero;
+        audioSource=GetComponent<AudioSource>();
+        WeaponManager.currentWeapon=currentGun.GetComponent<Transform>();
+        //기본적인 디폴트 무기를 Gun으로 삼기 위해 currentWeapon에 자기 자신의 transform을 할당해줌
         audioSource = GetComponent<AudioSource>();
+        //WeaponManager.currentWeaponAnim=currentGun.anim;
     }
 
     private void Update()
     {
-        GunFireRateCalc(); //쿨타임 측정이므로 update에서 돌아가야함. 
-        TryFire(); //발사 입력 받는 부분은 update에서 굳이 돌려야할까? --> input 쓰는데? 생각해보기. 
-        TryReload(); //재장전도 마찬가지 -> 키 눌렀을 때만 측정하면 되지 않을까? 
-        TryFineSight(); //정조준 
+        if(isActivate)
+        {
+            GunFireRateCalc(); //쿨타임 측정이므로 update에서 돌아가야함. 
+            TryFire(); //발사 입력 받는 부분은 update에서 굳이 돌려야할까? --> input 쓰는데? 생각해보기. 
+            TryReload(); //재장전도 마찬가지 -> 키 눌렀을 때만 측정하면 되지 않을까? 
+            TryFineSight(); //정조준 
+        }
+    }
+
+
+    public void CancelReload() //리로드 동작 중지. 
+    {
+        if(isReload) //장전 중이면 
+        {
+            StopAllCoroutines(); //이거 올 코루틴 중지 막 돌려도 되는지는 모르겠네.
+            isReload = false;
+        }
+    }
+
+    //총으로 교체하고자 할 때 필요.. 호출은 WeaponManager에서 이루어짐
+    public void GunChange(Gun gun) //이거 매개변수가 gun형인데 왜 딕셔너리 name이 받을 수 있는지? 
+    {
+        if (WeaponManager.currentWeapon!=null) //지금 손에 무기가 있으면 (current가 안 비어있다면)
+        {
+            WeaponManager.currentWeapon.gameObject.SetActive(false);              
+        }
+
+        currentGun = gun; 
+        WeaponManager.currentWeapon=currentGun.GetComponent<Transform>();
+        //WeaponManager.currentWeaponAnim=currentGun.anim; 애니메이션 교체 
+        currentGun.transform.localPosition = Vector3.zero; //위치 초기화
+        currentGun.gameObject.SetActive(true); //무기 켜주기. 
+
+        isActivate = true; 
 
     }
+    
+
 
     private void GunFireRateCalc()
     {
@@ -84,7 +122,7 @@ public class GunController : MonoBehaviour
         }
     }
 
-    private void CancelFineSight() // 정조준 취소 함수
+    public void CancelFineSight() // 정조준 취소 함수
     {
         if (isFineSightMode)
         {
@@ -109,7 +147,6 @@ public class GunController : MonoBehaviour
         StopAllCoroutines(); //반동 코루틴 멈추고
         StartCoroutine(RetroActionCoroutine());
 
-        Debug.Log("총알 발사함.");
     }
 
 
@@ -131,7 +168,7 @@ public class GunController : MonoBehaviour
     private void TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
     {
         if (!isReload)
-        {          
+        {
             CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
             StartCoroutine(ReloadCoroutine());
 
@@ -160,11 +197,11 @@ public class GunController : MonoBehaviour
     }
     private void TryFineSight() //정조준 실행. 
     {
-        if (Input.GetKeyDown("Fire2")/*&& currentGun.gunType==Gun.GunType.SNIPER*/
-            && !isReload) //스나이퍼 일 때만 정조준 진행. (??) ++ 장전 중이 아닐 때만 조준 가능하도록..
-        {
-            FineSight(); //나중에 equipCont로 옮겨줄 예정. 일단 더 생각해보기. 
-        }
+        /* if (Input.GetKeyDown("Fire2") && currentGun.gunType == Gun.GunType.SNIPER
+             && !isReload) //스나이퍼 일 때만 정조준 진행. (??) ++ 장전 중이 아닐 때만 조준 가능하도록..
+         {
+             FineSight(); //나중에 equipCont로 옮겨줄 예정. 일단 더 생각해보기. 
+         }*/
     }
 
     private void FineSight()
