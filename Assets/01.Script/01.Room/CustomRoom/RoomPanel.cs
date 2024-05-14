@@ -1,3 +1,5 @@
+using Firebase.Database;
+using Firebase.Extensions;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -29,6 +31,9 @@ public class RoomPanel : MonoBehaviourShowInfo
     List<LoadingPlayerEntry> loadingPlayerList;
     Room currentRoom;
 
+    [SerializeField] List<Sprite> loadImages;
+    [SerializeField] TMP_Text loadingMessage;
+
     const int RED = 2;
     const int BLUE = 1;
     int halfCount;
@@ -37,10 +42,16 @@ public class RoomPanel : MonoBehaviourShowInfo
     public bool isMaster { get; private set; }
     private void Awake()
     {
+        loadImages = new List<Sprite>();    
         loadingPlayerList = new List<LoadingPlayerEntry>();
         playerList = new List<PlayerEntry>();
         startButton.onClick.AddListener(StartGame);
         leaveButton.onClick.AddListener(LeaveRoom);
+        for(int i = 0; i < 5; i++) 
+        {
+            loadImages.Add(Resources.Load<Sprite>($"Image/load{i+1}"));
+        }
+        
     }
     private void OnEnable()
     {
@@ -270,32 +281,72 @@ public class RoomPanel : MonoBehaviourShowInfo
         
         Debug.Log("RoomUpdate");
         Debug.Log(currentRoom.GetProperty<bool>(DefinePropertyKey.START));
-        if (currentRoom.GetProperty<bool>(DefinePropertyKey.START)&&!isLoaded)
+        if (currentRoom.GetProperty<bool>(DefinePropertyKey.START) && !isLoaded)
         {
-                loadImage.gameObject.SetActive(true);
-                foreach (Player player in PhotonNetwork.PlayerList)
-                {
-                
-                    player.SetProperty<float>(DefinePropertyKey.LOADVALUE, 0);
-                    int teamCode = player.GetPhotonTeam().Code;
-                    Transform loadTransform = (teamCode == BLUE) ? loadImage.blueTeamLoad : loadImage.redTeamLoad;
-                    LoadingPlayerEntry LPEP = Instantiate(loadPlayerEntryPrefab, loadTransform);
-                    LPEP.SetPlayer(player);
-                    loadingPlayerList.Add(LPEP);
-                    Debug.Log($"{player.ActorNumber} is On");
+            int ra = Random.Range(1, 6);
+            Debug.Log(ra);
+            FireBaseManager.DB
+             .GetReference("LoadingMessage")
+             .Child($"Message{ra}")
+             .GetValueAsync().ContinueWithOnMainThread(task =>
+             {
+                 if (task.IsCanceled)
+                 {
+                     Debug.Log("cancle");
+                     return;
+                 }
+                 else if (task.IsFaulted)
+                 {
+                     Debug.Log("fault");
+                     return;
+                 }
+                 DataSnapshot snapshot = task.Result;
+                 if (snapshot.Exists)
+                 {
+                     string value = (string)snapshot.Value;
+                     loadingMessage.SetText(value);
 
-                    if(PhotonNetwork.LocalPlayer.ActorNumber == player.ActorNumber)
-                    StartCoroutine(LoadScene(player));
-                }
-            isLoaded = true;
-                
-                
-            
+                 }
+                 else
+                 {
+                     loadingMessage.text = "NONE";
+                 }
+
+             });
+            LoadingOn();
         }
+            
         else
         {
             Debug.Log("IsNotStartProperties");
         }
+    }
+
+    public void LoadingOn()
+    {
+        loadImage.gameObject.SetActive(true);
+        int r = Random.Range(0, 4);
+        
+        Image image = loadImage.GetComponent<Image>();
+        image.sprite = loadImages[r];
+        
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+
+            player.SetProperty<float>(DefinePropertyKey.LOADVALUE, 0);
+            int teamCode = player.GetPhotonTeam().Code;
+            Transform loadTransform = (teamCode == BLUE) ? loadImage.blueTeamLoad : loadImage.redTeamLoad;
+            LoadingPlayerEntry LPEP = Instantiate(loadPlayerEntryPrefab, loadTransform);
+            LPEP.SetPlayer(player);
+            loadingPlayerList.Add(LPEP);
+            Debug.Log($"{player.ActorNumber} is On");
+
+            if (PhotonNetwork.LocalPlayer.ActorNumber == player.ActorNumber)
+                StartCoroutine(LoadScene(player));
+        }
+        isLoaded = true;
+
+        
     }
     public void GameLoadPropertiesUpdate(Player targetPlayer,PhotonHashtable changedProps)
     {
