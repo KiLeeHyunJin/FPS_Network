@@ -9,12 +9,15 @@ public class Gun : MonoBehaviour
 
     public enum GunType 
     {
-        PISTOL,AR,SNIPER
+        SHOTGUN,AR,SNIPER, BASICPISTOL, PURCHASEPISTOL,END
     }
 
     [Tooltip("ui에 표현될 총의 스프라이트")]
     public Sprite gunSprite;
 
+
+    [Tooltip("총의 ID 넘버")]
+    public int gunID;
 
     [Tooltip("총의 종류 -> 권총, AR, 저격총")]
     public GunType gunType;
