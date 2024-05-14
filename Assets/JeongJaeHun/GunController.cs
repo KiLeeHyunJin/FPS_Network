@@ -88,7 +88,6 @@ public class GunController : MonoBehaviour
     }
     
 
-
     private void GunFireRateCalc()
     {
         if (currentFireRate > 0)

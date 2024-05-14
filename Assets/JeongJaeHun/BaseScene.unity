@@ -173,7 +173,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 1497860725}
+  item: {fileID: 0}
+  slotIndex: 0
   itemImage: {fileID: 0}
+  slots: []
 --- !u!1 &22858323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,12 +1453,12 @@ GameObject:
   - component: {fileID: 308967183}
   - component: {fileID: 308967182}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: WeaponCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &308967182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3630,7 +3633,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 1
-  gun: {fileID: 0}
 --- !u!1 &843985299
 GameObject:
   m_ObjectHideFlags: 0
@@ -3917,7 +3919,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 3
-  gun: {fileID: 0}
 --- !u!1 &929385831 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 114396, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
@@ -4742,7 +4743,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1163518745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6252,6 +6253,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GunItemPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 114396, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 22407936, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6351,6 +6356,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 114396, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1442958743}
+    - targetCorrespondingSourceObject: {fileID: 114396, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1442958745}
   m_SourcePrefab: {fileID: 100100000, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
 --- !u!224 &1442958740 stripped
 RectTransform:
@@ -6417,6 +6425,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1442958745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442958741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0be23e2b9c943837d4f2b8fbbe20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: f947ca25714e7594da3a665ae04f7ffc, type: 2}
 --- !u!1 &1458898711
 GameObject:
   m_ObjectHideFlags: 0
@@ -6922,7 +6943,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 2
-  gun: {fileID: 0}
 --- !u!1 &1515308839
 GameObject:
   m_ObjectHideFlags: 0
@@ -7791,7 +7811,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 5
-  gun: {fileID: 0}
 --- !u!1 &1747825349
 GameObject:
   m_ObjectHideFlags: 0
@@ -10419,7 +10438,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 4
-  gun: {fileID: 0}
 --- !u!1 &2101696414
 GameObject:
   m_ObjectHideFlags: 0
