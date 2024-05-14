@@ -211,11 +211,9 @@ public class RoomPanel : MonoBehaviourShowInfo
             return;
         isEnterGame = true;
         StartCoroutine(LoadProcess());
-
-
     }
 
-  IEnumerator LoadProcess()
+    IEnumerator LoadProcess()
     {
         currentRoom.SetProperty(DefinePropertyKey.START, true);
         yield return new WaitForSeconds(1);

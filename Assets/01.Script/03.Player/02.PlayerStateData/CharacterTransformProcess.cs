@@ -39,8 +39,11 @@ public class CharacterTransformProcess
     bool IsMove;
     bool IsRun;
     bool IsIgnoreSpace;
-    public void Init(CharacterController characterController)
+
+    bool IsMine;
+    public void Init(CharacterController characterController, bool _isMine)
     {
+        IsMine = _isMine;
         controller = characterController;
         limitAngle = controller.slopeLimit;
         checkRadius = controller.radius * 0.9f;

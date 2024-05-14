@@ -1,33 +1,30 @@
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
+using static SoundManager;
 
 
 public class AnimationController : MonoBehaviourPun
 {
     Animator anim;
     public Animator Anim { get { return anim; } }
+    Coroutine[] dampingCo;
+
     [SerializeField] float dampingSpeed;
 
     int JumpEnterId;
     int StandId;
     int CrouchId;
+
     int ChangeWeaponId;
     int ReloadId;
-    //int FireId;
+    int AtckId;
 
     int[] layerId;
     int[] floatId;
     int[] weaponId;
 
-    readonly string STAND = "StandRPC";
-    readonly string CROUCH = "CrouchRPC";
-    readonly string JUMP = "JumpRPC";
-    readonly string CHANGEWEAPON = "ChangeWeaponRPC";
-    readonly string RELOAD = "ReloadRPC";
-    readonly string FIRE = "FireRPC";
-
-    Coroutine[] dampingCo;
+    readonly string TRIGGER = "CallTriggerRPC";
 
     public Vector2 MoveValue
     {
@@ -49,42 +46,41 @@ public class AnimationController : MonoBehaviourPun
     }
     public void Crouch(bool state)
     {
-        string standType = state ? CROUCH : STAND;
-        photonView.RPC(standType, RpcTarget.AllViaServer);
+        int standType = state ? CrouchId : StandId;
+        photonView.RPC(TRIGGER, RpcTarget.AllViaServer, standType);
     }
 
     public void JumpStart()
     {
         SetState(AnimatorState.JumpFinish, false);
-        photonView.RPC(JUMP, RpcTarget.AllViaServer);
+        photonView.RPC(TRIGGER, RpcTarget.AllViaServer, JumpEnterId);
     }
-    //public void Fire()
-    //{
-    //    photonView.RPC(FIRE, RpcTarget.AllViaServer);
-    //}
-    public void ChangePistol()
+
+    public void Atck()
     {
-        ChangeWeapon(AnimatorWeapon.Pistol);
+        photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
     }
-    public void ChangeRifle()
+
+    public void ChangeWeapon(AnimatorWeapon type)
     {
-        ChangeWeapon(AnimatorWeapon.Rifle);
-    }
-    public void ChangeSword()
-    {
-        ChangeWeapon(AnimatorWeapon.Sword);
+        if (anim.GetBool(weaponId[(int)type]) == false)
+        {
+            OnWeapon(type);
+            photonView.RPC(TRIGGER, RpcTarget.All,ChangeWeaponId);
+        }
     }
 
     public void Reload()
     {
         if (anim.GetBool(weaponId[(int)AnimatorWeapon.Rifle]) ||
             anim.GetBool(weaponId[(int)AnimatorWeapon.Pistol]))
-            photonView.RPC(RELOAD, RpcTarget.AllViaServer);
+            photonView.RPC(TRIGGER, RpcTarget.AllViaServer, ReloadId);
     }
 
     public void Die()
     {
     }
+
     public void MoveRun()
     {
         SetState(AnimatorState.Move, true);
@@ -104,56 +100,25 @@ public class AnimationController : MonoBehaviourPun
     {
         SetState(AnimatorState.JumpFinish, true);
     }
-    //[PunRPC]
-    //void FireRPC()
-    //{
-    //    anim.SetTrigger(FireId);
-    //}
+
     [PunRPC]
-    void ReloadRPC()
+    void CallTriggerRPC(int triggerId)
     {
-        anim.SetTrigger(ReloadId);
+        anim.SetTrigger(triggerId);
     }
-    [PunRPC]
-    void ChangeWeaponRPC()
-    {
-        anim.SetTrigger(ChangeWeaponId);
-    }
-    [PunRPC]
-    void StandRPC()
-    {
-        anim.SetTrigger(StandId);
-    }
-    [PunRPC]
-    void CrouchRPC()
-    {
-        anim.SetTrigger(CrouchId);
-    }
-    [PunRPC]
-    void JumpRPC()
-    {
-        anim.SetTrigger(JumpEnterId);
-    }
+
     void SetState(AnimatorState type, bool state)
     {
         anim.SetBool(layerId[(int)type], state);
     }
+
     private void Awake()
     {
         SetAnimID();
         dampingSpeed = dampingSpeed <= 0 ? 0.15f : dampingSpeed;
         dampingSpeed = 1 / dampingSpeed;
     }
-    void ChangeWeapon(AnimatorWeapon type)
-    {
-        if (anim.GetBool(weaponId[(int)type]) == false)
-            Equip(type);
-    }
-    void Equip(AnimatorWeapon type)
-    {
-        OnWeapon(type);
-        photonView.RPC(CHANGEWEAPON, RpcTarget.All);
-    }
+
     void OnWeapon(AnimatorWeapon type)
     {
         for (int i = 0; i < weaponId.Length; i++)
@@ -162,6 +127,7 @@ public class AnimationController : MonoBehaviourPun
             anim.SetBool(weaponId[i], state);
         }
     }
+
     void SetAnimID()
     {
         anim = GetComponent<Animator>();
@@ -172,7 +138,7 @@ public class AnimationController : MonoBehaviourPun
         CrouchId = Animator.StringToHash("Crouching");
         ChangeWeaponId = Animator.StringToHash("ChangeWeapon");
         ReloadId = Animator.StringToHash("Reload");
-        //FireId = Animator.StringToHash("Fire");
+        AtckId = Animator.StringToHash("Atck");
 
         int ForwardId = Animator.StringToHash("Forward");
         int TurnId = Animator.StringToHash("Turn");
@@ -209,6 +175,11 @@ public class AnimationController : MonoBehaviourPun
             yield return null;
         }
     }
+    public enum AnimatorWeapon
+    {
+        Pistol, Rifle, Sword, END
+    }
+
     enum AnimatorState
     {
         Move,
@@ -216,10 +187,7 @@ public class AnimationController : MonoBehaviourPun
         JumpFinish,
         END
     }
-    enum AnimatorWeapon
-    {
-        Pistol, Rifle, Sword, END
-    }
+
 
     enum AnimatorFloatValue
     { X, Y, Z, END }

@@ -5,13 +5,12 @@ using UnityEngine;
 
 public class FPSCameraPosition : MonoBehaviour
 {
-    [SerializeField] Transform cameraRoot;
-    CinemachineVirtualCamera cam;
+    //[SerializeField] Transform cameraRoot;
     //[SerializeField] float front = -0.1f;
     //[SerializeField] float up = 0.1f;
     private void Start()
     {
-        cam = GetComponentInChildren<CinemachineVirtualCamera>();
+        CinemachineVirtualCamera cam = GetComponentInChildren<CinemachineVirtualCamera>();
         if(cam != null)
         {
             cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
