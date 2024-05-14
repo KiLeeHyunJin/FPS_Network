@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviourPun
 {
@@ -42,7 +43,7 @@ public class Controller : MonoBehaviourPun
     ProcessingController processingController;
     EquipController equipController;
     CharacterTransformProcess moveProcess;
-
+    IKAnimationController IKAnimationController;
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
@@ -81,12 +82,15 @@ public class Controller : MonoBehaviourPun
         {
             Destroy(inputController);
             Destroy(processingController);
+            IKAnimationController = new IKAnimationController();
+            if (TryGetComponent<PlayerInput>(out var input))
+                Destroy(input);
             return;
         }
-        cameraController = new CameraController(target, this, cameraRoot, mouseSensitivity);
+        cameraController = new CameraController(target, this, cameraRoot, cam, mouseSensitivity);
         attackProcess = new AttackProcess(this);
-
-        cameraController.Init(cam, ControllCharacterLayerChange);
+        inputController.Owner = this;
+        cameraController.Init(ControllCharacterLayerChange);
     }
 
     void SetData()
@@ -116,12 +120,11 @@ public class Controller : MonoBehaviourPun
     {
         moveProcess?.FixedUpdate();
     }
-    Coroutine FireCamShakeCo;
-    IEnumerator FireCamShakeRoutine;
+
     void CallFire()
     {
         equipController.Fire();
-        animController.Fire();
+        //animController.Fire();
         cameraController.GetCamShakeRoutine();
         Controller hitTarget = attackProcess?.Attack();
     }
@@ -189,7 +192,7 @@ public class Controller : MonoBehaviourPun
         moveProcess.SetMoveActionValue(v => animController.VelocityY = v);
         moveProcess.SetMoveActionValue(v => animController.MoveValue = v);
 
-        inputController.SetRot(v => cameraController.inputDir = v);
+        inputController.SetRot(v => cameraController.InputDir = v);
 
         inputController.SetMoveKey(moveProcess.SetMoveValue);
         inputController.SetMoveType(moveProcess.SetMoveType);
@@ -234,6 +237,7 @@ public class Controller : MonoBehaviourPun
             Destroy(inputController.gameObject);
         }
     }
+
     public void AddHp(int _healValue)
     {
         int other = maxHp - hp;
@@ -242,13 +246,13 @@ public class Controller : MonoBehaviourPun
     }
 
 
-    public void StartCoroutine(IEnumerator routine, ref Coroutine co)
+    public void StartCoroutined(IEnumerator routine, ref Coroutine co)
+        => this.ReStartCoroutine(routine, ref co);
+    public void StopCoroutined(ref Coroutine co)
     {
-        this.ReStartCoroutine(routine, ref co);
+        if(co != null)
+            StopCoroutine(co);
     }
-
-
-
 
 
     PhotonView view;

@@ -14,11 +14,12 @@ public class AnimationController : MonoBehaviourPun
     int CrouchId;
     int ChangeWeaponId;
     int ReloadId;
-    int FireId;
+    //int FireId;
 
     int[] layerId;
     int[] floatId;
     int[] weaponId;
+
     readonly string STAND = "StandRPC";
     readonly string CROUCH = "CrouchRPC";
     readonly string JUMP = "JumpRPC";
@@ -48,10 +49,8 @@ public class AnimationController : MonoBehaviourPun
     }
     public void Crouch(bool state)
     {
-        if (state)
-            photonView.RPC(CROUCH, RpcTarget.AllViaServer);
-        else
-            photonView.RPC(STAND, RpcTarget.AllViaServer);
+        string standType = state ? CROUCH : STAND;
+        photonView.RPC(standType, RpcTarget.AllViaServer);
     }
 
     public void JumpStart()
@@ -59,31 +58,30 @@ public class AnimationController : MonoBehaviourPun
         SetState(AnimatorState.JumpFinish, false);
         photonView.RPC(JUMP, RpcTarget.AllViaServer);
     }
-    public void Fire()
-    {
-        photonView.RPC(FIRE, RpcTarget.AllViaServer);
-    }
+    //public void Fire()
+    //{
+    //    photonView.RPC(FIRE, RpcTarget.AllViaServer);
+    //}
     public void ChangePistol()
     {
-        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Pistol]) == false)
-            Equip(AnimatorWeapon.Pistol);
+        ChangeWeapon(AnimatorWeapon.Pistol);
     }
     public void ChangeRifle()
     {
-        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Rifle]) == false)
-            Equip(AnimatorWeapon.Rifle);
+        ChangeWeapon(AnimatorWeapon.Rifle);
     }
     public void ChangeSword()
     {
-        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Sword]) == false)
-            Equip(AnimatorWeapon.Sword);
+        ChangeWeapon(AnimatorWeapon.Sword);
     }
+
     public void Reload()
     {
         if (anim.GetBool(weaponId[(int)AnimatorWeapon.Rifle]) ||
             anim.GetBool(weaponId[(int)AnimatorWeapon.Pistol]))
             photonView.RPC(RELOAD, RpcTarget.AllViaServer);
     }
+
     public void Die()
     {
     }
@@ -106,11 +104,11 @@ public class AnimationController : MonoBehaviourPun
     {
         SetState(AnimatorState.JumpFinish, true);
     }
-    [PunRPC]
-    void FireRPC()
-    {
-        anim.SetTrigger(FireId);
-    }
+    //[PunRPC]
+    //void FireRPC()
+    //{
+    //    anim.SetTrigger(FireId);
+    //}
     [PunRPC]
     void ReloadRPC()
     {
@@ -146,6 +144,11 @@ public class AnimationController : MonoBehaviourPun
         dampingSpeed = dampingSpeed <= 0 ? 0.15f : dampingSpeed;
         dampingSpeed = 1 / dampingSpeed;
     }
+    void ChangeWeapon(AnimatorWeapon type)
+    {
+        if (anim.GetBool(weaponId[(int)type]) == false)
+            Equip(type);
+    }
     void Equip(AnimatorWeapon type)
     {
         OnWeapon(type);
@@ -169,24 +172,27 @@ public class AnimationController : MonoBehaviourPun
         CrouchId = Animator.StringToHash("Crouching");
         ChangeWeaponId = Animator.StringToHash("ChangeWeapon");
         ReloadId = Animator.StringToHash("Reload");
-        FireId = Animator.StringToHash("Fire");
+        //FireId = Animator.StringToHash("Fire");
 
         int ForwardId = Animator.StringToHash("Forward");
         int TurnId = Animator.StringToHash("Turn");
         int JumpId = Animator.StringToHash("Jump");
 
+        floatId = new int[] { TurnId, JumpId, ForwardId };
+
         int JumpFinishId = Animator.StringToHash("JumpFinish");
         int MoveId = Animator.StringToHash("Move");
         int RunId = Animator.StringToHash("Run");
+
+        layerId = new int[] { MoveId, RunId, JumpFinishId };
+
         int rifleId = Animator.StringToHash("Rifle");
         int pistolId = Animator.StringToHash("Pistol");
         int swordId = Animator.StringToHash("Sword");
 
-        floatId = new int[] { TurnId, JumpId, ForwardId };
-        layerId = new int[] { MoveId, RunId, JumpFinishId };
         weaponId = new int[] { pistolId, rifleId, swordId };
-        dampingCo = new Coroutine[(int)AnimatorFloatValue.END];
 
+        dampingCo = new Coroutine[(int)AnimatorFloatValue.END];
         anim.SetBool(pistolId, true);
     }
 
@@ -217,7 +223,6 @@ public class AnimationController : MonoBehaviourPun
 
     enum AnimatorFloatValue
     { X, Y, Z, END }
-
 
     public enum MoveType
     {

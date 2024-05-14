@@ -17,7 +17,7 @@ public class AttackProcess
     => aim = _aim;
 
     void Recoil()
-        => owner.StartCoroutine(RecoilRoutine(), ref recoilCo);
+        => owner.StartCoroutined(RecoilRoutine(), ref recoilCo);
 
 
     public Controller Attack()

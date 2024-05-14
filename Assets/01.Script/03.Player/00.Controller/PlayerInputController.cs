@@ -11,6 +11,8 @@ public class PlayerInputController : MonoBehaviour
     Action<Vector2> moveAction;
     Action<Vector2> rotateAction;
     Action<bool> moveTypeAction;
+    Controller owner;
+    public Controller Owner { set { owner = value; } }
     public Define.InputWeaponType CurrentWeapon { get; private set; }
     public Define.FireType MainFireType { get; private set; }
     public Define.FireType Fire { get; private set; }
@@ -31,8 +33,8 @@ public class PlayerInputController : MonoBehaviour
     public void Init()
     {
         //InputActionAsset inputs = GetComponent<PlayerInput>().actions;
-        ChangeFireType = Define.FireType.Repeat;
-        actions ??= new Action[(int)Define.Key.END];
+        ChangeFireType = Define.FireType.One;
+        actions = new Action[(int)Define.Key.END];
     }
     void OnLook(InputValue inputValue)
     {
@@ -99,15 +101,19 @@ public class PlayerInputController : MonoBehaviour
     {
         actions[(int)Define.Key.Alt]?.Invoke();
     }
-
+    void OnFireOne(InputValue inputValue)
+    {
+        if (Define.FireType.One == Fire)
+            actions[(int)Define.Key.Press]?.Invoke();
+    }
     void OnFirePress(InputValue inputValue)
     {
         if (Define.FireType.One == Fire)
             return;
         if (inputValue.isPressed)
-            pressCo = StartCoroutine(PressRoutine());
+            owner.StartCoroutined(PressRoutine(), ref pressCo);
         else
-            StopCoroutine(pressCo);
+            owner.StopCoroutined(ref pressCo);
     }
     Coroutine pressCo;
     IEnumerator PressRoutine()
@@ -118,22 +124,5 @@ public class PlayerInputController : MonoBehaviour
             yield return null;
         }
     }
-
-    void OnFireOne(InputValue inputValue)
-    {
-        if (Define.FireType.One == Fire)
-        {
-            actions[(int)Define.Key.Press]?.Invoke();
-            Debug.Log("One");
-        }
-    }
-
-    void OnDestroy()
-    {
-        PlayerInput input = GetComponent<PlayerInput>();
-        if (input != null)
-            Destroy(input);
-    }
-
 
 }
