@@ -5,18 +5,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CloakingEffect : MonoBehaviourPun, IPunObservable
+public class CloakingEffect : MonoBehaviourPun, IPunObservable, ISkill
 {
     public bool isCloaked = false;
     public Material CloakingMaterial;
     public float CloakDuration = 5f;
     public float CloakTransparency = 0.2f;
     public KeyCode CloakKey = KeyCode.Q;
-
     private Color originalColor;
+    private Renderer renderer;
+    
+    public void Activate()
+    {
+        StartCoroutine(CloakRoutine());
+    }
+
+    public void Deactivate()
+    {
+        StopAllCoroutines();
+        renderer.material = CloakingMaterial;
+    }
 
     void Start()
     {
+        renderer = GetComponent<Renderer>();
         if (CloakingMaterial != null)
         {
             originalColor = CloakingMaterial.color;
@@ -41,7 +53,7 @@ public class CloakingEffect : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
-        if (Input.GetKeyDown(CloakKey) && photonView.IsMine)  // "L" 키를 누를 경우
+        if (Input.GetKeyDown(CloakKey) && photonView.IsMine)  // "Q" 키를 누를 경우
         {
             Debug.Log("클로킹");
             ToggleCloak();
@@ -58,6 +70,7 @@ public class CloakingEffect : MonoBehaviourPun, IPunObservable
         else
         {
             CloakingMaterial.color = originalColor; // 클로킹 해제
+            Debug.Log("클로킹 해제");
         }
     }
 
