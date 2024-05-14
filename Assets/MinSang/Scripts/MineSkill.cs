@@ -3,7 +3,7 @@ using Photon.Pun;
 using Firebase.Database;
 using System.Collections.Generic;
 
-public class MineSkill : MonoBehaviourPun
+public class MineSkill : MonoBehaviourPun, ISkill
 {
     public GameObject minePrefab;
     public int numberOfMines;
@@ -12,6 +12,14 @@ public class MineSkill : MonoBehaviourPun
 
     private DatabaseReference dbReference;
 
+    public void Activate()
+    {
+        
+    }
+    public void Deactivate()
+    {
+        
+    }
     void Start()
     {
         // Firebase Database 초기화

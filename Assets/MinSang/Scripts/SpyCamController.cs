@@ -4,12 +4,22 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-public class SpyCamController : MonoBehaviourPun
+public class SpyCamController : MonoBehaviourPun, ISkill
 {
     public CinemachineVirtualCamera spyCamVirtualCamera;
     public GameObject spyCam;
     private bool isSpyCamActive = false;
     private bool isSpyCamPlaced = false;
+
+    public void Activate()
+    {
+        
+    }
+
+    public void Deactivate()
+    {
+
+    }
 
     void Update()
     {
@@ -36,7 +46,7 @@ public class SpyCamController : MonoBehaviourPun
     {
         // 스파이캠을 마우스 클릭한 위치에 설치
         // if (input.GetMouseButtonDown(0))
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G)) // 임시로
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))

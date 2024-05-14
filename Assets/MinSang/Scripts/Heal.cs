@@ -3,32 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEditor;
-/*
-public class Heal : MonoBehaviour
+using Firebase.Database;
+
+public class Heal : MonoBehaviourPun, ISkill
 {
-    CharacterController characterController;
+    Controller Controller;
+    DatabaseReference dbReference;
 
     int maxHealth = 100;
     int currentHealth = 100;
 
+    public void Activate()
+    {
+
+    }
+
+    public void Deactivate()
+    {
+
+    }
+
     void Start()
     {
-        // 초기화 코드
+        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     void Update()
     {
-        // 캐릭터 이동 관련 코드
-
         // 힐 스킬 발동 키 설정
         if (Input.GetKeyDown(KeyCode.H))
         {
-            Heal(20);
+            HealSkill(20);
         }
     }
 
     [PunRPC]
-    void Heal(int amount)
+    void HealSkill(int amount)
     {
         if (!photonView.IsMine)
             return;
@@ -39,4 +49,4 @@ public class Heal : MonoBehaviour
         // 다른 플레이어도 회복하도록 RPC 호출
         photonView.RPC("Heal", RpcTarget.Others, amount);
     }
-} */
+}
