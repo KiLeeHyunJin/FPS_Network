@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviourPun
@@ -31,6 +32,15 @@ public class Controller : MonoBehaviourPun
     [SerializeField] FPSCameraPosition cameraRoot;
     [SerializeField] CinemachineVirtualCamera cam;
 
+    [SerializeField] Rig aimRig;
+    [SerializeField] TwoBoneIKConstraint leftAim;
+    [SerializeField] TwoBoneIKConstraint rightAim;
+    [SerializeField] Transform leftHand;
+    [SerializeField] Transform rightHand;
+    [SerializeField] Transform weaponHolder;
+
+    [SerializeField] IKWeapon currentTest;
+
     int maxHp;
     int hp;
     bool mine;
@@ -43,7 +53,7 @@ public class Controller : MonoBehaviourPun
     EquipController equipController;
     CharacterTransformProcess moveProcess;
     RequestController requestController;
-    IKAnimationController IKAnimationController;
+    IKAnimationController iKAnimationController;
     event Action Updates; 
     private void Awake()
     {
@@ -79,6 +89,7 @@ public class Controller : MonoBehaviourPun
             Updates -= moveProcess.Update;
             Updates += moveProcess.Update;
         }
+        iKAnimationController.ChangeWeapon(currentTest);
     }
 
     void CheckMine()
@@ -89,12 +100,12 @@ public class Controller : MonoBehaviourPun
 
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
+        iKAnimationController = new IKAnimationController(aimRig, leftAim, rightAim, leftHand, rightHand, weaponHolder,this);
 
         if (mine == false)
         {
             Destroy(inputController);
             Destroy(processingController);
-            IKAnimationController = new IKAnimationController();
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             return;
@@ -157,10 +168,13 @@ public class Controller : MonoBehaviourPun
 
     void CallOne()
     {
+        iKAnimationController.Swap();
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle);
     }
     void CallTwo()
     {
+        iKAnimationController.Swap();
+
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol);
         inputController.ChangeFireType = Define.FireType.One;
     }
