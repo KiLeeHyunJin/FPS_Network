@@ -289,6 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunSprite: {fileID: -904710510, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
+  gunID: 0
   gunType: 1
   gunName: AR1
   range: 100
