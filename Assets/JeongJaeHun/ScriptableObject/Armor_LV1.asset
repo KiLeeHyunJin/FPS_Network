@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfe311a150452f94b86fc9195efd5a21, type: 3}
-  m_Name: ArmorItem
+  m_Name: Armor_LV1
   m_EditorClassIdentifier: 
-  itemType: 3
+  itemType: 4
+  price: 0
+  itemPrefab: {fileID: 0}
+  prefabName: 
+  itemID: 1
   itemName: BasicArmor
   itemImage: {fileID: 0}
-  itemPrefab: {fileID: 0}
   weaponType: Armor
