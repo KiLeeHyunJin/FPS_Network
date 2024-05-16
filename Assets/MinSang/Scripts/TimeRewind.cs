@@ -57,16 +57,7 @@ public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
             }
         }
     }
-    private void OnDrawGizmos()
-    {
-        if (positionHistory != null)
-        {
-            Gizmos.color = Color.black;
-            Gizmos.DrawSphere(positionHistory[historyIndex], 1f);
 
-
-        }
-    }
     IEnumerator RecordPositionAndHealth() // 위치와 체력 기록
     {
         if (!on)
