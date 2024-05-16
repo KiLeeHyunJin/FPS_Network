@@ -6,7 +6,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Controller : MonoBehaviourPun
+public class Controller : MonoBehaviourPun, IPunObservable
 {
     [Range(0.05f, 3f)]
     [SerializeField] float groundCheckLength;
@@ -24,8 +24,6 @@ public class Controller : MonoBehaviourPun
 
     [SerializeField] GameObject rootBone;
     [SerializeField] GameObject foot;
-    [SerializeField] GameObject leftHand;
-    [SerializeField] GameObject rightHand;
 
     [SerializeField] float mouseSensitivity;
     [SerializeField] GameObject[] FPSIgnoreObject;
@@ -36,19 +34,24 @@ public class Controller : MonoBehaviourPun
     int maxHp;
     int hp;
     bool mine;
+
     AttackProcess attackProcess;
     CameraController cameraController;
     PlayerInputController inputController;
+    CharacterTransformProcess moveProcess;
+
+    EquipController equipController;
     AnimationController animController;
     ProcessingController processingController;
-    EquipController equipController;
-    CharacterTransformProcess moveProcess;
-    IKAnimationController IKAnimationController;
+
+    RequestController requestController;
+    event Action Updates;
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
         groundLayer = 1 << LayerMask.NameToLayer("Ground");
     }
+
     void Start()
     {
         if (PhotonNetwork.InRoom)
@@ -64,12 +67,21 @@ public class Controller : MonoBehaviourPun
     }
     void Check()
     {
-        GetView();
+        
         CheckMine();
         SetData();
         CollidersSetting();
         SetKeyAction();
         MoveProcessInit();
+        //SetRequest();
+        if (mine)
+        {
+            Updates -= cameraController.Update;
+            Updates += cameraController.Update;
+
+            Updates -= moveProcess.Update;
+            Updates += moveProcess.Update;
+        }
     }
 
     void CheckMine()
@@ -77,20 +89,23 @@ public class Controller : MonoBehaviourPun
         mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
+
         equipController = GetComponent<EquipController>();
+        requestController = GetComponent<RequestController>();
+
         if (mine == false)
         {
             Destroy(inputController);
             Destroy(processingController);
-            IKAnimationController = new IKAnimationController();
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             return;
         }
         cameraController = new CameraController(target, this, cameraRoot, cam, mouseSensitivity);
+        cameraController.Init(ControllCharacterLayerChange);
+
         attackProcess = new AttackProcess(this);
         inputController.Owner = this;
-        cameraController.Init(ControllCharacterLayerChange);
     }
 
     void SetData()
@@ -103,28 +118,20 @@ public class Controller : MonoBehaviourPun
     {
         Player pl = PhotonNetwork.LocalPlayer;
         Debug.Log($"LocalPlayer : {pl.ActorNumber},Controller : {photonView.Controller.ActorNumber} ");
+
         Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            colliders[i].gameObject.layer = 6;
-            colliders[i].gameObject.AddComponent<HitBox>().SetOwner(this);
-        }
+        foreach (Collider collider in colliders)
+            collider.gameObject.AddComponent<HitBox>().SetOwner(this);
     }
 
     void Update()
-    {
-        moveProcess?.Update();
-        cameraController?.Update();
-    }
+        => Updates?.Invoke();
     void FixedUpdate()
-    {
-        moveProcess?.FixedUpdate();
-    }
+        => moveProcess?.FixedUpdate();
 
     void CallFire()
     {
         equipController.Fire();
-        //animController.Fire();
         cameraController.GetCamShakeRoutine();
         Controller hitTarget = attackProcess?.Attack();
     }
@@ -146,18 +153,25 @@ public class Controller : MonoBehaviourPun
 
     void CallOne()
     {
-        animController.ChangeRifle();
+        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle);
     }
     void CallTwo()
     {
-        animController.ChangePistol();
+        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol);
         inputController.ChangeFireType = Define.FireType.One;
     }
     void CallThree()
     {
-        animController.ChangeSword();
+        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword);
         inputController.ChangeFireType = Define.FireType.One;
     }
+
+    void SetRequest()
+    {
+        requestController.SetMove(moveProcess.SetMoveValue);
+        requestController.SetJump(moveProcess.Jump);
+    }
+
     void SetKeyAction()
     {
         if (mine == false)
@@ -175,7 +189,7 @@ public class Controller : MonoBehaviourPun
         if (mine == false)
             return;
         moveProcess = new CharacterTransformProcess();
-        moveProcess.Init(GetComponent<CharacterController>());
+        moveProcess.Init(GetComponent<CharacterController>(), mine);
         moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, jumpHeight, gravitySpeed);
 
         moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
@@ -195,9 +209,11 @@ public class Controller : MonoBehaviourPun
         inputController.SetRot(v => cameraController.InputDir = v);
 
         inputController.SetMoveKey(moveProcess.SetMoveValue);
+        inputController.SetKey(moveProcess.Jump, Define.Key.Space);
+        //inputController.SetKey(() => { requestController.photonView.RPC("RequestJump", RpcTarget.MasterClient); }, Define.Key.Space);
+        //inputController.SetMoveKey(v => requestController.photonView.RPC("RequestMove",RpcTarget.MasterClient, v.x, v.y));
         inputController.SetMoveType(moveProcess.SetMoveType);
         inputController.SetKey(moveProcess.Crouch, Define.Key.C);
-        inputController.SetKey(moveProcess.Jump, Define.Key.Space);
 
         moveProcess.SetMoveSpeed(walkStandSpeed, runStandSpeed, walkCrouchSpeed, runCrouchSpeed);
         moveProcess.Start();
@@ -250,19 +266,12 @@ public class Controller : MonoBehaviourPun
         => this.ReStartCoroutine(routine, ref co);
     public void StopCoroutined(ref Coroutine co)
     {
-        if(co != null)
+        if (co != null)
             StopCoroutine(co);
     }
 
-
-    PhotonView view;
-    PhotonAnimatorView animatorView;
-    PhotonTransformView transformView;
-    void GetView()
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        view = gameObject.GetOrAddComponent<PhotonView>();
-        animatorView = gameObject.GetOrAddComponent<PhotonAnimatorView>();
-        transformView = gameObject.GetOrAddComponent<PhotonTransformView>();
+        throw new NotImplementedException();
     }
-
 }

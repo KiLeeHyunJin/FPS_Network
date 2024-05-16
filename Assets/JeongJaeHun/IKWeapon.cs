@@ -10,10 +10,10 @@ public class IKWeapon : MonoBehaviour
 
     // 칼 과 수류탄이라면 Right만 넣어주기? 
 
-    [SerializeField]
+    [field : SerializeField]
     public Transform leftGrip { get; private set; }
 
-    [SerializeField] 
+    [field: SerializeField] 
     public Transform RightGrip { get; private set; }
 
     [SerializeField]

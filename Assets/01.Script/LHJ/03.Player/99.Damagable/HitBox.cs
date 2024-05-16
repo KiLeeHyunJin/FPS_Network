@@ -13,6 +13,7 @@ public class HitBox : MonoBehaviour, IDamagable
     void Start()
     {
         Collider collider = GetComponent<Collider>();
+        this.gameObject.layer = 6;
         if (collider != null && collider.isTrigger == false)
             collider.isTrigger = true;
     }
