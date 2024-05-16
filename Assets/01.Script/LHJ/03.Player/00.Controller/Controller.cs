@@ -32,6 +32,15 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] FPSCameraPosition cameraRoot;
     [SerializeField] CinemachineVirtualCamera cam;
 
+    [SerializeField] GameObject minimapIcon_m;
+    [SerializeField] GameObject minimapIcon_Ally;
+    [SerializeField] GameObject minimapIcon_Enemy;
+
+    [SerializeField] int teamCode;
+    [SerializeField] GameObject miniCam;
+
+
+
     int maxHp;
     int hp;
     bool mine;
@@ -46,15 +55,19 @@ public class Controller : MonoBehaviourPun, IPunObservable
     EquipController equipController;
     AnimationController animController;
     ProcessingController processingController;
+    EquipController equipController;
+    CharacterTransformProcess moveProcess;
+    IKAnimationController IKAnimationController;
+    
 
     RequestController requestController;
+    event Action Updates;
     event Action Updates;
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
         groundLayer = 1 << LayerMask.NameToLayer("Ground");
     }
-
     void Start()
     {
         if (PhotonNetwork.InRoom)
@@ -71,7 +84,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void Check()
     {
         CheckMine();
-        SetData();
         CollidersSetting();
         SetKeyAction();
         MoveProcessInit();
@@ -80,6 +92,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CheckMine()
     {
+        minimapIcon_m.SetActive(true);
         mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
@@ -89,10 +102,17 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         if (mine == false)
         {
+            minimapIcon_m.SetActive(false);
+            Destroy(miniCam);
             Destroy(inputController);
             Destroy(processingController);
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
+            if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
+                minimapIcon_Ally.SetActive(false);
+            else
+                minimapIcon_Enemy.SetActive(true);
+
             return;
         }
         //TeamCode = photonView.Controller.GetPhotonTeam().Code;
@@ -106,6 +126,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
+        teamCode = photonView.Controller.GetPhotonTeam().Code;
         hp = maxHp;
     }
 
