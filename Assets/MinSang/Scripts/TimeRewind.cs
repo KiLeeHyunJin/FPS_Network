@@ -10,7 +10,7 @@ public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
     public float rewindDuration = 3.0f;
     public float positionRecordInterval = 0.1f;
     public KeyCode rewindKey = KeyCode.Z;
-    public int maxHealth = 100;
+    [SerializeField] public int maxHealth = 100;
 
     private Vector3[] positionHistory;
     private int[] healthHistory;
@@ -65,7 +65,7 @@ public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
             on = true;
 
             positionHistory[historyIndex] = transform.position;
-            Debug.Log($"index = {historyIndex} , position {positionHistory[historyIndex]}");
+            // Debug.Log($"index = {historyIndex} , position {positionHistory[historyIndex]}");
             healthHistory[historyIndex] = currentHealth;
             historyIndex = (historyIndex + 1) % maxPositionHistoryCount;
             yield return new WaitForSeconds(positionRecordInterval);
@@ -84,7 +84,7 @@ public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
         while (time < rewindDuration)
         {
             int rewindIndex = (historyIndex - 1 - Mathf.FloorToInt(time / positionRecordInterval) + maxPositionHistoryCount) % maxPositionHistoryCount;
-            Debug.Log($"RewindPos {positionHistory[rewindIndex]} , index {rewindIndex} ");
+            // Debug.Log($"RewindPos {positionHistory[rewindIndex]} , index {rewindIndex} ");
             transform.position = positionHistory[rewindIndex];
             currentHealth = healthHistory[rewindIndex];
             time += Time.deltaTime;
