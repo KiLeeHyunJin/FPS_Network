@@ -9,12 +9,12 @@ public class IKAnimationController
 {
     readonly Rig rig;
 
-    readonly TwoBoneIKConstraint[] handRig;
+    readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
 
     readonly Transform[] handTransform;
     readonly Transform weaponHolder;
     readonly Controller owner;
-    readonly RigBuilder builder;
+    readonly RigBuilder rigBuilder;
 
     IKWeapon currentWeapon;
     int SetWeight { 
@@ -28,10 +28,10 @@ public class IKAnimationController
     {
         rig = _rigging;
         handTransform = new Transform[]{ _left, _right };
-        handRig = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
+        twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
         weaponHolder = _weaponHolder;
         owner = _owner;
-        builder = _builder;
+        rigBuilder = _builder;
     }
 
     public void ChangeWeapon(IKWeapon _weapon)
@@ -51,7 +51,9 @@ public class IKAnimationController
     public void EquipWeapon()
     {
         currentWeapon.transform.SetParent(weaponHolder);
-        currentWeapon.transform.SetLocalPositionAndRotation(currentWeapon.OriginPos, currentWeapon.OriginRot);
+        currentWeapon.transform.localPosition = currentWeapon.OriginPos;
+        currentWeapon.transform.localRotation = currentWeapon.OriginRot;
+        //currentWeapon.transform.SetLocalPositionAndRotation(currentWeapon.OriginPos, currentWeapon.OriginRot);
 
         owner.StartCoroutined(
             FrameEndAction((v) => { SetWeight = v; }, 1),
@@ -62,13 +64,13 @@ public class IKAnimationController
     {
         yield return new WaitForEndOfFrame();
 
-        handRig[(int)Direction.Left].data.target = currentWeapon.leftGrip;
-        handRig[(int)Direction.Right].data.target = currentWeapon.RightGrip;
+        twoBoneIKConstraint[(int)Direction.Left].data.target = currentWeapon.leftGrip;
+        twoBoneIKConstraint[(int)Direction.Right].data.target = currentWeapon.RightGrip;
 
         action?.Invoke(value);
 
-        builder.SyncLayers();
-        builder.Build();
+        //rigBuilder.SyncLayers();
+        rigBuilder.Build();
     }
     enum Direction
     {
