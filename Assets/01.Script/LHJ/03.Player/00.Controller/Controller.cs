@@ -1,5 +1,6 @@
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System;
 using System.Collections;
@@ -35,6 +36,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
     int hp;
     bool mine;
 
+    public int TeamCode { get; private set; }
+
     AttackProcess attackProcess;
     CameraController cameraController;
     PlayerInputController inputController;
@@ -67,21 +70,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void Check()
     {
-        
         CheckMine();
         SetData();
         CollidersSetting();
         SetKeyAction();
         MoveProcessInit();
-        //SetRequest();
-        if (mine)
-        {
-            Updates -= cameraController.Update;
-            Updates += cameraController.Update;
-
-            Updates -= moveProcess.Update;
-            Updates += moveProcess.Update;
-        }
+        SetUpdateAction();
     }
 
     void CheckMine()
@@ -101,6 +95,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
                 Destroy(input);
             return;
         }
+        //TeamCode = photonView.Controller.GetPhotonTeam().Code;
         cameraController = new CameraController(target, this, cameraRoot, cam, mouseSensitivity);
         cameraController.Init(ControllCharacterLayerChange);
 
@@ -132,6 +127,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void CallFire()
     {
         equipController.Fire();
+        requestController.Fire();
         cameraController.GetCamShakeRoutine();
         Controller hitTarget = attackProcess?.Attack();
     }
@@ -164,12 +160,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword);
         inputController.ChangeFireType = Define.FireType.One;
-    }
-
-    void SetRequest()
-    {
-        requestController.SetMove(moveProcess.SetMoveValue);
-        requestController.SetJump(moveProcess.Jump);
     }
 
     void SetKeyAction()
@@ -209,16 +199,24 @@ public class Controller : MonoBehaviourPun, IPunObservable
         inputController.SetRot(v => cameraController.InputDir = v);
 
         inputController.SetMoveKey(moveProcess.SetMoveValue);
-        inputController.SetKey(moveProcess.Jump, Define.Key.Space);
-        //inputController.SetKey(() => { requestController.photonView.RPC("RequestJump", RpcTarget.MasterClient); }, Define.Key.Space);
-        //inputController.SetMoveKey(v => requestController.photonView.RPC("RequestMove",RpcTarget.MasterClient, v.x, v.y));
         inputController.SetMoveType(moveProcess.SetMoveType);
         inputController.SetKey(moveProcess.Crouch, Define.Key.C);
+        inputController.SetKey(moveProcess.Jump, Define.Key.Space);
 
         moveProcess.SetMoveSpeed(walkStandSpeed, runStandSpeed, walkCrouchSpeed, runCrouchSpeed);
         moveProcess.Start();
     }
+    void SetUpdateAction()
+    {
+        if (mine)
+        {
+            Updates -= cameraController.Update;
+            Updates += cameraController.Update;
 
+            Updates -= moveProcess.Update;
+            Updates += moveProcess.Update;
+        }
+    }
     void ControllCharacterLayerChange(int layerNum)
     {
         for (int i = 0; i < FPSIgnoreObject.Length; i++) //레이어 재설정
@@ -272,6 +270,14 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        throw new NotImplementedException();
+        if(stream.IsWriting)
+        {
+            stream.SendNext(TeamCode);
+
+        }
+        else
+        {
+            TeamCode = (int)stream.ReceiveNext();
+        }
     }
 }

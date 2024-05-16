@@ -19,7 +19,8 @@ public class AnimationController : MonoBehaviourPun
     [SerializeField] Transform weaponHolder;
     [SerializeField] float dampingSpeed;
 
-    [SerializeField] IKWeapon currentTest;
+    [SerializeField] IKWeapon rifleWeapon;
+    [SerializeField] IKWeapon pistolWeapon;
 
     int JumpEnterId;
     int StandId;
@@ -36,8 +37,9 @@ public class AnimationController : MonoBehaviourPun
     readonly string TRIGGER = "CallTriggerRPC";
     private void Start()
     {
-        iKAnimation = new IKAnimationController(aimRig, leftAim, rightAim, leftHand, rightHand, weaponHolder, GetComponent<Controller>());
-        iKAnimation.ChangeWeapon(currentTest);
+        iKAnimation = new IKAnimationController(aimRig, leftAim, rightAim, leftHand, rightHand, weaponHolder, GetComponent<RigBuilder>(), GetComponent<Controller>());
+        iKAnimation.ChangeWeapon(rifleWeapon);
+        iKAnimation.EquipWeapon();
     }
     public Vector2 MoveValue
     {
@@ -115,6 +117,7 @@ public class AnimationController : MonoBehaviourPun
     }
     public void EquipWeapon()
     {
+
         iKAnimation.EquipWeapon();
     }
     [PunRPC]
@@ -145,6 +148,21 @@ public class AnimationController : MonoBehaviourPun
         {
             bool state = i == (int)type;
             anim.SetBool(weaponId[i], state);
+            if (state)
+            {
+                if (type == AnimatorWeapon.Pistol)
+                {
+                    iKAnimation.ChangeWeapon(pistolWeapon);
+                    rifleWeapon.gameObject.SetActive(false);
+                    pistolWeapon.gameObject.SetActive(true);
+                }
+                else if(type == AnimatorWeapon.Rifle)
+                {
+                    iKAnimation.ChangeWeapon(rifleWeapon);
+                    rifleWeapon.gameObject.SetActive(true);
+                    pistolWeapon.gameObject.SetActive(false);
+                }
+            }
         }
     }
 
