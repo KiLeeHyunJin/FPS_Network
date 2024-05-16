@@ -1,16 +1,25 @@
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
-using static SoundManager;
+using UnityEngine.Animations.Rigging;
 
 
 public class AnimationController : MonoBehaviourPun
 {
+    IKAnimationController iKAnimation;
     Animator anim;
     public Animator Anim { get { return anim; } }
     Coroutine[] dampingCo;
 
+    [SerializeField] Rig aimRig;
+    [SerializeField] TwoBoneIKConstraint leftAim;
+    [SerializeField] TwoBoneIKConstraint rightAim;
+    [SerializeField] Transform leftHand;
+    [SerializeField] Transform rightHand;
+    [SerializeField] Transform weaponHolder;
     [SerializeField] float dampingSpeed;
+
+    [SerializeField] IKWeapon currentTest;
 
     int JumpEnterId;
     int StandId;
@@ -25,14 +34,18 @@ public class AnimationController : MonoBehaviourPun
     int[] weaponId;
 
     readonly string TRIGGER = "CallTriggerRPC";
-
+    private void Start()
+    {
+        iKAnimation = new IKAnimationController(aimRig, leftAim, rightAim, leftHand, rightHand, weaponHolder, GetComponent<Controller>());
+        iKAnimation.ChangeWeapon(currentTest);
+    }
     public Vector2 MoveValue
     {
         set
         {
-            this.ReStartCoroutine(DampingAnimationRoutine(value.x, dampingSpeed, AnimatorFloatValue.X), 
+            this.ReStartCoroutine(DampingAnimationRoutine(value.x, dampingSpeed, AnimatorFloatValue.X),
                 ref dampingCo[(int)AnimatorFloatValue.X]);
-            this.ReStartCoroutine(DampingAnimationRoutine(value.y, dampingSpeed, AnimatorFloatValue.Z), 
+            this.ReStartCoroutine(DampingAnimationRoutine(value.y, dampingSpeed, AnimatorFloatValue.Z),
                 ref dampingCo[(int)AnimatorFloatValue.Z]);
         }
     }
@@ -40,7 +53,7 @@ public class AnimationController : MonoBehaviourPun
     {
         set
         {
-            this.ReStartCoroutine(DampingAnimationRoutine(value, dampingSpeed, AnimatorFloatValue.Y), 
+            this.ReStartCoroutine(DampingAnimationRoutine(value, dampingSpeed, AnimatorFloatValue.Y),
                 ref dampingCo[(int)AnimatorFloatValue.Y]);
         }
     }
@@ -66,7 +79,7 @@ public class AnimationController : MonoBehaviourPun
         if (anim.GetBool(weaponId[(int)type]) == false)
         {
             OnWeapon(type);
-            photonView.RPC(TRIGGER, RpcTarget.All,ChangeWeaponId);
+            photonView.RPC(TRIGGER, RpcTarget.All, ChangeWeaponId);
         }
     }
 
@@ -100,11 +113,18 @@ public class AnimationController : MonoBehaviourPun
     {
         SetState(AnimatorState.JumpFinish, true);
     }
-
+    public void EquipWeapon()
+    {
+        iKAnimation.EquipWeapon();
+    }
     [PunRPC]
     void CallTriggerRPC(int triggerId)
     {
         anim.SetTrigger(triggerId);
+        if (triggerId == ChangeWeaponId)
+        {
+            iKAnimation.DequipWeapon();
+        }
     }
 
     void SetState(AnimatorState type, bool state)

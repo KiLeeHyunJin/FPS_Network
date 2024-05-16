@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,14 +6,22 @@ using UnityEngine.Animations.Rigging;
 
 public class IKAnimationController
 {
-    Rig rig;
+    readonly Rig rig;
 
-    Transform[] handTransform;
-    TwoBoneIKConstraint[] handRig;
+    readonly TwoBoneIKConstraint[] handRig;
 
-    Transform weaponHolder;
+    readonly Transform[] handTransform;
+    readonly Transform weaponHolder;
+    readonly Controller owner;
+
     IKWeapon currentWeapon;
-    Controller owner;
+    int SetWeight { 
+        set 
+        { 
+            rig.weight = value;
+            Debug.Log($"Set Weight Value {value}");
+        } 
+    }
     public IKAnimationController(Rig _rigging, TwoBoneIKConstraint _leftRig, TwoBoneIKConstraint _rightRig, Transform _left, Transform _right, Transform _weaponHolder, Controller _owner)
     {
         rig = _rigging;
@@ -27,43 +36,29 @@ public class IKAnimationController
         currentWeapon = _weapon;
     }
 
-    public void CurrenWeaponDequip()
+    public void DequipWeapon()
     {
-        rig.weight = 0;
+        owner.StartCoroutined(
+            FrameEndAction((v) => { SetWeight = v; }, 0), 
+            ref co);
         currentWeapon.transform.SetParent(handTransform[(int)Direction.Right]);
         currentWeapon.transform.localPosition = Vector3.zero;
     }
-    public void CurrenWeaponEquip()
+
+    public void EquipWeapon()
     {
-        rig.weight = 1;
         currentWeapon.transform.SetParent(weaponHolder);
-        currentWeapon.transform.localPosition = currentWeapon.OriginPos;
-        currentWeapon.transform.localRotation = currentWeapon.OriginRot;
+        currentWeapon.transform.SetLocalPositionAndRotation(currentWeapon.OriginPos, currentWeapon.OriginRot);
+        owner.StartCoroutined(
+            FrameEndAction((v) => { SetWeight = v; }, 1),
+            ref co);
     }
-    public void Swap()
+    Coroutine co;
+    IEnumerator FrameEndAction(Action<int> action, int value)
     {
-        owner.StartCoroutined(SwapRoutine(), ref swapCo);
+        yield return new WaitForEndOfFrame();
+        action?.Invoke(value);
     }
-    Coroutine swapCo;
-    IEnumerator SwapRoutine()
-    {
-        float time = 1;
-        currentWeapon.transform.SetParent(handTransform[(int)Direction.Right]);
-
-        while (time > 0)
-        {
-            time -= Time.deltaTime;
-            rig.weight = time;
-            yield return null;
-        }
-        while(time < 1)
-        {
-            time += Time.deltaTime;
-            rig.weight = time;
-            yield return null;
-        }
-    }
-
     enum Direction
     {
         Left,Right,END
