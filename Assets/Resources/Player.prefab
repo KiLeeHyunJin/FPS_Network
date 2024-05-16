@@ -6017,6 +6017,11 @@ MonoBehaviour:
   target: {fileID: 4501719902224000900}
   cameraRoot: {fileID: 425567504047030535}
   cam: {fileID: 8114579742163348247}
+  minimapIcon_m: {fileID: 0}
+  minimapIcon_Ally: {fileID: 0}
+  minimapIcon_Enemy: {fileID: 0}
+  teamCode: 0
+  miniCam: {fileID: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16257,7 +16262,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.038196422, y: 1.6105912, z: -0.041102737}
+  m_LocalPosition: {x: 0.038196508, y: 1.6105909, z: -0.041103207}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -55,13 +55,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
     EquipController equipController;
     AnimationController animController;
     ProcessingController processingController;
-    EquipController equipController;
-    CharacterTransformProcess moveProcess;
     IKAnimationController IKAnimationController;
     
 
     RequestController requestController;
-    event Action Updates;
     event Action Updates;
     private void Awake()
     {
