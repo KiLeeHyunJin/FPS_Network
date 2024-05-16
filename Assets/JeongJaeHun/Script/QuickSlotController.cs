@@ -61,7 +61,36 @@ public class ChangeWeaponSlot : MonoBehaviour
         }
     }
 
+    // Temp 로 1~5 번 슬롯까지 input 눌러서 바꾸는거 실험해보자.
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Excute(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Excute(2);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Excute(3);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Excute(4);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Excute(5);
+
+        }
+
+    }
 
 
 

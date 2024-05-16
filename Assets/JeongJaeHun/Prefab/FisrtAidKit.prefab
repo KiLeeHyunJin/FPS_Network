@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4609466476737162704}
   - component: {fileID: 3829247309958636592}
   - component: {fileID: 2078912250362247691}
+  - component: {fileID: 6989577477821207363}
   m_Layer: 0
   m_Name: FisrtAidKit
   m_TagString: Untagged
@@ -105,3 +106,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.9540792, y: 2.5032947, z: 0.4149846}
   m_Center: {x: 0, y: 1.2310425, z: 0.20749219}
+--- !u!114 &6989577477821207363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930948167494740121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c46dbf81a0893784b9b6db69fc40bc04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heal: 50
+  slider: {fileID: 0}
+  text: {fileID: 0}

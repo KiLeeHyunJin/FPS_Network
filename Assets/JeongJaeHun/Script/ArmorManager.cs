@@ -15,6 +15,8 @@ public class ArmorManager : MonoBehaviour
     // 디펜스 , 듀라빌리티 이용해서 그걸 equip에서 불러와서 
     // 자신의 방어구 변경 해주면 되지용 
 
+    public Sprite ArmorSprite; 
+
 
 
 
