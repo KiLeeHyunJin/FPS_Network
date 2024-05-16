@@ -1,39 +1,61 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
-using Photon.Pun;
+using static Define;
 
-public class Mine : MonoBehaviourPun
+public class Mine : MonoBehaviour
 {
-    public int damageAmount = 50;
+    [SerializeField]
+    private float explosionRadius = 5.0f;
+    [SerializeField]
+    private float explosionForce = 10.0f;
+    [SerializeField]
+    private float damage = 50.0f;
+
+    private bool hasExploded = false;
+    private SphereCollider detectionCollider;
+
+    void Start()
+    {
+        detectionCollider = gameObject.AddComponent<SphereCollider>();
+        detectionCollider.isTrigger = true;
+        detectionCollider.radius = explosionRadius;
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        // Photon을 통한 네트워크 동기화
-        if (photonView.IsMine)
+        if (!hasExploded && other.CompareTag("Player"))
         {
-            PhotonView targetPhotonView = other.GetComponent<PhotonView>();
-            if (targetPhotonView != null)
-            {
-                // 모든 클라이언트에 피해를 전달
-                photonView.RPC("ApplyDamage", RpcTarget.All, targetPhotonView.ViewID);
-            }
-
-            // 지뢰 파괴
-            PhotonNetwork.Destroy(gameObject);
+            hasExploded = true;
+            Explode();
         }
     }
 
-    [PunRPC]
-    void ApplyDamage(int targetViewID)
+    private void Explode()
     {
-        PhotonView targetView = PhotonView.Find(targetViewID);
-        if (targetView != null)
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+
+        foreach (Collider hit in colliders)
         {
-            IDamagable target = targetView.GetComponent<IDamagable>();
-            if (target != null)
+            Rigidbody rb = hit.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                target.TakeDamage(damageAmount);
-                Debug.Log($"Mine triggered and dealt {damageAmount} damage to {targetView.Owner.NickName}");
+                rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+            }
+
+            IDamagable damagable = hit.GetComponent<IDamagable>();
+            if (damagable != null)
+            {
+                damagable.TakeDamage((int)damage);
             }
         }
+
+        Destroy(gameObject);
     }
+
+    // 사용자 정의를 위한 속성들
+    public float ExplosionRadius { get => explosionRadius; set => explosionRadius = value; }
+    public float ExplosionForce { get => explosionForce; set => explosionForce = value; }
+    public float Damage { get => damage; set => damage = value; }
 }

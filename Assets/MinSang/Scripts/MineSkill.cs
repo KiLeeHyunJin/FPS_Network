@@ -1,59 +1,34 @@
-using UnityEngine;
-using Photon.Pun;
-using Firebase.Database;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class MineSkill : MonoBehaviourPun, ISkill
+public class MineSkill : MonoBehaviour
 {
-    public GameObject minePrefab;
-    public int numberOfMines;
-    public int baseDamageAmount = 50;
-    public int damageIncrement = 10;
+    [SerializeField]
+    private GameObject minePrefab;
+    [SerializeField]
+    private Transform mineSpawnPoint;
+    [SerializeField]
+    private float cooldownTime = 5.0f;
 
-    private DatabaseReference dbReference;
+    private float nextMineTime = 0.0f;
 
-    public void Activate()
+    void Update()
     {
-        
-    }
-    public void Deactivate()
-    {
-        
-    }
-    void Start()
-    {
-        // Firebase Database 초기화
-        dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-    }
-
-    public void DeployMines(Vector3 position)
-    {
-        List<Dictionary<string, object>> mineDataList = new List<Dictionary<string, object>>();
-
-        for (int i = 0; i < numberOfMines; i++)
+        if (minePrefab == null || mineSpawnPoint == null)
         {
-            Vector3 minePosition = position + new Vector3(i, 0, 0); // 위치
-            GameObject mine = PhotonNetwork.Instantiate(minePrefab.name, minePosition, Quaternion.identity);
-            Mine mineScript = mine.GetComponent<Mine>();
-
-            if (mineScript != null)
-            {
-                mineScript.damageAmount = baseDamageAmount + (damageIncrement * i);
-            }
-
-            // Firebase용 데이터 생성
-            Dictionary<string, object> mineData = new Dictionary<string, object>
-            {
-                { "positionX", minePosition.x },
-                { "positionY", minePosition.y },
-                { "positionZ", minePosition.z },
-                { "damageAmount", mineScript.damageAmount }
-            };
-            mineDataList.Add(mineData);
+            return;
         }
 
-        // Firebase에 지뢰 배치 데이터 저장
-        string userId = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser.UserId;
-        dbReference.Child("mineDeployments").Child(userId).SetValueAsync(mineDataList);
+        if (Input.GetButtonDown("Fire1") && Time.time > nextMineTime)
+        {
+            nextMineTime = Time.time + cooldownTime;
+            Instantiate(minePrefab, mineSpawnPoint.position, mineSpawnPoint.rotation);
+        }
     }
+
+    // 사용자 정의를 위한 속성들
+    public GameObject MinePrefab { get => minePrefab; set => minePrefab = value; }
+    public Transform MineSpawnPoint { get => mineSpawnPoint; set => mineSpawnPoint = value; }
+    public float CooldownTime { get => cooldownTime; set => cooldownTime = value; }
 }
