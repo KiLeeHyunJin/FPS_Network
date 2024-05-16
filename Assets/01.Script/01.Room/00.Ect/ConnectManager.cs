@@ -24,6 +24,9 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     [SerializeField] RandomMatchPanel randomPanel;
     LobbyData data;
     private ClientState state;
+
+    Coroutine fadeOut;
+    Coroutine fadeIn;
     private void Awake()
     {
         data = GetComponent<LobbyData>();
@@ -70,13 +73,15 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     }
     private void SetActivePanel(Panel panel)
     {
-        StartCoroutine(FadeOut());
+        
+        if (fadeIn != null)
+            StopCoroutine(fadeIn);
         loginPanel.gameObject?.SetActive(panel == Panel.Login);
         menuPanel.gameObject?.SetActive(panel == Panel.Menu);
         roomPanel.gameObject?.SetActive(panel == Panel.Room);
         lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
         randomPanel.gameObject?.SetActive(panel == Panel.Random);
-        StartCoroutine(FadeIn());
+        fadeIn = StartCoroutine(FadeIn());
     }
     public override void OnJoinedRoom()
     {

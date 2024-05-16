@@ -13,6 +13,7 @@ public static class DefinePropertyKey
     public static string CHAT = "Chat";
     public static string START = "Start";
     public static string LOADVALUE = "LoadValue";
+    public static string LOADCOMPLETE = "LoadComplete";
 }
 public static class CustomProperty
 {
