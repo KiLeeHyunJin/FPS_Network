@@ -7,7 +7,9 @@ public class Coin : MonoBehaviour,IInteractable
 {
     // 실제 생성되는 Coin 프리팹에 붙을 코인 아이템 
 
-    public Inventory Inventory;
+    public Inventory Inventory; //인벤토리 -> 플레이어의 holder 이므로 자식임 -> 그냥 인스펙터로 첨부하자. 
+
+    // 그냥 맵에 생성해 두는 방식의 Coin 으로 하자. 
 
     public enum CoinType
     {
@@ -19,6 +21,7 @@ public class Coin : MonoBehaviour,IInteractable
     private void Start()
     {
         coinValue=(int)(GetRandomEnumValue());
+        
     }
 
     public CoinType GetRandomEnumValue()

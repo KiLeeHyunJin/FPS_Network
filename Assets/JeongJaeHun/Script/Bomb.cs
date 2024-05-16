@@ -29,6 +29,10 @@ public class Bomb : IKWeapon
     [Tooltip("폭발 이펙트")]
     public ParticleSystem bomb_ParticleSystem;
 
+    [Tooltip("발사 후 몇 초 후 폭발할지 딜레이")]
+    public int delayTime; 
+
+
     //[Tooltip("폭발 이펙트 관련")]
 
     // 인보크 등 코루틴이던 다른 곳에서 실행 시켜줄? 아니면 여기서 실행할 수도 있고 생각해보자. 
@@ -62,6 +66,7 @@ public class Bomb : IKWeapon
         base.Awake();
     }
 
+    
 
 
 
