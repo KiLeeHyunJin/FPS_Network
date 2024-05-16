@@ -12,6 +12,7 @@ public class PlayerInputController : MonoBehaviour
     Action<Vector2> rotateAction;
     Action<bool> moveTypeAction;
     Controller owner;
+    InputActionAsset inputs;
     public Controller Owner { set { owner = value; } }
     public Define.InputWeaponType CurrentWeapon { get; private set; }
     public Define.FireType MainFireType { get; private set; }
@@ -25,6 +26,16 @@ public class PlayerInputController : MonoBehaviour
                 MainFireType = Fire;
         }
     }
+    public bool InputActive
+    {
+        set
+        {
+            if (value)
+                inputs.Enable();
+            else
+                inputs.Disable();
+        }
+    }
     public void SetKey(Action method, Define.Key key) => actions[(int)key] = method;
     public void SetMoveKey(Action<Vector2> moveMethod) => moveAction = moveMethod;
     public void SetRot(Action<Vector2> rotMethod) => rotateAction = rotMethod;
@@ -32,7 +43,7 @@ public class PlayerInputController : MonoBehaviour
 
     public void Init()
     {
-        //InputActionAsset inputs = GetComponent<PlayerInput>().actions;
+        inputs = GetComponent<PlayerInput>().actions;
         ChangeFireType = Define.FireType.One;
         actions = new Action[(int)Define.Key.END];
     }

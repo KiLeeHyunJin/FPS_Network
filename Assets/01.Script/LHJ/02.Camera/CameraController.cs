@@ -4,12 +4,14 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 public class CameraController //: MonoBehaviour
 {
     Action<int> SetUserCharacterLayer;
+    CinemachineVirtualCamera cam;
+    CinemachineBasicMultiChannelPerlin noise;
 
-    readonly CinemachineBasicMultiChannelPerlin noise;
     readonly FPSCameraPosition cameraRoot;
     readonly Controller owner;
     readonly Transform target;
@@ -33,22 +35,23 @@ public class CameraController //: MonoBehaviour
 
     public Vector2 InputDir { private get; set; }
     public float MouseSensitivity { set { mouseSensitivity = value; } }
-
-
-    public CameraController (Transform _aim, Controller _owner, FPSCameraPosition _cameraRoot, CinemachineVirtualCamera _cam, float _mouseSensitivity)
+    public int CameraPriority { set { cam.Priority = value; } }
+    Action updateAction;
+    public CameraController (Transform _aim, Controller _owner, FPSCameraPosition _cameraRoot)
     {
+        cameraRoot = _cameraRoot;
         target = _aim;
         owner = _owner;
-        cameraRoot = _cameraRoot;
+    }
+    public void Init(Action<int> _layerMethod, CinemachineVirtualCamera _cam, float _mouseSensitivity)
+    {
         mouseSensitivity = _mouseSensitivity;
+        cam = _cam;
         _cam.Priority = 10;
         noise = _cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         noise.m_AmplitudeGain = 0f;
         noise.m_FrequencyGain = 0f;
-    }
 
-    public void Init(Action<int> _layerMethod)
-    {
         int ignoreLayer = LayerMask.NameToLayer("FPSIgnore") ; //무시할 레이어 설정
         int iconignore1 = LayerMask.NameToLayer("MyMiniCam");
         int iconignore2 = LayerMask.NameToLayer("SearchEnemyCam");
@@ -59,9 +62,13 @@ public class CameraController //: MonoBehaviour
 
         Camera.main.cullingMask = ~ignoreFlag; //컬링 레이어 설정
         Cursor.lockState = CursorLockMode.Locked;
-    }
 
+        updateAction = UpdateMethod;
+    }
     public void Update()
+        => updateAction.Invoke();
+
+    void UpdateMethod()
     {
         target.position = Camera.main.transform.position + Camera.main.transform.forward * distance;// 바라볼 방향
         float value = mouseSensitivity * Time.deltaTime; //감도 계산
@@ -78,15 +85,20 @@ public class CameraController //: MonoBehaviour
         owner.transform.Rotate(Vector3.up, xValue); //캐릭터 좌우 회전
         cameraRoot.transform.localRotation = Quaternion.Euler(yRotation, 0, 0); //카메라 상하 회전
     }
-    public void CrouchCameraPosition()
+    public void ChangeView(ViewType viewType)
     {
-
+        if(owner.Mine)
+        {
+            Transform pos = viewType == ViewType.Stand ? cameraRoot.StandPos : cameraRoot.CrouchPos;
+            cam.Follow = pos;
+        }
     }
-    public void StandCameraPosition()
+
+    public void Spectator(int value)
     {
-
+        cam.Priority = value;
+        cam.LookAt = target;
     }
-
 
     Coroutine shakeCo;
     public void GetCamShakeRoutine()
@@ -105,6 +117,7 @@ public class CameraController //: MonoBehaviour
 
         owner.StartCoroutined(Shake(),ref shakeCo);
     }
+
     IEnumerator Shake()
     {
         while (shakeTimer > 0f)
@@ -130,5 +143,9 @@ public class CameraController //: MonoBehaviour
         noise.m_FrequencyGain = 0f;
     }
 
+    public enum ViewType
+    { 
+        Stand, Crouch, END
+    }
 
 }

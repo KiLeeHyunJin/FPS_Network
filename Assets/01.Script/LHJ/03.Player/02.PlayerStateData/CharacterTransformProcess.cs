@@ -118,9 +118,13 @@ public class CharacterTransformProcess
     {
         IsCrouch = !IsCrouch;
         if (IsCrouch)
+        {
             motions[(int)AnimationController.MoveType.Crouch]?.Invoke();
+        }
         else
+        {
             motions[(int)AnimationController.MoveType.Stand]?.Invoke();
+        }
         SetMoveType(IsRun);
     }
     public void Jump()

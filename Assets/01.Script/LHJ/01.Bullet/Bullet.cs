@@ -1,3 +1,4 @@
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,19 +6,18 @@ using UnityEngine;
 
 public class Bullet : PooledObject
 {
-    (int damage, int id , float moveSpeed) data;
+    (int damage, float moveSpeed) data;
     int teamCode;
     Vector3 beforePos;
     Vector3 direction;
     RaycastHit hitInfo;
 
-    public void SetData(float _moveSpeed, int _damage, int _shooterId, int _shooterTeam, float _time)
+    public void SetData(float _moveSpeed, int _damage, int _shooterTeam, float _time)
     {
-        data = (_damage, _shooterId, _moveSpeed);
+        data = (_damage, _moveSpeed);
         //teamCode = _shooterTeam;
         beforePos = transform.position;
         direction = transform.forward;
-
         HitCheck(_time);
     }
     private void Update()
@@ -28,11 +28,11 @@ public class Bullet : PooledObject
     {
         if (hitInfo.collider != null)
         {
-            if (hitInfo.collider.TryGetComponent<Controller>(out Controller player))
+            if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                if(teamCode != player.TeamCode)
+                //if(teamCode != player.TeamCode)
                 {
-                    player.Damage(data.damage);
+                    damagable.TakeDamage(data.damage);
                 }
             }
             else

@@ -42,8 +42,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
 
     int maxHp;
-    int hp;
-    bool mine;
+    [SerializeField] int hp;
+    public bool Mine { get; private set; }
 
     public int TeamCode { get; private set; }
 
@@ -73,11 +73,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Destroy(gameObject);
     }
 
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(foot.transform.position, GetComponent<CharacterController>().radius);
-    }
     void Check()
     {
         CheckMine();
@@ -90,19 +85,22 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void CheckMine()
     {
         //minimapIcon_m.SetActive(true);
-        mine = photonView.IsMine;
+        Mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
 
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
+        cameraController = new CameraController(target, this, cameraRoot);
 
-        if (mine == false)
+        if (Mine == false)
         {
             minimapIcon_m.SetActive(false);
+            cam.gameObject.SetActive(false);
             Destroy(miniCam);
             Destroy(inputController);
             Destroy(processingController);
+
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
@@ -112,18 +110,18 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
             return;
         }
-        //TeamCode = photonView.Controller.GetPhotonTeam().Code;
-        cameraController = new CameraController(target, this, cameraRoot, cam, mouseSensitivity);
-        cameraController.Init(ControllCharacterLayerChange);
+        cameraController.Init(ControllCharacterLayerChange, cam, mouseSensitivity);
+        animController.SetChangeViewAction(cameraController.ChangeView);
 
         attackProcess = new AttackProcess(this);
         inputController.Owner = this;
+        SetData();
     }
 
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
-        teamCode = photonView.Controller.GetPhotonTeam().Code;
+        //teamCode = photonView.Controller.GetPhotonTeam().Code;
         hp = maxHp;
     }
 
@@ -182,7 +180,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void SetKeyAction()
     {
-        if (mine == false)
+        if (Mine == false)
             return;
         inputController.Init();
         inputController.SetKey(CallReload, Define.Key.R);
@@ -191,13 +189,14 @@ public class Controller : MonoBehaviourPun, IPunObservable
         inputController.SetKey(CallThree, Define.Key.F3);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
+        
     }
     void MoveProcessInit()
     {
-        if (mine == false)
+        if (Mine == false)
             return;
         moveProcess = new CharacterTransformProcess();
-        moveProcess.Init(GetComponent<CharacterController>(), mine);
+        moveProcess.Init(GetComponent<CharacterController>(), Mine);
         moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, jumpHeight, gravitySpeed);
 
         moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
@@ -226,7 +225,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void SetUpdateAction()
     {
-        if (mine)
+        if (Mine)
         {
             Updates -= cameraController.Update;
             Updates += cameraController.Update;
@@ -259,14 +258,17 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     public void Damage(int _damage)
     {
+        if (requestController.Hit() == false)
+            return;
+
         hp -= equipController.ShieldCheck(_damage);
         if (hp <= 0)
         {
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
             ControllCharacterLayerChange(0);
-            Destroy(cameraRoot.gameObject); //컨트롤 파괴시 시네머신 카메라도 같이 파괴
-            Destroy(inputController.gameObject);
+            cameraController.CameraPriority = 0;
+            inputController.InputActive = false;
         }
     }
 

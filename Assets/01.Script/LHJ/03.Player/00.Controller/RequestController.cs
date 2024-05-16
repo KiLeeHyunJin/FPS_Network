@@ -9,7 +9,7 @@ public class RequestController : MonoBehaviourPun
     Action jumpAction;
     Action<Vector2> moveAction;
     Controller controller;
-
+    [SerializeField] Bullet bulletPrefab;
     bool isMine;
     const string FireOnMaster = "FireOnMasterRPC";
     const string FireOnEffect = "FireOnEffectRPC";
@@ -26,14 +26,15 @@ public class RequestController : MonoBehaviourPun
 
     public void Fire()
     {
-        photonView.RPC(FireOnMaster, RpcTarget.MasterClient);
+        photonView.RPC(FireOnMaster, RpcTarget.AllViaServer);
         photonView.RPC(FireOnEffect, RpcTarget.AllViaServer);
     }
 
     [PunRPC]
     public void FireOnMasterRPC()
     {
-        //탄알 생성
+        Bullet bullet = Instantiate(bulletPrefab, transform.position + transform.forward + Vector3.up, transform.rotation);
+        bullet.SetData(3, 3, 0, 0);
     }
 
     [PunRPC]
@@ -42,8 +43,12 @@ public class RequestController : MonoBehaviourPun
         //머즐 , 쉘 , 사운드
     }
 
-    public void Hit()
+    public bool Hit()
     {
-
+        if(PhotonNetwork.IsMasterClient)
+        {
+            return true;
+        }
+        return false;
     }
 }

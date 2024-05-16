@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -8,6 +9,7 @@ public class AnimationController : MonoBehaviourPun
 {
     IKAnimationController iKAnimation;
     Animator anim;
+    Action<CameraController.ViewType> ChangeViewAction;
     public Animator Anim { get { return anim; } }
     Coroutine[] dampingCo;
 
@@ -59,6 +61,8 @@ public class AnimationController : MonoBehaviourPun
                 ref dampingCo[(int)AnimatorFloatValue.Y]);
         }
     }
+    public void SetChangeViewAction(Action<CameraController.ViewType> action)
+        => ChangeViewAction = action;
     public void Crouch(bool state)
     {
         int standType = state ? CrouchId : StandId;
@@ -127,6 +131,14 @@ public class AnimationController : MonoBehaviourPun
         if (triggerId == ChangeWeaponId)
         {
             iKAnimation.DequipWeapon();
+        }
+        else if(triggerId == CrouchId)
+        {
+            ChangeViewAction?.Invoke(CameraController.ViewType.Crouch);
+        }
+        else if(triggerId == StandId)
+        {
+            ChangeViewAction?.Invoke(CameraController.ViewType.Stand);
         }
     }
 
