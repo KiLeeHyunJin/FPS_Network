@@ -34,6 +34,7 @@ public class CameraController //: MonoBehaviour
     public Vector2 InputDir { private get; set; }
     public float MouseSensitivity { set { mouseSensitivity = value; } }
 
+
     public CameraController (Transform _aim, Controller _owner, FPSCameraPosition _cameraRoot, CinemachineVirtualCamera _cam, float _mouseSensitivity)
     {
         target = _aim;
@@ -77,6 +78,15 @@ public class CameraController //: MonoBehaviour
         owner.transform.Rotate(Vector3.up, xValue); //캐릭터 좌우 회전
         cameraRoot.transform.localRotation = Quaternion.Euler(yRotation, 0, 0); //카메라 상하 회전
     }
+    public void CrouchCameraPosition()
+    {
+
+    }
+    public void StandCameraPosition()
+    {
+
+    }
+
 
     Coroutine shakeCo;
     public void GetCamShakeRoutine()

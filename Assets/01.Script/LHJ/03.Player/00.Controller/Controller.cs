@@ -89,7 +89,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CheckMine()
     {
-        minimapIcon_m.SetActive(true);
+        //minimapIcon_m.SetActive(true);
         mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
