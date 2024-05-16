@@ -12,27 +12,27 @@ public class Inventory : MonoBehaviour
     public int Gold { get; set; }
     public TextMeshProUGUI goldText;
 
-    [SerializeField]
-    public Item item;
+    
+    private  Item item; //이 부분 p[ublic 참조 해야하나? 아닐 것 같은데 
 
-    public int slotIndex; 
+    // int slotIndex; --> 미사용
 
 
     // 획득한 아이템 --> 일단 구매라고 생각하고 하자. 획득은 그냥 땅에 떨군거 주워먹으면 되서...
     // 캐릭터 trigger GUn 체크 --> 이름 가져와서 자기 이름똑같은 Holder의 자식 active 해주면됨. 
     
-    public Image itemImage; // 사실 이부분은 크게 중요하지는 않은듯함. -> hud에서 스프라이트 바꿔주면되서.. 
+    //public Image itemImage; --> 사실 이부분은 크게 중요하지는 않은듯함. -> hud에서 스프라이트 바꿔주면되서.. 
 
     // private List<GameObject> slotInventory= new List<GameObject>(); --> 나중에 list 인벤토리 필요할 때 
 
     
 
     [SerializeField]
-    private Slot[] slots; //슬롯 배열 
+   // private Slot[] slots; //슬롯 배열 
 
     private void Start()
     {
-       slots= gameObject.GetComponentsInChildren<Slot>();
+       //slots= gameObject.GetComponentsInChildren<Slot>();
 
         goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
 

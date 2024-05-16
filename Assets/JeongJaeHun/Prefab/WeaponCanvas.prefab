@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 2508323028576791547}
   - component: {fileID: 8331928872060739653}
   - component: {fileID: 8197444910411128518}
+  - component: {fileID: 3080685017446479605}
   m_Layer: 5
   m_Name: BombPanel
   m_TagString: Untagged
@@ -211,6 +212,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3080685017446479605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 673515672188592618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe89fca3fea7424cac57cc4e76c3f55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1314656105938012601
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +479,7 @@ GameObject:
   - component: {fileID: 1852203600789333789}
   - component: {fileID: 5287436101499471262}
   - component: {fileID: 8193766486599671185}
-  - component: {fileID: 5373579441628359153}
+  - component: {fileID: 8857876149310064023}
   m_Layer: 5
   m_Name: SwordPanel
   m_TagString: Untagged
@@ -533,7 +546,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5373579441628359153
+--- !u!114 &8857876149310064023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -542,13 +555,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4774074298799921999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55fff67627c85e94693f871a6dc9247d, type: 3}
+  m_Script: {fileID: 11500000, guid: 79701be5dbb43ea47a5713862818c1e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theGunController: {fileID: 0}
-  go_BulletHUD: {fileID: 4774074298799921999}
-  gunImage: {fileID: 3227803956598942168}
-  textBullet: {fileID: 6452714481019109138}
 --- !u!1 &5823509001122650286
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,7 +697,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -32, y: 148}
+  m_AnchoredPosition: {x: -20.2, y: 107}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &5087280452639780003

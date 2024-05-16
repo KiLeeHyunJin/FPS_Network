@@ -65,28 +65,28 @@ public class ChangeWeaponSlot : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Excute(1);
+            Excute(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Excute(2);
+            Excute(1);
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Excute(3);
+            Excute(2);
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            Excute(4);
+            Excute(3);
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            Excute(5);
+            Excute(4);
 
         }
 

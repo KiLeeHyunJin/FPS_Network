@@ -4,9 +4,17 @@ using UnityEngine;
 public class BombController : MonoBehaviour
 {
     private Camera mainCamera; //메인 카메라
-    [SerializeField] private Bomb currentBomb; //현재 들고 있는 폭탄 --> 수류탄 프리팹이나 마찬가지 아니냐?
+    
     [SerializeField] LineRenderer lineRenderer;
     [SerializeField] float throwPower; //수류탄 투척력
+
+    [SerializeField] private Bomb currentBomb; //현재 들고 있는 폭탄 --> 수류탄 프리팹이나 마찬가지 아니냐?
+
+    
+
+
+    public Bomb GetBomb() { return currentBomb; }
+
 
     private void Start()
     {

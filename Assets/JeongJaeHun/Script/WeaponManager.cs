@@ -48,11 +48,11 @@ public class WeaponManager : MonoBehaviour
     [SerializeField]
     private GunController theGunController; // 총 일땐 --> 1 2번 무기 이면 총 상태 on 해주기.
     [SerializeField]
-    private CloseWeaponController theCloseWeaponController; //3번 칼일 때는 칼 on 해주기. 
+    private CloseWeapon theCloseWeaponController; //3번 칼일 때는 칼 on 해주기. --> 이 부분 생각좀 해보자. 
     [SerializeField]
     private BombController theBombController; // 4 5 번일 때 4: 수류탄 5: 섬광탄 on 해주기.
 
-    public Animator currentWeaponAnim;
+    //public Animator currentWeaponAnim; --> 애니 메이션 여기서 작업안할듯? 
 
 
     private void Start()

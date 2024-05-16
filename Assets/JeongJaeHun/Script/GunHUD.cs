@@ -21,6 +21,11 @@ public class GunHUD : MonoBehaviour
     // 총알 개수를 텍스트 ui에 반영 
     public TextMeshProUGUI textBullet;
 
+
+    //다른 스크립트에서 slot을 on/off 할 때 이 관련 hud를 끄고 켜주고 하면 되니까... 
+    // 그냥 이 hud 스크립트는 여기서 그냥 돌리자. (분리는 다른 스크립트에서 해주면됨. ) 
+
+
     private void Update()
     {
         CheckUI(); // 이거 무기 종류마다 패널을 바꾸자.

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GunController : MonoBehaviour
@@ -40,12 +41,26 @@ public class GunController : MonoBehaviour
 
     private void Start()
     {
-        originPos = Vector3.zero;
-        audioSource=GetComponent<AudioSource>();
-        WeaponManager.currentWeapon=currentGun.GetComponent<Transform>();
+        
+        originPos = Vector3.zero;       
+        WeaponManager.currentWeapon=currentGun.GetComponent<Transform>(); //이부분 transform 으로 해주는게 맞나 ??? 
         //기본적인 디폴트 무기를 Gun으로 삼기 위해 currentWeapon에 자기 자신의 transform을 할당해줌
         audioSource = GetComponent<AudioSource>();
         //WeaponManager.currentWeaponAnim=currentGun.anim;
+
+        //main 카메라 가져오기 --> 왜 몾찾음?? 
+        theCam = Camera.main;
+
+        if(theCam==null)
+        {
+            Debug.Log("널널");
+        }
+        else if(theCam!=null)
+        {
+            Debug.Log("널 널 아님아님");
+        }
+     
+
     }
 
     private void Update()
