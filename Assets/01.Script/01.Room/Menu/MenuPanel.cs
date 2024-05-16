@@ -12,7 +12,7 @@ using System;
 using System.Text;
 using System.Collections;
 using UnityEngine.EventSystems;
-public class MenuPanel : MonoBehaviour,IPointerEnterHandler
+public class MenuPanel : MonoBehaviour
 {
     [SerializeField] Image PlayButton;
     [SerializeField] GameObject PlayButtons;
@@ -113,14 +113,4 @@ public class MenuPanel : MonoBehaviour,IPointerEnterHandler
         startButtonBool = !startButtonBool;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        ((IPointerEnterHandler)userInfoButton).OnPointerEnter(eventData);
-        ((IPointerEnterHandler)openButton).OnPointerEnter(eventData);
-        ((IPointerEnterHandler)closeButton).OnPointerEnter(eventData);
-        ((IPointerEnterHandler)logoutButton).OnPointerEnter(eventData);
-        ((IPointerEnterHandler)lobbyButton).OnPointerEnter(eventData);
-        ((IPointerEnterHandler)randomButton).OnPointerEnter(eventData);
-
-    }
 }
