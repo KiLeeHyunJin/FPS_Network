@@ -1,13 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using UnityEditor;
 
 // 게임 오브젝트가 이전 상태로 돌아갈 수 있도록 시간역행 기능을 제공
 public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
 {
     public Controller Controller;
     public float rewindDuration = 3.0f;
-    public float positionRecordInterval = 0.1f;
+    public float positionRecordInterval;
     public KeyCode rewindKey = KeyCode.Z;
     public int maxHealth = 100;
 
@@ -17,6 +18,7 @@ public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
     private int currentHealth;
     private int maxPositionHistoryCount;
     private Coroutine rewindCoroutine;
+    bool on;
 
     public void Activate()
     {
@@ -32,19 +34,21 @@ public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
     // 초기 상태와 이력 배열을 설정
     void Start()
     {
+        Controller = GetComponent<Controller>();
         currentHealth = maxHealth;
         maxPositionHistoryCount = Mathf.CeilToInt(rewindDuration / positionRecordInterval);
         
         positionHistory = new Vector3[maxPositionHistoryCount];
         healthHistory = new int[maxPositionHistoryCount];
+
     }
 
     // 매 프레임마다 입력을 처리하고 위치를 기록
     void Update()
     {
         if (!IsRewinding())
-        {
-            RecordPositionAndHealth();
+        {   if(!on)
+            StartCoroutine(RecordPositionAndHealth());
             if (Input.GetKeyDown(rewindKey))
             {
                 Debug.Log("시간 역행");
@@ -52,24 +56,33 @@ public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
             }
         }
     }
-
-    void RecordPositionAndHealth() // 위치와 체력 기록
+    IEnumerator RecordPositionAndHealth() // 위치와 체력 기록
     {
+        if (!on)
+        {
+            on = true;
+            
+            positionHistory[historyIndex] = transform.position;
+            Debug.Log($"index = {historyIndex} , position {positionHistory[historyIndex]}");
+            healthHistory[historyIndex] = currentHealth;
+            historyIndex = (historyIndex + 1) % maxPositionHistoryCount;
+            yield return new WaitForSeconds(positionRecordInterval);
+            on = false;
+        }
         
-        positionHistory[historyIndex] = transform.position;
-        healthHistory[historyIndex] = currentHealth;
-        historyIndex = (historyIndex + 1) % maxPositionHistoryCount;
+        
+        
     }
 
     IEnumerator RewindCoroutine()
     {
         Controller.enabled = false;
         float time = 0;
-        Debug.Log($"Current {historyIndex}");
+        
         while (time < rewindDuration)
         {
             int rewindIndex = (historyIndex - 1 - Mathf.FloorToInt(time / positionRecordInterval) + maxPositionHistoryCount) % maxPositionHistoryCount;
-            Debug.Log(rewindIndex);
+            Debug.Log($"RewindPos {positionHistory[rewindIndex]} , index {rewindIndex} ");
             transform.position = positionHistory[rewindIndex];
             currentHealth = healthHistory[rewindIndex];
             time += Time.deltaTime;

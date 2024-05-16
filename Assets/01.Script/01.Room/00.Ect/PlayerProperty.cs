@@ -92,19 +92,25 @@ public class PlayerProperty : MonoBehaviour
 
     void TeamChange()
     {
-        //최대 설정인원의 반을 저장한다.
-        int halfCount = PhotonNetwork.CurrentRoom.MaxPlayers >> 1;
-        int num = 1;
-        //현재 팀 코드가 1이면 변경할 팀 코드를 2로 저장한다.
-        if (num == player.GetPhotonTeam().Code)
-            num = 2;
-        //변경할 팀의 인원을 가져온다.
-        int teamCount = PhotonTeamsManager.Instance.GetTeamMembersCount((byte)num);
-        //변경할 팀의 인원이 찼으면 팀 변경을 시도하지 않는다.
-        //팀의 인원이 안찼으면 팀 변경을 시도한다.
-        if (halfCount > teamCount)
-            player.SwitchTeam((byte)num);
-        //임무를 마쳤기에 비활성화
-        gameObject.SetActive(false);
+        if (!player.GetProperty<bool>(DefinePropertyKey.READY))
+        {
+            Debug.Log("Change");
+            //최대 설정인원의 반을 저장한다.
+            int halfCount = PhotonNetwork.CurrentRoom.MaxPlayers >> 1;
+            int num = 1;
+            //현재 팀 코드가 1이면 변경할 팀 코드를 2로 저장한다.
+            if (num == player.GetPhotonTeam().Code)
+                num = 2;
+            //변경할 팀의 인원을 가져온다.
+            int teamCount = PhotonTeamsManager.Instance.GetTeamMembersCount((byte)num);
+            //변경할 팀의 인원이 찼으면 팀 변경을 시도하지 않는다.
+            //팀의 인원이 안찼으면 팀 변경을 시도한다.
+            if (halfCount > teamCount)
+                player.SwitchTeam((byte)num);
+            //임무를 마쳤기에 비활성화
+            gameObject.SetActive(false);
+        }
+        
+        
     }
 }

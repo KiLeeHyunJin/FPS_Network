@@ -1,5 +1,6 @@
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System;
 using System.Collections;
@@ -33,6 +34,15 @@ public class Controller : MonoBehaviourPun
     [SerializeField] FPSCameraPosition cameraRoot;
     [SerializeField] CinemachineVirtualCamera cam;
 
+    [SerializeField] GameObject minimapIcon_m;
+    [SerializeField] GameObject minimapIcon_Ally;
+    [SerializeField] GameObject minimapIcon_Enemy;
+
+    [SerializeField] int teamCode;
+    [SerializeField] GameObject miniCam;
+
+
+
     int maxHp;
     int hp;
     bool mine;
@@ -44,6 +54,7 @@ public class Controller : MonoBehaviourPun
     EquipController equipController;
     CharacterTransformProcess moveProcess;
     IKAnimationController IKAnimationController;
+    
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
@@ -65,8 +76,8 @@ public class Controller : MonoBehaviourPun
     void Check()
     {
         GetView();
-        CheckMine();
         SetData();
+        CheckMine();
         CollidersSetting();
         SetKeyAction();
         MoveProcessInit();
@@ -74,19 +85,29 @@ public class Controller : MonoBehaviourPun
 
     void CheckMine()
     {
+        minimapIcon_m.SetActive(true);
         mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
         equipController = GetComponent<EquipController>();
         if (mine == false)
         {
+            minimapIcon_m.SetActive(false);
+            Destroy(miniCam);
             Destroy(inputController);
             Destroy(processingController);
             IKAnimationController = new IKAnimationController();
+            
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
+            if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
+                minimapIcon_Ally.SetActive(false);
+            else
+                minimapIcon_Enemy.SetActive(true);
+
             return;
         }
+        
         cameraController = new CameraController(target, this, cameraRoot, cam, mouseSensitivity);
         attackProcess = new AttackProcess(this);
         inputController.Owner = this;
@@ -96,6 +117,7 @@ public class Controller : MonoBehaviourPun
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
+        teamCode = photonView.Controller.GetPhotonTeam().Code;
         hp = maxHp;
     }
 

@@ -48,8 +48,10 @@ public class CameraController //: MonoBehaviour
 
     public void Init(Action<int> _layerMethod)
     {
-        int ignoreLayer = LayerMask.NameToLayer("FPSIgnore"); //무시할 레이어 설정
-        int ignoreFlag = 1 << ignoreLayer; //쉬프트연산
+        int ignoreLayer = LayerMask.NameToLayer("FPSIgnore") ; //무시할 레이어 설정
+        int iconignore1 = LayerMask.NameToLayer("MyMiniCam");
+        int iconignore2 = LayerMask.NameToLayer("SearchEnemyCam");
+        int ignoreFlag = (1 << ignoreLayer) | (1 << iconignore1) | (1<<iconignore2); //쉬프트연산
 
         SetUserCharacterLayer ??= _layerMethod;
         SetUserCharacterLayer?.Invoke(ignoreLayer);

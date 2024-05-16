@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 // 일단 만든 다음에 인벤토리랑 연계해보자 일단 만들자.
@@ -41,7 +40,7 @@ public class WeaponManager : MonoBehaviour
 
     [SerializeField]
     private string currentWeaponType; // 현재 무기의 타입 (총,폭탄,칼)
-   
+
 
     public static Transform currentWeapon; //현재 무기 static 선언으로 클래스를 통해 바로접근 가능하도록함.
     //public static Animator currentWeaponAnim; //현재 무기의 애니메이션
@@ -76,7 +75,7 @@ public class WeaponManager : MonoBehaviour
             bombDictionary.Add(bomb[i].bombName, bomb[i]);
         }
 
-        
+
 
 
     }
@@ -99,7 +98,7 @@ public class WeaponManager : MonoBehaviour
     }
 
     //매개변수로 string 대신에 weapon type으로 넣어주고.. 넣어준 상태에서 +로 무기 구분 가능할까?
-    public IEnumerator ChangeWeaponCoroutine(string type,string name) //무기 변환 코루틴 
+    public IEnumerator ChangeWeaponCoroutine(string type, string name) //무기 변환 코루틴 
     {
         isChangeWeapon = true; //변환 상태 트루 --> 변환 중 또 변환 못하도록
         // 어차피 얘가 플레이어 자식? 에 달릴거라 플레이어가 애니메이션 가지고 있어도 같이 사용가능한듯?
@@ -107,7 +106,7 @@ public class WeaponManager : MonoBehaviour
         yield return new WaitForSeconds(changeWeaponDelayTime); //변환 애니 재생동안 중지 
 
         CancelPreWeaponAction();
-        WeaponChange(type,name);
+        WeaponChange(type, name);
         yield return new WaitForSeconds(changeWeaponEndDelayTime);
         currentWeaponType = type; // 아 이게 enum을 연결해 줄 수는 없나? 무기 종류가 많아서 연결하기 힘든가??
         isChangeWeapon = false; // 무기 변환 완료 
@@ -117,7 +116,7 @@ public class WeaponManager : MonoBehaviour
 
     private void CancelPreWeaponAction() //기존에 들고있는 무기 해제 
     {
-        switch(currentWeaponType)
+        switch (currentWeaponType)
         {
             case "GUN":
                 theGunController.CancelFineSight();
@@ -128,17 +127,17 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    private void WeaponChange(string type,string name) // 바꾸고자 하는 무기로 전환 
+    private void WeaponChange(string type, string name) // 바꾸고자 하는 무기로 전환 
     {
         if (type == "GUN")
         {
             theGunController.GunChange(gunDictionary[name]);
         }
-        else if(type=="BOMB")
+        else if (type == "BOMB")
         {
-            
+
         }
-        else if(type=="SOWRD")
+        else if (type == "SOWRD")
         {
 
         }
@@ -147,5 +146,5 @@ public class WeaponManager : MonoBehaviour
         // 이거 권총형을 만드는게 훨씬 나을것 같기도 하고.. 고민되네.. 
     }
 
-    
+
 }
