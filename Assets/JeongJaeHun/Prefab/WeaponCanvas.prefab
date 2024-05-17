@@ -820,7 +820,7 @@ GameObject:
   - component: {fileID: 2488375522861909338}
   - component: {fileID: 5087280452639780003}
   - component: {fileID: 6202418601257851179}
-  - component: {fileID: 3212948645581359459}
+  - component: {fileID: 4049507761821054690}
   m_Layer: 5
   m_Name: ArmorPanel
   m_TagString: Untagged
@@ -944,7 +944,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3212948645581359459
+--- !u!114 &4049507761821054690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -953,7 +953,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6171626418464862254}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86e59fd5096ef684d96b3858828377dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c32cce17ac6e0242bada2cf3c47db10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ArmorText: {fileID: 6202418601257851179}
