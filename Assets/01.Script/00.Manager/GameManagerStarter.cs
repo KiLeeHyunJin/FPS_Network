@@ -2,12 +2,15 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManagerStarter : MonoBehaviour
 {
+   
     [SerializeField] Transform redLocation;
     [SerializeField] Transform blueLocation;
     [SerializeField] int readyPlayer;
+
 
     void Start()
     {
@@ -20,6 +23,7 @@ public class GameManagerStarter : MonoBehaviour
 
     void AllPlayerReadyCheck()
     {
+        
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOADCOMPLETE, true);
         StartCoroutine(WaitForPlayers());
         
@@ -33,6 +37,7 @@ public class GameManagerStarter : MonoBehaviour
         }
         Debug.Log($"Ready on {readyPlayer}, listLength is {PhotonNetwork.PlayerList.Length}");
         Debug.Log("AllPlayerReady");
+        Manager.Scene.StartFadeIn();
         Manager.Game.StartGame(blueLocation, redLocation);
 
     }

@@ -28,7 +28,7 @@ public class SceneManager : Singleton<SceneManager>
     }
 
     /// <summary>
-    /// ·Îµù ÀÌ¹ÌÁöÀÇ ¹è¿­ÀÌ Á¸ÀçÇÑ´Ù¸é ·ÎµùÀÌ¹ÌÁö¸¦ Fade ÀÌ¹ÌÁö¿¡ Ãß°¡ÇÕ´Ï´Ù.
+    /// ë¡œë”© ì´ë¯¸ì§€ì˜ ë°°ì—´ì´ ì¡´ì¬í•œë‹¤ë©´ ë¡œë”©ì´ë¯¸ì§€ë¥¼ Fade ì´ë¯¸ì§€ì— ì¶”ê°€í•©ë‹ˆë‹¤.
     /// </summary>
     /// <param name="sceneName"></param>
     /// <param name="loadingImgIdx"></param>
@@ -73,7 +73,7 @@ public class SceneManager : Singleton<SceneManager>
         fade.gameObject.SetActive(false);
 
     }
-
+    
     IEnumerator FadeOut()
     {
         float rate = 0;
@@ -88,7 +88,7 @@ public class SceneManager : Singleton<SceneManager>
         }
     }
 
-    IEnumerator FadeIn()
+   IEnumerator FadeIn()
     {
         float rate = 0;
         Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
@@ -100,5 +100,18 @@ public class SceneManager : Singleton<SceneManager>
             fade.color = Color.Lerp(fadeOutColor, fadeInColor, rate);
             yield return null;
         }
+    }
+
+    public Coroutine StartFadeOut()
+    {
+        Debug.Log("Call FadeOut");
+       return StartCoroutine(FadeOut());
+    }
+
+    // FadeInì„ í˜¸ì¶œí•  ê³µê°œ ë©”ì„œë“œ
+    public Coroutine StartFadeIn()
+    {
+        Debug.Log("Call FadeIn");
+        return StartCoroutine(FadeIn());
     }
 }

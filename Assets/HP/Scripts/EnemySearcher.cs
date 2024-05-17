@@ -38,7 +38,7 @@ public class EnemySearcher : MonoBehaviourPun
                 dir = (collider.transform.position - transform.position).normalized;
                 if (Physics.Raycast(transform.position, dir, out hit, range, combinedLayerMask))
                 {
-                    Debug.Log($"hit : {hit.collider.gameObject.name}");
+                    
                     EnemyIcon hitIcon = hit.collider.GetComponent<EnemyIcon>();
                     if (hitIcon == null)
                     {
