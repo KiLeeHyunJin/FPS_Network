@@ -41,7 +41,6 @@ public class IKAnimationController
 
         currentWeapon.transform.localPosition = Vector3.zero;
         currentWeapon.transform.localRotation = Quaternion.identity;
-        Debug.Log("Dequip");
 
         owner.StartCoroutined(
             FrameEndAction(SetWeight, false), 
@@ -58,7 +57,6 @@ public class IKAnimationController
         twoBoneIKConstraint[(int)Direction.Left].data.target = currentWeapon.leftGrip;
         twoBoneIKConstraint[(int)Direction.Right].data.target = currentWeapon.RightGrip;
 
-        Debug.Log("Equip");
         owner.StartCoroutined(
             FrameEndAction(SetWeight, true),
             ref co);
@@ -77,6 +75,8 @@ public class IKAnimationController
             rigBuilder.Build();
             rigBuilder.SyncLayers();
         }
+
+
     }
 
     enum Direction

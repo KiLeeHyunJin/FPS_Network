@@ -1920,7 +1920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 1623591964358637583}
+    m_ConstrainedObject: {fileID: 3303732465516620629}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -2016,14 +2016,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1726781629992783362}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.13354197, w: 0.99104315}
+  m_LocalRotation: {x: 0, y: 0, z: -0.13052624, w: 0.9914449}
   m_LocalPosition: {x: -0.11642675, y: 0.0066957865, z: 2.2835393e-17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6380775078652952663}
   m_Father: {fileID: 1623591964358637583}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -15}
 --- !u!136 &5281024547487228717
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2885,7 +2885,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2242261301732233660}
   - component: {fileID: 372737925450212464}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Hand_L 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3070,7 +3070,7 @@ Transform:
   m_GameObject: {fileID: 2671285651575317260}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5724,7 +5724,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8410199175477989647}
   - component: {fileID: 562832683124545841}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Gauntlets_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5953,13 +5953,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2875853535969302384}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.65894806, y: 0.1581065, z: -0.5756841, w: -0.45757803}
-  m_LocalPosition: {x: 0.552, y: -0.057, z: 0.344}
+  m_LocalRotation: {x: -0.79088956, y: -0.21348077, z: -0.5665828, w: 0.088902675}
+  m_LocalPosition: {x: 0.454, y: 0.312, z: 0.255}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3176187071470092052}
-  m_LocalEulerAnglesHint: {x: 51.728, y: 82.432, z: -210.942}
+  m_LocalEulerAnglesHint: {x: -22.491, y: 111.736, z: -194.859}
 --- !u!1 &2936556017277548124
 GameObject:
   m_ObjectHideFlags: 0
@@ -6464,7 +6464,7 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -6788,7 +6788,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3355587700917137934}
   - component: {fileID: 6585112302689649711}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Gloves_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9690,16 +9690,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3838130477298301779}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.013996214, y: -0.8759914, z: -0.051311597, w: -0.4793855}
+  m_LocalRotation: {x: 0.24738806, y: -0.7583936, z: 0.06764253, w: -0.5992185}
   m_LocalPosition: {x: -0.017, y: -0.266, z: 0.075}
-  m_LocalScale: {x: 0.69999987, y: 0.69999987, z: 0.6999995}
+  m_LocalScale: {x: 0.7000003, y: 0.69999963, z: 0.6999996}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1875300480417108782}
   - {fileID: 2409350013156442485}
   - {fileID: 1998382069498178493}
   m_Father: {fileID: 1259744260950630733}
-  m_LocalEulerAnglesHint: {x: 185.93, y: -57.453003, z: 181.422}
+  m_LocalEulerAnglesHint: {x: 191.179, y: -73.85901, z: 152.282}
 --- !u!114 &2052427345127219892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9742,7 +9742,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4475273837535441987
 Transform:
   m_ObjectHideFlags: 0
@@ -10703,13 +10703,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4800214615008408736}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.14517853, y: 0.36889115, z: -0.18028106, w: 0.9001896}
-  m_LocalPosition: {x: -0.027, y: 0.134, z: 0.084}
+  m_LocalRotation: {x: -0.18342681, y: 0.38042486, z: -0.17432651, w: 0.8895178}
+  m_LocalPosition: {x: -0.0386, y: 0.1177, z: 0.0954}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3176187071470092052}
-  m_LocalEulerAnglesHint: {x: -7.375, y: 46.259, z: -25.803}
+  m_LocalEulerAnglesHint: {x: -11.168, y: 49.029, z: -27.282}
 --- !u!1 &4924574571796427599
 GameObject:
   m_ObjectHideFlags: 0
@@ -12181,7 +12181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 265990470910439113}
   - component: {fileID: 5404000022860927507}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Gloves_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15200,7 +15200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1627749704728448561}
   - component: {fileID: 419287307001725289}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15765,7 +15765,7 @@ Transform:
   m_GameObject: {fileID: 7636198967759021848}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -16377,7 +16377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4261804633812696794}
   - component: {fileID: 7589461515892227499}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Gauntlets_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16596,7 +16596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6547699929187795051}
   - component: {fileID: 803875391364485850}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Hand_R 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
