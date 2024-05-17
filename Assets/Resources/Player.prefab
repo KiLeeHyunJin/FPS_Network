@@ -5487,6 +5487,89 @@ Cloth:
   - {x: 0.6666667, y: 0.16666667, z: 0.16666667}
   - {x: 0.5, y: 0.5, z: 0}
   m_VirtualParticleIndices: 
+--- !u!1 &2716177363120236428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4945775284584023633}
+  - component: {fileID: 5437208417815431066}
+  m_Layer: 0
+  m_Name: MultiAimRig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4945775284584023633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716177363120236428}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5704405979108050125}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5437208417815431066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716177363120236428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8935e03361a14ec4b8edc872f76bc822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Data:
+    m_ConstrainedObject: {fileID: 4166024142292734671}
+    m_SourceObjects:
+      m_Length: 2
+      m_Item0:
+        transform: {fileID: 8674157141563465105}
+        weight: 1
+      m_Item1:
+        transform: {fileID: 1259744260950630733}
+        weight: 1
+      m_Item2:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item3:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item4:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item5:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item6:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item7:
+        transform: {fileID: 0}
+        weight: 0
+    m_ConstrainedPositionAxes:
+      x: 1
+      y: 1
+      z: 1
+    m_ConstrainedRotationAxes:
+      x: 1
+      y: 1
+      z: 1
+    m_MaintainPositionOffset: 0
+    m_MaintainRotationOffset: 0
 --- !u!1 &2780004478860726468
 GameObject:
   m_ObjectHideFlags: 0
@@ -6086,6 +6169,7 @@ Transform:
   - {fileID: 2050116553537931456}
   - {fileID: 3311110718005716207}
   - {fileID: 5558403134704911534}
+  - {fileID: 4945775284584023633}
   m_Father: {fileID: 2121747480424366495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3162171735836929336
@@ -6267,15 +6351,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aimRig: {fileID: 1244557321125575083}
-  leftAim: {fileID: 1175105020223948357}
-  rightAim: {fileID: 3146569453552303302}
-  leftHand: {fileID: 5819182542138014547}
-  rightHand: {fileID: 8674157141563465105}
-  weaponHolder: {fileID: 1259744260950630733}
   dampingSpeed: 0
+  multiParent: {fileID: 5437208417815431066}
   rifleWeapon: {fileID: 8244666204833046069}
   pistolWeapon: {fileID: 6782852557423843845}
   swordWeapon: {fileID: 2052427345127219892}
+  left: {fileID: 1175105020223948357}
+  right: {fileID: 3146569453552303302}
 --- !u!114 &5367758992188053670
 MonoBehaviour:
   m_ObjectHideFlags: 0

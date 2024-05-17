@@ -10,23 +10,21 @@ public class IKAnimationController
     readonly Rig rig;
 
     readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
-
-    readonly Transform[] handTransform;
-    readonly Transform weaponHolder;
+    readonly MultiParentConstraint multiParent;
 
     readonly Controller owner;
     readonly RigBuilder rigBuilder;
 
     IKWeapon currentWeapon;
 
-    public IKAnimationController(Rig _rigging, TwoBoneIKConstraint _leftRig, TwoBoneIKConstraint _rightRig, Transform _left, Transform _right, Transform _weaponHolder, RigBuilder _builder, Controller _owner)
+    public IKAnimationController(Rig _rigging ,TwoBoneIKConstraint _leftRig,TwoBoneIKConstraint _rightRig, MultiParentConstraint _multiParent,RigBuilder _builder, Controller _owner)
     {
         rig = _rigging;
-        handTransform = new Transform[]{ _left, _right };
         twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
-        weaponHolder = _weaponHolder;
         owner = _owner;
         rigBuilder = _builder;
+        multiParent = _multiParent;
+        multiParent.weight = 1;
     }
 
     public void ChangeWeapon(IKWeapon _weapon)
@@ -37,7 +35,9 @@ public class IKAnimationController
 
     public void DequipWeapon()
     {
-        currentWeapon.transform.SetParent(handTransform[(int)Direction.Right]);
+        //currentWeapon.transform.SetParent(handTransform[(int)Direction.Right]);
+        multiParent.data.sourceObjects.SetWeight(0, 0);
+        multiParent.data.sourceObjects.SetWeight(1, 1);
 
         currentWeapon.transform.localPosition = Vector3.zero;
         currentWeapon.transform.localRotation = Quaternion.identity;
@@ -49,7 +49,11 @@ public class IKAnimationController
 
     public void EquipWeapon()
     {
-        currentWeapon.transform.SetParent(weaponHolder);
+        //currentWeapon.transform.SetParent(weaponHolder);
+        multiParent.data.constrainedObject = currentWeapon.transform;
+
+        multiParent.data.sourceObjects.SetWeight(1, 0);
+        multiParent.data.sourceObjects.SetWeight(0, 1);
 
         currentWeapon.transform.localPosition = currentWeapon.OriginPos;
         currentWeapon.transform.localRotation = currentWeapon.OriginRot;
@@ -62,7 +66,7 @@ public class IKAnimationController
             ref co);
     }
 
-
+    
     Coroutine co;
     IEnumerator FrameEndAction(Action<int> action,bool state)
     {
@@ -72,11 +76,9 @@ public class IKAnimationController
 
         if(state)
         {
-            rigBuilder.Build();
             rigBuilder.SyncLayers();
+            rigBuilder.Build();
         }
-
-
     }
 
     enum Direction

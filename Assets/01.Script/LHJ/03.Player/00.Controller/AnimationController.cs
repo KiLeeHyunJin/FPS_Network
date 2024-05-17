@@ -2,6 +2,7 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
 
 
@@ -13,17 +14,13 @@ public class AnimationController : MonoBehaviourPun
     Coroutine[] dampingCo;
 
     [SerializeField] Rig aimRig;
-    [SerializeField] TwoBoneIKConstraint leftAim;
-    [SerializeField] TwoBoneIKConstraint rightAim;
-    [SerializeField] Transform leftHand;
-    [SerializeField] Transform rightHand;
-    [SerializeField] Transform weaponHolder;
     [SerializeField] float dampingSpeed;
-
+    [SerializeField] MultiParentConstraint multiParent;
     [SerializeField] IKWeapon rifleWeapon;
     [SerializeField] IKWeapon pistolWeapon;
     [SerializeField] IKWeapon swordWeapon;
-
+    [SerializeField] TwoBoneIKConstraint left;
+    [SerializeField] TwoBoneIKConstraint right;
     int JumpEnterId;
     int StandId;
     int CrouchId;
@@ -39,7 +36,8 @@ public class AnimationController : MonoBehaviourPun
     readonly string TRIGGER = "CallTriggerRPC";
     private void Start()
     {
-        iKAnimation = new IKAnimationController(aimRig, leftAim, rightAim, leftHand, rightHand, weaponHolder, GetComponent<RigBuilder>(), GetComponent<Controller>());
+        iKAnimation = new IKAnimationController(aimRig, left, right, multiParent, GetComponent<RigBuilder>(), GetComponent<Controller>());
+        
         iKAnimation.ChangeWeapon(rifleWeapon);
         iKAnimation.EquipWeapon();
     }
