@@ -13,9 +13,6 @@ using UnityEngine.UI;
 public class ConnectManager : MonoBehaviourPunCallbacks
 {
     public enum Panel { Login, Menu, Lobby, Room, Random }
-
-    [SerializeField] Image fade;
-    [SerializeField] float fadeTime;
     [SerializeField] GameObject loginPanel;
     [SerializeField] MenuPanel menuPanel;
     [SerializeField] RoomPanel roomPanel;
@@ -25,7 +22,6 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     LobbyData data;
     private ClientState state;
 
-    Coroutine fadeOut;
     Coroutine fadeIn;
     private void Awake()
     {
@@ -44,33 +40,6 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         state = currentState;
         Debug.Log(currentState);
     }
-    IEnumerator FadeOut()
-    {
-        float rate = 0;
-        Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
-        Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
-
-        while (rate <= 1)
-        {
-            rate += Time.deltaTime / fadeTime;
-            fade.color = Color.Lerp(fadeInColor, fadeOutColor, rate);
-            yield return null;
-        }
-    }
-
-    IEnumerator FadeIn()
-    {
-        float rate = 0;
-        Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
-        Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
-
-        while (rate <= 1)
-        {
-            rate += Time.deltaTime / fadeTime;
-            fade.color = Color.Lerp(fadeOutColor, fadeInColor, rate);
-            yield return null;
-        }
-    }
     private void SetActivePanel(Panel panel)
     {
         
@@ -81,7 +50,7 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         roomPanel.gameObject?.SetActive(panel == Panel.Room);
         lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
         randomPanel.gameObject?.SetActive(panel == Panel.Random);
-        fadeIn = StartCoroutine(FadeIn());
+        fadeIn = Manager.Scene.StartFadeIn();
     }
     public override void OnJoinedRoom()
     {
