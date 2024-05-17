@@ -100,7 +100,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         minimapIcon_m.SetActive(true);
 
-        if (Mine == false)
+        if (mine == false)
         {
             Destroy(enemySearcher);
             minimapIcon_m.SetActive(false);
