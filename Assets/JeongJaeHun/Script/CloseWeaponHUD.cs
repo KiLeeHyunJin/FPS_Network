@@ -1,19 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CloseWeaponHUD : MonoBehaviour
 {
-    // 탄알 수 없음
+    // 어케 수정할지 생각좀 해보자. 
+    // 켜져 있는 근접무기에 접근하여(3번 -> slot 내부의 자식들 순회 )
+    // 그 무기의 sprite에 접근하여 sprite 띄워주기. 
 
-    CloseWeapon CloseWeapon; //얘는 controllger 가 abstract라서.. 
-    Sword currentSword;
+    [SerializeField]
+    private CloseWeapon[] CloseWeaponController; //얘는 controllger 가 abstract라서.. 
+    private Sword currentSword;
 
     [SerializeField]
     private Image WeaponImage;
 
-    // 다만 현재 무기가 어떤 무기인지 받아올 수 있는 방법이 뭐가 있을까? 
+    [SerializeField]
+    private TextMeshProUGUI weaponText;
     
 
     private void Update()
@@ -24,8 +29,21 @@ public class CloseWeaponHUD : MonoBehaviour
 
     private void CheckUi() //무기에 따른 스프라이트만 받아오면 된다. 
     {
-        currentSword=CloseWeapon.GetCloseWeapon();
-        WeaponImage.sprite = currentSword.SwordImage.sprite;
+        for(int i=0;i<CloseWeaponController.Length;i++)
+        {
+            if (CloseWeaponController[i] != null)
+            {
+                if (CloseWeaponController[i].gameObject.activeSelf)
+                {
+                    currentSword = CloseWeaponController[i].GetCloseWeapon();
+                }
+            }
+        }
+        WeaponImage.sprite = currentSword.weaponSprite; //스프라이트 
+        weaponText.text = currentSword.closeWeaponName; //이름 
+
     }
+
+    
 
 }

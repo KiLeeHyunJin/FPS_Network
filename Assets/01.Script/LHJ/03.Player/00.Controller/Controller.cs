@@ -37,7 +37,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     [SerializeField] GameObject minimapIcon_m;
     [SerializeField] GameObject minimapIcon_Ally;
-    [SerializeField] GameObject minimapIcon_Enemy;
+    [SerializeField] EnemySearcher enemySearcher;
+    [SerializeField] GameObject enemyIcon;
 
     [SerializeField] int teamCode;
     [SerializeField] GameObject miniCam;
@@ -82,10 +83,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
         MoveProcessInit();
         SetUpdateAction();
         CheckRig();
+       
     }
 
     void CheckMine()
     {
+        teamCode = photonView.Controller.GetPhotonTeam().Code;
         //minimapIcon_m.SetActive(true);
         Mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
@@ -95,8 +98,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
         requestController = GetComponent<RequestController>();
         cameraController = new CameraController(target, this, cam, cameraRoot);
 
-        if (Mine == false)
+        minimapIcon_m.SetActive(true);
+
+        if (mine == false)
         {
+            Destroy(enemySearcher);
             minimapIcon_m.SetActive(false);
             cam.gameObject.SetActive(false);
             Destroy(miniCam);
@@ -106,9 +112,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
-                minimapIcon_Ally.SetActive(false);
-            else
-                minimapIcon_Enemy.SetActive(true);
+            {
+                Destroy(enemyIcon);
+                minimapIcon_Ally.SetActive(true);
+            }
+                
 
             return;
         }

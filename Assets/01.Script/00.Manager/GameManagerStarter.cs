@@ -31,7 +31,7 @@ public class GameManagerStarter : MonoBehaviour
             Debug.Log($"Ready on {readyPlayer}, listLength is {PhotonNetwork.PlayerList.Length}");
             yield return null;
         }
-
+        Debug.Log($"Ready on {readyPlayer}, listLength is {PhotonNetwork.PlayerList.Length}");
         Debug.Log("AllPlayerReady");
         Manager.Game.StartGame(blueLocation, redLocation);
 
