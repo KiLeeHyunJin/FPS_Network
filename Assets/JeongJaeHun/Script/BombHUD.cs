@@ -25,13 +25,14 @@ public class BombHUD : MonoBehaviour
     private void CheckUi()
     {
 
-        for(int i=0;i<bombController.Length;i++)
+        for(int i=0;i<bombController.Length;i++)  // 붐컨이 2개니까.. 하나가 꺼져도 계속 getbomb이 됨. 
         {
             if (bombController[i] !=null)
             {
                 if (bombController[i].gameObject.activeSelf) 
                 {
                     currentBomb= bombController[i].GetBomb(); //현재 상태의 폭탄을 가져옴. 
+                    break; //여기서 브레이크 띄워주기. --> 하나만 가져오도록. 
                 }
             }
         }

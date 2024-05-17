@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class Sword : CloseWeapon //close 웨폰 상속 
 {
     [Tooltip("무기 공격 궤적")]
-    public TrailRenderer TrailRenderer;
+    public TrailRenderer TrailRenderer; 
 
 
 

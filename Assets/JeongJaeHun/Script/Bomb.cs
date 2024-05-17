@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Bomb : IKWeapon
@@ -21,6 +22,7 @@ public class Bomb : IKWeapon
 
     public BombType bombType;
 
+    [Header("HUD와 연계될 정보들")]
     [Tooltip("ui에 표현될 폭탄의 스프라이트")]
     public Sprite bombSprite;
     [Tooltip("폭탄의 이름")]
@@ -38,8 +40,19 @@ public class Bomb : IKWeapon
     [Tooltip("폭발 이펙트")]
     public ParticleSystem bomb_ParticleSystem;
 
+
+    [Header("딜레이 관련 변수들 ")]
     [Tooltip("발사 후 몇 초 후 폭발할지 딜레이")]
-    public int delayTime; 
+    public int delayTime;
+
+    [Tooltip("폭탄 투척 딜레이 ")]
+    public int throwDelay;
+
+
+    private void OnEnable() 
+    {
+        Debug.Log("폭탄 on 입니다.");
+    }
 
 
     //[Tooltip("폭발 이펙트 관련")]
