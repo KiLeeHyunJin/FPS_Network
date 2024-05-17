@@ -847,7 +847,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &455594006603923515
 Transform:
   m_ObjectHideFlags: 0
@@ -928,6 +928,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <leftGrip>k__BackingField: {fileID: 0}
+  <RightGrip>k__BackingField: {fileID: 0}
   gunSprite: {fileID: 0}
   gunID: 0
   gunType: 1

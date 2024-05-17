@@ -45,3 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bloodEffect: {fileID: 0}
+  BulletMark: {fileID: 0}
+  BulletSpark: {fileID: 0}
