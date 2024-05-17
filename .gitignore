@@ -77,3 +77,4 @@ crashlytics-build.properties
 /Assets/Plugins
 /Assets/StreamingAssets
 *.zip
+/Assets/google-services.json.meta
