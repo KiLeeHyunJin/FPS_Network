@@ -2129,7 +2129,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 100
-  field of view: 60
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -2156,7 +2156,7 @@ Transform:
   m_GameObject: {fileID: 701296235}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.08715578, z: -0, w: 0.9961947}
-  m_LocalPosition: {x: 2.7104788, y: 4.650591, z: -31.59711}
+  m_LocalPosition: {x: 2.4707184, y: 1.8646207, z: -6.3826895}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4311,65 +4311,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2314896274677362847, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.038196508
-      objectReference: {fileID: 0}
-    - target: {fileID: 2314896274677362847, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.6105909
-      objectReference: {fileID: 0}
-    - target: {fileID: 2314896274677362847, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.041103207
-      objectReference: {fileID: 0}
-    - target: {fileID: 2671285651575317260, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_Layer
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3552819859659342744, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4701629501883127732, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 5025413939343055287, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: <leftGrip>k__BackingField
+      value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 5564018747883856697, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_ClearFlags
-      value: 2
+    - target: {fileID: 5025413939343055287, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: <RightGrip>k__BackingField
+      value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 5564018747883856697, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_BackGroundColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5564018747883856697, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.5698112
-      objectReference: {fileID: 0}
-    - target: {fileID: 5564018747883856697, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.5698112
-      objectReference: {fileID: 0}
-    - target: {fileID: 5564018747883856697, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.5698112
-      objectReference: {fileID: 0}
-    - target: {fileID: 7636198967759021848, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 8544027938743297954, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: FPSHand.Array.data[8]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
