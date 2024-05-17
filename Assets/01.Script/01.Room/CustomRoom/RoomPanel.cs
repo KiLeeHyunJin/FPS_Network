@@ -372,7 +372,6 @@ public class RoomPanel : MonoBehaviourShowInfo
     }
     public void PlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
-        Debug.Log("UpdateList");
         //플레이어 리스트를 돌면서 
         foreach (PlayerEntry player in playerList)
         {

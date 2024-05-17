@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class GameManagerStarter : MonoBehaviour
+public class GameManagerStarter : MonoBehaviourPunCallbacks
 {
    
     [SerializeField] Transform redLocation;
@@ -50,4 +51,5 @@ public class GameManagerStarter : MonoBehaviour
         return true;
         
     }
+
 }
