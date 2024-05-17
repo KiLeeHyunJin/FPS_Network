@@ -252,8 +252,9 @@ public class RoomPanel : MonoBehaviourShowInfo
             yield return null;
         }
 
-
+        
         Debug.Log("Complete");
+        yield return new WaitForSeconds(3f);
         PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = true;
     }
     public bool AllLoadComplete(string key)
