@@ -2156,7 +2156,7 @@ Transform:
   m_GameObject: {fileID: 701296235}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.08715578, z: -0, w: 0.9961947}
-  m_LocalPosition: {x: 2.4707184, y: 1.8646207, z: -6.3826895}
+  m_LocalPosition: {x: 2.5105803, y: 4.929925, z: -31.6235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4271,6 +4271,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1404201885252024400, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2121747480424366495, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.68
@@ -4318,18 +4322,6 @@ PrefabInstance:
     - target: {fileID: 3552819859659342744, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: sceneViewId
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5025413939343055287, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: <leftGrip>k__BackingField
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5025413939343055287, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: <RightGrip>k__BackingField
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8544027938743297954, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: FPSHand.Array.data[8]
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

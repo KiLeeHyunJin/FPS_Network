@@ -88,7 +88,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CheckMine()
     {
-        teamCode = photonView.Controller.GetPhotonTeam().Code;
+        if (photonView.Controller.GetPhotonTeam() == null)
+            teamCode = 0;
+        else
+            teamCode = photonView.Controller.GetPhotonTeam().Code;
         //minimapIcon_m.SetActive(true);
         Mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
