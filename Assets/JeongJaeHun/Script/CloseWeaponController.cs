@@ -22,6 +22,7 @@ public abstract class CloseWeaponController : MonoBehaviour
         if (!isAttack) //코루틴에서 변수 넣어주는 거보다 바깥에서 변수 넣어주는게 더 깔끔해보이는듯?
         {
             StartCoroutine(AttackCoroutine());
+
         }
     }
 
@@ -35,6 +36,8 @@ public abstract class CloseWeaponController : MonoBehaviour
         //애니메이션에 이벤트 다는 방법이 더 나을 것 같긴 한대 일단 이 방법으로 실행해보자. 실제 애니 나오기전까지
         isSwing = true;
         StartCoroutine(HitCoroutine()); // 실제로 공격데미지가 들어가는 상황
+
+
 
         yield return new WaitForSeconds(currentCloseWeapon.attackDelayB);
         isSwing = false;
@@ -61,6 +64,7 @@ public abstract class CloseWeaponController : MonoBehaviour
     //이 부분을 장비컨트롤러의  swap 에다 넣는다면 어떨가?? 
     public virtual void CloseWeaponChange(CloseWeapon _closeWeapon) //근접무기 변경. 
     {
+        Debug.Log("실제 히트 루틴 내부임. "); //여기 내부 수정 필요하겠다. 웨폰 매니저를 더이상 이용하고 있지 않기 때문에 ㅠㅠ 
         if (WeaponManager.currentWeapon != null)
         {
             WeaponManager.currentWeapon.gameObject.SetActive(false);

@@ -90,13 +90,13 @@ MonoBehaviour:
   <leftGrip>k__BackingField: {fileID: 0}
   <RightGrip>k__BackingField: {fileID: 0}
   bombType: 1
-  bombSprite: {fileID: 0}
-  bombName: 
+  bombSprite: {fileID: 172588930, guid: a3199f7e15eb94d469e00051113bf9b2, type: 3}
+  bombName: "\uC12C\uAD11\uD0C4 "
   fullBombNumber: 2
   currentBombNumber: 2
   bomb_Sound: {fileID: 0}
   bomb_ParticleSystem: {fileID: 0}
-  delayTime: 0
+  delayTime: 3
 --- !u!120 &2242347534956566249
 LineRenderer:
   serializedVersion: 2
