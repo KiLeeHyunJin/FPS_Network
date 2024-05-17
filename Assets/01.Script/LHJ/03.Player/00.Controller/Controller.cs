@@ -34,7 +34,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     [SerializeField] GameObject minimapIcon_m;
     [SerializeField] GameObject minimapIcon_Ally;
-    [SerializeField] GameObject minimapIcon_Enemy;
+    [SerializeField] EnemySearcher enemySearcher;
+    [SerializeField] GameObject enemyIcon;
 
     [SerializeField] int teamCode;
     [SerializeField] GameObject miniCam;
@@ -85,10 +86,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
         SetKeyAction();
         MoveProcessInit();
         SetUpdateAction();
+       
     }
 
     void CheckMine()
     {
+        teamCode = photonView.Controller.GetPhotonTeam().Code;
         //minimapIcon_m.SetActive(true);
         mine = photonView.IsMine;
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
@@ -97,8 +100,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
 
+        minimapIcon_m.SetActive(true);
+
         if (mine == false)
         {
+            Destroy(enemySearcher);
             minimapIcon_m.SetActive(false);
             Destroy(miniCam);
             Destroy(inputController);
@@ -106,24 +112,25 @@ public class Controller : MonoBehaviourPun, IPunObservable
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
-                minimapIcon_Ally.SetActive(false);
-            else
-                minimapIcon_Enemy.SetActive(true);
+            {
+                Destroy(enemyIcon);
+                minimapIcon_Ally.SetActive(true);
+            }
+                
 
             return;
         }
-        //TeamCode = photonView.Controller.GetPhotonTeam().Code;
         cameraController = new CameraController(target, this, cameraRoot, cam, mouseSensitivity);
         cameraController.Init(ControllCharacterLayerChange);
 
         attackProcess = new AttackProcess(this);
         inputController.Owner = this;
+        Destroy(enemyIcon);
     }
 
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
-        teamCode = photonView.Controller.GetPhotonTeam().Code;
         hp = maxHp;
     }
 

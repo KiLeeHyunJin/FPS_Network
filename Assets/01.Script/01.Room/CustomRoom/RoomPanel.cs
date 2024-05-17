@@ -216,15 +216,12 @@ public class RoomPanel : MonoBehaviourShowInfo
     IEnumerator LoadProcess()
     {
         currentRoom.SetProperty(DefinePropertyKey.START, true);
-        yield return new WaitForSeconds(1);
         PhotonNetwork.LoadLevel(gameSceneName);
+        PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = false;
+        yield return null;
     }
     IEnumerator LoadScene(Player player)
     {
-        yield return new WaitForSeconds(1f);
-
-        
-        PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = false;
 
         while (PhotonNetwork.LevelLoadingProgress<1f)
         {
@@ -257,7 +254,6 @@ public class RoomPanel : MonoBehaviourShowInfo
 
 
         Debug.Log("Complete");
-        yield return new WaitForSeconds(2f);
         PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = true;
     }
     public bool AllLoadComplete(string key)
@@ -278,8 +274,7 @@ public class RoomPanel : MonoBehaviourShowInfo
     public void RoomPropertiesUpdate(PhotonHashtable changedProps)
     {
         
-        Debug.Log("RoomUpdate");
-        Debug.Log(currentRoom.GetProperty<bool>(DefinePropertyKey.START));
+        
         if (currentRoom.GetProperty<bool>(DefinePropertyKey.START) && !isLoaded)
         {
             int ra = Random.Range(1, 6);
@@ -339,10 +334,8 @@ public class RoomPanel : MonoBehaviourShowInfo
             LPEP.SetPlayer(player);
             loadingPlayerList.Add(LPEP);
             Debug.Log($"{player.ActorNumber} is On");
-
-            if (PhotonNetwork.LocalPlayer.ActorNumber == player.ActorNumber)
-                StartCoroutine(LoadScene(player));
         }
+        StartCoroutine(LoadScene(PhotonNetwork.LocalPlayer));
         isLoaded = true;
 
         
