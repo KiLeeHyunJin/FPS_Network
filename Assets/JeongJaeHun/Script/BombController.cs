@@ -97,10 +97,6 @@ public class BombController : MonoBehaviour
             currentBomb.gameObject.SetActive(false);    
         }
         
-
-
-
-
     }
 
     private void ShowTrajectory() //궤도를 보여줌 (라인렌더러)
