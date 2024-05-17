@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class GunController : MonoBehaviour
@@ -39,28 +40,33 @@ public class GunController : MonoBehaviour
     }
 
 
-    private void Start()
+    private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
         
+    }
+
+
+    private void Start()
+    {
+        // Current Gun 찾기 
+
+        int numOfChild = this.transform.childCount;
+        for (int i = 0; i < numOfChild; i++)
+        {
+            if (transform.GetChild(i).gameObject.activeSelf == true)
+            {
+                currentGun = transform.GetChild(i).GetComponent<Gun>();
+
+            }
+        }
         originPos = Vector3.zero;       
-        WeaponManager.currentWeapon=currentGun.GetComponent<Transform>(); //이부분 transform 으로 해주는게 맞나 ??? 
+        //WeaponManager.currentWeapon=currentGun.GetComponent<Transform>(); //이부분 transform 으로 해주는게 맞나 ??? 
         //기본적인 디폴트 무기를 Gun으로 삼기 위해 currentWeapon에 자기 자신의 transform을 할당해줌
         audioSource = GetComponent<AudioSource>();
         //WeaponManager.currentWeaponAnim=currentGun.anim;
 
         //main 카메라 가져오기 --> 왜 몾찾음?? 
         theCam = Camera.main;
-
-        if(theCam==null)
-        {
-            Debug.Log("널널");
-        }
-        else if(theCam!=null)
-        {
-            Debug.Log("널 널 아님아님");
-        }
-     
-
     }
 
     private void Update()
@@ -68,10 +74,22 @@ public class GunController : MonoBehaviour
         if(isActivate)
         {
             GunFireRateCalc(); //쿨타임 측정이므로 update에서 돌아가야함. 
-            TryFire(); //발사 입력 받는 부분은 update에서 굳이 돌려야할까? --> input 쓰는데? 생각해보기. 
-            TryReload(); //재장전도 마찬가지 -> 키 눌렀을 때만 측정하면 되지 않을까? 
+            //TryFire(); //발사 입력 받는 부분은 update에서 굳이 돌려야할까? --> input 쓰는데? 생각해보기. 
+            //TryReload(); //재장전도 마찬가지 -> 키 눌렀을 때만 측정하면 되지 않을까? 
             TryFineSight(); //정조준 
         }
+
+        if(Input.GetKeyDown(KeyCode.Mouse0)) //임시로 마우스 왼쪽 버튼으로 fire 발사 
+        {
+            TryFire();
+        }
+        if(Input.GetKeyDown(KeyCode.Mouse1)) //임시로 마우스 우측 버튼으로 리로드 시작. 
+        {
+            TryReload();
+            
+        }
+
+
     }
 
 
@@ -183,6 +201,7 @@ public class GunController : MonoBehaviour
     {
         if (!isReload)
         {
+            Debug.Log("재장전 진입");
             CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
             StartCoroutine(ReloadCoroutine());
 

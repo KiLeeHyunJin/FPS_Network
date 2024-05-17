@@ -111,7 +111,7 @@ public class Inventory : MonoBehaviour
 
     public void RemoveItem() //인벤토리에서 아이템을 제거해주는 함수 --> 이거 무기 버리기 함수 가져오자. 어딨더라?
     {
-        // 무기 떨구기. 
+        // 무기 떨구기. --> 기본적으로 id로 체크해서 id가 겹치면 그 프리팹을 생성해줘야하는데 어떻게 생성하지? 
 
 
 
