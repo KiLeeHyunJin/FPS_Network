@@ -46,8 +46,5 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    {
 
-    }
 }
