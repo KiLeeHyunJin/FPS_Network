@@ -28,8 +28,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     [SerializeField] float mouseSensitivity;
     [SerializeField] GameObject[] FPSIgnoreObject;
+    [SerializeField] GameObject[] FPSHand;
     [SerializeField] Transform target;
-    [SerializeField] FPSCameraPosition cameraRoot;
+
+    [SerializeField] Transform cameraRoot;
+    [SerializeField] Camera overlayCam;
     [SerializeField] CinemachineVirtualCamera cam;
 
     [SerializeField] GameObject minimapIcon_m;
@@ -55,8 +58,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     EquipController equipController;
     AnimationController animController;
     ProcessingController processingController;
-    IKAnimationController IKAnimationController;
-    
 
     RequestController requestController;
     event Action Updates;
@@ -80,6 +81,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         SetKeyAction();
         MoveProcessInit();
         SetUpdateAction();
+        CheckRig();
     }
 
     void CheckMine()
@@ -91,7 +93,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
-        cameraController = new CameraController(target, this, cameraRoot);
+        cameraController = new CameraController(target, this, cam, cameraRoot);
 
         if (Mine == false)
         {
@@ -110,8 +112,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
             return;
         }
-        cameraController.Init(ControllCharacterLayerChange, cam, mouseSensitivity);
-        animController.SetChangeViewAction(cameraController.ChangeView);
+        cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
 
         attackProcess = new AttackProcess(this);
         inputController.Owner = this;
@@ -121,7 +122,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void SetData()
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
-        //teamCode = photonView.Controller.GetPhotonTeam().Code;
+        if (photonView.Controller.GetPhotonTeam() != null)
+            teamCode = photonView.Controller.GetPhotonTeam().Code;
+        else
+            teamCode = 0;
         hp = maxHp;
     }
 
@@ -132,7 +136,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
         foreach (Collider collider in colliders)
-            collider.gameObject.AddComponent<HitBox>().SetOwner(this);
+            collider.gameObject.AddComponent<HitBox>().SetOwner(this, Mine);
     }
 
     void Update()
@@ -144,6 +148,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         equipController.Fire();
         requestController.Fire();
+        animController.Atck();
         cameraController.GetCamShakeRoutine();
         Controller hitTarget = attackProcess?.Attack();
     }
@@ -176,6 +181,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword);
         inputController.ChangeFireType = Define.FireType.One;
+    }
+    void CheckRig()
+    {
+
     }
 
     void SetKeyAction()
@@ -234,16 +243,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Updates += moveProcess.Update;
         }
     }
-    void ControllCharacterLayerChange(int layerNum)
+    void ControllCharacterLayerChange(int bodyNum, int handNum)
     {
-        for (int i = 0; i < FPSIgnoreObject.Length; i++) //레이어 재설정
-        {
-            if (FPSIgnoreObject[i] == null)
-                continue;
-            //하위 객체들 또한 전부 레이어 재설정
-            foreach (Transform childeGameObject in FPSIgnoreObject[i].GetComponentsInChildren<Transform>())
-                childeGameObject.gameObject.layer = layerNum;
-        }
+        foreach (GameObject childeGameObject in FPSIgnoreObject)
+            childeGameObject.layer = bodyNum;
+        foreach (GameObject childeGameObject in FPSHand)
+            childeGameObject.layer = handNum;
     }
 
     void SlideJump()
@@ -266,7 +271,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
-            ControllCharacterLayerChange(0);
+            ControllCharacterLayerChange(0,0);
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
         }

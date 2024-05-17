@@ -4,15 +4,17 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 using static UnityEngine.Rendering.DebugUI;
 
 public class CameraController //: MonoBehaviour
 {
-    Action<int> SetUserCharacterLayer;
+    Action<int, int> SetUserCharacterLayer;
     CinemachineVirtualCamera cam;
     CinemachineBasicMultiChannelPerlin noise;
+    Camera overlay;
 
-    readonly FPSCameraPosition cameraRoot;
+    readonly Transform cameraRoot;
     readonly Controller owner;
     readonly Transform target;
 
@@ -37,28 +39,32 @@ public class CameraController //: MonoBehaviour
     public float MouseSensitivity { set { mouseSensitivity = value; } }
     public int CameraPriority { set { cam.Priority = value; } }
     Action updateAction;
-    public CameraController (Transform _aim, Controller _owner, FPSCameraPosition _cameraRoot)
+    public CameraController (Transform _aim, Controller _owner, CinemachineVirtualCamera _cam, Transform _root)
     {
-        cameraRoot = _cameraRoot;
         target = _aim;
         owner = _owner;
+        cam = _cam;
+        _cam.Priority = 40;
+        cameraRoot = _root;
+        noise = _cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
-    public void Init(Action<int> _layerMethod, CinemachineVirtualCamera _cam, float _mouseSensitivity)
+    public void Init(Action<int,int> _layerMethod,  Camera _overlayCam, float _mouseSensitivity)
     {
         mouseSensitivity = _mouseSensitivity;
-        cam = _cam;
-        _cam.Priority = 10;
-        noise = _cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        overlay = _overlayCam;
+        Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(overlay);
         noise.m_AmplitudeGain = 0f;
         noise.m_FrequencyGain = 0f;
 
-        int ignoreLayer = LayerMask.NameToLayer("FPSIgnore") ; //무시할 레이어 설정
+        int ignoreLayer = LayerMask.NameToLayer("Door") ; //무시할 레이어 설정
+        int ignore2Layer = LayerMask.NameToLayer("FPSIgnore"); //무시할 레이어 설정
         int iconignore1 = LayerMask.NameToLayer("MyMiniCam");
         int iconignore2 = LayerMask.NameToLayer("SearchEnemyCam");
-        int ignoreFlag = (1 << ignoreLayer) | (1 << iconignore1) | (1<<iconignore2); //쉬프트연산
+        int ignoreFlag = (1 << ignoreLayer) | (1 << iconignore1) | (1<<iconignore2) | (1<< ignore2Layer); //쉬프트연산
 
         SetUserCharacterLayer ??= _layerMethod;
-        SetUserCharacterLayer?.Invoke(ignoreLayer);
+        SetUserCharacterLayer?.Invoke(ignoreLayer, ignore2Layer);
 
         Camera.main.cullingMask = ~ignoreFlag; //컬링 레이어 설정
         Cursor.lockState = CursorLockMode.Locked;
@@ -89,15 +95,9 @@ public class CameraController //: MonoBehaviour
     {
         if(owner.Mine)
         {
-            Transform pos = viewType == ViewType.Stand ? cameraRoot.StandPos : cameraRoot.CrouchPos;
-            cam.Follow = pos;
+            //Transform pos = viewType == ViewType.Stand ? cameraRoot.StandPos : cameraRoot.CrouchPos;
+            //cam.Follow = pos;
         }
-    }
-
-    public void Spectator(int value)
-    {
-        cam.Priority = value;
-        cam.LookAt = target;
     }
 
     Coroutine shakeCo;

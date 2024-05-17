@@ -11,9 +11,9 @@ public class GameManagerStarter : MonoBehaviour
 
     void Start()
     {
-        /*   if (PhotonNetwork.InRoom == false)
-               return;
-           */
+        if (PhotonNetwork.InRoom == false)
+            return;
+
         AllPlayerReadyCheck();
        
     }

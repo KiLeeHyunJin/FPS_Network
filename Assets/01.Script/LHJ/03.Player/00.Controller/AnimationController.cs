@@ -9,7 +9,6 @@ public class AnimationController : MonoBehaviourPun
 {
     IKAnimationController iKAnimation;
     Animator anim;
-    Action<CameraController.ViewType> ChangeViewAction;
     public Animator Anim { get { return anim; } }
     Coroutine[] dampingCo;
 
@@ -23,6 +22,7 @@ public class AnimationController : MonoBehaviourPun
 
     [SerializeField] IKWeapon rifleWeapon;
     [SerializeField] IKWeapon pistolWeapon;
+    [SerializeField] IKWeapon swordWeapon;
 
     int JumpEnterId;
     int StandId;
@@ -61,8 +61,7 @@ public class AnimationController : MonoBehaviourPun
                 ref dampingCo[(int)AnimatorFloatValue.Y]);
         }
     }
-    public void SetChangeViewAction(Action<CameraController.ViewType> action)
-        => ChangeViewAction = action;
+
     public void Crouch(bool state)
     {
         int standType = state ? CrouchId : StandId;
@@ -98,6 +97,8 @@ public class AnimationController : MonoBehaviourPun
 
     public void Die()
     {
+        int upper = anim.GetLayerIndex("Upper");
+        anim.SetLayerWeight(upper, 0);
     }
 
     public void MoveRun()
@@ -121,26 +122,48 @@ public class AnimationController : MonoBehaviourPun
     }
     public void EquipWeapon()
     {
-
-        iKAnimation.EquipWeapon();
+        photonView.RPC("CallEquip", RpcTarget.All);
+    }
+    public void DequipWeapon()
+    {
+        photonView.RPC("CallDequip", RpcTarget.All);
     }
     [PunRPC]
     void CallTriggerRPC(int triggerId)
     {
         anim.SetTrigger(triggerId);
-        if (triggerId == ChangeWeaponId)
+        if(triggerId == ChangeWeaponId)
+            iKAnimation?.DequipWeapon();
+    }
+
+    [PunRPC]
+    void CallEquip()
+    {
+        iKAnimation?.EquipWeapon();
+    }
+    [PunRPC]
+    void CallDequip()
+    {
+        if (aimRig.weight > 0)
+            iKAnimation?.DequipWeapon();
+        for (int i = 0; i < weaponId.Length; i++)
         {
-            iKAnimation.DequipWeapon();
-        }
-        else if(triggerId == CrouchId)
-        {
-            ChangeViewAction?.Invoke(CameraController.ViewType.Crouch);
-        }
-        else if(triggerId == StandId)
-        {
-            ChangeViewAction?.Invoke(CameraController.ViewType.Stand);
+            bool state = anim.GetBool(weaponId[i]);
+            if (i == 0)
+            {
+                pistolWeapon.gameObject.SetActive(state);
+            }
+            else if (i == 1)
+            {
+                rifleWeapon.gameObject.SetActive(state);
+            }
+            else if(i == 2)
+            {
+                swordWeapon.gameObject.SetActive(state);
+            }
         }
     }
+
 
     void SetState(AnimatorState type, bool state)
     {
@@ -160,21 +183,6 @@ public class AnimationController : MonoBehaviourPun
         {
             bool state = i == (int)type;
             anim.SetBool(weaponId[i], state);
-            if (state)
-            {
-                if (type == AnimatorWeapon.Pistol)
-                {
-                    iKAnimation.ChangeWeapon(pistolWeapon);
-                    rifleWeapon.gameObject.SetActive(false);
-                    pistolWeapon.gameObject.SetActive(true);
-                }
-                else if(type == AnimatorWeapon.Rifle)
-                {
-                    iKAnimation.ChangeWeapon(rifleWeapon);
-                    rifleWeapon.gameObject.SetActive(true);
-                    pistolWeapon.gameObject.SetActive(false);
-                }
-            }
         }
     }
 
