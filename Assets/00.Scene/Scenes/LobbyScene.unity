@@ -777,8 +777,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "NETWORK\n\tPROJECT"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 41eeb538bdbc9a04dbf40ef25e25bfd3, type: 2}
-  m_sharedMaterial: {fileID: 21307179227807236, guid: 41eeb538bdbc9a04dbf40ef25e25bfd3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f2261d3ab7863df49966b3888f39c773, type: 2}
+  m_sharedMaterial: {fileID: 21307179227807236, guid: f2261d3ab7863df49966b3888f39c773, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
