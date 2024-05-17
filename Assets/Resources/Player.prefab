@@ -17192,22 +17192,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2121747480424366495}
     m_Modifications:
-    - target: {fileID: 183001704566845463, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 80
-      objectReference: {fileID: 0}
     - target: {fileID: 2692279584178851766, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
       propertyPath: m_Name
       value: minimap
       objectReference: {fileID: 0}
-    - target: {fileID: 2862752868347619768, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_Cameras.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2862752868347619768, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_Cameras.Array.data[0]
-      value: 
-      objectReference: {fileID: 5564018747883856697}
     - target: {fileID: 3162477990895440347, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -17248,82 +17236,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3885494313623986568, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_ClearFlags
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3885494313623986568, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_TargetTexture
-      value: 
-      objectReference: {fileID: 8400000, guid: c8143dc774d7e83418d9309d759eafd0, type: 2}
-    - target: {fileID: 3885494313623986568, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: orthographic size
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 3885494313623986568, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.21960786
-      objectReference: {fileID: 0}
-    - target: {fileID: 3885494313623986568, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.21960786
-      objectReference: {fileID: 0}
-    - target: {fileID: 3885494313623986568, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.21960786
-      objectReference: {fileID: 0}
-    - target: {fileID: 3885494313623986568, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 10486272
-      objectReference: {fileID: 0}
-    - target: {fileID: 6987329565211363986, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_CameraType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6987329565211363986, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_RenderShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6987329565211363986, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_VolumeLayerMask.m_Bits
-      value: 4194304
-      objectReference: {fileID: 0}
-    - target: {fileID: 8803986756404262747, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_ClearFlags
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_TargetTexture
-      value: 
-      objectReference: {fileID: 8400000, guid: 3376918582875de4b9f58edc3cdfc566, type: 2}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: orthographic size
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_OcclusionCulling
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.21960784
-      objectReference: {fileID: 0}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.21960784
-      objectReference: {fileID: 0}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.21960784
-      objectReference: {fileID: 0}
-    - target: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 14680576
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17337,11 +17249,6 @@ GameObject:
 --- !u!4 &1877967731184276407 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3162477990895440347, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
-  m_PrefabInstance: {fileID: 3597392355943170668}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &5564018747883856697 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 8997027517693550933, guid: b84804f0b3d80f0428d831a317c3b90f, type: 3}
   m_PrefabInstance: {fileID: 3597392355943170668}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9021656047306125645
