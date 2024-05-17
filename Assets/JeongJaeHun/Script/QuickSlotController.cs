@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ChangeWeaponSlot : MonoBehaviour
 {
@@ -10,10 +13,51 @@ public class ChangeWeaponSlot : MonoBehaviour
 
     [SerializeField] private Slot[] slots; //무기 슬롯 배열 
 
-    [SerializeField] private WeaponManager weaponManager;
+    [Tooltip("총기 장비 중일 때 나올 UHD ")]
+    [SerializeField] private GunHUD gunHUD;
+    [Tooltip("근접 무기 장비시에 나올 UHD")]
+    [SerializeField] private CloseWeaponHUD closeWeaponHUD;
+    [Tooltip("폭탄 무기 장비시에 나올 UHD")]
+    [SerializeField] private BombHUD bombHUD;
+
+    public enum slotType //HUD와 연계 할 슬롯 타입 (매개변수로 받아서 HUD ON/OFF --> 하드 코딩 방지 ) 
+    {
+        PistolType=0,
+        ArType=1,     
+        CloseWeaponType=2,
+        GrenadeType=3,
+        FlashBangType=4
+    }
+
+
+    private slotType curSlotType;
+
+    public UnityEvent<slotType> slotChange;
+
+    public slotType CurSlotType
+    {
+        get { return curSlotType; }
+        set
+        {
+            curSlotType = value;
+            slotChange?.Invoke(curSlotType);
+        }
+    }
+    //[SerializeField] private WeaponManager weaponManager;
 
     Inventory inventory;
 
+    public void Change()
+    {
+        slotChange.AddListener(SlotChange);
+    }
+
+    public void SlotChange(slotType nextType)
+    {
+        // 현재 타일 끄고
+        //switch(nextType)
+        // 다음 타일켜기
+    }
 
     private void Start()
     {
@@ -38,26 +82,58 @@ public class ChangeWeaponSlot : MonoBehaviour
         {
             // 전부 꺼져있는 경우라면? --> 총을 다 버렸거나 수류탄 같은거를 물량을 다 써버렸을 때 
 
+            if (slots[slotNumber].gameObject.activeSelf==true)
+            {
+                               
+                return; 
+            }
+
+           
+
+            if (slotNumber== (int)slotType.PistolType || slotNumber==(int)slotType.ArType) // gun 
+            {
+                closeWeaponHUD.gameObject.SetActive(false);
+                bombHUD.gameObject.SetActive(false);
+
+                gunHUD.gameObject.SetActive(true); 
+            }
+            else if(slotNumber==(int)slotType.CloseWeaponType)
+            {
+                closeWeaponHUD.gameObject.SetActive(true);
+                bombHUD.gameObject.SetActive(false);
+
+                gunHUD.gameObject.SetActive(false);
+            }
+            else if(slotNumber==(int)slotType.GrenadeType|slotNumber==(int)slotType.FlashBangType)
+            {
+                closeWeaponHUD.gameObject.SetActive(false);
+                bombHUD.gameObject.SetActive(true);
+
+                gunHUD.gameObject.SetActive(false);
+            }
+
             int numChild = slots[slotNumber].transform.childCount;
+
+
+
             for(int i=0;i<numChild;i++)
             {
+                
                 // 켜져 있는 자식이 존재한다면. 그 무기로 바꿔주는 상황을 진행해줘야함.
-                if (transform.GetChild(i).gameObject.activeSelf == true) //무기가 켜져 있으면 
+                if (slots[slotNumber].transform.GetChild(i).gameObject.activeSelf == true) //무기가 켜져 있으면 (즉 무기가 있는 상황)
                 {
                     foreach (Slot slot in slots)
                     {
                         slot.gameObject.SetActive(false); //일단 모든 슬롯을 꺼주고. 
-                        slots[slotNumber].gameObject.SetActive(true); // 키가 눌린 슬롯만 켜주기. 
-
+                       
                         // 나중에 확인
                         // StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(quickSlots[selectedSlot].
                         // item.weaponType, quickSlots[selectedSlot].item.itemName));
 
                     }
+                    slots[slotNumber].gameObject.SetActive(true); // 키가 눌린 슬롯만 켜주기. 
                 }
-
             }
-
         }
     }
 
@@ -66,34 +142,26 @@ public class ChangeWeaponSlot : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
+        {           
             Excute(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Excute(1);
-
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             Excute(2);
-
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             Excute(3);
-
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             Excute(4);
-
         }
 
     }
-
-
-
-
 
 }

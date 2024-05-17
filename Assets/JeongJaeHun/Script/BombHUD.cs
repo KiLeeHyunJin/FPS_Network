@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class BombHUD : MonoBehaviour
 {
     [SerializeField] //폭탄의 정보를 얻기 위한 스크립트 참조
-    private BombController bombController;
+    private BombController[] bombController;
     private Bomb currentBomb; //현재 폭탄 상태를 어떻게 체크해줘야될지 생각해보자.
 
     [SerializeField]
@@ -24,10 +24,20 @@ public class BombHUD : MonoBehaviour
 
     private void CheckUi()
     {
-        currentBomb=bombController.GetBomb(); //현재 상태의 폭탄.
+
+        for(int i=0;i<bombController.Length;i++)
+        {
+            if (bombController[i] !=null)
+            {
+                if (bombController[i].gameObject.activeSelf) 
+                {
+                    currentBomb= bombController[i].GetBomb(); //현재 상태의 폭탄을 가져옴. 
+                }
+            }
+        }
 
         //폭탄 갯수 업데이트 ( 폭탄 이름 추가. )
-        textBomb.text = $"{currentBomb.bombName} : {currentBomb.currentBombNumber} /{currentBomb.currentBombNumber} ";
+        textBomb.text = $"{currentBomb.bombName} \n {currentBomb.currentBombNumber} /{currentBomb.fullBombNumber} ";
 
         bombImage.sprite = currentBomb.bombSprite; 
     }
