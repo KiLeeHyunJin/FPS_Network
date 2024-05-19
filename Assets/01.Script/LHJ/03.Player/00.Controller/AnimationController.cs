@@ -38,8 +38,8 @@ public class AnimationController : MonoBehaviourPun
     {
         iKAnimation = new IKAnimationController(aimRig, left, right, multiParent, GetComponent<RigBuilder>(), GetComponent<Controller>());
         
-        iKAnimation.ChangeWeapon(rifleWeapon);
-        iKAnimation.EquipWeapon();
+        //iKAnimation.ChangeWeapon(rifleWeapon);
+        //iKAnimation.EquipWeapon();
     }
     public Vector2 MoveValue
     {

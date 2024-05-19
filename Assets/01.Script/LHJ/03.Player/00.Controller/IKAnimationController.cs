@@ -23,8 +23,8 @@ public class IKAnimationController
         twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
         owner = _owner;
         rigBuilder = _builder;
-        multiParent = _multiParent;
-        multiParent.weight = 1;
+        //multiParent = _multiParent;
+        //multiParent.weight = 1;
     }
 
     public void ChangeWeapon(IKWeapon _weapon)
@@ -35,12 +35,11 @@ public class IKAnimationController
 
     public void DequipWeapon()
     {
-        //currentWeapon.transform.SetParent(handTransform[(int)Direction.Right]);
-        multiParent.data.sourceObjects.SetWeight(0, 0);
-        multiParent.data.sourceObjects.SetWeight(1, 1);
+        //return;
 
-        currentWeapon.transform.localPosition = Vector3.zero;
-        currentWeapon.transform.localRotation = Quaternion.identity;
+        //currentWeapon.transform.SetParent(handTransform[(int)Direction.Right]);
+        //multiParent.data.sourceObjects.SetWeight(0, 0);
+        //multiParent.data.sourceObjects.SetWeight(1, 1);
 
         owner.StartCoroutined(
             FrameEndAction(SetWeight, false), 
@@ -49,17 +48,19 @@ public class IKAnimationController
 
     public void EquipWeapon()
     {
+        //return;
+
+
         //currentWeapon.transform.SetParent(weaponHolder);
-        multiParent.data.constrainedObject = currentWeapon.transform;
+        //multiParent.data.constrainedObject = currentWeapon.transform;
 
-        multiParent.data.sourceObjects.SetWeight(1, 0);
-        multiParent.data.sourceObjects.SetWeight(0, 1);
+        //multiParent.data.sourceObjects.SetWeight(1, 0);
+        //multiParent.data.sourceObjects.SetWeight(0, 1);
 
-        currentWeapon.transform.localPosition = currentWeapon.OriginPos;
-        currentWeapon.transform.localRotation = currentWeapon.OriginRot;
-
-        twoBoneIKConstraint[(int)Direction.Left].data.target = currentWeapon.leftGrip;
-        twoBoneIKConstraint[(int)Direction.Right].data.target = currentWeapon.RightGrip;
+        twoBoneIKConstraint[(int)Direction.Left].data.target.position = currentWeapon.leftGrip.position;
+        twoBoneIKConstraint[(int)Direction.Left].data.target.rotation = currentWeapon.leftGrip.rotation;
+        twoBoneIKConstraint[(int)Direction.Right].data.target.position = currentWeapon.RightGrip.position;
+        twoBoneIKConstraint[(int)Direction.Right].data.target.rotation = currentWeapon.RightGrip.rotation;
 
         owner.StartCoroutined(
             FrameEndAction(SetWeight, true),
@@ -76,8 +77,8 @@ public class IKAnimationController
 
         if(state)
         {
-            rigBuilder.SyncLayers();
-            rigBuilder.Build();
+            //rigBuilder.SyncLayers();
+            //rigBuilder.Build();
         }
     }
 
