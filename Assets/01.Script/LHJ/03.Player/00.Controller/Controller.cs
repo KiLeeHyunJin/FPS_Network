@@ -103,12 +103,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
         requestController = GetComponent<RequestController>();
         cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
 
-        minimapIcon_m.SetActive(true);
+        minimapIcon_m?.SetActive(true);
 
         if (Mine == false)
         {
             Destroy(enemySearcher);
-            minimapIcon_m.SetActive(false);
+            minimapIcon_m?.SetActive(false);
             cam.gameObject.SetActive(false);
             Destroy(miniCam);
             Destroy(inputController);
@@ -121,8 +121,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
                 Destroy(enemyIcon);
                 minimapIcon_Ally.SetActive(true);
             }
-                
-
             return;
         }
         cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
