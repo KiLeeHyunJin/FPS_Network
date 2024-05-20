@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Bomb : IKWeapon
@@ -22,6 +21,8 @@ public class Bomb : IKWeapon
 
     public BombType bombType;
 
+    
+
     [Header("HUD와 연계될 정보들")]
     [Tooltip("ui에 표현될 폭탄의 스프라이트")]
     public Sprite bombSprite;
@@ -36,7 +37,7 @@ public class Bomb : IKWeapon
     public LineRenderer lineRenderer;  // 그런데 이거 컨트롤러에서 하고 있는거 아닌가? */
 
     [Header("기타 이펙트 및 소리 등")]
-    public AudioClip bomb_Sound; //폭탄 종류에 따른 사운드
+    
     [Tooltip("수류탄 폭발 이펙트")]
     public ParticleSystem bomb_ParticleSystem;
     [Tooltip("섬광탄 폭발 이펙트")]
@@ -56,8 +57,14 @@ public class Bomb : IKWeapon
     public LayerMask targetLayerMask;
     [Tooltip("수류탄의 데미지")]
     public int damage;
-    [Tooltip("폭탄의 포스트 프로세싱 효과")]
-    public ProcessingController processing;
+
+    [Tooltip("수류탄 폭발용 게임오브젝트")]
+    public GameObject bombFX;
+    [Tooltip("섬광탄 폭발 게임오브젝트")]
+    public GameObject flashFX;
+
+    private ProcessingController processing;
+
     [Tooltip("수류탄 폭발 소리 ")]
     public AudioClip bombSoundClip;
     [Tooltip("섬광탄 폭발 소리 ")]
@@ -75,47 +82,52 @@ public class Bomb : IKWeapon
 
     private void OnEnable() 
     {
-        lineRenderer=GetComponent<LineRenderer>(); 
-        lineRenderer.enabled=true;  
+        /*lineRenderer=GetComponent<LineRenderer>(); 
+        lineRenderer.enabled=true;  */
     }
-
     private void OnDisable()
     {
-        lineRenderer.enabled = false;
+        /*lineRenderer.enabled = false;*/
+        rigidbody.isKinematic = true; // 키네마틱 on ( 투척시에 키네마틱 꺼줄 예정) 
     }
-
     protected override void Awake()
     {
         base.Awake();
     }
 
-
     public void Start()  //일단 기본적으로 시작할 때 rigidbody kinematic 실시해줘야함. 
     {
         rigidbody=GetComponent<Rigidbody>();
-        rigidbody.isKinematic= true; // 키네마틱 on ( 투척시에 키네마틱 꺼줄 예정) 
 
-        audioSource=GetComponent<AudioSource>(); 
+        audioSource=GetComponent<AudioSource>();  //폭탄에 붙어 있는데 어째서 ??
 
         audioSource.loop=false;  //  loop 꺼주기.
         audioSource.playOnAwake = false; //시작하자마자 소리 키기 꺼주기. 
 
         damage = 50;
-        processing = new ProcessingController();
     }
 
 
     // 인보크 등 코루틴이던 다른 곳에서 실행 시켜줄? 아니면 여기서 실행할 수도 있고 생각해보자. 
-    public void CountDownBomb() //폭탄 투척시 카운트 다운임. --?컨트롤러에서 투척 실행 시 이 함수를 부르자.
+    public void CountDownBomb(GameObject instanceBomb) //폭탄 투척시 카운트 다운임. --?컨트롤러에서 투척 실행 시 이 함수를 부르자.
     {
-        switch (bombType)  //자신의 타입에 따라 다른 함수 실행. 
+        if (instanceBomb == null)
+            return;
+
+        Bomb ins= instanceBomb.GetComponent<Bomb>();
+
+
+        switch (ins.bombType)  //자신의 타입에 따라 다른 함수 실행. 
         {
             case BombType.GRENADE:
-                Invoke("Grenade", delayTime); // 딜레이타임 이후 폭발 실행. 
+                ins.StartCoroutine(Grenade(instanceBomb,ins));
+                
                 break;
             case BombType.FLASHBANG:
-                Invoke("FlashBang", delayTime);
+                ins.StartCoroutine(FlashBang(instanceBomb,ins));
+                
                 break;
+
         }
     }
 
@@ -123,17 +135,18 @@ public class Bomb : IKWeapon
 
     private void BombFindTarget()
     {
+        Debug.Log("붐파인드타겟 실행");
         int size = Physics.OverlapSphereNonAlloc(transform.position, range, colliders, targetLayerMask);
 
         for (int i = 0; i < size; i++) //한 번 player가 체크되면 데미지 주고 빠져나가야함. 
         {
             Controller controller=colliders[i].gameObject.GetComponent<Controller>();
 
-            if(controller!=null && processing!=null) //targetLayer가 controller를 가지고 있다면. 데미지 주기. 
+            if(controller!=null) //targetLayer가 controller를 가지고 있다면. 데미지 주기. 
             {
                 controller.Damage(damage); //데미지 함수 내부에서 쉴드체크 해주고 있음. !
-                processing.HitEffect(); //데미지 받는 이펙트 진행. 
-                break; //1회만 데미지를 주고 for문 탈출. 
+                controller.GetComponent<ProcessingController>()?.HitEffect();
+                
             }
         }
     }
@@ -149,37 +162,45 @@ public class Bomb : IKWeapon
             Controller controller = colliders[i].gameObject.GetComponent<Controller>();
             if (controller != null)
             {
-                
-                if(processing!=null)
-                {
-                    processing.FlashEffect();
-                }
-                break;
+                controller.GetComponent<ProcessingController>()?.FlashEffect();
             }
         }
     }
-    public void Grenade() //수류탄 터질 시 발생할 함수
+    private IEnumerator Grenade(GameObject instanceBomb,Bomb bomb) //수류탄 터질 시 발생할 함수
     {
+       
+        yield return new WaitForSeconds(delayTime); //지금 이 뒤로 진행이 안되는데?
+        BombFindTarget();
+        
 
-        BombFindTarget(); 
+        GameObject bombFxIns= Instantiate(bombFX, instanceBomb.transform.position,Quaternion.identity);
+        bomb.audioSource.PlayOneShot(bombSoundClip, 1.0f); //특정 클립 한 번만 재생 --> 매개변수 2번째는 소리크기 조절.
+        yield return new WaitForSeconds(2f);
+        
+        Destroy(instanceBomb.gameObject);
+        Destroy(bombFxIns);
 
-        bomb_ParticleSystem.Play();
-        audioSource.PlayOneShot(bombSoundClip, 1.0f); //특정 클립 한 번만 재생 --> 매개변수 2번째는 소리크기 조절. 
-        Debug.Log("그레네이드 함수발동됨");
 
     }
 
-    public void FlashBang() // 섬광탄 터질 시 발생할 함수 
+    private IEnumerator FlashBang(GameObject instanceBomb,Bomb bomb) // 섬광탄 터질 시 발생할 함수 
     {
+        yield return new WaitForSeconds(delayTime);
+
         FlashFindTarget();
 
-        flash_ParticleSystem.Play(); //섬광탄 파티클 재생. 
-        audioSource.PlayOneShot(FlashSoundClip, 1.0f); //섬광탄 소리 
-        Debug.Log("플래시뱅 함수 발동됨.");
+        GameObject flashFxINS = Instantiate(flashFX, instanceBomb.transform.position, Quaternion.identity);
+
+        bomb.audioSource.PlayOneShot(FlashSoundClip, 1.0f); //섬광탄 소리 
+        yield return new WaitForSeconds(2f);
+        Destroy(instanceBomb.gameObject);
+        Destroy(flashFxINS);
 
     }
 
+
     
+
 
 
     

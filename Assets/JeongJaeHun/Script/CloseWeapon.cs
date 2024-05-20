@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class CloseWeapon : IKWeapon
 {
-    // 이게 지금 holder에 붙어 잇으니까 이 부분에 다 붙여넣어주자.. 
+    // sword는 기본 변수만 가지고 있음. --> closeWeapon에서 직접이용 (gun controller나 마찬가지 기능임)
+    //결국 여기서 쓰는 변수들은 currentSword의 변수들을 이용하는 것임. --> < currentSowrd. > 
 
-
-    [Tooltip("현재 active 된 무기")]
+    [Tooltip("현재 active 된 무기")] // 
     public Sword currentSword;
 
     [Tooltip("현재 공격중인지?")]
@@ -49,8 +49,12 @@ public class CloseWeapon : IKWeapon
 
     public Animator anim; //무기에 애니메이터를 붙이나?? 
 
+   
+    private AudioSource audioSource;
     [Tooltip("무기 공격 사운드")]
-    public AudioSource audioSource;
+    public AudioClip swordSoundClip;
+    [Tooltip("무기 휘두를 시 트레일 렌더러")]
+    public TrailRenderer trailRenderer;
 
 
     [Header("각도 및 데미지 체크")]
@@ -82,8 +86,15 @@ public class CloseWeapon : IKWeapon
         }
     }
 
+    // 현재 무기에 따라 실제로 실행되는 함수를 여기다 두어야하나? 
 
     public Sword GetCloseWeapon() { return currentSword; }
+
+
+    private void Start()
+    {
+        audioSource= GetComponent<AudioSource>();
+    }
 
     protected override void Awake()
     {
@@ -92,12 +103,13 @@ public class CloseWeapon : IKWeapon
 
     private void OnEnable() //어차피 처음 시작에 꺼줄꺼니가 on에서 한 번 해보자. 
     {
-        int numOfChild = this.transform.childCount;
+        int numOfChild = this.transform.childCount; //현재 활성화된 무기 검색. 
         for (int i = 0; i < numOfChild; i++)
         {
             if (transform.GetChild(i).gameObject.activeSelf == true)
             {
                 currentSword = transform.GetChild(i).GetComponent<Sword>();
+                break; 
             }
         }
     }
@@ -107,6 +119,11 @@ public class CloseWeapon : IKWeapon
         if (!isAttack) //어택 중이 아니면 TryAttack 시도 (실제 공격시도)
         {
             StartCoroutine(AttackCoroutine());
+
+            //어택성공하면 sound 와 trail 내부에서 진행. -->코루틴 외부에서해야함 (안 맞아도 소리는 나야함)
+
+
+
         }
     }
 
@@ -118,7 +135,9 @@ public class CloseWeapon : IKWeapon
         isAttack = true;
         yield return new WaitForSeconds(currentSword.attackDelayA); //팔 돌리기 전 대기 
         isSwing = true;
-        
+
+        StartCoroutine(HitCoroutine());
+
         yield return new WaitForSeconds(currentSword.attackDelayB);
         isSwing = false;
 
@@ -128,19 +147,23 @@ public class CloseWeapon : IKWeapon
 
     }
 
+
     Collider[] colliders = new Collider[20]; 
 
-    protected void AttackTiming()
+   IEnumerator HitCoroutine() //중첩코루틴 하면 해당 코루틴이 종료될 때 까지 대기하게 된다.(while 주의) 
     {
-        // 
-        int size = Physics.OverlapSphereNonAlloc(currentSword.transform.position
-            , currentSword.range, colliders, layerMask);
-
-        for(int i=0;i<size;i++)
+        while(isSwing)
         {
-            
+            // 내부 overlap 체크 --> 시간 확인  
+            // player 있으면 isSwing=false; --> while문 탈출 후 
+            // 굳이 꼭 이런식으로? 그냥 overlap 돌리는게 낫지 않나? 
+            // 그런데 딱 layer가 닿는 순간에 피가 터져야하니까.. 그거 생각하면 while이 나을 수도 
+
+
+            isSwing = false;
         }
 
+        yield return null;
     }
 
     public virtual void CloseWeaponChange(CloseWeapon _closeWeapon) // 근접 무기 변경 가상 함수. 

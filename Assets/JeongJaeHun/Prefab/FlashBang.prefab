@@ -72,6 +72,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 76fa50113d7298a46906cf5933244bdb, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1754177071249997999}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 76fa50113d7298a46906cf5933244bdb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3782740813613056078}
   m_SourcePrefab: {fileID: 100100000, guid: 76fa50113d7298a46906cf5933244bdb, type: 3}
 --- !u!1 &588291369709093362 stripped
 GameObject:
@@ -97,19 +100,19 @@ MonoBehaviour:
   bombName: "\uC12C\uAD11\uD0C4 "
   fullBombNumber: 2
   currentBombNumber: 2
-  bomb_Sound: {fileID: 0}
   bomb_ParticleSystem: {fileID: 0}
   flash_ParticleSystem: {fileID: 0}
   delayTime: 3
   throwDelay: 5
-  range: 0
+  range: 10
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
   damage: 0
-  processing: {fileID: 0}
-  bombSoundClip: {fileID: 0}
-  FlashSoundClip: {fileID: 0}
+  bombFX: {fileID: 0}
+  flashFX: {fileID: 0}
+  bombSoundClip: {fileID: 8300000, guid: 419336aa8912ae0468e104596863a0a1, type: 3}
+  FlashSoundClip: {fileID: 8300000, guid: 64baa1f44691afc42a584e482cd9a27d, type: 3}
 --- !u!120 &2242347534956566249
 LineRenderer:
   serializedVersion: 2
@@ -337,3 +340,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!136 &3782740813613056078
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588291369709093362}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0.29774532, y: -1.2254158, z: 15.164}
