@@ -16,9 +16,6 @@ public class AnimationController : MonoBehaviourPun
 
     [SerializeField] Rig handRig;
 
-    [SerializeField] Transform primary;
-    [SerializeField] Transform secondary;
-
     [SerializeField] MultiParentConstraint primaryParent;
     [SerializeField] MultiParentConstraint subParent;
     [SerializeField] MultiParentConstraint knifeParent;
@@ -49,7 +46,10 @@ public class AnimationController : MonoBehaviourPun
     readonly string TRIGGER = "CallTriggerRPC";
     private void Start()
     {
-        iKAnimation = new IKAnimationController(handRig, GetComponent<RigBuilder>(), left, right, primaryParent, subParent, knifeParent, throwParent, currentWeapons, saveWeapons, GetComponent<Controller>());
+        iKAnimation = new IKAnimationController
+            (handRig, GetComponent<RigBuilder>(), left, right, 
+            primaryParent, subParent, knifeParent, throwParent, 
+            currentWeapons, saveWeapons, GetComponent<Controller>());
         
         //iKAnimation.ChangeWeapon(rifleWeapon);
         //iKAnimation.EquipWeapon();

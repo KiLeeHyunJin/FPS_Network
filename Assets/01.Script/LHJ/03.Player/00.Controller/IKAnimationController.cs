@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
+using static Define;
 using static UnityEngine.Rendering.DebugUI;
 
 public class IKAnimationController
@@ -52,9 +53,7 @@ public class IKAnimationController
     {
         currentWeapon = _weapon;
         if (currentWeaponId[(int)_weapon.weaponType] != _weapon.GetInstanceID())
-        {
-
-        }
+            EquipWeaponEnter(_weapon);
         ChangeWeaponWeight(currentWeapon.weaponType);
     }
 
@@ -133,6 +132,17 @@ public class IKAnimationController
     }
     Coroutine handCo;
 
+    void EquipWeaponEnter(IKWeapon weapon)
+    {
+        currentWeaponId[(int)weapon.weaponType] = weapon.GetInstanceID();
+
+        for (int i = 0; i < currentWeapons[(int)weapon.weaponType].childCount; i++)
+            currentWeapons[(int)weapon.weaponType].GetChild(i).transform.SetParent(saveWeapons[(int)weapon.weaponType]);
+
+        weapon.transform.SetParent(currentWeapons[(int)weapon.weaponType]);
+        weapon.transform.localPosition = Vector3.zero;
+        weapon.transform.localRotation = Quaternion.identity;
+    }
     IEnumerator FrameHandTarget()
     {
         yield return new WaitForEndOfFrame();
@@ -152,8 +162,7 @@ public class IKAnimationController
             {
                 currentWeaponParent = weaoponParent[i];
                 currentWeaponParent.data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
-                //장착 무기에 있는지 확인
-                //없으면 parent 이동 및 활성화
+
                 HandOn();
             }
         }

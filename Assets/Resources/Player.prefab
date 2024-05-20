@@ -335,7 +335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1028063607362966582}
   m_Layer: 24
-  m_Name: 02.Thrower
+  m_Name: 03.Thrower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1875,8 +1875,8 @@ Transform:
   m_Children:
   - {fileID: 2104039700890027392}
   - {fileID: 8621067361844610791}
+  - {fileID: 475067165285954441}
   - {fileID: 1028063607362966582}
-  - {fileID: 3176187071470092052}
   - {fileID: 4166024142292734671}
   m_Father: {fileID: 2537293654791088781}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7780,8 +7780,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dampingSpeed: 0
   handRig: {fileID: 1244557321125575083}
-  primary: {fileID: 0}
-  secondary: {fileID: 0}
   primaryParent: {fileID: 5709171757124478688}
   subParent: {fileID: 7384799907462462980}
   knifeParent: {fileID: 6197072261432390898}
@@ -7791,12 +7789,14 @@ MonoBehaviour:
   swordWeapon: {fileID: 2052427345127219892}
   throwWeapon: {fileID: 3411624786301720531}
   currentWeapons:
-  - {fileID: 8296164532963933574}
   - {fileID: 6645689630095728053}
+  - {fileID: 8296164532963933574}
+  - {fileID: 4983004326694610994}
   - {fileID: 3630669043222935506}
   saveWeapons:
-  - {fileID: 2104039700890027392}
   - {fileID: 8621067361844610791}
+  - {fileID: 2104039700890027392}
+  - {fileID: 475067165285954441}
   - {fileID: 1028063607362966582}
   left: {fileID: 1175105020223948357}
   right: {fileID: 3146569453552303302}
@@ -11420,13 +11420,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3838130477298301779}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 0.70000005, y: 0.7, z: 0.70000005}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 947338860529208512}
-  m_Father: {fileID: 2640863731238187225}
+  m_Father: {fileID: 475067165285954441}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2052427345127219892
 MonoBehaviour:
@@ -11733,6 +11733,38 @@ Transform:
   - {fileID: 6669154652655310606}
   - {fileID: 239721155919568650}
   m_Father: {fileID: 2121747480424366495}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4182599775936057120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 475067165285954441}
+  m_Layer: 24
+  m_Name: 02.Sword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &475067165285954441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4182599775936057120}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3176187071470092052}
+  m_Father: {fileID: 2640863731238187225}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4206755357105766244
 GameObject:
@@ -14220,6 +14252,7 @@ Transform:
   m_Children:
   - {fileID: 8296164532963933574}
   - {fileID: 6645689630095728053}
+  - {fileID: 4983004326694610994}
   - {fileID: 3630669043222935506}
   m_Father: {fileID: 2537293654791088781}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20407,6 +20440,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &9141832856700347183
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4983004326694610994}
+  m_Layer: 24
+  m_Name: Sword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4983004326694610994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9141832856700347183}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7777466239967728839}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9158148387096990995
 GameObject:
   m_ObjectHideFlags: 0
