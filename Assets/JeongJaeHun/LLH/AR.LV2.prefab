@@ -197,7 +197,7 @@ MonoBehaviour:
   <leftGrip>k__BackingField: {fileID: 0}
   <RightGrip>k__BackingField: {fileID: 0}
   weaponType: 1
-  gunSprite: {fileID: 0}
+  gunSprite: {fileID: -904710510, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
   gunID: 2
   gunType: 1
   gunName: AR2

@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 8838885063687410231}
   - component: {fileID: 4503084811113121782}
   - component: {fileID: 6188891708972201241}
+  - component: {fileID: -2788287913922397801}
   m_Layer: 0
   m_Name: SniperGUN
   m_TagString: Untagged
@@ -251,3 +252,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-2788287913922397801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8171807902769747681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <leftGrip>k__BackingField: {fileID: 0}
+  <RightGrip>k__BackingField: {fileID: 0}
+  weaponType: 0
+  gunSprite: {fileID: 966742079, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
+  gunID: 2
+  gunType: 2
+  gunName: SNIPER1
+  range: 300
+  accuracy: 1
+  fireRate: 2
+  reloadTime: 3
+  trailEffect: {fileID: 0}
+  damage: 50
+  currentBulletCount: 5
+  maxBulletCount: 5
+  retroActionForce: 0
+  retroActionFineSightForce: 0
+  fineSightOriginPos: {x: 0, y: 0, z: 0}
+  anim: {fileID: 0}
+  muzzleFlash: {fileID: 0}
+  fire_Sound: {fileID: 0}
