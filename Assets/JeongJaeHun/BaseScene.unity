@@ -418,6 +418,18 @@ PrefabInstance:
       propertyPath: attackDelayB
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2194873766721633858, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_Drag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2194873766721633858, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_AngularDrag
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2194873766721633858, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2911517347963259167, guid: 808aea02acf71864cb971886aa848af7, type: 3}
       propertyPath: m_Height
       value: 0.1

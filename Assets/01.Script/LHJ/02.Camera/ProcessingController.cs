@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 public class ProcessingController : MonoBehaviour
 {
-    [SerializeField] AnimationCurve hitEffectCurve  = AnimationCurve.Linear(0, 0, 1, 1);
+    [SerializeField] AnimationCurve hitEffectCurve = AnimationCurve.Linear(0, 0, 1, 1);
     [SerializeField] AnimationCurve flashEffectCurve;
 
     [SerializeField] Volume volume;
@@ -47,8 +47,8 @@ public class ProcessingController : MonoBehaviour
 
         floatParameter = new VolumeParameter<float>();
         colorParameter = new ColorParameter(Color.red);
-        clamped = new ClampedFloatParameter(1,0,1,true);
-        
+        clamped = new ClampedFloatParameter(1, 0, 1, true);
+
         //FlashEffect();
     }
 
@@ -70,11 +70,11 @@ public class ProcessingController : MonoBehaviour
     IEnumerator HitRoutine()
     {
         vignette.active = true;
-        if(vignette.color.overrideState == false)
+        if (vignette.color.overrideState == false)
             vignette.color.overrideState = true;
-        if(vignette.intensity.overrideState == false)
+        if (vignette.intensity.overrideState == false)
             vignette.intensity.overrideState = true;
-        if(vignette.smoothness.overrideState == false)
+        if (vignette.smoothness.overrideState == false)
             vignette.smoothness.overrideState = true;
 
         colorParameter.value = Color.red;
@@ -101,10 +101,10 @@ public class ProcessingController : MonoBehaviour
 
         colorCurves.active = true;
         lensDistortion.active = true;
-        
+
         VolumeParameter<float> volumeParameter = new VolumeParameter<float>();
         volumeParameter.value = 0;
-        TextureCurveParameter textureCurveParameter= colorCurves.master;
+        TextureCurveParameter textureCurveParameter = colorCurves.master;
         textureCurveParameter.overrideState = true;
         TextureCurve originCurve = textureCurveParameter.value;
 
@@ -230,7 +230,7 @@ public class ProcessingController : MonoBehaviour
             yield return null;
             time += Time.deltaTime;
         }
-        while(outTime >= time)
+        while (outTime >= time)
         {
             float timeValue = time / halfTime;
             volumeParameter.value = Mathf.Lerp(0, 30, timeValue);
