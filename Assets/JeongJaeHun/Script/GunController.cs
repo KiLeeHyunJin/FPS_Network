@@ -42,7 +42,7 @@ public class GunController : MonoBehaviour
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        
+        Debug.Log("총 켜짐");
     }
 
 
@@ -88,11 +88,7 @@ public class GunController : MonoBehaviour
             TryReload();
             
         }
-
-
     }
-
-
     public void CancelReload() //리로드 동작 중지. 
     {
         if(isReload) //장전 중이면 

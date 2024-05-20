@@ -76,7 +76,10 @@ public class AnimationController : MonoBehaviourPun
 
     public void Atck()
     {
+        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Sword]) == false)
+            return;
         photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
+        DequipWeapon();
     }
 
     public void ChangeWeapon(AnimatorWeapon type)
@@ -144,24 +147,28 @@ public class AnimationController : MonoBehaviourPun
     [PunRPC]
     void CallDequip()
     {
-        if (aimRig.weight > 0)
-            iKAnimation?.DequipWeapon();
         for (int i = 0; i < weaponId.Length; i++)
         {
             bool state = anim.GetBool(weaponId[i]);
+            IKWeapon weapon = null;
             if (i == 0)
             {
-                pistolWeapon.gameObject.SetActive(state);
+                weapon = pistolWeapon;
             }
             else if (i == 1)
             {
-                rifleWeapon.gameObject.SetActive(state);
+                weapon = rifleWeapon;
             }
             else if(i == 2)
             {
-                swordWeapon.gameObject.SetActive(state);
+                weapon = swordWeapon;
             }
+            weapon?.gameObject.SetActive(state);
+            if (state)
+                iKAnimation.ChangeWeapon(weapon);
         }
+        if (aimRig.weight > 0)
+            iKAnimation?.DequipWeapon();
     }
 
 

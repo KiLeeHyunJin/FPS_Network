@@ -459,10 +459,7 @@ PrefabInstance:
       propertyPath: closeWeaponHUD
       value: 
       objectReference: {fileID: 599017119}
-    m_RemovedComponents:
-    - {fileID: 7605835922177634441, guid: 808aea02acf71864cb971886aa848af7, type: 3}
-    - {fileID: 798194200535490940, guid: 808aea02acf71864cb971886aa848af7, type: 3}
-    - {fileID: 8911849654448172631, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -569,10 +566,6 @@ PrefabInstance:
     - target: {fileID: 6938906202110752654, guid: 1aa4dcf5c5e123743a5645d454990faf, type: 3}
       propertyPath: m_Name
       value: ShopCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 6938906202110752654, guid: 1aa4dcf5c5e123743a5645d454990faf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
