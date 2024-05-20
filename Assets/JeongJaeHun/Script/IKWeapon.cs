@@ -9,7 +9,8 @@ public class IKWeapon : MonoBehaviour
     // leftGrip  // RightGrip 에 각각 자기 부품 위치 넣어주기.
 
     // 칼 과 수류탄이라면 Right만 넣어주기? 
-
+    [field: SerializeField]
+    public Transform WeaponPos { get; private set; }
     [field : SerializeField]
     public Transform leftGrip { get; private set; }
 

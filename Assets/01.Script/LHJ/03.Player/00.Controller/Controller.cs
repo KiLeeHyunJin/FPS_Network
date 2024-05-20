@@ -32,6 +32,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] float mouseSensitivity;
     [SerializeField] GameObject[] FPSIgnoreObject;
     [SerializeField] GameObject[] FPSHand;
+    [SerializeField] GameObject[] weaponObj;
     [SerializeField] Transform target;
 
     [SerializeField] Transform cameraRoot;
@@ -266,6 +267,18 @@ public class Controller : MonoBehaviourPun, IPunObservable
             childeGameObject.layer = bodyNum;
         foreach (GameObject childeGameObject in FPSHand)
             childeGameObject.layer = handNum;
+
+        for (int i = 0; i < weaponObj.Length; i++)
+        {
+            if (weaponObj[i] != null)
+            {
+                Transform[] children = weaponObj[i].GetComponentsInChildren<Transform>();
+                foreach (Transform chl in children)
+                {
+                    chl.gameObject.layer = handNum;
+                }
+            }
+        }
     }
 
     void SlideJump()

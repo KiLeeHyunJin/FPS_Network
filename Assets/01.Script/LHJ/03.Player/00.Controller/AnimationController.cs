@@ -12,9 +12,12 @@ public class AnimationController : MonoBehaviourPun
     Animator anim;
     public Animator Anim { get { return anim; } }
     Coroutine[] dampingCo;
+    [SerializeField] float dampingSpeed;
 
     [SerializeField] Rig handRig;
-    [SerializeField] float dampingSpeed;
+
+    [SerializeField] Transform primary;
+    [SerializeField] Transform secondary;
 
     [SerializeField] MultiParentConstraint primaryParent;
     [SerializeField] MultiParentConstraint subParent;
@@ -25,6 +28,9 @@ public class AnimationController : MonoBehaviourPun
     [SerializeField] IKWeapon pistolWeapon;
     [SerializeField] IKWeapon swordWeapon;
     [SerializeField] IKWeapon throwWeapon;
+
+    [SerializeField] Transform[] currentWeapons;
+    [SerializeField] Transform[] saveWeapons;
 
     [SerializeField] TwoBoneIKConstraint left;
     [SerializeField] TwoBoneIKConstraint right;
@@ -43,7 +49,7 @@ public class AnimationController : MonoBehaviourPun
     readonly string TRIGGER = "CallTriggerRPC";
     private void Start()
     {
-        iKAnimation = new IKAnimationController(handRig, left, right, primaryParent, subParent, knifeParent, throwParent, GetComponent<Controller>());
+        iKAnimation = new IKAnimationController(handRig, GetComponent<RigBuilder>(), left, right, primaryParent, subParent, knifeParent, throwParent, currentWeapons, saveWeapons, GetComponent<Controller>());
         
         //iKAnimation.ChangeWeapon(rifleWeapon);
         //iKAnimation.EquipWeapon();
@@ -84,7 +90,6 @@ public class AnimationController : MonoBehaviourPun
         if (anim.GetBool(weaponId[(int)AnimatorWeapon.Sword]) ||
             anim.GetBool(weaponId[(int)AnimatorWeapon.Throw]) )
             photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
-        //DequipWeapon();
     }
 
     public void ChangeWeapon(AnimatorWeapon type)
@@ -129,7 +134,7 @@ public class AnimationController : MonoBehaviourPun
         SetState(AnimatorState.JumpFinish, true);
     }
 
-    public void TransitionWeapon() //
+    public void TransitionWeapon()
     {
         iKAnimation?.HandOn();
     }

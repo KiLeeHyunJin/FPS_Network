@@ -8,7 +8,12 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class IKAnimationController
 {
+    readonly RigBuilder rigBuilder;
     readonly Rig handRig;
+
+    readonly Transform[] currentWeapons;
+
+    readonly Transform[] saveWeapons;
 
     readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
 
@@ -19,20 +24,26 @@ public class IKAnimationController
     IKWeapon currentWeapon;
     AnimationController.AnimatorWeapon currentWeaponType;
     MultiParentConstraint currentWeaponParent;
-
+    int[] currentWeaponId;
     public IKAnimationController(
         Rig _handRig,
+        RigBuilder _rigBuilder,
         TwoBoneIKConstraint _leftRig,
-        TwoBoneIKConstraint _rightRig, 
-        MultiParentConstraint _primaryParent, 
-        MultiParentConstraint _subParent, 
-        MultiParentConstraint _knifeParent, 
+        TwoBoneIKConstraint _rightRig,
+        MultiParentConstraint _primaryParent,
+        MultiParentConstraint _subParent,
+        MultiParentConstraint _knifeParent,
         MultiParentConstraint _throwParent,
+        Transform[] _currentWeaopons,
+        Transform[] _saveWeapons,
         Controller _owner)
     {
+        currentWeaponId = new int[(int)AnimationController.AnimatorWeapon.END];
         handRig = _handRig;
         owner = _owner;
-
+        rigBuilder = _rigBuilder;
+        currentWeapons = _currentWeaopons;
+        saveWeapons = _saveWeapons;
         twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
         weaoponParent = new MultiParentConstraint[] { _subParent, _primaryParent, _knifeParent, _throwParent };
     }
@@ -40,7 +51,10 @@ public class IKAnimationController
     public void ChangeWeapon(IKWeapon _weapon)
     {
         currentWeapon = _weapon;
-        Debug.Log("ChangeParent");
+        if (currentWeaponId[(int)_weapon.weaponType] != _weapon.GetInstanceID())
+        {
+
+        }
         ChangeWeaponWeight(currentWeapon.weaponType);
     }
 
@@ -137,6 +151,9 @@ public class IKAnimationController
             if ((int)weaponType == i)
             {
                 currentWeaponParent = weaoponParent[i];
+                currentWeaponParent.data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
+                //장착 무기에 있는지 확인
+                //없으면 parent 이동 및 활성화
                 HandOn();
             }
         }
