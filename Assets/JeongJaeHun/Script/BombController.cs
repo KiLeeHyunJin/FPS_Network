@@ -38,7 +38,7 @@ public class BombController : MonoBehaviour
         mainCamera = Camera.main;
         lineRenderer = currentBomb.GetComponent<LineRenderer>();
         lineRenderer.enabled = true; // 렌더러 켜주기. 
-        ShowTrajectory();
+        ShowTrajectory(); //폭탄을 들고 있는 상태가되면 궤적을 보여줌. 
     }
 
     private void OnDisable()
@@ -53,9 +53,6 @@ public class BombController : MonoBehaviour
             Throw(); // 임시로 폭탄 발사. 
         }
     }
-
-    
-
     private void Start()
     {
         
@@ -69,9 +66,6 @@ public class BombController : MonoBehaviour
             return; //발사불가능
         }
 
-        
-
-
         // 이게 손에 들어가 있는 상황에서는 transform을 어떻게 잡아줘야 될지 고민되네
         // local 인지 전역 position인지.. 
         Vector3 position = transform.position;
@@ -80,8 +74,7 @@ public class BombController : MonoBehaviour
         Vector3 startPosition = transform.position;
 
         instanceBomb = Instantiate(currentBomb.gameObject, startPosition,Quaternion.identity);
-
-
+        // 실제 인벤토리의 아이템을 투척하는 것이 아니라 인스턴스를 생성하고 그것을 투척함. 
 
         //Vector3 startPosition = transform.localPosition;  --> 이거 실험해보자. 
 
@@ -89,6 +82,8 @@ public class BombController : MonoBehaviour
         Rigidbody rigidGrenade = instanceBomb.GetComponent<Rigidbody>();
         rigidGrenade.isKinematic = false; //키네마틱 해제. 
         rigidGrenade.AddForce(startVelocity, ForceMode.Impulse);
+
+        currentBomb.CountDownBomb();  //현재 폭탄의 실제 폭발 함수 실행. -->내부에서 case에 따라 효과전환해줌. 
 
         currentBomb.currentBombNumber--;
        
