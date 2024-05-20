@@ -11,30 +11,23 @@ public class IKAnimationController
 {
     readonly RigBuilder rigBuilder;
     readonly Rig handRig;
-
     readonly Transform[] currentWeapons;
-
     readonly Transform[] saveWeapons;
-
-    readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
-
     readonly MultiParentConstraint[] weaoponParent;
-
+    readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
     readonly Controller owner;
+    MultiParentConstraint currentWeaponParent;
 
     IKWeapon currentWeapon;
-    AnimationController.AnimatorWeapon currentWeaponType;
-    MultiParentConstraint currentWeaponParent;
     int[] currentWeaponId;
+
+    AnimationController.AnimatorWeapon currentWeaponType;
     public IKAnimationController(
         Rig _handRig,
         RigBuilder _rigBuilder,
         TwoBoneIKConstraint _leftRig,
         TwoBoneIKConstraint _rightRig,
-        MultiParentConstraint _primaryParent,
-        MultiParentConstraint _subParent,
-        MultiParentConstraint _knifeParent,
-        MultiParentConstraint _throwParent,
+        MultiParentConstraint[] _Parents,
         Transform[] _currentWeaopons,
         Transform[] _saveWeapons,
         Controller _owner)
@@ -46,15 +39,16 @@ public class IKAnimationController
         currentWeapons = _currentWeaopons;
         saveWeapons = _saveWeapons;
         twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
-        weaoponParent = new MultiParentConstraint[] { _subParent, _primaryParent, _knifeParent, _throwParent };
+        weaoponParent = _Parents;
     }
 
     public void ChangeWeapon(IKWeapon _weapon)
     {
         currentWeapon = _weapon;
-        if (currentWeaponId[(int)_weapon.weaponType] != _weapon.GetInstanceID())
-            EquipWeaponEnter(_weapon);
+        if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.GetInstanceID())
+            EquipWeaponEnter(currentWeapon);
         ChangeWeaponWeight(currentWeapon.weaponType);
+        //owner.SetZoomPosition(currentWeapon.ZoomPos);
     }
 
     void SetWeight(int value)
@@ -69,6 +63,10 @@ public class IKAnimationController
         owner.StartCoroutined(
             FrameParentAction(0),
             ref parentco);
+
+        for (int i = 0; i < currentWeapons.Length; i++)
+            for (int j = 0; j < currentWeapons[i].childCount; j++)
+                currentWeapons[i].GetChild(j).gameObject.SetActive(false);
     }
 
     public void EquipWeapon()
@@ -160,8 +158,8 @@ public class IKAnimationController
             weaoponParent[i].weight = 0;
             if ((int)weaponType == i)
             {
+                weaoponParent[i].data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
                 currentWeaponParent = weaoponParent[i];
-                currentWeaponParent.data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
 
                 HandOn();
             }

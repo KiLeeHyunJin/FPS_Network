@@ -150,7 +150,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
         foreach (Collider collider in colliders)
             collider.gameObject.AddComponent<HitBox>().SetOwner(this, Mine);
     }
-
+    public void SetZoomPosition(Transform _zoom)
+    => cameraController.SetZoomPosition(_zoom);
     void Update()
         => Updates?.Invoke();
     void FixedUpdate()
@@ -183,23 +184,29 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void CallOne()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle);
+        if(inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
     void CallTwo()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol);
         inputController.ChangeFireType = Define.FireType.One;
+        if (inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
     void CallThree()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword);
         inputController.ChangeFireType = Define.FireType.One;
-        cameraController.ZoomChange(false);
+        if (inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
     void CallFour()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw);
         inputController.ChangeFireType = Define.FireType.One;
-        cameraController.ZoomChange(false);
+        if (inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
 
     void SetKeyAction()

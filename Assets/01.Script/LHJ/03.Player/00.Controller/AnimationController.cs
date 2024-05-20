@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
+using static Define;
 
 
 public class AnimationController : MonoBehaviourPun
@@ -16,10 +17,6 @@ public class AnimationController : MonoBehaviourPun
 
     [SerializeField] Rig handRig;
 
-    [SerializeField] MultiParentConstraint primaryParent;
-    [SerializeField] MultiParentConstraint subParent;
-    [SerializeField] MultiParentConstraint knifeParent;
-    [SerializeField] MultiParentConstraint throwParent;
 
     [SerializeField] IKWeapon rifleWeapon;
     [SerializeField] IKWeapon pistolWeapon;
@@ -31,6 +28,8 @@ public class AnimationController : MonoBehaviourPun
 
     [SerializeField] TwoBoneIKConstraint left;
     [SerializeField] TwoBoneIKConstraint right;
+    [SerializeField] MultiParentConstraint[] weaponParents;
+
     int JumpEnterId;
     int StandId;
     int CrouchId;
@@ -42,17 +41,19 @@ public class AnimationController : MonoBehaviourPun
     int[] layerId;
     int[] floatId;
     int[] weaponId;
+    IKWeapon[] weapons;
 
     readonly string TRIGGER = "CallTriggerRPC";
+
     private void Start()
     {
         iKAnimation = new IKAnimationController
-            (handRig, GetComponent<RigBuilder>(), left, right, 
-            primaryParent, subParent, knifeParent, throwParent, 
+            (handRig, GetComponent<RigBuilder>(), left, right,
+            weaponParents, 
             currentWeapons, saveWeapons, GetComponent<Controller>());
-        
-        //iKAnimation.ChangeWeapon(rifleWeapon);
-        //iKAnimation.EquipWeapon();
+
+        weapons = new IKWeapon[] { pistolWeapon, rifleWeapon, swordWeapon, throwWeapon };
+
     }
     public Vector2 MoveValue
     {
@@ -147,31 +148,19 @@ public class AnimationController : MonoBehaviourPun
     {
         iKAnimation?.EquipWeapon();
     }
+
     public void DequipWeapon()
     {
         iKAnimation?.DequipWeapon();
 
-        for (int i = 0; i < weaponId.Length; i++)
+        for (int i = 0; i < weapons.Length; i++)
         {
-            bool state = anim.GetBool(weaponId[i]);
-            IKWeapon weapon = null;
-            if (i == 0)
+            if(anim.GetBool(weaponId[i]))
             {
-                weapon = pistolWeapon;
+                weapons[i].gameObject.SetActive(true);
+                iKAnimation.ChangeWeapon(weapons[i]);
+                return;
             }
-            else if (i == 1)
-            {
-                weapon = rifleWeapon;
-            }
-            else if (i == 2)
-            {
-                weapon = swordWeapon;
-            }
-            else
-                weapon = throwWeapon;
-            weapon?.gameObject.SetActive(state);
-            if (state)
-                iKAnimation.ChangeWeapon(weapon);
         }
     }
 
