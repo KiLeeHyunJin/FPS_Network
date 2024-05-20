@@ -46,8 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c26132537d24424eb49a20362a1b103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spyCamVirtualCamera: {fileID: 0}
-  spyCam: {fileID: 0}
+  spyCamVirtualCamera: {fileID: 213383002116421107, guid: 3d9000d81de56b6458d6b52a289154ec, type: 3}
+  spyCamPrefab: {fileID: 3397436688837240144, guid: c9679d3be33c60a4ebfc41cc310dc2ad, type: 3}
+  isSpyCamActive: 0
+  isSpyCamPlaced: 0
 --- !u!114 &2857349333441185402
 MonoBehaviour:
   m_ObjectHideFlags: 0

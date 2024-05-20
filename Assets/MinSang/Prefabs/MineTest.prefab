@@ -100,7 +100,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -120,4 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 997eacefe499eb442b4c9ec7f9357dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 50
+  explosionRadius: 5
+  explosionForce: 10
+  damage: 50
+  explosionEffectPrefab: {fileID: 5871176639894484925, guid: 5e8a9e49d58674848a131436c936df3a, type: 3}
