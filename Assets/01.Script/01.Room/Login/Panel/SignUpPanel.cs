@@ -13,8 +13,10 @@ public class SignUpPanel : MonoBehaviourShowInfo
     [SerializeField] TMP_InputField passInputField;
     [SerializeField] TMP_InputField confirmInputField;
 
-    [SerializeField] Button cancelButton; //Ã¢ ´İ±â ¹öÆ°
-    [SerializeField] Button signUpButton; //¾ÆÀÌµğ »ı¼º ¹öÆ°
+    [SerializeField] Button cancelButton; //ì°½ ë‹«ê¸° ë²„íŠ¼
+    [SerializeField] Button signUpButton; //ì•„ì´ë”” ìƒì„± ë²„íŠ¼
+
+
 
     private void Awake()
     {
@@ -33,7 +35,7 @@ public class SignUpPanel : MonoBehaviourShowInfo
 
         if (confirm != password)
         {
-            ShowInfo($"ºñ¹Ğ¹øÈ£°¡ ºÒÀÏÄ¡ÇÕ´Ï´Ù.");
+            ShowInfo($"ë¹„ë°€ë²ˆí˜¸ê°€ ë¶ˆì¼ì¹˜í•©ë‹ˆë‹¤.");
 
             return;
         }
@@ -41,22 +43,23 @@ public class SignUpPanel : MonoBehaviourShowInfo
         FireBaseManager.Auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread((task) => {
             if (task.IsCanceled)
             {
-                ShowInfo($"°èÁ¤ »ı¼ºÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù.");
+                ShowInfo($"ê³„ì • ìƒì„±ì´ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.");
                 SetInteractable(true);
                 return;
             }
             if (task.IsFaulted)
             {
-                ShowError(task.Exception.InnerExceptions, "»ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                ShowError(task.Exception.InnerExceptions, "ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
                 SetInteractable(true);
                 return;
             }
             Firebase.Auth.AuthResult result = task.Result;
             panelController.SetActivePanel(LoginPanelController.Panel.Login);
-            ShowInfo("°èÁ¤ÀÌ »ı¼ºµÇ¾ú½À´Ï´Ù.");
+            ShowInfo("ê³„ì •ì´ ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.");
             SetInteractable(true);
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
                 result.User.DisplayName, result.User.UserId);
+            Manager.Game.CreateUserData();
         });
     }
 

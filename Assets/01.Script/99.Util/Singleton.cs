@@ -1,6 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+public class Singleton<T> : MonoBehaviourPun where T : MonoBehaviourPun
 {
     private static T instance;
     public static T Instance { get { return instance; } }

@@ -3,7 +3,7 @@ using System;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public static class DefinePropertyKey
 {
-    
+   
     public static string READY = "Ready";
     public static string LOAD = "Load";
     public static string RED = "Red";
@@ -14,6 +14,12 @@ public static class DefinePropertyKey
     public static string START = "Start";
     public static string LOADVALUE = "LoadValue";
     public static string LOADCOMPLETE = "LoadComplete";
+    public static string SHOPPINGTIME = "Shopping";
+    public static string STARTGAME = "StartInGame";
+    public static string TIMER = "Timer";
+
+
+
 }
 public static class CustomProperty
 {
@@ -98,8 +104,8 @@ public static class CustomProperty
     public static double GetLoadTime(this Room room)
     {
         PhotonHashtable property = room.CustomProperties;
-        if (property.ContainsKey(Define.RoomProperty.LoadTime))
-            return (double)property[Define.RoomProperty.LoadTime];
+        if (property.ContainsKey(DefinePropertyKey.TIMER))
+            return (double)property[DefinePropertyKey.TIMER];
         else
             return -1;
     }
@@ -107,7 +113,7 @@ public static class CustomProperty
     public static void SetLoadTime(this Room room, double loadTime)
     {
         PhotonHashtable property = new PhotonHashtable();
-        property[Define.RoomProperty.LoadTime] = loadTime;
+        property[DefinePropertyKey.TIMER] = loadTime;
         room.SetCustomProperties(property);
     }
 }

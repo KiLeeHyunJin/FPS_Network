@@ -40,6 +40,8 @@ public class RoomPanel : MonoBehaviourShowInfo
     bool isEnterGame;
     bool isLoaded;
     public bool isMaster { get; private set; }
+
+    Coroutine Fade;
     private void Awake()
     {
         loadImages = new List<Sprite>();    
@@ -88,7 +90,8 @@ public class RoomPanel : MonoBehaviourShowInfo
     }
     private void OnDisable()
     {
-        //팀별로 돌면서 플레이어 엔트리 파괴
+        if(Fade !=null)
+        StopCoroutine(Fade);
         ClearRoomData(redTeam);
         ClearRoomData(blueTeam);
     }
@@ -256,10 +259,11 @@ public class RoomPanel : MonoBehaviourShowInfo
         Debug.Log("Complete");
         
         yield return new WaitForSeconds(2f);
-        Manager.Scene.StartFadeOut();
+        Fade = Manager.Scene.StartFadeOut();
         yield return new WaitForSeconds(1f);
         PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = true;
     }
+    
     public bool AllLoadComplete(string key)
     {
         foreach (PlayerEntry entry in playerList)
@@ -372,7 +376,6 @@ public class RoomPanel : MonoBehaviourShowInfo
     }
     public void PlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
-        Debug.Log("UpdateList");
         //플레이어 리스트를 돌면서 
         foreach (PlayerEntry player in playerList)
         {

@@ -42,15 +42,14 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     }
     private void SetActivePanel(Panel panel)
     {
-        
-        if (fadeIn != null)
-            StopCoroutine(fadeIn);
         loginPanel.gameObject?.SetActive(panel == Panel.Login);
         menuPanel.gameObject?.SetActive(panel == Panel.Menu);
         roomPanel.gameObject?.SetActive(panel == Panel.Room);
         lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
         randomPanel.gameObject?.SetActive(panel == Panel.Random);
-        fadeIn = Manager.Scene.StartFadeIn();
+
+        if(Manager.Scene != null)
+        Manager.Scene.StartFadeIn();
     }
     public override void OnJoinedRoom()
     {
@@ -64,7 +63,8 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     }
     public override void OnLeftRoom()
     {
-        SetActivePanel(Panel.Menu);
+        Debug.Log("leftRoom");
+        
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -79,6 +79,7 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     }
     public override void OnLeftLobby()
     {
+       
         SetActivePanel(Panel.Menu);
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -88,7 +89,9 @@ public class ConnectManager : MonoBehaviourPunCallbacks
 
     public override void OnConnected()
     {
+        Debug.Log("isConnect");
         PhotonNetwork.NickName = FireBaseManager.Auth.CurrentUser.DisplayName;
+        
         SetActivePanel(Panel.Menu);
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

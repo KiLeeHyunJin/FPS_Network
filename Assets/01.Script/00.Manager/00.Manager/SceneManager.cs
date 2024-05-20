@@ -1,3 +1,4 @@
+using Firebase.Database;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class SceneManager : Singleton<SceneManager>
     [SerializeField] float fadeTime;
     [SerializeField] Sprite[] loadingImgs;
     private BaseScene curScene;
+    public bool onFading;
 
     public BaseScene GetCurScene()
     {
@@ -88,8 +90,9 @@ public class SceneManager : Singleton<SceneManager>
         }
     }
 
-   IEnumerator FadeIn()
+    IEnumerator FadeIn()
     {
+        onFading = true;
         float rate = 0;
         Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
         Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
@@ -100,6 +103,8 @@ public class SceneManager : Singleton<SceneManager>
             fade.color = Color.Lerp(fadeOutColor, fadeInColor, rate);
             yield return null;
         }
+        onFading = false;
+        fadeInRoutine = null;
     }
 
     public Coroutine StartFadeOut()
@@ -109,9 +114,19 @@ public class SceneManager : Singleton<SceneManager>
     }
 
     // FadeIn을 호출할 공개 메서드
-    public Coroutine StartFadeIn()
+    //public Coroutine StartFadeIn()
+    //{
+    //    Debug.Log("Call FadeIn");
+    //    return StartCoroutine(FadeIn());
+    //}
+
+    Coroutine fadeInRoutine;
+    public void StartFadeIn()
     {
         Debug.Log("Call FadeIn");
-        return StartCoroutine(FadeIn());
+        if (fadeInRoutine != null)
+            StopCoroutine(fadeInRoutine);
+
+        fadeInRoutine = StartCoroutine(FadeIn());
     }
 }

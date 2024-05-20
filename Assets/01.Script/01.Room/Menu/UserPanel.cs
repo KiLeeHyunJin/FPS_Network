@@ -9,7 +9,7 @@ public class UserPanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UserData userData = new UserData("sad");
+        UserData userData = new UserData();
         FireBaseManager.DB
             .GetReference("UserData")
             .Child("id")

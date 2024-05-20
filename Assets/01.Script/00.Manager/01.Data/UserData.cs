@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 [Serializable]
 public class UserData
 {
@@ -8,17 +7,16 @@ public class UserData
     public int KillCount;
     public int Level;
     public int PlayCount;
-    public UserData ()
+    public string profileImageName;
+    public UserData()
     {
         this.NickName = "non";
+        this.profileImageName = null;
+        this.Level = 1;
+        this.DeathCount = 0;
+        this.KillCount = 0;
+        this.PlayCount = 0;
     }
-    public UserData(string _nickName,int _level = 0,int _playCount = 0,int _killCount = 0, int _deathCount = 0)
-    {
-        this.NickName = _nickName;
-        DeathCount = _deathCount;
-        KillCount = _killCount;
-        Level = _level;
-        PlayCount = _playCount;
-    }
+
 }
 
