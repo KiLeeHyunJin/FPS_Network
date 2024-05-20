@@ -16,8 +16,6 @@ public class BombController : MonoBehaviour
     // throw 발동시에.--> 딜레이 주기 (막 던지기 불가능하도록 애니메이션과 맞춤)
     // 무기 전환 시에 무기 투척 불가능하도록 해야함. 
 
-
-
     public Bomb GetBomb() { return currentBomb; }
 
     // 붐이 지금 준비가 되어 있는 상태라면... 궤적을 보여줘야함. 
@@ -69,6 +67,12 @@ public class BombController : MonoBehaviour
             Throw(); // 임시로 폭탄 발사. 
         }
     }
+
+    public void Fire()
+    {
+        Throw(); 
+    }
+
 
 
     private void Throw() //투척 함수 

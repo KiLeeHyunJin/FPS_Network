@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 7000538499654676478}
   - component: {fileID: 4714011078597266675}
   m_Layer: 0
-  m_Name: AR
+  m_Name: AR.LV1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
