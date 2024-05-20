@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CloakingEffect : MonoBehaviourPun, IPunObservable, ISkill
+public class CloakingEffect : MonoBehaviourPun, ISkill
 {
     public bool isCloaked = false;
     public Material CloakingMaterial;
@@ -14,7 +14,7 @@ public class CloakingEffect : MonoBehaviourPun, IPunObservable, ISkill
     public KeyCode CloakKey = KeyCode.Q;
     private Color originalColor;
     private Renderer renderer;
-    
+
     public void Activate()
     {
         StartCoroutine(CloakRoutine());
@@ -23,6 +23,7 @@ public class CloakingEffect : MonoBehaviourPun, IPunObservable, ISkill
     public void Deactivate()
     {
         StopAllCoroutines();
+        SetCloakTransparency(1f);  // 복구 시 투명도를 원래 상태로 설정
         renderer.material = CloakingMaterial;
     }
 
@@ -39,53 +40,18 @@ public class CloakingEffect : MonoBehaviourPun, IPunObservable, ISkill
         }
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    private IEnumerator CloakRoutine()
     {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(isCloaked);
-        }
-        else
-        {
-            isCloaked = (bool)stream.ReceiveNext();
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(CloakKey) && photonView.IsMine)  // "Q" 키를 누를 경우
-        {
-            Debug.Log("클로킹");
-            ToggleCloak();
-        }
-    }
-
-    void ToggleCloak()
-    {
-        isCloaked = !isCloaked; // 클로킹 상태 토글
-        if (isCloaked)
-        {
-            StartCoroutine(CloakRoutine());
-        }
-        else
-        {
-            CloakingMaterial.color = originalColor; // 클로킹 해제
-            Debug.Log("클로킹 해제");
-        }
-    }
-
-    IEnumerator CloakRoutine()
-    {
-        // 투명도 적용
-        Color cloakColor = originalColor;
-        cloakColor.a = CloakTransparency;
-        CloakingMaterial.color = cloakColor;
-
-        // 지정된 시간 동안 대기
+        SetCloakTransparency(CloakTransparency);  // 투명화 시작 시 투명도를 설정
         yield return new WaitForSeconds(CloakDuration);
+        Deactivate();  // 일정 시간 후 비활성화
+    }
 
-        // 클로킹 비활성화
-        isCloaked = false;
-        CloakingMaterial.color = originalColor;
+    private void SetCloakTransparency(float transparency)
+    {
+        if (CloakingMaterial != null)
+        {
+            CloakingMaterial.SetFloat("_Transparency", transparency);  // 셰이더 속성 업데이트
+        }
     }
 }

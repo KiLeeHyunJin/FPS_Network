@@ -1,34 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class MineSkill : MonoBehaviour
+public class MineSkill : MonoBehaviourPun, ISkill
 {
     [SerializeField]
     private GameObject minePrefab;
     [SerializeField]
-    private Transform mineSpawnPoint;
-    [SerializeField]
-    private float cooldownTime = 5.0f;
-
+    private float cooldownTime;
+    Controller controller;
+    private bool isCooldown;
     private float nextMineTime = 0.0f;
-
-    void Update()
+    public void Activate()
     {
-        if (minePrefab == null || mineSpawnPoint == null)
+
+    }
+
+    public void Deactivate()
+    {
+
+    }
+    private void Update()
+    {
+        if (minePrefab == null)
         {
             return;
         }
-
-        if (Input.GetButtonDown("Fire1") && Time.time > nextMineTime)
+        if (Input.GetKeyDown(KeyCode.M) && !isCooldown)
         {
-            nextMineTime = Time.time + cooldownTime;
-            Instantiate(minePrefab, mineSpawnPoint.position, mineSpawnPoint.rotation);
+            StartCoroutine(PlaceMine());
         }
     }
-
     // 사용자 정의를 위한 속성들
     public GameObject MinePrefab { get => minePrefab; set => minePrefab = value; }
-    public Transform MineSpawnPoint { get => mineSpawnPoint; set => mineSpawnPoint = value; }
     public float CooldownTime { get => cooldownTime; set => cooldownTime = value; }
+
+    IEnumerator PlaceMine()
+    {
+        isCooldown = true;
+        Vector3 spawnPosition = transform.position; // 플레이어의 현재 위치
+        Quaternion spawnRotation = transform.rotation;
+        Instantiate(minePrefab, spawnPosition, spawnRotation);
+
+        yield return new WaitForSeconds(cooldownTime);
+
+        isCooldown = false;
+    }
 }

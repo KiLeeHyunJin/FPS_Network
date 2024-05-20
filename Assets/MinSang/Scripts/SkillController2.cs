@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using UnityEngine.Serialization;
+
 
 public interface ISkill
 {
@@ -8,20 +11,30 @@ public interface ISkill
     void Deactivate();
 }
 
-public class SkillController2 : MonoBehaviour
+public class SkillController2 : MonoBehaviourPun
 {
     private Dictionary<string, ISkill> skills = new Dictionary<string, ISkill>();
 
-    public enum SkillType
+    public enum Skill
     {
         TimeRewind,
-        Mine,
-        SpyCam,
-        Heal,
-        CloakingEffect
+        CloakingEffect,
+        SpyCamController,
+        MineSkill,
+        Heal
     }
 
-    public void RegisterSkill(string skillName, ISkill skill)
+    private void Start()
+    {
+
+    }
+
+    private void Update()
+    {
+
+    }
+
+    public void RegisterSkill(string skillName, ISkill skill) // 스킬 등록
     {
         if (!skills.ContainsKey(skillName))
         {
@@ -29,7 +42,7 @@ public class SkillController2 : MonoBehaviour
         }
     }
 
-    public void ActivateSkill(string skillName)
+    public void ActivateSkill(string skillName) // 스킬 활성화
     {
         if (skills.ContainsKey(skillName))
         {
@@ -37,12 +50,20 @@ public class SkillController2 : MonoBehaviour
         }
     }
 
-    public void DeactivateSkill(string skillName)
+    public void DeactivateSkill(string skillName) // 스킬 비활성화
     {
         if (skills.ContainsKey(skillName))
         {
             skills[skillName].Deactivate();
         }
     }
-
-}
+    
+    public void RegisterDefaultSkills()
+    {
+        RegisterSkill(Skill.TimeRewind.ToString(), new TimeRewind());
+        RegisterSkill(Skill.SpyCamController.ToString(), new SpyCamController());
+        RegisterSkill(Skill.CloakingEffect.ToString(), new CloakingEffect());
+        RegisterSkill(Skill.MineSkill.ToString(), new MineSkill());
+        RegisterSkill(Skill.Heal.ToString(), new Heal());
+    }
+} 
