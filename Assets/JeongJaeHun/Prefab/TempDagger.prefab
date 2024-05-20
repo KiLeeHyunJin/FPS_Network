@@ -2329,7 +2329,6 @@ GameObject:
   - component: {fileID: 2443066413317363212}
   - component: {fileID: 4097890076351007173}
   - component: {fileID: 352926927820781517}
-  - component: {fileID: 681338979163010299}
   - component: {fileID: 4189996118095495379}
   - component: {fileID: 4058224144693463558}
   - component: {fileID: 2825182878235087734}
@@ -2437,8 +2436,22 @@ MonoBehaviour:
     m_Bits: 512
   rootBone: {fileID: 2579463154896920474}
   foot: {fileID: 1291103197244539443}
-  leftHand: {fileID: 2381027179787815608}
-  rightHand: {fileID: 8653121584680145956}
+  zoomIn: {fileID: 0}
+  zoomOut: {fileID: 0}
+  mouseSensitivity: 0
+  FPSIgnoreObject: []
+  FPSHand: []
+  target: {fileID: 0}
+  cameraRoot: {fileID: 0}
+  overlayCam: {fileID: 0}
+  cam: {fileID: 0}
+  minimapIcon_m: {fileID: 0}
+  minimapIcon_Ally: {fileID: 0}
+  enemySearcher: {fileID: 0}
+  enemyIcon: {fileID: 0}
+  teamCode: 0
+  miniCam: {fileID: 0}
+  hp: 0
 --- !u!114 &4097890076351007173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2463,30 +2476,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca8a9501b8a475c41835dc3660496874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handRig: {fileID: 0}
   dampingSpeed: 0
---- !u!114 &681338979163010299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1818559008348906572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93429551b758bfa45b1705513a67e33c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseSensitivity: 5
-  distance: 10
-  FPSIgnoreObject:
-  - {fileID: 81563445628488009}
-  - {fileID: 574953131385074956}
-  - {fileID: 2716656740447872574}
-  - {fileID: 7143463374892190522}
-  - {fileID: 6171984493011680366}
-  target: {fileID: 7361530393243404025}
-  FPSCameraRoot: {fileID: 3671161223254888596}
-  FPSCam: {fileID: 2449920996525531730}
+  primaryParent: {fileID: 0}
+  subParent: {fileID: 0}
+  knifeParent: {fileID: 0}
+  throwParent: {fileID: 0}
+  rifleWeapon: {fileID: 0}
+  pistolWeapon: {fileID: 0}
+  swordWeapon: {fileID: 0}
+  throwWeapon: {fileID: 0}
+  left: {fileID: 0}
+  right: {fileID: 0}
 --- !u!114 &4189996118095495379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2659,6 +2660,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 2443066413317363212}
   - {fileID: 218456812559553060}
   - {fileID: 4813249814716859639}
   - {fileID: 3687734883618525784}
@@ -2725,9 +2727,6 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 0
     Name: Sword
-  - Type: 9
-    SynchronizeType: 0
-    Name: Fire
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
@@ -5099,9 +5098,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d837c03be6d3bb34b8c9a5fb3b58e4df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraRoot: {fileID: 6056966786755574781}
-  front: 0.05
-  up: -0.05
+  <StandPos>k__BackingField: {fileID: 0}
+  <CrouchPos>k__BackingField: {fileID: 0}
 --- !u!1 &4679630068208775344
 GameObject:
   m_ObjectHideFlags: 0
