@@ -6111,7 +6111,7 @@ GameObject:
   - component: {fileID: 1490060514008551445}
   - component: {fileID: 1404201885252024400}
   - component: {fileID: 7096750706993251039}
-  m_Layer: 24
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6464,7 +6464,7 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -17081,7 +17081,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.24114351, y: 1.8449631, z: -0.118761174}
+  m_LocalPosition: {x: -0.24114351, y: 1.8449627, z: -0.118761174}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

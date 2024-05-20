@@ -86,6 +86,7 @@ public class MenuPanel : MonoBehaviour
              });
         OpenPlayButtons(false);
         startButtonBool = false;
+        Manager.Game.GetUserData();
     }
 
     public void RandomMatching()
