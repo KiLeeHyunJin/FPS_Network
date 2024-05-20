@@ -181,9 +181,19 @@ MonoBehaviour:
   bombName: "\uC218\uB958\uD0C4 "
   fullBombNumber: 2
   currentBombNumber: 2
-  bomb_Sound: {fileID: 0}
   bomb_ParticleSystem: {fileID: 0}
-  delayTime: 3
+  flash_ParticleSystem: {fileID: 0}
+  delayTime: 5
+  throwDelay: 3
+  range: 10
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  damage: 50
+  bombFX: {fileID: 0}
+  flashFX: {fileID: 0}
+  bombSoundClip: {fileID: 8300000, guid: 419336aa8912ae0468e104596863a0a1, type: 3}
+  FlashSoundClip: {fileID: 8300000, guid: 64baa1f44691afc42a584e482cd9a27d, type: 3}
 --- !u!120 &1726205046447225576
 LineRenderer:
   serializedVersion: 2
@@ -192,7 +202,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5415112011065038435}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -326,7 +336,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

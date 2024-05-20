@@ -1,10 +1,9 @@
-using System;
 using UnityEngine;
 
 public class BombController : MonoBehaviour
 {
     private Camera mainCamera; //메인 카메라
-    
+
     [SerializeField] LineRenderer lineRenderer;
     [SerializeField] float throwPower; //수류탄 투척력
 
@@ -13,6 +12,10 @@ public class BombController : MonoBehaviour
     [SerializeField] private Rigidbody bombRigidbody; // 자식의 폭탄의 리지드바디 가져와서 kinematic 으로 해주고 던지면 해제. 
 
     private GameObject instanceBomb; //실제 날리는게 아니라 생성해서 날려줄 폭탄. 
+
+    // throw 발동시에.--> 딜레이 주기 (막 던지기 불가능하도록 애니메이션과 맞춤)
+    // 무기 전환 시에 무기 투척 불가능하도록 해야함. 
+
 
 
     public Bomb GetBomb() { return currentBomb; }
@@ -26,7 +29,7 @@ public class BombController : MonoBehaviour
         int numOfChild = this.transform.childCount;
         for (int i = 0; i < numOfChild; i++)
         {
-            if (transform.GetChild(i).gameObject.activeSelf == true)
+            if (transform.GetChild(i).gameObject.activeSelf == true) //이거 다 쓰고나면 true가 아닌데 어째서 켜지지?
             {
                 currentBomb = transform.GetChild(i).GetComponent<Bomb>();
 
@@ -38,39 +41,43 @@ public class BombController : MonoBehaviour
         mainCamera = Camera.main;
         lineRenderer = currentBomb.GetComponent<LineRenderer>();
         lineRenderer.enabled = true; // 렌더러 켜주기. 
-        ShowTrajectory();
+        ShowTrajectory(); //폭탄을 들고 있는 상태가되면 궤적을 보여줌. 
     }
 
     private void OnDisable()
     {
-        lineRenderer.enabled = false;
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if (lineRenderer.enabled == true)
         {
-            Throw(); // 임시로 폭탄 발사. 
+            lineRenderer.enabled = false;
         }
-    }
 
-    
+    }
 
     private void Start()
     {
         
     }
 
+
+
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Throw(); // 임시로 폭탄 발사. 
+        }
+    }
+
+
     private void Throw() //투척 함수 
     {
-        if(currentBomb.currentBombNumber<=0)
+        if (currentBomb.currentBombNumber <= 0)
         {
-            Debug.Log("폭탄숫자 부족");
+            
             return; //발사불가능
         }
-
-        
-
 
         // 이게 손에 들어가 있는 상황에서는 transform을 어떻게 잡아줘야 될지 고민되네
         // local 인지 전역 position인지.. 
@@ -78,25 +85,31 @@ public class BombController : MonoBehaviour
         Vector3 forward = mainCamera.transform.forward; //카메라의 전방으로 라인을 그릴 거기 때문에 
         Vector3 startVelocity = throwPower * forward; // 전방으로 던지는 힘. 
         Vector3 startPosition = transform.position;
+        startPosition.y += startPosition.y + 1f;
+        
+        instanceBomb = Instantiate(currentBomb.gameObject, startPosition, Quaternion.identity);
+        
 
-        instanceBomb = Instantiate(currentBomb.gameObject, startPosition,Quaternion.identity);
-
-
+        // 실제 인벤토리의 아이템을 투척하는 것이 아니라 인스턴스를 생성하고 그것을 투척함. 
 
         //Vector3 startPosition = transform.localPosition;  --> 이거 실험해보자. 
 
         //아무튼 실제로는 던져도 실물을 던지는게 아니라 복사본? 약간 그런걸 던지면됨. 
-        Rigidbody rigidGrenade = instanceBomb.GetComponent<Rigidbody>();
+        Rigidbody rigidGrenade = instanceBomb.gameObject.GetComponent<Rigidbody>();
+
         rigidGrenade.isKinematic = false; //키네마틱 해제. 
+
         rigidGrenade.AddForce(startVelocity, ForceMode.Impulse);
 
+        currentBomb.CountDownBomb(instanceBomb);  //현재 폭탄의 실제 폭발 함수 실행. -->내부에서 case에 따라 효과전환해줌. 
+
         currentBomb.currentBombNumber--;
-       
-        if(currentBomb.currentBombNumber<=0) //이거 폭탄 컨트롤러가 아니라 폭탄 자체를 꺼주면 아마 못찾을거야 체크를 그렇게하니까
+
+        if (currentBomb.currentBombNumber <= 0) //이거 폭탄 컨트롤러가 아니라 폭탄 자체를 꺼주면 아마 못찾을거야 체크를 그렇게하니까
         {
-            currentBomb.gameObject.SetActive(false);    
+            currentBomb.gameObject.SetActive(false); //그런데 찾아지는 살짝의 버그있음. 
         }
-        
+
     }
 
     private void ShowTrajectory() //궤도를 보여줌 (라인렌더러)
@@ -106,24 +119,24 @@ public class BombController : MonoBehaviour
         float timePoint = 0.1f;
 
         //라인 렌더러 점 개수 설정
-        lineRenderer.positionCount=Mathf.CeilToInt(linePoint / timePoint) + 1;
+        lineRenderer.positionCount = Mathf.CeilToInt(linePoint / timePoint) + 1;
 
         // 초기 위치 및 방향 설정
         Vector3 forward = mainCamera.transform.forward;
         Vector3 startVelocity = throwPower * forward;
         Vector3 startPosition = transform.position; //홀더 위치? --> 홀더도 자식이니까 실제 홀더면 local인가?
-        
+
 
         //초기 위치 설정
         lineRenderer.SetPosition(0, startPosition);
 
-        for(int i=0;i<lineRenderer.positionCount;i++) // 1/0.1 이므로 10개의 선으로 이루어져 곡선을 그림
+        for (int i = 0; i < lineRenderer.positionCount; i++) // 1/0.1 이므로 10개의 선으로 이루어져 곡선을 그림
         {
             float time = i * timePoint;
 
             // 시간에 따른 궤적 위치 계산 
             Vector3 point = startPosition + (time * startVelocity);
-            point.y=startPosition.y + startVelocity.y * time + (Physics.gravity.y / 2f * time * time);
+            point.y = startPosition.y + startVelocity.y * time + (Physics.gravity.y / 2f * time * time);
 
             // 라인 렌더러에 궤적 위치 설정
             lineRenderer.SetPosition(i, point);

@@ -92,6 +92,7 @@ public class ChangeWeaponSlot : MonoBehaviour
 
 
 
+
             if (slotNumber== (int)slotType.PistolType || slotNumber==(int)slotType.ArType) // gun 
             {
                 closeWeaponHUD.gameObject.SetActive(false);
@@ -115,8 +116,6 @@ public class ChangeWeaponSlot : MonoBehaviour
             }
 
             int numChild = slots[slotNumber].transform.childCount;
-
-
 
             for(int i=0;i<numChild;i++)
             {
@@ -145,7 +144,7 @@ public class ChangeWeaponSlot : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {           
-            Excute(0);
+            Excute(0); //여기서 스왑할 때 (공격 불가 + 재장전 불가등의 추가 작업을 진행해줘야함. )
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -163,6 +162,11 @@ public class ChangeWeaponSlot : MonoBehaviour
         {
             Excute(4);
         }
+
+    }
+
+    private void DuringChange() //무기스왑 중 다른 행동 방지용 함수. 
+    {
 
     }
 
