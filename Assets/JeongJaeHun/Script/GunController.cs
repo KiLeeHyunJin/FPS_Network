@@ -42,7 +42,7 @@ public class GunController : MonoBehaviour
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        Debug.Log("총 켜짐");
+        
     }
 
 

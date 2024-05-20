@@ -15,12 +15,7 @@ public class Sword : CloseWeapon //close 웨폰 상속
     [SerializeField] private bool debug;
     
 
-
-
-
-
     // 어택 딜레이 등은 인스펙터로 해야하나? 
-
 
 
     private void OnEnable()
@@ -50,6 +45,8 @@ public class Sword : CloseWeapon //close 웨폰 상속
         Vector3 leftDir = Quaternion.Euler(0, angle * -0.5f, 0) * transform.forward;
         Debug.DrawRay(transform.position, rightDir * range, Color.cyan);
         Debug.DrawRay(transform.position, leftDir * range, Color.cyan);
+
+        
     }
 
 
