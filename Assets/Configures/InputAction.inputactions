@@ -51,6 +51,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ThrowWeapon",
+                    "type": "Button",
+                    "id": "38825e91-992d-46f7-87f5-046558d94c77",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Interaction",
                     "type": "Button",
                     "id": "0c185b48-23c5-412f-8017-f639d548a045",
@@ -144,6 +153,15 @@
                     "name": "FireOne",
                     "type": "Button",
                     "id": "21607c7d-fa0b-4022-8af2-eee46c5f2921",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Button",
+                    "id": "052b9e2b-b8c5-4b5e-91c7-6bef97a4c1d6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -368,6 +386,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "R",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6087e0e5-f2e4-475a-bc58-55eb026e929f",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThrowWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ccc22ddc-6822-4475-9098-eea5d95d1e4d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

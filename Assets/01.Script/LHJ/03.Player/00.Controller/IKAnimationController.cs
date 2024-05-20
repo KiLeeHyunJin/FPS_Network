@@ -4,81 +4,141 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
+using static UnityEngine.Rendering.DebugUI;
 
 public class IKAnimationController
 {
-    readonly Rig rig;
+    readonly Rig handRig;
 
     readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
-    readonly MultiParentConstraint multiParent;
+
+    readonly MultiParentConstraint[] weaoponParent;
 
     readonly Controller owner;
-    readonly RigBuilder rigBuilder;
 
     IKWeapon currentWeapon;
+    AnimationController.AnimatorWeapon currentWeaponType;
+    MultiParentConstraint currentWeaponParent;
 
-    public IKAnimationController(Rig _rigging ,TwoBoneIKConstraint _leftRig,TwoBoneIKConstraint _rightRig, MultiParentConstraint _multiParent,RigBuilder _builder, Controller _owner)
+    public IKAnimationController(
+        Rig _handRig,
+        TwoBoneIKConstraint _leftRig,
+        TwoBoneIKConstraint _rightRig, 
+        MultiParentConstraint _primaryParent, 
+        MultiParentConstraint _subParent, 
+        MultiParentConstraint _knifeParent, 
+        MultiParentConstraint _throwParent,
+        Controller _owner)
     {
-        rig = _rigging;
-        twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
+        handRig = _handRig;
         owner = _owner;
-        rigBuilder = _builder;
-        //multiParent = _multiParent;
-        //multiParent.weight = 1;
+
+        twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
+        weaoponParent = new MultiParentConstraint[] { _subParent, _primaryParent, _knifeParent, _throwParent };
     }
 
     public void ChangeWeapon(IKWeapon _weapon)
-        => currentWeapon = _weapon;
+    {
+        currentWeapon = _weapon;
+        Debug.Log("ChangeParent");
+        ChangeWeaponWeight(currentWeapon.weaponType);
+    }
 
     void SetWeight(int value)
-    => rig.weight = value;
+    => handRig.weight = value;
 
     public void DequipWeapon()
     {
-        //return;
-
-        //currentWeapon.transform.SetParent(handTransform[(int)Direction.Right]);
-        //multiParent.data.sourceObjects.SetWeight(0, 0);
-        //multiParent.data.sourceObjects.SetWeight(1, 1);
+        owner.StartCoroutined(
+            FrameEndAction(SetWeight, 0), 
+            ref SetWeightco);
 
         owner.StartCoroutined(
-            FrameEndAction(SetWeight, false), 
-            ref co);
+            FrameParentAction(0),
+            ref parentco);
     }
 
     public void EquipWeapon()
     {
-        //return;
-
-
-        //currentWeapon.transform.SetParent(weaponHolder);
-        //multiParent.data.constrainedObject = currentWeapon.transform;
-
-        //multiParent.data.sourceObjects.SetWeight(1, 0);
-        //multiParent.data.sourceObjects.SetWeight(0, 1);
-
-        twoBoneIKConstraint[(int)Direction.Left].data.target.position = currentWeapon.leftGrip.position;
-        twoBoneIKConstraint[(int)Direction.Left].data.target.rotation = currentWeapon.leftGrip.rotation;
-        twoBoneIKConstraint[(int)Direction.Right].data.target.position = currentWeapon.RightGrip.position;
-        twoBoneIKConstraint[(int)Direction.Right].data.target.rotation = currentWeapon.RightGrip.rotation;
+        owner.StartCoroutined(
+            FrameEndAction(SetWeight, 1),
+            ref SetWeightco);
 
         owner.StartCoroutined(
-            FrameEndAction(SetWeight, true),
-            ref co);
+            FrameParentAction(1), 
+            ref parentco);
     }
 
-    
-    Coroutine co;
-    IEnumerator FrameEndAction(Action<int> action,bool state)
+    public void HandOn()
+    {
+        owner.StartCoroutined(
+            FrameEndAction(SetWeight, 0),
+            ref SetWeightco);
+
+        owner.StartCoroutined(
+            FrameParentWeight(1, 0),
+            ref trainsitionco);
+    }
+
+    public void AimOn()
+    {
+        owner.StartCoroutined(
+            FrameEndAction(SetWeight, 1),
+            ref SetWeightco);
+
+        owner.StartCoroutined(
+            FrameParentWeight(0, 1),
+            ref trainsitionco);
+    }
+
+    Coroutine trainsitionco;
+    Coroutine parentco;
+    Coroutine SetWeightco;
+
+    IEnumerator FrameEndAction(Action<int> action,int value)
     {
         yield return new WaitForEndOfFrame();
-        int value = state ? 1 : 0;
         action?.Invoke(value);
+    }
+    IEnumerator FrameParentAction(int value)
+    {
+        yield return new WaitForEndOfFrame();
+        currentWeaponParent.weight = value;
+    }
 
-        if(state)
+    IEnumerator FrameParentWeight(float value1, float value2)
+    {
+        yield return new WaitForEndOfFrame();
+        WeightedTransformArray array = currentWeaponParent.data.sourceObjects;
+        array.SetWeight(0, value1);
+        array.SetWeight(1, value2);
+        currentWeaponParent.data.sourceObjects = array;
+
+        if (value2 == 1)
+            owner.StartCoroutined(FrameHandTarget(), ref handCo);
+    }
+    Coroutine handCo;
+
+    IEnumerator FrameHandTarget()
+    {
+        yield return new WaitForEndOfFrame();
+        twoBoneIKConstraint[(int)Direction.Left].data.target.position = currentWeapon.leftGrip.position;
+        twoBoneIKConstraint[(int)Direction.Left].data.target.rotation = currentWeapon.leftGrip.rotation;
+
+        twoBoneIKConstraint[(int)Direction.Right].data.target.position = currentWeapon.RightGrip.position;
+        twoBoneIKConstraint[(int)Direction.Right].data.target.rotation = currentWeapon.RightGrip.rotation;
+    }
+    void ChangeWeaponWeight(AnimationController.AnimatorWeapon weaponType)
+    {
+        currentWeaponParent = null;
+        for (int i = 0; i < weaoponParent.Length; i++)
         {
-            //rigBuilder.SyncLayers();
-            //rigBuilder.Build();
+            weaoponParent[i].weight = 0;
+            if ((int)weaponType == i)
+            {
+                currentWeaponParent = weaoponParent[i];
+                HandOn();
+            }
         }
     }
 
@@ -86,4 +146,5 @@ public class IKAnimationController
     {
         Left,Right,END
     }
+    
 }

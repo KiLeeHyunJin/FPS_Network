@@ -13,12 +13,19 @@ public class AnimationController : MonoBehaviourPun
     public Animator Anim { get { return anim; } }
     Coroutine[] dampingCo;
 
-    [SerializeField] Rig aimRig;
+    [SerializeField] Rig handRig;
     [SerializeField] float dampingSpeed;
-    [SerializeField] MultiParentConstraint multiParent;
+
+    [SerializeField] MultiParentConstraint primaryParent;
+    [SerializeField] MultiParentConstraint subParent;
+    [SerializeField] MultiParentConstraint knifeParent;
+    [SerializeField] MultiParentConstraint throwParent;
+
     [SerializeField] IKWeapon rifleWeapon;
     [SerializeField] IKWeapon pistolWeapon;
     [SerializeField] IKWeapon swordWeapon;
+    [SerializeField] IKWeapon throwWeapon;
+
     [SerializeField] TwoBoneIKConstraint left;
     [SerializeField] TwoBoneIKConstraint right;
     int JumpEnterId;
@@ -36,7 +43,7 @@ public class AnimationController : MonoBehaviourPun
     readonly string TRIGGER = "CallTriggerRPC";
     private void Start()
     {
-        iKAnimation = new IKAnimationController(aimRig, left, right, multiParent, GetComponent<RigBuilder>(), GetComponent<Controller>());
+        iKAnimation = new IKAnimationController(handRig, left, right, primaryParent, subParent, knifeParent, throwParent, GetComponent<Controller>());
         
         //iKAnimation.ChangeWeapon(rifleWeapon);
         //iKAnimation.EquipWeapon();
@@ -74,10 +81,10 @@ public class AnimationController : MonoBehaviourPun
 
     public void Atck()
     {
-        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Sword]) == false)
-            return;
-        photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
-        DequipWeapon();
+        if (anim.GetBool(weaponId[(int)AnimatorWeapon.Sword]) ||
+            anim.GetBool(weaponId[(int)AnimatorWeapon.Throw]) )
+            photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
+        //DequipWeapon();
     }
 
     public void ChangeWeapon(AnimatorWeapon type)
@@ -121,30 +128,24 @@ public class AnimationController : MonoBehaviourPun
     {
         SetState(AnimatorState.JumpFinish, true);
     }
-    public void EquipWeapon()
+
+    public void TransitionWeapon() //
     {
-        photonView.RPC("CallEquip", RpcTarget.All);
+        iKAnimation?.HandOn();
     }
-    public void DequipWeapon()
+    public void AimWeapon()
     {
-        photonView.RPC("CallDequip", RpcTarget.All);
-    }
-    [PunRPC]
-    void CallTriggerRPC(int triggerId)
-    {
-        anim.SetTrigger(triggerId);
-        if(triggerId == ChangeWeaponId)
-            iKAnimation?.DequipWeapon();
+        iKAnimation?.AimOn();
     }
 
-    [PunRPC]
-    void CallEquip()
+    public void EquipWeapon()
     {
         iKAnimation?.EquipWeapon();
     }
-    [PunRPC]
-    void CallDequip()
+    public void DequipWeapon()
     {
+        iKAnimation?.DequipWeapon();
+
         for (int i = 0; i < weaponId.Length; i++)
         {
             bool state = anim.GetBool(weaponId[i]);
@@ -157,18 +158,23 @@ public class AnimationController : MonoBehaviourPun
             {
                 weapon = rifleWeapon;
             }
-            else if(i == 2)
+            else if (i == 2)
             {
                 weapon = swordWeapon;
             }
+            else
+                weapon = throwWeapon;
             weapon?.gameObject.SetActive(state);
             if (state)
                 iKAnimation.ChangeWeapon(weapon);
         }
-        if (aimRig.weight > 0)
-            iKAnimation?.DequipWeapon();
     }
 
+    [PunRPC]
+    void CallTriggerRPC(int triggerId)
+    {
+        anim.SetTrigger(triggerId);
+    }
 
     void SetState(AnimatorState type, bool state)
     {
@@ -218,8 +224,9 @@ public class AnimationController : MonoBehaviourPun
         int rifleId = Animator.StringToHash("Rifle");
         int pistolId = Animator.StringToHash("Pistol");
         int swordId = Animator.StringToHash("Sword");
+        int throwId = Animator.StringToHash("Throw");
 
-        weaponId = new int[] { pistolId, rifleId, swordId };
+        weaponId = new int[] { pistolId, rifleId, swordId, throwId };
 
         dampingCo = new Coroutine[(int)AnimatorFloatValue.END];
         anim.SetBool(pistolId, true);
@@ -240,7 +247,7 @@ public class AnimationController : MonoBehaviourPun
     }
     public enum AnimatorWeapon
     {
-        Pistol, Rifle, Sword, END
+        Pistol, Rifle, Sword, Throw ,END
     }
 
     enum AnimatorState

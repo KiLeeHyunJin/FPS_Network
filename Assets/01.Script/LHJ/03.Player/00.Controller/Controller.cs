@@ -26,6 +26,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] GameObject rootBone;
     [SerializeField] GameObject foot;
 
+    [SerializeField] Transform zoomIn;
+    [SerializeField] Transform zoomOut;
+
     [SerializeField] float mouseSensitivity;
     [SerializeField] GameObject[] FPSIgnoreObject;
     [SerializeField] GameObject[] FPSHand;
@@ -82,7 +85,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         SetKeyAction();
         MoveProcessInit();
         SetUpdateAction();
-        CheckRig();
        
     }
 
@@ -99,7 +101,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
-        cameraController = new CameraController(target, this, cam, cameraRoot);
+        cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
 
         minimapIcon_m.SetActive(true);
 
@@ -192,10 +194,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword);
         inputController.ChangeFireType = Define.FireType.One;
+        cameraController.ZoomChange(false);
     }
-    void CheckRig()
+    void CallFour()
     {
-
+        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw);
+        inputController.ChangeFireType = Define.FireType.One;
+        cameraController.ZoomChange(false);
     }
 
     void SetKeyAction()
@@ -204,9 +209,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         inputController.Init();
         inputController.SetKey(CallReload, Define.Key.R);
+
         inputController.SetKey(CallOne, Define.Key.F1);
         inputController.SetKey(CallTwo, Define.Key.F2);
         inputController.SetKey(CallThree, Define.Key.F3);
+        inputController.SetKey(CallFour, Define.Key.F4);
+        inputController.SetZoomType(cameraController.ZoomChange);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
         

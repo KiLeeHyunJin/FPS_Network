@@ -21,7 +21,8 @@ public class IKWeapon : MonoBehaviour
     [SerializeField]
     public Vector3 OriginPos { get; protected set; }
 
-    
+    [SerializeField]
+    public AnimationController.AnimatorWeapon weaponType;
     protected virtual void Awake()
     {
         OriginPos = transform.localPosition; 

@@ -11,11 +11,13 @@ public class PlayerInputController : MonoBehaviour
     Action<Vector2> moveAction;
     Action<Vector2> rotateAction;
     Action<bool> moveTypeAction;
+    Action<bool> zoomAction;
     Controller owner;
     InputActionAsset inputs;
     public Controller Owner { set { owner = value; } }
     public Define.InputWeaponType CurrentWeapon { get; private set; }
     public Define.FireType MainFireType { get; private set; }
+    public bool Zoom { get; private set; }
     public Define.FireType Fire { get; private set; }
     public Define.FireType ChangeFireType
     {
@@ -40,6 +42,7 @@ public class PlayerInputController : MonoBehaviour
     public void SetMoveKey(Action<Vector2> moveMethod) => moveAction = moveMethod;
     public void SetRot(Action<Vector2> rotMethod) => rotateAction = rotMethod;
     public void SetMoveType(Action<bool> moveTypeMethod) => moveTypeAction = moveTypeMethod;
+    public void SetZoomType(Action<bool> moveTypeMethod) => zoomAction = moveTypeMethod;
 
     public void Init()
     {
@@ -77,7 +80,26 @@ public class PlayerInputController : MonoBehaviour
     {
         actions[(int)Define.Key.F3].Invoke();
         CurrentWeapon = Define.InputWeaponType.Default;
+        Zoom = false;
     }
+
+    void OnThrowWeapon(InputValue inputValue)
+    {
+        actions[(int)Define.Key.F4].Invoke();
+        CurrentWeapon = Define.InputWeaponType.Default;
+        Zoom = false;
+    }
+
+    void OnZoom(InputValue inputValue)
+    {
+        if(CurrentWeapon == Define.InputWeaponType.MainWeapon ||
+           CurrentWeapon == Define.InputWeaponType.SubWeapon)
+        {
+            Zoom = !Zoom;
+            zoomAction?.Invoke(Zoom);
+        }
+    }
+
     void OnInteraction(InputValue inputValue)
     {
         actions[(int)Define.Key.F]?.Invoke();

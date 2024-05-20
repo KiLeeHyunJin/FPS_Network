@@ -14,6 +14,9 @@ public class CameraController //: MonoBehaviour
     CinemachineBasicMultiChannelPerlin noise;
     Camera overlay;
 
+    readonly Transform zoomInPos;
+    readonly Transform zoomOutPos;
+
     readonly Transform cameraRoot;
     readonly Controller owner;
     readonly Transform target;
@@ -39,7 +42,7 @@ public class CameraController //: MonoBehaviour
     public float MouseSensitivity { set { mouseSensitivity = value; } }
     public int CameraPriority { set { cam.Priority = value; } }
     Action updateAction;
-    public CameraController (Transform _aim, Controller _owner, CinemachineVirtualCamera _cam, Transform _root)
+    public CameraController (Transform _aim, Controller _owner, CinemachineVirtualCamera _cam, Transform _root, Transform _zoomIn, Transform _zoomOut)
     {
         target = _aim;
         owner = _owner;
@@ -47,6 +50,8 @@ public class CameraController //: MonoBehaviour
         _cam.Priority = 40;
         cameraRoot = _root;
         noise = _cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        zoomInPos = _zoomIn;
+        zoomOutPos = _zoomOut;
     }
     public void Init(Action<int,int> _layerMethod,  Camera _overlayCam, float _mouseSensitivity)
     {
@@ -73,7 +78,24 @@ public class CameraController //: MonoBehaviour
     }
     public void Update()
         => updateAction.Invoke();
+    public void ZoomChange(bool state)
+    {
+        Transform currentParent;
+        if (state)
+        {
+            currentParent = zoomInPos;
+            cam.m_Lens.FieldOfView = 30;
+        }
+        else
+        {
+            currentParent = zoomOutPos;
+            cam.m_Lens.FieldOfView = 50;
+        }
+        overlay.transform.SetParent(currentParent);
 
+        overlay.transform.localPosition = Vector3.zero;
+        overlay.transform.localRotation = Quaternion.identity;
+    }
     void UpdateMethod()
     {
         target.position = Camera.main.transform.position + Camera.main.transform.forward * distance;// 바라볼 방향

@@ -57,9 +57,9 @@ public class Define
 
     public enum Key
     {
-        Shift, C, X, Z, Space, F, F1, F2, F3, Press, Pressed,
+        Shift, C, X, Z, Space, F, F1, F2, F3, F4, Press, Pressed,
         V, R,
-        Alt,
+        Alt, Zoom,
         END
     }
     public enum State
