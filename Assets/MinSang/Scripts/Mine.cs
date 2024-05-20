@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using static Define;
 
 public class Mine : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Mine : MonoBehaviour
     [SerializeField]
     private float explosionForce = 10.0f;
     [SerializeField]
-    private float damage = 50f;
+    private float damage = 50.0f;
 
     private bool hasExploded = false;
     private SphereCollider detectionCollider;

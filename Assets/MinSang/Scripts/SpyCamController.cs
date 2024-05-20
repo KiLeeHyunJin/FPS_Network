@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
-using Unity.IO.LowLevel.Unsafe;
 
 public class SpyCamController : MonoBehaviourPun, ISkill
 {
@@ -18,7 +17,7 @@ public class SpyCamController : MonoBehaviourPun, ISkill
     {
         if (currentSpyCam != null)
         {
-            spyCamVirtualCamera.Priority = 20;
+            spyCamVirtualCamera.Priority = 10;
             isSpyCamActive = true;
         }
     }
@@ -31,11 +30,8 @@ public class SpyCamController : MonoBehaviourPun, ISkill
             isSpyCamActive = false;
         }
     }
-    public void Start()
-    {
-        spyCamVirtualCamera.Priority = 0;
-    }
-    public void Update()
+
+    void Update()
     {
         // F 키를 누르면 스파이캠 활성화 및 비활성화
         if (Input.GetKeyDown(KeyCode.F))
@@ -48,11 +44,6 @@ public class SpyCamController : MonoBehaviourPun, ISkill
         if (!isSpyCamPlaced && isSpyCamActive)
         {
             StartCoroutine(PlaceSpyCam());
-        }
-
-        if (isSpyCamPlaced && isSpyCamActive)
-        {
-            RotateSpyCam();
         }
     }
 
@@ -113,7 +104,6 @@ public class SpyCamController : MonoBehaviourPun, ISkill
         // 지면 검사: 스파이캠이 특정 지면이나 벽에만 설치되도록 제한
         // 레이캐스트를 아래로 쏴서 지면을 확인
         RaycastHit groundHit;
-        Debug.DrawRay(position, Vector3.down * 1.0f, Color.red, 10f);
         if (!Physics.Raycast(position, Vector3.down, out groundHit, 1.0f))
         {
             return false; // 지면이 없으면 설치 불가
