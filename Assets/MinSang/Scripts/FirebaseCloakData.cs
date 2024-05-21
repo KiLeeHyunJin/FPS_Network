@@ -1,3 +1,4 @@
+/*
 using Firebase.Database;
 
 public class FirebaseCloakData
@@ -9,3 +10,4 @@ public class FirebaseCloakData
         reference.Child("users").Child(userId).Child("cloaking").SetValueAsync(isCloaked);
     }
 }
+*/

@@ -4,7 +4,7 @@ using Photon.Pun;
 using UnityEditor;
 
 // 게임 오브젝트가 이전 상태로 돌아갈 수 있도록 시간역행 기능을 제공
-public class TimeRewind : MonoBehaviourPun, IDamagable, ISkill
+public class TimeRewind : MonoBehaviourPun, IDamagable
 {
     public Controller Controller;
     public float rewindDuration = 3.0f;
