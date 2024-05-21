@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2584344247769437957}
   - component: {fileID: 3758951733360919684}
-  - component: {fileID: 8292147008563379967}
   - component: {fileID: 1467688217282418382}
+  - component: {fileID: 8093631697261526463}
   m_Layer: 0
   m_Name: Slot_3 Sword
   m_TagString: Untagged
@@ -50,34 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 3
---- !u!114 &8292147008563379967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8632874179436985412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a7167a9e871024284960d179a447e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <leftGrip>k__BackingField: {fileID: 0}
-  <RightGrip>k__BackingField: {fileID: 0}
-  weaponType: 0
-  currentSword: {fileID: 0}
-  weaponSprite: {fileID: 0}
-  closeWeaponID: 0
-  closeWeaponType: 0
-  closeWeaponName: 
-  attackDelay: 0
-  attackDelayA: 0
-  attackDelayB: 0
-  anim: {fileID: 0}
-  swordSoundClip: {fileID: 0}
-  trailRenderer: {fileID: 0}
-  range: 0
-  damage: 0
+  notHaving: 0
 --- !u!82 &1467688217282418382
 AudioSource:
   m_ObjectHideFlags: 0
@@ -174,6 +147,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8093631697261526463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8632874179436985412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b5c06b051d2194f91679da94687bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <leftGrip>k__BackingField: {fileID: 0}
+  <RightGrip>k__BackingField: {fileID: 0}
+  weaponType: 2
+  currentCloseWeapon: {fileID: 0}
+  isAttack: 0
+  isSwing: 0
+  closeWeapons:
+  - {fileID: 9095992506093341031}
+  - {fileID: 4938717017539612641}
 --- !u!1001 &4753676343494185952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -226,16 +220,44 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sword_Grip_Lv1
       objectReference: {fileID: 0}
+    - target: {fileID: 4594524356052851335, guid: 58b8e8bbcfcc86d4d8ec51bdb9ed1103, type: 3}
+      propertyPath: weaponSprite
+      value: 
+      objectReference: {fileID: -1869107078, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
+    - target: {fileID: 4594524356052851335, guid: 58b8e8bbcfcc86d4d8ec51bdb9ed1103, type: 3}
+      propertyPath: trailRenderer
+      value: 
+      objectReference: {fileID: 2693799835725785230}
+    - target: {fileID: 4594524356052851335, guid: 58b8e8bbcfcc86d4d8ec51bdb9ed1103, type: 3}
+      propertyPath: closeWeaponName
+      value: Sword1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58b8e8bbcfcc86d4d8ec51bdb9ed1103, type: 3}
+--- !u!96 &2693799835725785230 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 7249176778950245230, guid: 58b8e8bbcfcc86d4d8ec51bdb9ed1103, type: 3}
+  m_PrefabInstance: {fileID: 4753676343494185952}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5284890254733802230 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 625930930283014422, guid: 58b8e8bbcfcc86d4d8ec51bdb9ed1103, type: 3}
   m_PrefabInstance: {fileID: 4753676343494185952}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9095992506093341031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4594524356052851335, guid: 58b8e8bbcfcc86d4d8ec51bdb9ed1103, type: 3}
+  m_PrefabInstance: {fileID: 4753676343494185952}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a7167a9e871024284960d179a447e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6955017431096375159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -308,17 +330,16 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2302869776843761963, guid: 2b23871e20d58ce4eb7e0499055cd6fe, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 280324404004500400, guid: 2b23871e20d58ce4eb7e0499055cd6fe, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5166494004534166939}
+      addedObject: {fileID: 2789683303506884505}
     - targetCorrespondingSourceObject: {fileID: 280324404004500400, guid: 2b23871e20d58ce4eb7e0499055cd6fe, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2789683303506884505}
+      addedObject: {fileID: 4938717017539612641}
   m_SourcePrefab: {fileID: 100100000, guid: 2b23871e20d58ce4eb7e0499055cd6fe, type: 3}
 --- !u!4 &4722925935258005350 stripped
 Transform:
@@ -330,36 +351,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 280324404004500400, guid: 2b23871e20d58ce4eb7e0499055cd6fe, type: 3}
   m_PrefabInstance: {fileID: 6955017431096375159}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5166494004534166939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7162630022718129351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7d919d6056226d4fb93a3d09f4a2f63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <leftGrip>k__BackingField: {fileID: 0}
-  <RightGrip>k__BackingField: {fileID: 0}
-  weaponType: 0
-  currentSword: {fileID: 0}
-  weaponSprite: {fileID: -1869107078, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
-  closeWeaponID: 1
-  closeWeaponType: 0
-  closeWeaponName: "\uC7A5\uAC80"
-  attackDelay: 2
-  attackDelayA: 1
-  attackDelayB: 2
-  anim: {fileID: 0}
-  swordSoundClip: {fileID: 0}
-  trailRenderer: {fileID: 0}
-  range: 5
-  damage: 10
-  TrailRenderer: {fileID: 2789683303506884505}
-  debug: 0
 --- !u!96 &2789683303506884505
 TrailRenderer:
   serializedVersion: 3
@@ -473,3 +464,33 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4938717017539612641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7162630022718129351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a7167a9e871024284960d179a447e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <leftGrip>k__BackingField: {fileID: 0}
+  <RightGrip>k__BackingField: {fileID: 0}
+  weaponType: 2
+  weaponSprite: {fileID: -1869107078, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
+  closeWeaponID: 2
+  closeWeaponType: 0
+  closeWeaponName: Sword2
+  attackDelay: 2
+  attackDelayA: 1
+  attackDelayB: 1
+  anim: {fileID: 0}
+  swordSoundClip: {fileID: 0}
+  trailRenderer: {fileID: 2789683303506884505}
+  range: 3
+  angle: 90
+  damage: 0
+  preAngle: 0
+  cosAngle: 0

@@ -4,44 +4,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
+using static Define;
 using static UnityEngine.Rendering.DebugUI;
 
 public class IKAnimationController
 {
+    readonly RigBuilder rigBuilder;
     readonly Rig handRig;
-
-    readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
-
+    readonly Transform[] currentWeapons;
+    readonly Transform[] saveWeapons;
     readonly MultiParentConstraint[] weaoponParent;
-
+    readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
     readonly Controller owner;
-
-    IKWeapon currentWeapon;
-    AnimationController.AnimatorWeapon currentWeaponType;
     MultiParentConstraint currentWeaponParent;
 
+    IKWeapon currentWeapon;
+    int[] currentWeaponId;
+
+    AnimationController.AnimatorWeapon currentWeaponType;
     public IKAnimationController(
         Rig _handRig,
+        RigBuilder _rigBuilder,
         TwoBoneIKConstraint _leftRig,
-        TwoBoneIKConstraint _rightRig, 
-        MultiParentConstraint _primaryParent, 
-        MultiParentConstraint _subParent, 
-        MultiParentConstraint _knifeParent, 
-        MultiParentConstraint _throwParent,
+        TwoBoneIKConstraint _rightRig,
+        MultiParentConstraint[] _Parents,
+        Transform[] _currentWeaopons,
+        Transform[] _saveWeapons,
         Controller _owner)
     {
+        currentWeaponId = new int[(int)AnimationController.AnimatorWeapon.END];
         handRig = _handRig;
         owner = _owner;
-
+        rigBuilder = _rigBuilder;
+        currentWeapons = _currentWeaopons;
+        saveWeapons = _saveWeapons;
         twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
-        weaoponParent = new MultiParentConstraint[] { _subParent, _primaryParent, _knifeParent, _throwParent };
+        weaoponParent = _Parents;
     }
 
-    public void ChangeWeapon(IKWeapon _weapon)
+    public void ChangeWeapon(IKWeapon _weapon, bool isMine = true)
     {
         currentWeapon = _weapon;
-        Debug.Log("ChangeParent");
+        if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.GetInstanceID())
+            EquipWeaponEnter(currentWeapon, isMine);
+
         ChangeWeaponWeight(currentWeapon.weaponType);
+        Transform part = currentWeaponParent.data.constrainedObject;
+
+        owner.SetZoomPosition(currentWeapon.ZoomPos);
     }
 
     void SetWeight(int value)
@@ -56,6 +66,12 @@ public class IKAnimationController
         owner.StartCoroutined(
             FrameParentAction(0),
             ref parentco);
+
+        for (int i = 0; i < currentWeapons.Length; i++)
+        {
+            currentWeapons[i].gameObject.SetActive(false);
+        }
+
     }
 
     public void EquipWeapon()
@@ -119,6 +135,22 @@ public class IKAnimationController
     }
     Coroutine handCo;
 
+    void EquipWeaponEnter(IKWeapon weapon, bool isMine)
+    {
+        int weaponTypeNum = isMine ? (int)weapon.weaponType : 0;
+
+
+        currentWeaponId[weaponTypeNum] = weapon.GetInstanceID();
+
+        for (int i = 0; i < currentWeapons[weaponTypeNum].childCount; i++)
+            currentWeapons[weaponTypeNum].GetChild(i).transform.SetParent(saveWeapons[weaponTypeNum]);
+
+        weapon.transform.SetParent(currentWeapons[weaponTypeNum]);
+        weapon.transform.localPosition = Vector3.zero;
+        weapon.transform.localRotation = Quaternion.identity;
+        weapon.gameObject.SetActive(true);
+    }
+
     IEnumerator FrameHandTarget()
     {
         yield return new WaitForEndOfFrame();
@@ -136,7 +168,10 @@ public class IKAnimationController
             weaoponParent[i].weight = 0;
             if ((int)weaponType == i)
             {
+                weaoponParent[i].data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
                 currentWeaponParent = weaoponParent[i];
+                currentWeapon.gameObject.SetActive(true);
+                currentWeaponParent.data.constrainedObject.gameObject.SetActive(true);
                 HandOn();
             }
         }

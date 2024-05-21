@@ -143,6 +143,7 @@ public class PlayerInputController : MonoBehaviour
     {
         if (Define.FireType.One == Fire)
             return;
+
         if (inputValue.isPressed)
             owner.StartCoroutined(PressRoutine(), ref pressCo);
         else

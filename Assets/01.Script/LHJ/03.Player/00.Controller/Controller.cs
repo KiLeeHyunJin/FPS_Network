@@ -32,6 +32,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] float mouseSensitivity;
     [SerializeField] GameObject[] FPSIgnoreObject;
     [SerializeField] GameObject[] FPSHand;
+    [SerializeField] GameObject[] weaponObj;
     [SerializeField] Transform target;
 
     [SerializeField] Transform cameraRoot;
@@ -101,6 +102,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
+
         cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
 
         minimapIcon_m?.SetActive(true);
@@ -116,10 +118,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
-            if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
+            if(PhotonNetwork.LocalPlayer.GetPhotonTeam() != null)
             {
-                Destroy(enemyIcon);
-                minimapIcon_Ally.SetActive(true);
+                if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
+                {
+                    Destroy(enemyIcon);
+                    minimapIcon_Ally.SetActive(true);
+                }
             }
             return;
         }
@@ -149,7 +154,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
         foreach (Collider collider in colliders)
             collider.gameObject.AddComponent<HitBox>().SetOwner(this, Mine);
     }
-
+    public void SetZoomPosition(Transform _zoom)
+        => cameraController.SetZoomPosition(_zoom);
     void Update()
         => Updates?.Invoke();
     void FixedUpdate()
@@ -161,7 +167,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         requestController.Fire();
         animController.Atck();
         cameraController.GetCamShakeRoutine();
-        Controller hitTarget = attackProcess?.Attack();
+        //Controller hitTarget = attackProcess?.Attack();
     }
     void CallReload()
     {
@@ -182,23 +188,29 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void CallOne()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle);
+        if(inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
     void CallTwo()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol);
         inputController.ChangeFireType = Define.FireType.One;
+        if (inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
     void CallThree()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword);
         inputController.ChangeFireType = Define.FireType.One;
-        cameraController.ZoomChange(false);
+        if (inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
     void CallFour()
     {
         animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw);
         inputController.ChangeFireType = Define.FireType.One;
-        cameraController.ZoomChange(false);
+        if (inputController.Zoom)
+            cameraController.ZoomChange(false);
     }
 
     void SetKeyAction()
@@ -223,7 +235,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         moveProcess = new CharacterTransformProcess();
         moveProcess.Init(GetComponent<CharacterController>(), Mine);
-        moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, jumpHeight, gravitySpeed);
+        moveProcess.InitGroundCheckData(
+            foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, 
+            jumpHeight, gravitySpeed);
 
         moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
         moveProcess.SetMotions(AnimationController.MoveType.Walk, animController.MoveWalk);
@@ -260,12 +274,28 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Updates += moveProcess.Update;
         }
     }
+    public void AddWeapon(IKWeapon newWeapon)
+    {
+        animController.AddnewWeapon(newWeapon);
+    }
     void ControllCharacterLayerChange(int bodyNum, int handNum)
     {
         foreach (GameObject childeGameObject in FPSIgnoreObject)
             childeGameObject.layer = bodyNum;
         foreach (GameObject childeGameObject in FPSHand)
             childeGameObject.layer = handNum;
+
+        for (int i = 0; i < weaponObj.Length; i++)
+        {
+            if (weaponObj[i] != null)
+            {
+                Transform[] children = weaponObj[i].GetComponentsInChildren<Transform>();
+                foreach (Transform chl in children)
+                {
+                    chl.gameObject.layer = handNum;
+                }
+            }
+        }
     }
 
     void SlideJump()
@@ -315,7 +345,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if(stream.IsWriting)
         {
             stream.SendNext(TeamCode);
-
         }
         else
         {

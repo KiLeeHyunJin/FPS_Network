@@ -42,6 +42,7 @@ public class CameraController //: MonoBehaviour
     public float MouseSensitivity { set { mouseSensitivity = value; } }
     public int CameraPriority { set { cam.Priority = value; } }
     Action updateAction;
+    Transform ZoomPosition;
     public CameraController (Transform _aim, Controller _owner, CinemachineVirtualCamera _cam, Transform _root, Transform _zoomIn, Transform _zoomOut)
     {
         target = _aim;
@@ -78,13 +79,22 @@ public class CameraController //: MonoBehaviour
     }
     public void Update()
         => updateAction.Invoke();
+
+    public void SetZoomPosition(Transform _zoomTransform)
+    {
+        ZoomPosition = _zoomTransform;
+    }
+
     public void ZoomChange(bool state)
     {
         Transform currentParent;
         if (state)
         {
+            zoomInPos.position = ZoomPosition.position;
+            zoomInPos.rotation = ZoomPosition.rotation;
+
             currentParent = zoomInPos;
-            cam.m_Lens.FieldOfView = 30;
+            cam.m_Lens.FieldOfView = 42;
         }
         else
         {
