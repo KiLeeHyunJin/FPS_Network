@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CloseWeaponController : IKWeapon
+public class CloseWeaponController : IKWeapon, Iattackable
 {
     AudioSource audioSource;
     private RaycastHit hitInfo; //현재 무기에 닿은 것들의 정보 
@@ -33,9 +33,12 @@ public class CloseWeaponController : IKWeapon
     [SerializeField]public Dictionary<string,CloseWeapon> DicCloseWeapon=new Dictionary<string, CloseWeapon> ();
 
     private float range;
-    LayerMask layermask; 
+    LayerMask layermask;
 
-
+    public void Attack()
+    {
+        Fire();
+    }
     private void OnEnable()
     {
         int numOfChild = this.transform.childCount; //현재 활성화된 무기 검색. 
@@ -87,14 +90,12 @@ public class CloseWeaponController : IKWeapon
     {
         if (!isAttack) //코루틴에서 변수 넣어주는 거보다 바깥에서 변수 넣어주는게 더 깔끔해보이는듯?
         {
-            
             StartCoroutine(AttackCoroutine());
-
         }
     }
 
 
-    public IEnumerator AttackCoroutine() // 공격 루틴 
+    IEnumerator AttackCoroutine() // 공격 루틴 
     {
         isAttack = true;
         //currentCloseWeapon.anim.SetTrigger("Attack"); // 플레이어에게 붙이는건가? 액션은 플레이어가 해야할텐데.
@@ -162,7 +163,6 @@ public class CloseWeaponController : IKWeapon
             Debug.DrawRay(currentCloseWeapon.transform.position, leftDir * range, Color.cyan);
         }
     }
-
 
 
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class GunController : MonoBehaviour
+public class GunController : MonoBehaviour, Iattackable
 {
     // 무기 holder에 붙일 건 컨트롤러 
 
@@ -45,11 +45,9 @@ public class GunController : MonoBehaviour
         int numOfChild = this.transform.childCount;
         for (int i = 0; i < numOfChild; i++)
         {
-            
-                currentGun = transform.GetChild(i).GetComponent<Gun>();
-                audioSource.clip = currentGun.fire_Sound;
-                break;
-            
+            currentGun = transform.GetChild(i).GetComponent<Gun>();
+            audioSource.clip = currentGun.fire_Sound;
+            break;
         }
     }
 
@@ -67,6 +65,10 @@ public class GunController : MonoBehaviour
         // 이거 일단 빨간 줄 떠서 켜놓음. 
         theCam = Camera.main;
     }
+    public void Attack()
+    {
+        TryFire();
+    }
 
     private void Update()
     {
@@ -78,22 +80,9 @@ public class GunController : MonoBehaviour
             //TryFineSight(); //정조준 
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) //임시로 마우스 왼쪽 버튼으로 fire 발사 
-        {
-            TryFire();
-        }
         if (Input.GetKeyDown(KeyCode.Mouse1)) //임시로 마우스 우측 버튼으로 리로드 시작. 
         {
             TryReload();
-
-        }
-    }
-    public void CancelReload() //리로드 동작 중지. 
-    {
-        if (isReload) //장전 중이면 
-        {
-            StopAllCoroutines(); //이거 올 코루틴 중지 막 돌려도 되는지는 모르겠네.
-            isReload = false;
         }
     }
 
@@ -111,26 +100,6 @@ public class GunController : MonoBehaviour
     {
         if (currentFireRate <= 0 && !isReload) //쿨타임 <=0 이고 재장전 중이 아닐 때만 Fire 실행. 
         {
-            
-            {
-                if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
-                {
-                    Shoot();
-                }
-                else
-                {
-                    //원본에서는 여기서 Reload를 실행하지만 우리 게임은 Reload를 키를 눌러서 진행할 예정이다.
-                }
-            }
-           
-        }
-
-    }
-
-    private void Fire() //발사를 위한 과정 
-    {
-        if (!isReload)
-        {
             if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
             {
                 Shoot();
@@ -139,14 +108,6 @@ public class GunController : MonoBehaviour
             {
                 //원본에서는 여기서 Reload를 실행하지만 우리 게임은 Reload를 키를 눌러서 진행할 예정이다.
             }
-        }
-    }
-
-    public void CancelFineSight() // 정조준 취소 함수
-    {
-        if (isFineSightMode)
-        {
-            FineSight();
         }
     }
 
@@ -316,6 +277,5 @@ public class GunController : MonoBehaviour
 
 
     }
-
 
 }
