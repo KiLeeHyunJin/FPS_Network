@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))] // bomb는 리지드 바디 필수. 
 public class Bomb : IKWeapon
 {
     // 폭탄에 필요한 공통 조각
@@ -144,7 +145,9 @@ public class Bomb : IKWeapon
 
             if(controller!=null) //targetLayer가 controller를 가지고 있다면. 데미지 주기. 
             {
-                controller.Damage(damage); //데미지 함수 내부에서 쉴드체크 해주고 있음. !
+                IDamagable damagable= colliders[i].gameObject.GetComponent<IDamagable>();
+                damagable?.TakeDamage(damage);
+
                 controller.GetComponent<ProcessingController>()?.HitEffect();
                 
             }
@@ -179,7 +182,6 @@ public class Bomb : IKWeapon
         
         Destroy(instanceBomb.gameObject);
         Destroy(bombFxIns);
-
 
     }
 

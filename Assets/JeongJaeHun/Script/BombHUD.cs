@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class BombHUD : MonoBehaviour
+public class BombHUD : MonoBehaviourPun
 {
     [SerializeField] //폭탄의 정보를 얻기 위한 스크립트 참조
     private BombController[] bombController;
@@ -19,6 +20,11 @@ public class BombHUD : MonoBehaviour
 
     private void Update()
     {
+        if(!photonView.IsMine)
+        {
+            return;
+        }
+
         CheckUi(); 
     }
 
