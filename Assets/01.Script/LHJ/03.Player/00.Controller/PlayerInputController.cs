@@ -129,7 +129,6 @@ public class PlayerInputController : MonoBehaviour
         bool value = inputValue.isPressed ? true : false;
         moveTypeAction.Invoke(value);
     }
-
     void OnAlt(InputValue inputValue)
     {
         actions[(int)Define.Key.Alt]?.Invoke();

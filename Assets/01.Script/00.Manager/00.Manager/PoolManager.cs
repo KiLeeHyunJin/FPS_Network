@@ -7,13 +7,17 @@ public class PoolManager : Singleton<PoolManager>
 
     public void CreatePool(PooledObject prefab, int size, int capacity)
     {
-        GameObject gameObject = new GameObject();
-        gameObject.name = $"Pool_{prefab.name}";
+        int prefabKey = prefab.GetInstanceID();
+        if (!poolDic.ContainsKey(prefabKey)) // 이미 있으면 안함
+        {
+            GameObject gameObject = new GameObject();
+            gameObject.name = $"Pool_{prefab.name}";
 
-        ObjectPool objectPool = gameObject.AddComponent<ObjectPool>();
-        objectPool.CreatePool(prefab, size, capacity);
+            ObjectPool objectPool = gameObject.AddComponent<ObjectPool>();
+            objectPool.CreatePool(prefab, size, capacity);
 
-        poolDic.Add(prefab.GetInstanceID(), objectPool);
+            poolDic.Add(prefabKey, objectPool);
+        }
     }
 
     public void DestroyPool(PooledObject prefab)
