@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 4
+  notHaving: 0
 --- !u!114 &3205242705271170208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +170,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9125250902353471123}
     m_Modifications:
+    - target: {fileID: 1346254717474426037, guid: 0ac820b0626832e4b965264a87518e54, type: 3}
+      propertyPath: weaponType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3396686382411874503, guid: 0ac820b0626832e4b965264a87518e54, type: 3}
       propertyPath: m_Enabled
       value: 0

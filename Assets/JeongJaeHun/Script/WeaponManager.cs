@@ -75,9 +75,6 @@ public class WeaponManager : MonoBehaviour
             bombDictionary.Add(bomb[i].bombName, bomb[i]);
         }
 
-
-
-
     }
     public void OnInputSwapWeapon() //이거 어차피 equip에서 함수 부르는데 일단.. 
                                     // 각 번호에 알맞는 무기가 저장되어야 하고 그 무기가 있어야 하고 (특히 1번 무기 -->주무기) 

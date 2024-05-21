@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 5
+  notHaving: 0
 --- !u!114 &5625018157180194195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,6 +213,10 @@ PrefabInstance:
     - target: {fileID: 766033668547857108, guid: 4d989060082947e48a13f707f29a49e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 995263414877082416, guid: 4d989060082947e48a13f707f29a49e5, type: 3}
+      propertyPath: weaponType
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

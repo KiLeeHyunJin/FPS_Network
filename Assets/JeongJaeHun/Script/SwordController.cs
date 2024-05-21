@@ -15,18 +15,18 @@ public class SwordController : CloseWeaponController
         // WeaponManager.currentWeaponAnim = currentCloseWeapon.anim;
     }
 
-    protected override IEnumerator HitCoroutine() // 칼 만의 데미지 처리 
+   /* protected  new IEnumerator HitCoroutine() // 칼 만의 데미지 처리 
     {
         while (isSwing) //closeWeaponController의 isSwing; 
         {
             if (CheckObject()) //여기서 플레이어를 만나야 하는데 tag가 player면? 으로 해야하나?
             {
                 isSwing = false;
-                Debug.Log(hitInfo.transform.name);
+                
             }
             yield return null;
         }
-    }
+    }*/
 
     public override void CloseWeaponChange(CloseWeapon _closeWeapon) //칼 만의 무기 교체 처리 
     {
