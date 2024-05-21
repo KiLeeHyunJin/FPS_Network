@@ -51,7 +51,7 @@ public class CloseWeaponController : IKWeapon, Iattackable
                 break;
             }
         }
-
+        if(trailRenderer!=null)
         trailRenderer.emitting = false; //공격하지 않을 때 렌더러가 생기지 않도록 꺼주기. 
 
         range = currentCloseWeapon.range; //캐싱? 해주기 

@@ -1,7 +1,10 @@
 using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 
-public class GunController : MonoBehaviour, Iattackable
+
+[RequireComponent(typeof(AudioSource))]
+public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 {
     // 무기 holder에 붙일 건 컨트롤러 
 
@@ -25,29 +28,36 @@ public class GunController : MonoBehaviour, Iattackable
     
     private Camera theCam; //카메라 시점에서 정 중앙에 발사할 것. 
 
-    [SerializeField]
-    [Tooltip("피격 시 발생할 피 터지는 이펙트")]
-
-    [Header("PooledObject 이펙트 관리 스크립트연결")]
-    public PoolContainer poolContainer;
-
     [Tooltip("스크립트의 활성화 여부")]
     public static bool isActivate = true;
+
+    [Tooltip("총알이 생성 될 FirePos 위치 ")]
+    [SerializeField]private Transform FirePos;
+
+
     private void Awake()
     {
-        poolContainer = GameObject.FindObjectOfType<PoolContainer>();
+        //poolContainer = GameObject.FindObjectOfType<PoolContainer>();
         audioSource = GetComponent<AudioSource>();
     }
 
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        int numOfChild = this.transform.childCount;
+        if(!photonView.IsMine) // 자신의 로컬 객체가 아니면 onEnable 실행하지 않기. 
+        {
+            return; 
+        }
+
+        int numOfChild = transform.childCount;
         for (int i = 0; i < numOfChild; i++)
         {
             currentGun = transform.GetChild(i).GetComponent<Gun>();
             audioSource.clip = currentGun.fire_Sound;
-            break;
+
+
+
+            // true 체크를 안하기 때문에 break를 걸어줄 필요가 없음 
         }
     }
 
@@ -63,18 +73,31 @@ public class GunController : MonoBehaviour, Iattackable
         //WeaponManager.currentWeaponAnim=currentGun.anim;
 
         // 이거 일단 빨간 줄 떠서 켜놓음. 
-        theCam = Camera.main;
+
+        if(photonView.IsMine) //각각 로컬의 메인카메라를 가져오도록 
+        {
+            theCam = Camera.main;
+        }
     }
+
+
+    // 인터페이스로 상속한 인터페이스 함수 --> 실제 플레이어 클릭 시 실행 할 함수임. 
+
+
     public void Attack()
     {
-        TryFire();
+        if(photonView.IsMine)
+        {
+            TryFire(); // 로컬 플레이어만 총을 직접 사격 및 탄알 ui 갱신 가능 --> ui 연계도 로컬 상태로 갱신해줘야함. 
+        }
+        
     }
 
     private void Update()
     {
         if (isActivate)
         {
-            GunFireRateCalc(); //쿨타임 측정이므로 update에서 돌아가야함. 
+            GunFireRateCalc(); //쿨타임 측정이므로 update에서 돌아가야함. --> 사실 이런 공격 쿨타임 코루틴으로 구현하면 되긴 함... 
             //TryFire(); //발사 입력 받는 부분은 update에서 굳이 돌려야할까? --> input 쓰는데? 생각해보기. 
             //TryReload(); //재장전도 마찬가지 -> 키 눌렀을 때만 측정하면 되지 않을까? 
             //TryFineSight(); //정조준 
@@ -87,11 +110,11 @@ public class GunController : MonoBehaviour, Iattackable
     }
 
 
-    private void GunFireRateCalc()
+    private void GunFireRateCalc() // 총의 쿨타임 
     {
         if (currentFireRate > 0)
         {
-            currentFireRate -= Time.deltaTime; // deltaTime만큼 지속적으로 감소 (총의 쿨타임)
+            currentFireRate -= Time.deltaTime; // deltaTime만큼 지속적으로 감소 
         }
 
     }
@@ -118,10 +141,11 @@ public class GunController : MonoBehaviour, Iattackable
         currentGun.currentBulletCount--; //총알 감소 
         currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
 
-        currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.
-        audioSource.Play();
+        Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성. 
+        currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.      
+        audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생. 
 
-        //피격 처리
+        //피격 처리 --> 어차피 실제 불렛에서 진행할 예정이긴 함.. 
         Hit();
 
         //총기 반동 코루틴 실행
@@ -130,20 +154,13 @@ public class GunController : MonoBehaviour, Iattackable
 
     }
 
-
-    private void Hit()
+    private void Hit() //bullet 연구해서 연계 가능한지 확인해보고 --> 피 터지는건 불렛에서 피 터지게 하면 될 것 같은데 
     {
-        // 카메라 월드 좌표 (localPosition이 아니다. )
-        // 플레이어에게 달려있는 1인칭 카메라로부터 RaYcAST를 쏴서 충돌 지점을 총알이 맞은 위치로 판정할 것. 
-        // 1인칭 카메라 이기 때문에 사실상 화면 정중앙에 총을 쏘게 되기 때문에. 
         if (Physics.Raycast(Camera.main.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
         {
-            poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+            
 
         }
-
-        // 충돌 시 생성할 때 objectPool을 이용한다.
-        // ParticleSystem hitEffect =GameManager.Pool.Get 이용!! --> pooled Object 상속해서 풀링해두기. 
     }
 
     private void TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
@@ -177,14 +194,7 @@ public class GunController : MonoBehaviour, Iattackable
         }
 
     }
-    private void TryFineSight() //정조준 실행. 
-    {
-        /* if (Input.GetKeyDown("Fire2") && currentGun.gunType == Gun.GunType.SNIPER
-             && !isReload) //스나이퍼 일 때만 정조준 진행. (??) ++ 장전 중이 아닐 때만 조준 가능하도록..
-         {
-             FineSight(); //나중에 equipCont로 옮겨줄 예정. 일단 더 생각해보기. 
-         }*/
-    }
+    
 
     private void FineSight()
     {
@@ -278,4 +288,8 @@ public class GunController : MonoBehaviour, Iattackable
 
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        
+    }
 }
