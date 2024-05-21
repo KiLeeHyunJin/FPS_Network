@@ -90,9 +90,6 @@ public class ChangeWeaponSlot : MonoBehaviour
 
             // 이게 무기 내부에 무기가 다 꺼져있으면 변경되면 안되는 작업을 맨 앞에서 해줘야 할 것 같음. --> ui가 변경되는 문제가 발생함. 
 
-
-
-
             if (slotNumber== (int)slotType.PistolType || slotNumber==(int)slotType.ArType) // gun 
             {
                 closeWeaponHUD.gameObject.SetActive(false);

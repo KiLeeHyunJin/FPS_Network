@@ -119,7 +119,7 @@ public class WeaponManager : MonoBehaviour
         switch (currentWeaponType)
         {
             case "GUN":
-                theGunController.CancelFineSight();
+                //theGunController.CancelFineSight();
                 theGunController.CancelReload();
                 GunController.isActivate = false;
                 break;
@@ -131,7 +131,7 @@ public class WeaponManager : MonoBehaviour
     {
         if (type == "GUN")
         {
-            theGunController.GunChange(gunDictionary[name]);
+            //theGunController.GunChange(gunDictionary[name]);
         }
         else if (type == "BOMB")
         {

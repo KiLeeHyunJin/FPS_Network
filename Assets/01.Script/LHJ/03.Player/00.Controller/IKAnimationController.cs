@@ -42,13 +42,18 @@ public class IKAnimationController
         weaoponParent = _Parents;
     }
 
-    public void ChangeWeapon(IKWeapon _weapon)
+    public void ChangeWeapon(IKWeapon _weapon, bool isMine = true)
     {
         currentWeapon = _weapon;
-        if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.GetInstanceID())
-            EquipWeaponEnter(currentWeapon);
         ChangeWeaponWeight(currentWeapon.weaponType);
-        //owner.SetZoomPosition(currentWeapon.ZoomPos);
+        if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.GetInstanceID())
+            EquipWeaponEnter(currentWeapon, isMine);
+        Transform part = currentWeaponParent.data.constrainedObject;
+
+        //for (int i = 0; i < part.childCount; i++)
+        //    part.GetChild(i).gameObject.SetActive(true);
+
+        owner.SetZoomPosition(currentWeapon.ZoomPos);
     }
 
     void SetWeight(int value)
@@ -65,8 +70,10 @@ public class IKAnimationController
             ref parentco);
 
         for (int i = 0; i < currentWeapons.Length; i++)
-            for (int j = 0; j < currentWeapons[i].childCount; j++)
-                currentWeapons[i].GetChild(j).gameObject.SetActive(false);
+        {
+            currentWeapons[i].gameObject.SetActive(false);
+        }
+
     }
 
     public void EquipWeapon()
@@ -130,17 +137,21 @@ public class IKAnimationController
     }
     Coroutine handCo;
 
-    void EquipWeaponEnter(IKWeapon weapon)
+    void EquipWeaponEnter(IKWeapon weapon, bool isMine)
     {
-        currentWeaponId[(int)weapon.weaponType] = weapon.GetInstanceID();
+        int weaponTypeNum = isMine ? (int)weapon.weaponType : 0;
 
-        for (int i = 0; i < currentWeapons[(int)weapon.weaponType].childCount; i++)
-            currentWeapons[(int)weapon.weaponType].GetChild(i).transform.SetParent(saveWeapons[(int)weapon.weaponType]);
 
-        weapon.transform.SetParent(currentWeapons[(int)weapon.weaponType]);
+        currentWeaponId[weaponTypeNum] = weapon.GetInstanceID();
+
+        for (int i = 0; i < currentWeapons[weaponTypeNum].childCount; i++)
+            currentWeapons[weaponTypeNum].GetChild(i).transform.SetParent(saveWeapons[weaponTypeNum]);
+
+        weapon.transform.SetParent(currentWeapons[weaponTypeNum]);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
     }
+
     IEnumerator FrameHandTarget()
     {
         yield return new WaitForEndOfFrame();
@@ -160,7 +171,7 @@ public class IKAnimationController
             {
                 weaoponParent[i].data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
                 currentWeaponParent = weaoponParent[i];
-
+                currentWeaponParent.data.constrainedObject.gameObject.SetActive(true);
                 HandOn();
             }
         }

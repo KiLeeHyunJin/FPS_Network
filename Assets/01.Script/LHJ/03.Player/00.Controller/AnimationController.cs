@@ -41,10 +41,10 @@ public class AnimationController : MonoBehaviourPun
     int[] layerId;
     int[] floatId;
     int[] weaponId;
-    IKWeapon[] weapons;
+    //IKWeapon[] weapons;
 
     readonly string TRIGGER = "CallTriggerRPC";
-
+    readonly string RIGIK = "RigIK";
     private void Start()
     {
         iKAnimation = new IKAnimationController
@@ -52,8 +52,7 @@ public class AnimationController : MonoBehaviourPun
             weaponParents, 
             currentWeapons, saveWeapons, GetComponent<Controller>());
 
-        weapons = new IKWeapon[] { pistolWeapon, rifleWeapon, swordWeapon, throwWeapon };
-
+       // weapons = new IKWeapon[] { pistolWeapon, rifleWeapon, swordWeapon, throwWeapon };
     }
     public Vector2 MoveValue
     {
@@ -92,13 +91,41 @@ public class AnimationController : MonoBehaviourPun
             anim.GetBool(weaponId[(int)AnimatorWeapon.Throw]) )
             photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
     }
+    public void AddnewWeapon(IKWeapon newWeapon)
+    {
+        if (newWeapon == null || newWeapon.weaponType == AnimatorWeapon.END)
+            return;
 
+        switch (newWeapon.weaponType)
+        {
+            case AnimatorWeapon.Pistol:
+                pistolWeapon = newWeapon;
+                break;
+            case AnimatorWeapon.Rifle:
+                rifleWeapon = newWeapon;
+                break;
+            case AnimatorWeapon.Sword:
+                swordWeapon = newWeapon;
+                break;
+            case AnimatorWeapon.Throw:
+                throwWeapon = newWeapon;
+                break;
+            case AnimatorWeapon.END:
+                break;
+        }
+    }
     public void ChangeWeapon(AnimatorWeapon type)
     {
+        IKWeapon changeWeapon = GetIKWeapon(type);
+        if (changeWeapon == null)
+            return;
+        
         if (anim.GetBool(weaponId[(int)type]) == false)
         {
+            photonView.RPC(RIGIK, RpcTarget.Others, changeWeapon.name, ChangeWeaponId);
+
             OnWeapon(type);
-            photonView.RPC(TRIGGER, RpcTarget.All, ChangeWeaponId);
+            anim.SetTrigger(ChangeWeaponId);
         }
     }
 
@@ -153,21 +180,63 @@ public class AnimationController : MonoBehaviourPun
     {
         iKAnimation?.DequipWeapon();
 
-        for (int i = 0; i < weapons.Length; i++)
+        for (int i = 0; i < weaponId.Length; i++)
         {
             if(anim.GetBool(weaponId[i]))
             {
-                weapons[i].gameObject.SetActive(true);
-                iKAnimation.ChangeWeapon(weapons[i]);
+                IKWeapon weapon;
+                switch (i)
+                {
+                    case 0:
+                        weapon = pistolWeapon;
+                        break;
+                    case 1:
+                        weapon = rifleWeapon;
+                        break;
+                    case 2:
+                        weapon = swordWeapon;
+                        break;
+                    default:
+                        weapon = throwWeapon;
+                        break;
+                }
+                if (weapon != null)
+                {
+                    weapon.gameObject.SetActive(true);
+                    iKAnimation.ChangeWeapon(weapon);
+                }
                 return;
             }
         }
+    }
+    IKWeapon GetIKWeapon(AnimatorWeapon type)
+    {
+        switch (type)
+        {
+            case AnimatorWeapon.Pistol:
+                return pistolWeapon;
+            case AnimatorWeapon.Rifle:
+                return rifleWeapon;
+            case AnimatorWeapon.Sword:
+                return swordWeapon;
+            case AnimatorWeapon.Throw:
+                return throwWeapon;
+        }
+        return null;
     }
 
     [PunRPC]
     void CallTriggerRPC(int triggerId)
     {
         anim.SetTrigger(triggerId);
+    }
+
+    [PunRPC]
+    void RigIK(string rigWeaponStr, int triggerId)
+    {
+        IKWeapon newWeapon = Manager.Resource.Load<IKWeapon>(ResourceManager.ResourceType.Weapon,rigWeaponStr);
+        anim.SetTrigger(triggerId);
+        iKAnimation.ChangeWeapon(newWeapon);
     }
 
     void SetState(AnimatorState type, bool state)

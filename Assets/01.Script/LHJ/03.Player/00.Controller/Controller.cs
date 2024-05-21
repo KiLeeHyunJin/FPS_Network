@@ -102,6 +102,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
+
         cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
 
         minimapIcon_m?.SetActive(true);
@@ -117,10 +118,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
-            if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
+            if(PhotonNetwork.LocalPlayer.GetPhotonTeam() != null)
             {
-                Destroy(enemyIcon);
-                minimapIcon_Ally.SetActive(true);
+                if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
+                {
+                    Destroy(enemyIcon);
+                    minimapIcon_Ally.SetActive(true);
+                }
             }
             return;
         }
@@ -151,7 +155,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             collider.gameObject.AddComponent<HitBox>().SetOwner(this, Mine);
     }
     public void SetZoomPosition(Transform _zoom)
-    => cameraController.SetZoomPosition(_zoom);
+        => cameraController.SetZoomPosition(_zoom);
     void Update()
         => Updates?.Invoke();
     void FixedUpdate()
@@ -163,7 +167,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         requestController.Fire();
         animController.Atck();
         cameraController.GetCamShakeRoutine();
-        Controller hitTarget = attackProcess?.Attack();
+        //Controller hitTarget = attackProcess?.Attack();
     }
     void CallReload()
     {
@@ -231,7 +235,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         moveProcess = new CharacterTransformProcess();
         moveProcess.Init(GetComponent<CharacterController>(), Mine);
-        moveProcess.InitGroundCheckData(foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, jumpHeight, gravitySpeed);
+        moveProcess.InitGroundCheckData(
+            foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, 
+            jumpHeight, gravitySpeed);
 
         moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
         moveProcess.SetMotions(AnimationController.MoveType.Walk, animController.MoveWalk);
@@ -267,6 +273,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Updates -= moveProcess.Update;
             Updates += moveProcess.Update;
         }
+    }
+    public void AddWeapon(IKWeapon newWeapon)
+    {
+        animController.AddnewWeapon(newWeapon);
     }
     void ControllCharacterLayerChange(int bodyNum, int handNum)
     {
@@ -335,7 +345,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if(stream.IsWriting)
         {
             stream.SendNext(TeamCode);
-
         }
         else
         {

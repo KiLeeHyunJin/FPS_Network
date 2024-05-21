@@ -56,7 +56,6 @@ public class GunController : MonoBehaviour
             if (transform.GetChild(i).gameObject.activeSelf == true)
             {
                 currentGun = transform.GetChild(i).GetComponent<Gun>();
-
             }
         }
         originPos = Vector3.zero;       

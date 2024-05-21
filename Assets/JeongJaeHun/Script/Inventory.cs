@@ -35,7 +35,6 @@ public class Inventory : MonoBehaviour
        //slots= gameObject.GetComponentsInChildren<Slot>();
 
         goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
-
     }
 
 
@@ -55,13 +54,20 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(Item _item,int ID) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {
-        item = _item; 
+        item = _item;
+        
+        int id = _item.itemPrefab.GetInstanceID();
+        PooledObject getPoolObject = Manager.Pool.GetPool(id, Vector3.zero, Quaternion.identity);
+        IKWeapon newWeapon = getPoolObject as IKWeapon;
+        GetComponent<Controller>().AddWeapon(newWeapon);
+
+        //GetComponent<Controller>().AddWeapon(IKWeapon as _item.itemPrefab);
 
         // 슬롯 중 아이디가 1번인 거를 찾아서 거기의 자식 id를 체크 
         if(item.itemType==Item.ItemType.Pistol)
         {
             GameObject obj1 = transform.GetChild(0).gameObject; //0번 자식 --> 첫번째 자식 (첫번째 슬롯임)
-
+            
             if(obj1==null)
             {
                 return; 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IKWeapon : MonoBehaviour
+public class IKWeapon : PooledObject
 {
     // 모든 무기가 상속을 해줘야하는 IkWeapon (역운동학을 위해서 )
     // 플레이어가 맞춰줘야 하니까. 각 무기들에 달아줘야함. 
