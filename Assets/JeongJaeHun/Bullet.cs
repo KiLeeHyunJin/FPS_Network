@@ -1,9 +1,6 @@
-using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Bullet : PooledObject
 {
     (int damage, float moveSpeed) data;
@@ -11,6 +8,18 @@ public class Bullet : PooledObject
     Vector3 beforePos;
     Vector3 direction;
     RaycastHit hitInfo;
+
+    AudioSource audioSource;
+
+    [SerializeField] private float moveForce = 300f;
+
+    private void OnEnable()
+    {
+        audioSource = GetComponent<AudioSource>();
+        Rigidbody rigidbody=GetComponent<Rigidbody>();
+
+        //rigidbody.AddForce(transform.forward*moveForce);
+    }
 
     public void SetData(float _moveSpeed, int _damage, int _shooterTeam, float _time)
     {
@@ -33,13 +42,23 @@ public class Bullet : PooledObject
                 //if(teamCode != player.TeamCode)
                 {
                     damagable.TakeDamage(data.damage);
+                    Vector3 pos = hitInfo.point;
+                    Quaternion rot = Quaternion.LookRotation(hitInfo.normal);
+                    //사람에 맞으면 피 법선벡터로 생성 
+                    Manager.Pool.GetBloodEffect(pos, rot);
+                    Release();
+
                 }
             }
-            else
+            else // 벽 이나 땅에 부딪힌 경우 mark + spark 프리팹을 불러와줘야함. 
             {
+                Vector3 pos = hitInfo.point;
+                Quaternion rot = Quaternion.LookRotation(hitInfo.normal);
+                Manager.Pool.GetbulletMarks(pos, rot);
+                Manager.Pool.GetBulletSpark(pos, rot);
+                Release();
 
             }
-            Release();
         }
     }
     void HitCheck(float delayTime)
@@ -48,8 +67,11 @@ public class Bullet : PooledObject
         bool state = Physics.Raycast(beforePos, direction, out hitInfo, moveDistance);
         transform.position += moveDistance * transform.forward;
         beforePos = transform.position;
-        if(state)
+        if (state)
             Collision();
     }
+
+
+
 
 }

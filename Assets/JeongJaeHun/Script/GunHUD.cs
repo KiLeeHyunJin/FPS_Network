@@ -4,8 +4,9 @@ using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class GunHUD : MonoBehaviour
+public class GunHUD : MonoBehaviourPun
 {
     // 총알 정보를 얻기 위한 스크립트 참조 
     [SerializeField]
@@ -34,6 +35,11 @@ public class GunHUD : MonoBehaviour
 
     private void Update()
     {
+        if(!photonView.IsMine)
+        {
+            return;
+        }
+
         CheckUI(); // 이거 무기 종류마다 패널을 바꾸자.
         // 무기 onEnable 될 때마다 다른 패널을 꺼줘버리자. 
     }
