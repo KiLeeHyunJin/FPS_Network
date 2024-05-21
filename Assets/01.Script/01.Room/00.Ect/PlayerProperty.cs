@@ -2,7 +2,6 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,14 +43,14 @@ public class PlayerProperty : MonoBehaviour
     }
     public void isWhispering(bool b)
     {
-        if(b)
-        whisperText.text = "해제";
+        if (b)
+            whisperText.text = "해제";
         else
             whisperText.text = "귓속말";
     }
     private void OnEnable()
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             //속성버튼을 클릭한 클라이언트가 마스터라면 추방과 팀 변경 버튼이 비활성화되어있다면 활성화한다.
             if (getOut.gameObject.activeSelf == false)
@@ -78,10 +77,10 @@ public class PlayerProperty : MonoBehaviour
         //채팅을 보낼 상대를 설정한다.
         chat.SendTarget(player);
         //임무를 마쳤기에 비활성화
-       
+
         gameObject.SetActive(false);
     }
-  
+
     void GetOut()
     {
         //추방시킨다.
@@ -110,7 +109,7 @@ public class PlayerProperty : MonoBehaviour
             //임무를 마쳤기에 비활성화
             gameObject.SetActive(false);
         }
-        
-        
+
+
     }
 }

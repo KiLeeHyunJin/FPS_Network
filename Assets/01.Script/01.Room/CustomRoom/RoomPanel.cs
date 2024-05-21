@@ -220,7 +220,7 @@ public class RoomPanel : MonoBehaviourShowInfo
     {
         currentRoom.SetProperty(DefinePropertyKey.START, true);
         PhotonNetwork.LoadLevel(gameSceneName);
-        PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = false;
+        
         yield return null;
     }
     IEnumerator LoadScene(Player player)
@@ -285,6 +285,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         
         if (currentRoom.GetProperty<bool>(DefinePropertyKey.START) && !isLoaded)
         {
+            PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = false;
             int ra = Random.Range(1, 6);
             Debug.Log(ra);
             FireBaseManager.DB
@@ -334,7 +335,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-
+            if(player == PhotonNetwork.LocalPlayer)
             player.SetProperty<float>(DefinePropertyKey.LOADVALUE, 0);
             int teamCode = player.GetPhotonTeam().Code;
             Transform loadTransform = (teamCode == BLUE) ? loadImage.blueTeamLoad : loadImage.redTeamLoad;

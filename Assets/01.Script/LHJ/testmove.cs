@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor.Animations;
+#endif
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 public class SaveHandPos : MonoBehaviour
 {
+#if UNITY_EDITOR
     [SerializeField] Transform leftHandPos;
     [SerializeField] Transform rightHandPos;
     [ContextMenu("Save_Hand_Pose")]
@@ -17,4 +16,5 @@ public class SaveHandPos : MonoBehaviour
         recorder.TakeSnapshot(0);
         //recorder.SaveToClip()
     }
+#endif
 }

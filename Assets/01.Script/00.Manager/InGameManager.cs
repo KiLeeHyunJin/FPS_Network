@@ -92,11 +92,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         
         Manager.Game.StartGame(blueLocation, redLocation);
 
-        if(PhotonNetwork.IsMasterClient)
-        pv.RPC("MessageUp",RpcTarget.All,("준비완료 \n 무기 사시고 전투를 준비하세요 20초드림"));
+        if (PhotonNetwork.IsMasterClient)
+        {
+            pv.RPC("MessageUp", RpcTarget.All, ("준비완료 \n 무기 사시고 전투를 준비하세요 20초드림"));
+            PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
+            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, true);
+        }
 
-        PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
-        PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, true);
 
     }
 
@@ -157,15 +159,16 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             inGameTimer.text = (remainTime + 1).ToString();
             yield return null;
         }
-
+        
         if (PhotonNetwork.IsMasterClient)
-            pv.RPC("MessageUp", RpcTarget.Others, ($"GAME START  {pv.Controller.ActorNumber}"));
-        else
-            MessageUp("isNotMasterClient");
+        {
+            pv.RPC("MessageUp", RpcTarget.All, ($"GAME START  {pv.Controller.ActorNumber}"));
 
-        PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, false);
-        PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, true);
-        PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
+            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, false);
+            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, true);
+            PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
+        }
+            
 
     }
 
