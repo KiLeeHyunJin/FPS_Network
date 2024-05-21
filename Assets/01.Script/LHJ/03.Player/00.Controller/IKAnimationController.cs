@@ -45,13 +45,11 @@ public class IKAnimationController
     public void ChangeWeapon(IKWeapon _weapon, bool isMine = true)
     {
         currentWeapon = _weapon;
-        ChangeWeaponWeight(currentWeapon.weaponType);
         if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.GetInstanceID())
             EquipWeaponEnter(currentWeapon, isMine);
-        Transform part = currentWeaponParent.data.constrainedObject;
 
-        //for (int i = 0; i < part.childCount; i++)
-        //    part.GetChild(i).gameObject.SetActive(true);
+        ChangeWeaponWeight(currentWeapon.weaponType);
+        Transform part = currentWeaponParent.data.constrainedObject;
 
         owner.SetZoomPosition(currentWeapon.ZoomPos);
     }
@@ -150,6 +148,7 @@ public class IKAnimationController
         weapon.transform.SetParent(currentWeapons[weaponTypeNum]);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
+        weapon.gameObject.SetActive(true);
     }
 
     IEnumerator FrameHandTarget()
@@ -171,6 +170,7 @@ public class IKAnimationController
             {
                 weaoponParent[i].data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
                 currentWeaponParent = weaoponParent[i];
+                currentWeapon.gameObject.SetActive(true);
                 currentWeaponParent.data.constrainedObject.gameObject.SetActive(true);
                 HandOn();
             }

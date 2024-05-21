@@ -49,10 +49,10 @@ public class AnimationController : MonoBehaviourPun
     {
         iKAnimation = new IKAnimationController
             (handRig, GetComponent<RigBuilder>(), left, right,
-            weaponParents, 
+            weaponParents,
             currentWeapons, saveWeapons, GetComponent<Controller>());
 
-       // weapons = new IKWeapon[] { pistolWeapon, rifleWeapon, swordWeapon, throwWeapon };
+        // weapons = new IKWeapon[] { pistolWeapon, rifleWeapon, swordWeapon, throwWeapon };
     }
     public Vector2 MoveValue
     {

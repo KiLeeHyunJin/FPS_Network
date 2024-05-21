@@ -31,19 +31,23 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
        //slots= gameObject.GetComponentsInChildren<Slot>();
-
-        goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
+       if(goldText != null)
+            goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
     }
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
     {
-        Gold += coin; //골드 추가. 
-        goldText.text = $"{Gold}";
-
+        if (goldText != null)
+        {
+            Gold += coin; //골드 추가. 
+            goldText.text = $"{Gold}";
+        }
     }
     
     public void LoseCoin(int coin) //상점 아이템 구매 등
     {
+        if (goldText == null)
+            return;
         Gold -= coin;
         if (Gold < 0) Gold = 0; //최소값 0으로 제한 
         goldText.text = $"{Gold}"; //골드텍스트 초기화 

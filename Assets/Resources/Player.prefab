@@ -3046,7 +3046,7 @@ MonoBehaviour:
   <leftGrip>k__BackingField: {fileID: 5855758541339562154}
   <RightGrip>k__BackingField: {fileID: 4985068261820418403}
   <ZoomPos>k__BackingField: {fileID: 0}
-  <weaponType>k__BackingField: 0
+  <weaponType>k__BackingField: 3
 --- !u!1 &1910069145140850999
 GameObject:
   m_ObjectHideFlags: 0
@@ -7130,6 +7130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 0
+  notHaving: 0
 --- !u!114 &6632997920356581901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7144,7 +7145,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGun: {fileID: 0}
   originPos: {x: 0, y: 0, z: 0}
-  theCam: {fileID: 0}
   poolContainer: {fileID: 0}
 --- !u!82 &1525380330895399996
 AudioSource:
@@ -7911,6 +7911,8 @@ MonoBehaviour:
   gunHUD: {fileID: 0}
   closeWeaponHUD: {fileID: 0}
   bombHUD: {fileID: 0}
+  isChangeWeapon: 0
+  changeWeaponDelayTime: 0
   slotChange:
     m_PersistentCalls:
       m_Calls: []
@@ -8244,7 +8246,7 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -8455,6 +8457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84d2aa485622ea41a84741f90b3d9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  armorManager: {fileID: 0}
+  currentArmor: {fileID: 0}
 --- !u!1 &3204037897197038457
 GameObject:
   m_ObjectHideFlags: 0
@@ -11678,8 +11682,7 @@ MonoBehaviour:
   <leftGrip>k__BackingField: {fileID: 1998382069498178493}
   <RightGrip>k__BackingField: {fileID: 2409350013156442485}
   <ZoomPos>k__BackingField: {fileID: 0}
-  <weaponType>k__BackingField: 0
-  currentSword: {fileID: 0}
+  <weaponType>k__BackingField: 2
   weaponSprite: {fileID: 0}
   closeWeaponID: 0
   closeWeaponType: 0
@@ -11691,7 +11694,10 @@ MonoBehaviour:
   swordSoundClip: {fileID: 0}
   trailRenderer: {fileID: 0}
   range: 0
+  angle: 0
   damage: 0
+  preAngle: 0
+  cosAngle: 0
 --- !u!1 &3901768806029341238
 GameObject:
   m_ObjectHideFlags: 0
@@ -14302,7 +14308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 3176187071470092052}
+    m_ConstrainedObject: {fileID: 4983004326694610994}
     m_SourceObjects:
       m_Length: 2
       m_Item0:
@@ -15270,6 +15276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 0}
   slotIndex: 0
+  notHaving: 0
 --- !u!114 &8644913041405509699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15284,7 +15291,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGun: {fileID: 0}
   originPos: {x: 0, y: 0, z: 0}
-  theCam: {fileID: 0}
   poolContainer: {fileID: 0}
 --- !u!82 &1086287704117312395
 AudioSource:
