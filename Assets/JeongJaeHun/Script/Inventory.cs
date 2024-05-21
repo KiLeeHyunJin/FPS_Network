@@ -53,63 +53,20 @@ public class Inventory : MonoBehaviour
     public void AddItem(Item _item,int ID) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {
         item = _item;
-        
+
         int id = _item.itemPrefab.GetInstanceID();
         PooledObject getPoolObject = Manager.Pool.GetPool(id, Vector3.zero, Quaternion.identity);
         IKWeapon newWeapon = getPoolObject as IKWeapon;
         GetComponent<Controller>().AddWeapon(newWeapon);
 
-        //GetComponent<Controller>().AddWeapon(IKWeapon as _item.itemPrefab);
-
-        // 슬롯 중 아이디가 1번인 거를 찾아서 거기의 자식 id를 체크 
-        if(item.itemType==Item.ItemType.Pistol)
+        AnimationController animationController=GetComponentInParent<AnimationController>();
+        
+        if(animationController != null)
         {
-            GameObject obj1 = transform.GetChild(0).gameObject; //0번 자식 --> 첫번째 자식 (첫번째 슬롯임)
-            
-            if(obj1==null)
-            {
-                return; 
-            }
-
-            foreach (Transform child in obj1.transform)
-            {
-                if (child.gameObject.AddComponent<Gun>().gunID == ID) //id가 일치하면 
-                {
-                    child.gameObject.SetActive(true);
-                }
-
-            }
-
-            // 이 부분에서 이미 같은 타입 내부에 다른 무기가 켜져있었다면 그거를 active flase 해주고
-            // (그냥 일단 전부 껏다가 켜주는 방식으로 위에서 진행하고)
-            // 기존 무기는 플레이어 앞에 생성해주기 (무기 버리기 <교체> ) (프리팹 생성 )
-
+            animationController.GetWeapon(newWeapon.weaponType);
         }
-        else if (item.itemType == Item.ItemType.Gun) // 상점에서 권총 구입 시 
-        {
-            // 슬롯 중 아이디가 2번인거를 찾아서 거기의 자식의 id 체크
-            GameObject obj2 = transform.GetChild(1).gameObject; //1번 자식 -> 주력총 
-            foreach (Transform child in obj2.transform)
-            {
-                if (child.gameObject.AddComponent<Gun>().gunID == ID) //id가 일치하면 
-                {
-                    child.gameObject.SetActive(true);
-                }
-            }
 
-
-        }
-        else if (item.itemType == Item.ItemType.Armor) //상점에서 아머 구입 시 --> 따로 슬롯에 넣을 필요있나? 슬롯에서 image 작업할까? 
-        {
-            GameObject obj3=transform.GetChild(5).gameObject; //5번 idx -> Armor 관련 슬롯 
-            foreach(Transform child in obj3.transform)
-            {
-                if(child.gameObject.AddComponent<ArmorManager>().ArmorId==ID)
-                {
-                    child.gameObject.SetActive(true); // 관련 아머 액티브 
-                }
-            }
-        }
+        
 
     }
 

@@ -114,6 +114,21 @@ public class AnimationController : MonoBehaviourPun
                 break;
         }
     }
+    public IKWeapon GetWeapon(AnimatorWeapon type)
+    {
+        switch (type)
+        {
+            case AnimatorWeapon.Pistol:
+                return pistolWeapon;
+            case AnimatorWeapon.Rifle:
+                return rifleWeapon;
+            case AnimatorWeapon.Sword:
+                return swordWeapon;
+            case AnimatorWeapon.Throw:
+                return throwWeapon;
+        }
+        return null;
+    }
     public void ChangeWeapon(AnimatorWeapon type)
     {
         IKWeapon changeWeapon = GetIKWeapon(type);
