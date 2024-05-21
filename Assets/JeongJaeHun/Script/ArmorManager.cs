@@ -24,7 +24,6 @@ public class ArmorManager : MonoBehaviour
     public Armor GetCurrentArmor() { return currentArmor; }
 
 
-
     private void Start()
     {
         CurrentArmorCheck(0); //0번 아머 키기 

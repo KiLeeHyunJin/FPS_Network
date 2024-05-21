@@ -6,8 +6,8 @@ using UnityEngine;
 public class EquipController : MonoBehaviourPun
 {
     // 웨폰 스왑 함수 발동시에 --> swap 컴포넌트의 변수 가져와서 스왑 방지 시켜주기. 
-    ArmorManager armorManager;
-    Armor currentArmor;
+    [SerializeField]ArmorManager armorManager;
+    [SerializeField]Armor currentArmor;
 
 
 
