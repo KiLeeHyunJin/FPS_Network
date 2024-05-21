@@ -4,7 +4,7 @@ using UnityEngine;
 
 // 일단 만든 다음에 인벤토리랑 연계해보자 일단 만들자.
 
-public class WeaponType //아 이거 이용안되나? --> 아 인벤토리랑 연계를 어떻게하지??
+/*public class WeaponType //아 이거 이용안되나? --> 아 인벤토리랑 연계를 어떻게하지??
 {
     public Gun.GunType GunType;
     public CloseWeapon.CloseWeaponType CloseWeaponType;
@@ -15,8 +15,8 @@ public class WeaponType //아 이거 이용안되나? --> 아 인벤토리랑 �
         GunType = Gun.GunType.SHOTGUN;
     }
 }
-
-public class WeaponManager : MonoBehaviour
+*/
+/*public class WeaponManager : MonoBehaviour
 {
     // Holder에 붙일 웨폰 매니저. 모두가 공유가능한 static 변수 존재.
     // 무기 교체 및 여러 무기들의 동작을 관리함. --> 일단 적어보고 player에 setactive로
@@ -80,7 +80,7 @@ public class WeaponManager : MonoBehaviour
                                     // 각 번호에 알맞는 무기가 저장되어야 하고 그 무기가 있어야 하고 (특히 1번 무기 -->주무기) 
     {
         // 이 부분은 진짜 생각해보자. 
-        /*if (!isChangeWeapon)
+        *//*if (!isChangeWeapon)
         {
 
             if (Input.GetKeyDown(KeyCode.Alpha1)) // 1 누르면 '맨손'으로 무기 교체 실행
@@ -91,7 +91,7 @@ public class WeaponManager : MonoBehaviour
             {
                 StartCoroutine(ChangeWeaponCoroutine("GUN", "SubMachineGun1"));
             }
-        }*/
+        }*//*
     }
 
     //매개변수로 string 대신에 weapon type으로 넣어주고.. 넣어준 상태에서 +로 무기 구분 가능할까?
@@ -141,7 +141,5 @@ public class WeaponManager : MonoBehaviour
 
         // 총 무기가 1,2,3 종류가 있고 하면 배열에 원소로 추가해주면된다. 
         // 이거 권총형을 만드는게 훨씬 나을것 같기도 하고.. 고민되네.. 
-    }
+    }*/
 
-
-}

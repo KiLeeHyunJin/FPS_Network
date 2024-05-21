@@ -11,7 +11,7 @@ public class PoolContainer : MonoBehaviour
     public int poolSize;
     public int poolCapacity;
 
-    private void Start()
+    private void Awake()
     {
         string bloodPath = "BloodEffect";
         bloodEffect = Manager.Resource.basicLoad<PooledObject>(bloodPath);
@@ -33,9 +33,8 @@ public class PoolContainer : MonoBehaviour
         {
             Manager.Pool.CreatePool(BulletSpark, poolSize, poolCapacity);
         }
-
-
     }
+
 
     public void GetBloodEffect(Vector3 pos, Quaternion quaternion)
     {
