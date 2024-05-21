@@ -47,3 +47,5 @@ MonoBehaviour:
   bloodEffect: {fileID: 0}
   BulletMark: {fileID: 0}
   BulletSpark: {fileID: 0}
+  poolSize: 10
+  poolCapacity: 10

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BombController : MonoBehaviour
+public class BombController : MonoBehaviour, Iattackable
 {
     private Camera mainCamera; //메인 카메라
 
@@ -43,6 +43,10 @@ public class BombController : MonoBehaviour
         lineRenderer.enabled = true; // 렌더러 켜주기. 
         ShowTrajectory(); //폭탄을 들고 있는 상태가되면 궤적을 보여줌. 
     }
+    public void Attack()
+    {
+        Throw();
+    }
 
     private void OnDisable()
     {
@@ -50,33 +54,17 @@ public class BombController : MonoBehaviour
         {
             lineRenderer.enabled = false;
         }
-
     }
 
     private void Start()
     {
         slot = GetComponent<Slot>(); //자신이 slot을 가지고 있으므로. 
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Throw(); // 임시로 폭탄 발사. 
-        }
-    }
-
-    public void Fire()
-    {
-        Throw(); 
-    }
-
-
 
     private void Throw() //투척 함수 
     {
         if (currentBomb.currentBombNumber <= 0)
         {
-            
             return; //발사불가능
         }
 
@@ -111,7 +99,6 @@ public class BombController : MonoBehaviour
             currentBomb.gameObject.SetActive(false); //그런데 찾아지는 살짝의 버그있음. 
             slot.notHaving = true;
         }
-
     }
 
     private void ShowTrajectory() //궤도를 보여줌 (라인렌더러)
@@ -143,7 +130,6 @@ public class BombController : MonoBehaviour
             // 라인 렌더러에 궤적 위치 설정
             lineRenderer.SetPosition(i, point);
         }
-
     }
 
 

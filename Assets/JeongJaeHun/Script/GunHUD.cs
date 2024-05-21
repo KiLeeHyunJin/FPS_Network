@@ -46,7 +46,7 @@ public class GunHUD : MonoBehaviour
             {
                 if (theGunController[i].gameObject.activeSelf==true) //켜져 있는 컨트롤러를 찾아서. 
                 {
-                    curretGun = theGunController[i].GetGun(); //현재 상태의 건 
+                    curretGun = theGunController[i].GetGun; //현재 상태의 건 
                 }
             }
         }

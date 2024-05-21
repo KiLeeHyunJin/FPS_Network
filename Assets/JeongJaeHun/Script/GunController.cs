@@ -1,16 +1,14 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using UnityEngine;
 
-public class GunController : MonoBehaviour
+public class GunController : MonoBehaviour, Iattackable
 {
     // 무기 holder에 붙일 건 컨트롤러 
 
     [SerializeField]
     private Gun currentGun; //현재 들고 있는 총의 Gun이 할당됨. 
 
-    public Gun GetGun() { return currentGun; } //프로퍼티 함수 
+    public Gun GetGun { get { return currentGun; } } //프로퍼티 함수 
 
     private float currentFireRate; //이 값이 0 보다 큰 동안에는 총알이 발사되지 않음. 
     // 초기 값은 연사속도인 Gun.cs의 fireRate 
@@ -18,12 +16,13 @@ public class GunController : MonoBehaviour
     private bool isReload = false; //재장전 중인지 확인 --> 재장전 중이 아닐 때만 발사 가능. 
     private bool isFineSightMode = false; //정조준 중인지 확인.
     // 한 번 우클릭으로 정조준 실행하면 다시 우클릭 눌러서 해제 전까지 정조준 상태 유지 --> bool 
+
     [SerializeField]
     private Vector3 originPos; //원래 총의 위치 (정조준 해제하면 나중에 돌아와야함. ) 
     private AudioSource audioSource; // 총 발사 소리 재생위한 오디오소스 
 
     private RaycastHit hitInfo; //총알의 충돌 정보
-    [SerializeField]
+    
     private Camera theCam; //카메라 시점에서 정 중앙에 발사할 것. 
 
     [SerializeField]
@@ -37,12 +36,19 @@ public class GunController : MonoBehaviour
     private void Awake()
     {
         poolContainer = GameObject.FindObjectOfType<PoolContainer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        
+        int numOfChild = this.transform.childCount;
+        for (int i = 0; i < numOfChild; i++)
+        {
+            currentGun = transform.GetChild(i).GetComponent<Gun>();
+            audioSource.clip = currentGun.fire_Sound;
+            break;
+        }
     }
 
 
@@ -50,72 +56,36 @@ public class GunController : MonoBehaviour
     {
         // Current Gun 찾기 
 
-        int numOfChild = this.transform.childCount;
-        for (int i = 0; i < numOfChild; i++)
-        {
-            if (transform.GetChild(i).gameObject.activeSelf == true)
-            {
-                currentGun = transform.GetChild(i).GetComponent<Gun>();
-
-            }
-        }
-        originPos = Vector3.zero;       
+        originPos = Vector3.zero;
         //WeaponManager.currentWeapon=currentGun.GetComponent<Transform>(); //이부분 transform 으로 해주는게 맞나 ??? 
         //기본적인 디폴트 무기를 Gun으로 삼기 위해 currentWeapon에 자기 자신의 transform을 할당해줌
-        audioSource = GetComponent<AudioSource>();
+        
         //WeaponManager.currentWeaponAnim=currentGun.anim;
 
-        //main 카메라 가져오기 --> 왜 몾찾음?? 
+        // 이거 일단 빨간 줄 떠서 켜놓음. 
         theCam = Camera.main;
+    }
+    public void Attack()
+    {
+        TryFire();
     }
 
     private void Update()
     {
-        if(isActivate)
+        if (isActivate)
         {
             GunFireRateCalc(); //쿨타임 측정이므로 update에서 돌아가야함. 
             //TryFire(); //발사 입력 받는 부분은 update에서 굳이 돌려야할까? --> input 쓰는데? 생각해보기. 
             //TryReload(); //재장전도 마찬가지 -> 키 눌렀을 때만 측정하면 되지 않을까? 
-            TryFineSight(); //정조준 
+            //TryFineSight(); //정조준 
         }
 
-        if(Input.GetKeyDown(KeyCode.Mouse0)) //임시로 마우스 왼쪽 버튼으로 fire 발사 
-        {
-            TryFire();
-        }
-        if(Input.GetKeyDown(KeyCode.Mouse1)) //임시로 마우스 우측 버튼으로 리로드 시작. 
+        if (Input.GetKeyDown(KeyCode.Mouse1)) //임시로 마우스 우측 버튼으로 리로드 시작. 
         {
             TryReload();
-            
-        }
-    }
-    public void CancelReload() //리로드 동작 중지. 
-    {
-        if(isReload) //장전 중이면 
-        {
-            StopAllCoroutines(); //이거 올 코루틴 중지 막 돌려도 되는지는 모르겠네.
-            isReload = false;
         }
     }
 
-    //총으로 교체하고자 할 때 필요.. 호출은 WeaponManager에서 이루어짐
-    public void GunChange(Gun gun) //이거 매개변수가 gun형인데 왜 딕셔너리 name이 받을 수 있는지? 
-    {
-        if (WeaponManager.currentWeapon!=null) //지금 손에 무기가 있으면 (current가 안 비어있다면)
-        {
-            WeaponManager.currentWeapon.gameObject.SetActive(false);              
-        }
-
-        currentGun = gun; 
-        WeaponManager.currentWeapon=currentGun.GetComponent<Transform>();
-        //WeaponManager.currentWeaponAnim=currentGun.anim; 애니메이션 교체 
-        currentGun.transform.localPosition = Vector3.zero; //위치 초기화
-        currentGun.gameObject.SetActive(true); //무기 켜주기. 
-
-        isActivate = true; 
-
-    }
-    
 
     private void GunFireRateCalc()
     {
@@ -130,15 +100,6 @@ public class GunController : MonoBehaviour
     {
         if (currentFireRate <= 0 && !isReload) //쿨타임 <=0 이고 재장전 중이 아닐 때만 Fire 실행. 
         {
-            Fire();
-        }
-
-    }
-
-    private void Fire() //발사를 위한 과정 
-    {
-        if (!isReload)
-        {
             if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
             {
                 Shoot();
@@ -150,14 +111,6 @@ public class GunController : MonoBehaviour
         }
     }
 
-    public void CancelFineSight() // 정조준 취소 함수
-    {
-        if (isFineSightMode)
-        {
-            FineSight();
-        }
-    }
-
     private void Shoot() //실제 발사되는 과정 
     {
         //muzzleEffect 생성 필요. + renderer 필요 시 추가 + 화염효과 추가 
@@ -166,13 +119,13 @@ public class GunController : MonoBehaviour
         currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
 
         currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.
-        PlaySE(currentGun.fire_Sound); //현재 총의 사운드 재생 
+        audioSource.Play();
 
         //피격 처리
         Hit();
 
         //총기 반동 코루틴 실행
-        StopAllCoroutines(); //반동 코루틴 멈추고
+        // StopAllCoroutines(); //반동 코루틴 멈추고
         StartCoroutine(RetroActionCoroutine());
 
     }
@@ -183,7 +136,7 @@ public class GunController : MonoBehaviour
         // 카메라 월드 좌표 (localPosition이 아니다. )
         // 플레이어에게 달려있는 1인칭 카메라로부터 RaYcAST를 쏴서 충돌 지점을 총알이 맞은 위치로 판정할 것. 
         // 1인칭 카메라 이기 때문에 사실상 화면 정중앙에 총을 쏘게 되기 때문에. 
-        if (Physics.Raycast(theCam.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
+        if (Physics.Raycast(Camera.main.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
         {
             poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
 
@@ -197,8 +150,8 @@ public class GunController : MonoBehaviour
     {
         if (!isReload)
         {
-            Debug.Log("재장전 진입");
-            CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
+            
+            //CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
             StartCoroutine(ReloadCoroutine());
 
         }
@@ -207,7 +160,7 @@ public class GunController : MonoBehaviour
     private void PlaySE(AudioClip _clip) //발사 소리 재생 
     {
         audioSource.clip = _clip;
-        audioSource.Play();
+        
     }
 
     IEnumerator ReloadCoroutine() //재장전 코루틴. 
@@ -324,6 +277,5 @@ public class GunController : MonoBehaviour
 
 
     }
-
 
 }

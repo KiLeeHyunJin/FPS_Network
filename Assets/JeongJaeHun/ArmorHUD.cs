@@ -33,7 +33,16 @@ public class ArmorHUD : MonoBehaviour
         CurrentArmor = ArmorManager.currentArmor;
         ArmorID = CurrentArmor.ArmorID; 
 
-        ArmorText.text = $"Armor Lv. {ArmorID} ";
+        if(ArmorID!=0 && CurrentArmor.ArmorDurability<=0 ) //아머 깨진 상황임. 
+        {
+            ArmorText.text = "아머 파괴."; 
+        }
+        else
+        {
+            ArmorText.text = $"Armor Lv. {ArmorID} ";
+        }
+
+       
         
     }
 

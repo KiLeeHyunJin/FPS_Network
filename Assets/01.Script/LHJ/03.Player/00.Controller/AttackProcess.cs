@@ -20,13 +20,13 @@ public class AttackProcess
         => owner.StartCoroutined(RecoilRoutine(), ref recoilCo);
 
 
-    public Controller Attack()
+    public Vector3 Attack()
     {
         if (sleepTime != 0)
             sleepTime = 0;
 
         if (aim == null)
-            return null;
+            return Vector3.zero;
 
         //Recoil();
 
@@ -34,13 +34,13 @@ public class AttackProcess
         {
             if (hitInfo.collider != null)
             {
-                Vector3 direction = (hitInfo.transform.position - aim.position).normalized;
+                return (hitInfo.transform.position - aim.position).normalized;
 
-                if (Physics.Raycast(aim.position, direction, out hitInfo, Mathf.Infinity))
-                    return hitInfo.collider.GetComponent<Controller>();
+                //if (Physics.Raycast(aim.position, direction, out hitInfo, Mathf.Infinity))
+                //    return hitInfo.collider.GetComponent<Controller>();
             }
         }
-        return null;
+        return Vector3.zero;
     }
 
     public IEnumerator RecoilRoutine()

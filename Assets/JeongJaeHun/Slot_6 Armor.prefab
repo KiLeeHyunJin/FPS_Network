@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armorId: 1
-  armorDefense: 1
-  armorDurability: 1
+  armorDefense: 2
+  armorDurability: 4
 --- !u!1 &5340133979583738171
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ArmorId: 0
   Defense: 0
-  Durability: 0
+  Durability: 100
   ArmorSprite: {fileID: 0}
   currentArmor: {fileID: 0}
 --- !u!1 &7063959054508619441
@@ -191,5 +191,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armorId: 2
-  armorDefense: 2
-  armorDurability: 2
+  armorDefense: 3
+  armorDurability: 6
