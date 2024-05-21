@@ -5,7 +5,7 @@ using Photon.Pun;
 using UnityEditor;
 using Firebase.Database;
 
-public class Heal : MonoBehaviourPun, ISkill
+public class Heal : MonoBehaviourPun
 {
     Controller Controller;
     DatabaseReference dbReference;
@@ -14,11 +14,6 @@ public class Heal : MonoBehaviourPun, ISkill
     int currentHealth = 100;
 
     public void Activate()
-    {
-
-    }
-
-    public void Deactivate()
     {
 
     }
