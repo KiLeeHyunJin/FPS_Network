@@ -13,6 +13,8 @@ public class BombController : MonoBehaviour
 
     private GameObject instanceBomb; //실제 날리는게 아니라 생성해서 날려줄 폭탄. 
 
+    private Slot slot; 
+
     // throw 발동시에.--> 딜레이 주기 (막 던지기 불가능하도록 애니메이션과 맞춤)
     // 무기 전환 시에 무기 투척 불가능하도록 해야함. 
 
@@ -22,7 +24,7 @@ public class BombController : MonoBehaviour
 
     private void OnEnable() //기본적으로 꺼져있다가 켜질 거기 때문에 궤적 여기서 그려주기.
     {
-
+       
         // currentBomb을 찾으려면?? --> 자기 자신의 자식들 중에서 (active 되어 있는 것을 찾아서 넣어주자.)
         int numOfChild = this.transform.childCount;
         for (int i = 0; i < numOfChild; i++)
@@ -30,7 +32,7 @@ public class BombController : MonoBehaviour
             if (transform.GetChild(i).gameObject.activeSelf == true) //이거 다 쓰고나면 true가 아닌데 어째서 켜지지?
             {
                 currentBomb = transform.GetChild(i).GetComponent<Bomb>();
-
+                break;
             }
         }
 
@@ -53,13 +55,8 @@ public class BombController : MonoBehaviour
 
     private void Start()
     {
-        
+        slot = GetComponent<Slot>(); //자신이 slot을 가지고 있으므로. 
     }
-
-
-
-
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -112,6 +109,7 @@ public class BombController : MonoBehaviour
         if (currentBomb.currentBombNumber <= 0) //이거 폭탄 컨트롤러가 아니라 폭탄 자체를 꺼주면 아마 못찾을거야 체크를 그렇게하니까
         {
             currentBomb.gameObject.SetActive(false); //그런데 찾아지는 살짝의 버그있음. 
+            slot.notHaving = true;
         }
 
     }
@@ -128,8 +126,8 @@ public class BombController : MonoBehaviour
         // 초기 위치 및 방향 설정
         Vector3 forward = mainCamera.transform.forward;
         Vector3 startVelocity = throwPower * forward;
-        Vector3 startPosition = transform.position; //홀더 위치? --> 홀더도 자식이니까 실제 홀더면 local인가?
-
+        Vector3 startPosition = transform.position; //홀더 위치? --> 홀더도 자식이니까 실제 홀더면 local인가?       
+        startPosition.y += startPosition.y + 1f;
 
         //초기 위치 설정
         lineRenderer.SetPosition(0, startPosition);

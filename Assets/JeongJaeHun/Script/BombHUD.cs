@@ -6,7 +6,7 @@ public class BombHUD : MonoBehaviour
 {
     [SerializeField] //폭탄의 정보를 얻기 위한 스크립트 참조
     private BombController[] bombController;
-    private Bomb currentBomb; //현재 폭탄 상태를 어떻게 체크해줘야될지 생각해보자.
+    public Bomb currentBomb; //현재 폭탄 상태를 어떻게 체크해줘야될지 생각해보자.
 
     [SerializeField]
     private GameObject gO_BombHUD; // 넌 뭐니 ?
@@ -30,10 +30,12 @@ public class BombHUD : MonoBehaviour
             if (bombController[i] !=null)
             {
                 if (bombController[i].gameObject.activeSelf) 
-                {
+                {                   
                     currentBomb= bombController[i].GetBomb(); //현재 상태의 폭탄을 가져옴. 
                     break; //여기서 브레이크 띄워주기. --> 하나만 가져오도록. 
                 }
+                
+
             }
         }
 

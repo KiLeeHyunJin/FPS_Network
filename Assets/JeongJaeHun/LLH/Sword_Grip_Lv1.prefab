@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <leftGrip>k__BackingField: {fileID: 0}
   <RightGrip>k__BackingField: {fileID: 0}
-  weaponType: 0
+  weaponType: 2
   currentSword: {fileID: 0}
   weaponSprite: {fileID: -1869107078, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
   closeWeaponID: 1
@@ -61,10 +61,13 @@ MonoBehaviour:
   anim: {fileID: 0}
   swordSoundClip: {fileID: 0}
   trailRenderer: {fileID: 0}
-  range: 5
-  damage: 10
+  range: 10
+  angle: 90
+  damage: 20
+  preAngle: 0
+  cosAngle: 0
   TrailRenderer: {fileID: 7249176778950245230}
-  debug: 0
+  debug: 1
 --- !u!96 &7249176778950245230
 TrailRenderer:
   serializedVersion: 3

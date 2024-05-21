@@ -15,12 +15,13 @@ public class Sword : CloseWeapon //close 웨폰 상속
     [SerializeField] private bool debug;
     
 
-    // 어택 딜레이 등은 인스펙터로 해야하나? 
+    
 
 
     private void OnEnable()
     {
         SetUp(); //함수를 통해서 기본 데미지 세팅을 진행. 
+        
     }
 
     private void SetUp()
@@ -31,22 +32,14 @@ public class Sword : CloseWeapon //close 웨폰 상속
 
     private void OnDrawGizmosSelected()
     {
-        if(debug==false)
-        {
-            return;
-        }
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
 
-        // 그냥 이렇게 angle을 써도 상속을 받았기 때문에 closeWeapon의 anlge로 되네?
-        // 이거 인스펙터에서 angle 수정해주면 각각의 sword 마다 angle 이용가능할듯. 
         Vector3 rightDir = Quaternion.Euler(0, angle * 0.5f, 0) * transform.forward;
         Vector3 leftDir = Quaternion.Euler(0, angle * -0.5f, 0) * transform.forward;
+
         Debug.DrawRay(transform.position, rightDir * range, Color.cyan);
         Debug.DrawRay(transform.position, leftDir * range, Color.cyan);
-
-        
     }
 
 
