@@ -135,7 +135,7 @@ public class Bomb : IKWeapon
 
     private void BombFindTarget()
     {
-        Debug.Log("붐파인드타겟 실행");
+        
         int size = Physics.OverlapSphereNonAlloc(transform.position, range, colliders, targetLayerMask);
 
         for (int i = 0; i < size; i++) //한 번 player가 체크되면 데미지 주고 빠져나가야함. 

@@ -25,6 +25,7 @@ public class CloseWeaponHUD : MonoBehaviour
     {
         // 다른 스크립트에서 on off 하니까 상관안해도 되나? 다른 sprite로 on할거니까? 
         CheckUi();
+        
     }
 
     private void CheckUi() //무기에 따른 스프라이트만 받아오면 된다. 
