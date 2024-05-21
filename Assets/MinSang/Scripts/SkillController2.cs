@@ -1,48 +1,90 @@
+using Firebase;
+using Photon.Pun.Demo.SlotRacer.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Firebase.Database;
 
-public interface ISkill
+public class SkillController2 : MonoBehaviourPun
 {
-    void Activate();
-    void Deactivate();
+    public Heal heal;
+    public MineSkill mineSkill;
+    public CloakingEffect cloakingEffect;
+    public TimeRewind timeRewind;
+    public SpyCamController spyCamController;
+
+    private DatabaseReference databaseReference;
+    void Start()
+    {
+        // Firebase 초기화
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        {
+            FirebaseApp app = FirebaseApp.DefaultInstance;
+            databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        });
+
+        // 스킬 초기화
+        heal = GetComponent<Heal>();
+        mineSkill = GetComponent<MineSkill>();
+        spyCamController = GetComponent<SpyCamController>();
+        timeRewind = GetComponent<TimeRewind>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q)) cloakingEffect.Activate();
+        if (Input.GetKeyDown(KeyCode.H)) heal.Activate();
+        if (Input.GetKeyDown(KeyCode.M)) mineSkill.Activate();
+        if (Input.GetKeyDown(KeyCode.F)) spyCamController.Activate();
+        if (Input.GetKeyDown(KeyCode.Z)) timeRewind.Activate();
+    }
+
+    public void UseSkill(string skillName)
+    {
+        switch (skillName)
+        {
+            case "Heal":
+                heal.Activate();
+                break;
+            case "MineSkill":
+                mineSkill.Activate();
+                break;
+            case "SpyCam":
+                spyCamController.Activate();
+                break;
+            case "TimeRewind":
+                timeRewind.Activate();
+                break;
+            default:
+                Debug.LogError("Unknown skill: " + skillName);
+                break;
+        }
+
+        LogSkillUse(skillName);
+    }
+
+    void LogSkillUse(string skillName)
+    {
+        string userId = PhotonNetwork.LocalPlayer.UserId;
+        string key = databaseReference.Child("skills").Push().Key;
+        SkillLog skillLog = new SkillLog(userId, skillName, System.DateTime.Now.ToString());
+        string json = JsonUtility.ToJson(skillLog);
+
+        databaseReference.Child("skills").Child(key).SetRawJsonValueAsync(json);
+    }
 }
 
-public class SkillController2 : MonoBehaviour
+public class SkillLog
 {
-    private Dictionary<string, ISkill> skills = new Dictionary<string, ISkill>();
+    public string userId;
+    public string skillName;
+    public string timestamp;
 
-    public enum SkillType
+    public SkillLog(string userId, string skillName, string timestamp)
     {
-        TimeRewind,
-        Mine,
-        SpyCam,
-        Heal,
-        CloakingEffect
+        this.userId = userId;
+        this.skillName = skillName;
+        this.timestamp = timestamp;
     }
-
-    public void RegisterSkill(string skillName, ISkill skill)
-    {
-        if (!skills.ContainsKey(skillName))
-        {
-            skills.Add(skillName, skill);
-        }
-    }
-
-    public void ActivateSkill(string skillName)
-    {
-        if (skills.ContainsKey(skillName))
-        {
-            skills[skillName].Activate();
-        }
-    }
-
-    public void DeactivateSkill(string skillName)
-    {
-        if (skills.ContainsKey(skillName))
-        {
-            skills[skillName].Deactivate();
-        }
-    }
-
 }

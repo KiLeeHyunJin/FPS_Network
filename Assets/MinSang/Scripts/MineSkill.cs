@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using static Define;
 
-public class MineSkill : MonoBehaviour
+public class MineSkill : MonoBehaviourPun
 {
     [SerializeField]
     private GameObject minePrefab;
@@ -11,7 +13,13 @@ public class MineSkill : MonoBehaviour
     [SerializeField]
     private float cooldownTime = 5.0f;
 
-    private float nextMineTime = 0.0f;
+    private float nextMineTime = 3f;
+
+
+    public void Activate()
+    {
+
+    }
 
     void Update()
     {
@@ -20,7 +28,7 @@ public class MineSkill : MonoBehaviour
             return;
         }
 
-        if (Input.GetButtonDown("Fire1") && Time.time > nextMineTime)
+        if (Input.GetKeyDown(KeyCode.M) && Time.time > nextMineTime)
         {
             nextMineTime = Time.time + cooldownTime;
             Instantiate(minePrefab, mineSpawnPoint.position, mineSpawnPoint.rotation);

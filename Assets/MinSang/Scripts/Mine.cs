@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using Photon.Pun;
 using static Define;
 
-public class Mine : MonoBehaviour
+public class Mine : MonoBehaviourPun
 {
     [SerializeField]
     private float explosionRadius = 5.0f;
@@ -15,6 +16,11 @@ public class Mine : MonoBehaviour
 
     private bool hasExploded = false;
     private SphereCollider detectionCollider;
+
+    public void Activate()
+    {
+
+    }
 
     void Start()
     {
