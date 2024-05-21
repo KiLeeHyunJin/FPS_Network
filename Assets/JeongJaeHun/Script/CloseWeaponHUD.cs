@@ -11,8 +11,8 @@ public class CloseWeaponHUD : MonoBehaviour
     // 그 무기의 sprite에 접근하여 sprite 띄워주기. 
 
     [SerializeField]
-    private CloseWeapon[] CloseWeaponController; //얘는 controllger 가 abstract라서.. 
-    private Sword currentSword;
+    private CloseWeaponController[] CloseWeaponController; //얘는 controllger 가 abstract라서.. 
+    private CloseWeapon currentSword;
 
     [SerializeField]
     private Image WeaponImage;
@@ -25,6 +25,8 @@ public class CloseWeaponHUD : MonoBehaviour
     {
         // 다른 스크립트에서 on off 하니까 상관안해도 되나? 다른 sprite로 on할거니까? 
         CheckUi();
+       
+        
     }
 
     private void CheckUi() //무기에 따른 스프라이트만 받아오면 된다. 
@@ -35,10 +37,11 @@ public class CloseWeaponHUD : MonoBehaviour
             {
                 if (CloseWeaponController[i].gameObject.activeSelf)
                 {
-                    currentSword = CloseWeaponController[i].GetCloseWeapon();
+                    currentSword = CloseWeaponController[i].GetCloseWeapon();                   
                 }
             }
         }
+
         WeaponImage.sprite = currentSword.weaponSprite; //스프라이트 
         weaponText.text = currentSword.closeWeaponName; //이름 
 

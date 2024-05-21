@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 625930930283014422}
-  - component: {fileID: 4119088621958535790}
   - component: {fileID: 7249176778950245230}
   - component: {fileID: 710702672691033188}
+  - component: {fileID: 4594524356052851335}
   m_Layer: 0
   m_Name: Sword_Grip_Lv1
   m_TagString: Untagged
@@ -35,36 +35,6 @@ Transform:
   - {fileID: 520933075370076299}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &4119088621958535790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3045052160536674999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7d919d6056226d4fb93a3d09f4a2f63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <leftGrip>k__BackingField: {fileID: 0}
-  <RightGrip>k__BackingField: {fileID: 0}
-  weaponType: 0
-  currentSword: {fileID: 0}
-  weaponSprite: {fileID: -1869107078, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
-  closeWeaponID: 1
-  closeWeaponType: 0
-  closeWeaponName: "\uAE30\uBCF8\uCE7C"
-  attackDelay: 2
-  attackDelayA: 1
-  attackDelayB: 2
-  anim: {fileID: 0}
-  swordSoundClip: {fileID: 0}
-  trailRenderer: {fileID: 0}
-  range: 5
-  damage: 10
-  TrailRenderer: {fileID: 7249176778950245230}
-  debug: 0
 --- !u!96 &7249176778950245230
 TrailRenderer:
   serializedVersion: 3
@@ -274,6 +244,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4594524356052851335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3045052160536674999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a7167a9e871024284960d179a447e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <leftGrip>k__BackingField: {fileID: 0}
+  <RightGrip>k__BackingField: {fileID: 0}
+  weaponType: 2
+  weaponSprite: {fileID: 0}
+  closeWeaponID: 1
+  closeWeaponType: 0
+  closeWeaponName: 
+  attackDelay: 2
+  attackDelayA: 1
+  attackDelayB: 1
+  anim: {fileID: 0}
+  swordSoundClip: {fileID: 0}
+  trailRenderer: {fileID: 0}
+  range: 3
+  angle: 90
+  damage: 10
+  preAngle: 0
+  cosAngle: 0
 --- !u!1 &4736858663057421597
 GameObject:
   m_ObjectHideFlags: 0

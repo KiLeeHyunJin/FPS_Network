@@ -25,8 +25,6 @@ public class Inventory : MonoBehaviour
 
     // private List<GameObject> slotInventory= new List<GameObject>(); --> 나중에 list 인벤토리 필요할 때 
 
-    
-
     [SerializeField]
    // private Slot[] slots; //슬롯 배열 
 
@@ -36,7 +34,6 @@ public class Inventory : MonoBehaviour
 
         goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
     }
-
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
     {
@@ -51,6 +48,7 @@ public class Inventory : MonoBehaviour
         if (Gold < 0) Gold = 0; //최소값 0으로 제한 
         goldText.text = $"{Gold}"; //골드텍스트 초기화 
     }
+
 
     public void AddItem(Item _item,int ID) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {

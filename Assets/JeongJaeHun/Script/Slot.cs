@@ -8,12 +8,19 @@ public class Slot : MonoBehaviour
     // 상점에서 구매하면 1번 구매시 -> 기존 1번 무기를 바닥에 떨구고 새로운 1번 무기로 변경함.
     // 1번은 권총 2번은 주력무기임. 
 
+    // 이거 무기 구매하면 이거랑 연계해서 가져와야 되는데 그거 어케함..? 
+
+
     public Item item;
     [Tooltip("자기 자신의 슬롯 인덱스--> 인덱스로 타입 판단. ")]
     public int slotIndex;
 
-
+    public bool notHaving;
     
+    public enum SlotType
+    {
+        PISTOL, AR, SWORD, GRENADE , FLASHBANG
+    }
 
 
 

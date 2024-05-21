@@ -20,6 +20,13 @@ public class ChangeWeaponSlot : MonoBehaviour
     [Tooltip("폭탄 무기 장비시에 나올 UHD")]
     [SerializeField] private BombHUD bombHUD;
 
+    [Tooltip("이미 무기를 변경 중 인 상황을 체크 할 bool변수--> fire 시에 이거 가져다 쓰자. ")]
+    [SerializeField] public bool isChangeWeapon;
+
+    [Tooltip("무기 전환 시 적용 할 쿨타임")]
+    [SerializeField] private float changeWeaponDelayTime;
+
+
     public enum slotType //HUD와 연계 할 슬롯 타입 (매개변수로 받아서 HUD ON/OFF --> 하드 코딩 방지 ) 
     {
         PistolType=0,
@@ -43,6 +50,7 @@ public class ChangeWeaponSlot : MonoBehaviour
             slotChange?.Invoke(curSlotType);
         }
     }
+
     //[SerializeField] private WeaponManager weaponManager;
 
     Inventory inventory;
@@ -76,6 +84,14 @@ public class ChangeWeaponSlot : MonoBehaviour
 
     public void Excute(int slotNumber) //실제 전환 실행 --> equip컨트롤에서 불러서 작업해주기. 
     {
+        // 무기 체인지가 진행 중이면 다시 변경 못하도록 잠시 리턴 띄워주기.
+        if(isChangeWeapon==true)
+        {
+            return;
+        }
+        
+
+
         // 슬롯 내부의 자식들을 체크해서 그 자식들이 켜져 있는지 확인하고 하나도 안켜져 있다면 return 해버리기
  
         if (slots[slotNumber] != null) //그리고 그 자식들이 전부 꺼져있는 경우가 아니어야 하니까.
@@ -88,6 +104,10 @@ public class ChangeWeaponSlot : MonoBehaviour
                 return; 
             }
 
+            if (slots[slotNumber].notHaving==true)
+            {
+                return; // 슬롯의 비어있음 bool 변수가 true면 return 하고 --> 이 부분은 리스폰 시 초기화 시켜줘야함. 
+            }
             // 이게 무기 내부에 무기가 다 꺼져있으면 변경되면 안되는 작업을 맨 앞에서 해줘야 할 것 같음. --> ui가 변경되는 문제가 발생함. 
 
             if (slotNumber== (int)slotType.PistolType || slotNumber==(int)slotType.ArType) // gun 
@@ -95,21 +115,27 @@ public class ChangeWeaponSlot : MonoBehaviour
                 closeWeaponHUD.gameObject.SetActive(false);
                 bombHUD.gameObject.SetActive(false);
 
-                gunHUD.gameObject.SetActive(true); 
+                gunHUD.gameObject.SetActive(true);
+
+                StartCoroutine(ChangeWeaponCoroutine((slotType)slotNumber));
+
             }
             else if(slotNumber==(int)slotType.CloseWeaponType)
             {
                 closeWeaponHUD.gameObject.SetActive(true);
                 bombHUD.gameObject.SetActive(false);
-
                 gunHUD.gameObject.SetActive(false);
+                StartCoroutine(ChangeWeaponCoroutine((slotType)slotNumber)); // 슬롯 번호에 따라 다른 전환작업
+
             }
-            else if(slotNumber==(int)slotType.GrenadeType|slotNumber==(int)slotType.FlashBangType)
+            else if (slotNumber == (int)slotType.GrenadeType | slotNumber == (int)slotType.FlashBangType)
             {
+                
                 closeWeaponHUD.gameObject.SetActive(false);
                 bombHUD.gameObject.SetActive(true);
 
                 gunHUD.gameObject.SetActive(false);
+                StartCoroutine(ChangeWeaponCoroutine((slotType)slotNumber));
             }
 
             int numChild = slots[slotNumber].transform.childCount;
@@ -162,8 +188,34 @@ public class ChangeWeaponSlot : MonoBehaviour
 
     }
 
-    private void DuringChange() //무기스왑 중 다른 행동 방지용 함수. 
+   private IEnumerator ChangeWeaponCoroutine(slotType type)
+     
     {
+        // 공통으로 진행 할 무기 전환 작업 --> 공격 불가능 + 재장전 불가능 상태로 만들어줘야함. 
+
+        isChangeWeapon= true; 
+
+        switch (type)
+        {
+            case slotType.PistolType:
+
+                break;
+            case slotType.ArType:
+
+                break;
+            case slotType.CloseWeaponType:  // 근접 무기로 변경 시 해야 할 작업 
+
+                break;
+            case slotType.GrenadeType:  // 수류탄으로 변경 시 해야 할 작업 
+
+                break;
+            case slotType.FlashBangType: //섬광탄 으로 무기 변경 시 해야 할 작업 
+
+                break;
+        }
+
+        yield return new WaitForSeconds(changeWeaponDelayTime); // 무기 전환 시간동안 재 변환금지
+        isChangeWeapon = false;
 
     }
 
