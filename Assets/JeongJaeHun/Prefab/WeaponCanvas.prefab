@@ -227,6 +227,7 @@ MonoBehaviour:
   bombController:
   - {fileID: 0}
   - {fileID: 0}
+  currentBomb: {fileID: 0}
   gO_BombHUD: {fileID: 673515672188592618}
   bombImage: {fileID: 8656197560808956735}
   textBomb: {fileID: 5616120756543947732}
