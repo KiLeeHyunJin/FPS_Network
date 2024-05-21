@@ -402,8 +402,24 @@ PrefabInstance:
       propertyPath: muzzleFlash
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 569070255710436664, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: angle
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 569070255710436664, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: range
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2211669759195588334, guid: 808aea02acf71864cb971886aa848af7, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919134411435511360, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919134411435511360, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3924633950043950716, guid: 808aea02acf71864cb971886aa848af7, type: 3}
@@ -453,6 +469,26 @@ PrefabInstance:
     - target: {fileID: 6113504477458031433, guid: 808aea02acf71864cb971886aa848af7, type: 3}
       propertyPath: m_Name
       value: PlyaerTemp_JJH
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509514528621567032, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_Time
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509514528621567032, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509514528621567032, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2cf2d564c8b1c7a469f8711c96c0efaa, type: 2}
+    - target: {fileID: 6509514528621567032, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.25842667
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694973797748204467, guid: 808aea02acf71864cb971886aa848af7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7534672364131770492, guid: 808aea02acf71864cb971886aa848af7, type: 3}
       propertyPath: goldText
