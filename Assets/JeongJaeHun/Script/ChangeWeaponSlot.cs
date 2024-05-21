@@ -50,6 +50,7 @@ public class ChangeWeaponSlot : MonoBehaviour
             slotChange?.Invoke(curSlotType);
         }
     }
+
     //[SerializeField] private WeaponManager weaponManager;
 
     Inventory inventory;

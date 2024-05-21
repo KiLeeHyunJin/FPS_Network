@@ -69,6 +69,8 @@ MonoBehaviour:
   gunHUD: {fileID: 0}
   closeWeaponHUD: {fileID: 0}
   bombHUD: {fileID: 0}
+  isChangeWeapon: 0
+  changeWeaponDelayTime: 0
   slotChange:
     m_PersistentCalls:
       m_Calls: []
@@ -224,16 +226,53 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot_3 Sword
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5166494004534166939, guid: b71e08dafef2ea74e8a8a99c319b896d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7162630022718129351, guid: b71e08dafef2ea74e8a8a99c319b896d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6031630767994095175}
   m_SourcePrefab: {fileID: 100100000, guid: b71e08dafef2ea74e8a8a99c319b896d, type: 3}
 --- !u!4 &3145735573114563391 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2584344247769437957, guid: b71e08dafef2ea74e8a8a99c319b896d, type: 3}
   m_PrefabInstance: {fileID: 610953191761296442}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7718128242766067965 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7162630022718129351, guid: b71e08dafef2ea74e8a8a99c319b896d, type: 3}
+  m_PrefabInstance: {fileID: 610953191761296442}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6031630767994095175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7718128242766067965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a7167a9e871024284960d179a447e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSword: {fileID: 0}
+  weaponSprite: {fileID: 0}
+  closeWeaponID: 0
+  closeWeaponType: 0
+  closeWeaponName: 
+  attackDelay: 0
+  attackDelayA: 0
+  attackDelayB: 0
+  anim: {fileID: 0}
+  swordSoundClip: {fileID: 0}
+  trailRenderer: {fileID: 0}
+  range: 0
+  angle: 0
+  damage: 0
+  preAngle: 0
+  cosAngle: 0
 --- !u!1001 &2559951809080068120
 PrefabInstance:
   m_ObjectHideFlags: 0

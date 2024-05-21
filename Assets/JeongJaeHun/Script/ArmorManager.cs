@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ArmorManager : MonoBehaviour
 {
@@ -23,12 +24,14 @@ public class ArmorManager : MonoBehaviour
     public Armor GetCurrentArmor() { return currentArmor; }
 
 
-    private void Start()  // 스타트 시에는 일단 0번 아머를 active 해주기. 
+
+    private void Start()
     {
-        CurrentArmorCheck(0);
+        CurrentArmorCheck(0); //0번 아머 키기 
     }
 
-    private void CurrentArmorCheck(int num) //Start 시에 아머 현황을 체크함. 
+    //매개변수로 armorId를 주면 ok. (0 1 2 ) 
+    public void CurrentArmorCheck(int num) // 외부에서 armor 변경 시 (아머 구입 ) --> 이 함수 호출해주면 됨. 
     {
         int childOfNum = transform.childCount;
 
@@ -42,9 +45,7 @@ public class ArmorManager : MonoBehaviour
         currentArmor = transform.GetChild(num).GetComponent<Armor>();
     }
 
+
     
-
-
-
 
 }
