@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using Firebase.Database;
 using Firebase.Extensions;
 using Photon.Pun;
@@ -83,6 +84,7 @@ public class RoomPanel : MonoBehaviourShowInfo
 
         //우클릭 목록에 채팅 연결
         playerProperty.SetChat(chat);
+        chat.inChatType = Chat.InChatType.Lobby;
         //우클릭 목록 비활성화
         if (playerProperty.gameObject.activeSelf)
             playerProperty.gameObject.SetActive(false);
@@ -140,7 +142,6 @@ public class RoomPanel : MonoBehaviourShowInfo
         foreach (PlayerEntry player in playerList)
         {
             player.isMasterSymbol.gameObject.SetActive(player.Player == PhotonNetwork.MasterClient);
-
         }
     }
 
@@ -155,6 +156,10 @@ public class RoomPanel : MonoBehaviourShowInfo
         //마스터 클라이언트면 플레이어가 들어가야할 팀 선별
         if (PhotonNetwork.IsMasterClient)
             NewPlayerEnterSetTeam(newPlayer);
+        foreach (PlayerEntry player in playerList)
+        {
+            player.isMasterSymbol.gameObject.SetActive(player.Player == PhotonNetwork.MasterClient);
+        }
     }
     void NewPlayerEnterSetTeam(Player newPlayer)
     {
@@ -317,11 +322,6 @@ public class RoomPanel : MonoBehaviourShowInfo
 
              });
             LoadingOn();
-        }
-            
-        else
-        {
-            Debug.Log("IsNotStartProperties");
         }
     }
 

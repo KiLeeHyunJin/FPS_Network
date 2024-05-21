@@ -21,15 +21,27 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     [SerializeField] RandomMatchPanel randomPanel;
     LobbyData data;
     private ClientState state;
-
-    Coroutine fadeIn;
     private void Awake()
     {
         data = GetComponent<LobbyData>();
+        StartCoroutine(UpUi());
+        Debug.Log("StartOn");
     }
-    private void Start()
+    IEnumerator UpUi()
     {
-        SetActivePanel(Panel.Login);
+        yield return new WaitForSeconds(0.5f);
+        Debug.Log(Manager.Game.afterGame);
+
+        if (Manager.Game.afterGame)
+        {
+            SetActivePanel(Panel.Room);
+            Manager.Game.afterGame = false;
+        }
+        else
+        {
+            Debug.Log("Login");
+            SetActivePanel(Panel.Login);
+        }
     }
 
     public void Update()
@@ -132,6 +144,7 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         if (cause == DisconnectCause.DisconnectByServerLogic)
             return;
         SetActivePanel(Panel.Login);
+        Debug.Log("OnDisconnected");
     }
 
 }

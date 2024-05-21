@@ -57,6 +57,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     AttackProcess attackProcess;
     CameraController cameraController;
     PlayerInputController inputController;
+    PlayerInput playerInput;
     CharacterTransformProcess moveProcess;
 
     EquipController equipController;
@@ -215,7 +216,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         inputController.SetZoomType(cameraController.ZoomChange);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
-        
     }
     void MoveProcessInit()
     {

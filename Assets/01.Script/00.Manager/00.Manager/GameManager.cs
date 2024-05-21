@@ -3,6 +3,7 @@ using Firebase.Database;
 using Firebase.Extensions;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Transform messageTransform;
     [SerializeField] ScrollRect systemRect;
 
+    [SerializeField] GameObject localPlayerIns;
+    [SerializeField] public bool afterGame;
     const int BLUE = 1;
     const int RED = 2;
 
@@ -86,12 +89,12 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGame(Transform b, Transform r)
     {
-        Debug.Log("isStart");
+        PhotonNetwork.Destroy(localPlayerIns);
         Spawn(b, r);
         if (BLUE == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
-            PhotonNetwork.Instantiate("Player", blueTeamSpawner.position, blueTeamSpawner.rotation, 0);
+        localPlayerIns = PhotonNetwork.Instantiate("Player", blueTeamSpawner.position, blueTeamSpawner.rotation, 0);
         else
-            PhotonNetwork.Instantiate("Player", redTeamSpawner.position, redTeamSpawner.rotation, 0);
+            localPlayerIns  = PhotonNetwork.Instantiate("Player", redTeamSpawner.position, redTeamSpawner.rotation, 0);
 
     }
 
@@ -107,24 +110,25 @@ public class GameManager : Singleton<GameManager>
         TMP_Text text = instance.GetComponentInChildren<TMP_Text>();
         text.text = message;
         CanvasGroup canvasGroup = instance.GetComponent<CanvasGroup>();
-        StartCoroutine(MessageFading(canvasGroup));
         StartCoroutine(MessageDown());
+        StartCoroutine(MessageFading(canvasGroup));
 
 
         IEnumerator MessageDown()
         {
-            float startingValue = systemRect.verticalScrollbar.value;
+            float d = 1f;
+            float s = systemRect.verticalScrollbar.value;
             float targetValue = 0f;
-            for (float t = 0; t < 1; t += Time.deltaTime)
+            for (float t = 0; t < d; t += Time.deltaTime)
             {
-                systemRect.verticalScrollbar.value = Mathf.Lerp(startingValue, targetValue, t / 1f);
+                systemRect.verticalScrollbar.value = Mathf.Lerp(s, targetValue, t / d);
                 yield return null;
             }
             systemRect.verticalScrollbar.value = targetValue;
         }
         IEnumerator MessageFading(CanvasGroup canvas)
         {
-            float duration = 1f;
+            float duration = 0.5f;
             for (float t = 0; t < duration; t += Time.deltaTime)
             {
                 canvasGroup.alpha = t / duration;
@@ -136,7 +140,7 @@ public class GameManager : Singleton<GameManager>
             yield return new WaitForSeconds(3f);
 
 
-            float disDur = 1f;
+            float disDur = 0.5f;
             for (float t = 0; t < disDur; t += Time.deltaTime)
             {
                 canvasGroup.alpha = 1 - t / disDur;
@@ -150,5 +154,12 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    
+    public void GoToLobby()
+    {
+        afterGame = true;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
 
 }

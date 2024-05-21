@@ -109,7 +109,7 @@ public class SceneManager : Singleton<SceneManager>
 
     public Coroutine StartFadeOut()
     {
-        Debug.Log("Call FadeOut");
+      
        return StartCoroutine(FadeOut());
     }
 
@@ -123,7 +123,7 @@ public class SceneManager : Singleton<SceneManager>
     Coroutine fadeInRoutine;
     public void StartFadeIn()
     {
-        Debug.Log("Call FadeIn");
+        
         if (fadeInRoutine != null)
             StopCoroutine(fadeInRoutine);
 
