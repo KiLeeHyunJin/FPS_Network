@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SwordController : CloseWeaponController
 {
-    // 팔 holder에 붙고 sword 오브젝트의 위치를 잡고 교체해주는 등의 칼과 관련된 작업을 수행한다.
+    /*// 팔 holder에 붙고 sword 오브젝트의 위치를 잡고 교체해주는 등의 칼과 관련된 작업을 수행한다.
 
     [Tooltip("활성화 여부")]
     public static bool isActivate = true;
@@ -15,7 +15,7 @@ public class SwordController : CloseWeaponController
         // WeaponManager.currentWeaponAnim = currentCloseWeapon.anim;
     }
 
-   /* protected  new IEnumerator HitCoroutine() // 칼 만의 데미지 처리 
+   *//* protected  new IEnumerator HitCoroutine() // 칼 만의 데미지 처리 
     {
         while (isSwing) //closeWeaponController의 isSwing; 
         {
@@ -26,12 +26,12 @@ public class SwordController : CloseWeaponController
             }
             yield return null;
         }
-    }*/
+    }*//*
 
     public override void CloseWeaponChange(CloseWeapon _closeWeapon) //칼 만의 무기 교체 처리 
     {
         base.CloseWeaponChange(_closeWeapon);
         isActivate = true;
-    }
+    }*/
 
 }

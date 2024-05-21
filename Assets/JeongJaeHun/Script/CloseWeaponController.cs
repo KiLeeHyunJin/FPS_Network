@@ -116,16 +116,6 @@ public class CloseWeaponController : IKWeapon
 
     }
 
-   /* protected bool CheckObject() //실제 공격동작을 실행하는 동안 체크할 레이캐스트 범위. 
-    {
-        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, currentCloseWeapon.range))
-        {
-            return true; //범위내에 있으면 체크. 
-        }
-        return false;
-    }
-*/
-
     Collider[] colliders = new Collider[20]; // overlap으로 정면 적 확인. 
 
     protected  IEnumerator HitCoroutine() //추상 코루틴도 가능하네 (실제 히트 효과니까 이걸 상속해서
@@ -156,22 +146,7 @@ public class CloseWeaponController : IKWeapon
    
 
     //이 부분을 장비컨트롤러의  swap 에다 넣는다면 어떨가?? 
-    public virtual void CloseWeaponChange(CloseWeapon _closeWeapon) //근접무기 변경. 
-    {
-        Debug.Log("실제 히트 루틴 내부임. "); //여기 내부 수정 필요하겠다. 웨폰 매니저를 더이상 이용하고 있지 않기 때문에 ㅠㅠ 
-        if (WeaponManager.currentWeapon != null)
-        {
-            WeaponManager.currentWeapon.gameObject.SetActive(false);
-        }
-
-        currentCloseWeapon= _closeWeapon;
-        WeaponManager.currentWeapon=currentCloseWeapon.GetComponent<Transform>();
-        //WeaponManager.currentWeaponAnim = currentCloseWeapon.anim;
-
-        currentCloseWeapon.transform.localPosition = Vector3.zero; //위치 잡는걸 플레이어에서 할 수도있고 그러면 이부분 다 삭제 해주면되나?
-        currentCloseWeapon.gameObject.SetActive(true);
-
-    }
+    
 
     private void OnDrawGizmos()
     {

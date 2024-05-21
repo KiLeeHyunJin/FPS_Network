@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,13 +24,15 @@ public class ChangeWeaponSlot : MonoBehaviour
     [SerializeField] private float changeWeaponDelayTime;
 
 
+
+
     public enum slotType //HUD와 연계 할 슬롯 타입 (매개변수로 받아서 HUD ON/OFF --> 하드 코딩 방지 ) 
     {
-        PistolType=0,
-        ArType=1,     
-        CloseWeaponType=2,
-        GrenadeType=3,
-        FlashBangType=4
+        PistolType = 0,
+        ArType = 1,
+        CloseWeaponType = 2,
+        GrenadeType = 3,
+        FlashBangType = 4
     }
 
 
@@ -69,9 +68,9 @@ public class ChangeWeaponSlot : MonoBehaviour
 
     private void Start()
     {
-        inventory=GameObject.FindObjectOfType<Inventory>();
-        slots=inventory.GetComponentsInChildren<Slot>();
-        foreach(Slot slot in slots)
+        inventory = GameObject.FindObjectOfType<Inventory>();
+        slots = inventory.GetComponentsInChildren<Slot>();
+        foreach (Slot slot in slots)
         {
             slot.gameObject.SetActive(false); //일단 모든 슬롯을 꺼주고. 
         }
@@ -82,141 +81,75 @@ public class ChangeWeaponSlot : MonoBehaviour
     // 무기 버리는 경우가 있을 수 있으니까 만약 slot 내부에 모든 종류의 아이템이 꺼져 있다면 
     // 그 슬롯으로 전환이 불가능한 경우이므로 .. 전환을 return 해주자. 
 
-    public void Excute(int slotNumber) //실제 전환 실행 --> equip컨트롤에서 불러서 작업해주기. 
+    public void Excute(AnimationController.AnimatorWeapon weapon) //실제 전환 실행 --> equip컨트롤에서 불러서 작업해주기. 
     {
         // 무기 체인지가 진행 중이면 다시 변경 못하도록 잠시 리턴 띄워주기.
-        if(isChangeWeapon==true)
+        if (isChangeWeapon == true)
         {
             return;
         }
-        
-
-
-        // 슬롯 내부의 자식들을 체크해서 그 자식들이 켜져 있는지 확인하고 하나도 안켜져 있다면 return 해버리기
- 
-        if (slots[slotNumber] != null) //그리고 그 자식들이 전부 꺼져있는 경우가 아니어야 하니까.
+        switch (weapon)
         {
-            // 전부 꺼져있는 경우라면? --> 총을 다 버렸거나 수류탄 같은거를 물량을 다 써버렸을 때 
+            case AnimationController.AnimatorWeapon.Pistol:  //권총 1번 
 
-            if (slots[slotNumber].gameObject.activeSelf==true) //이미 켜져있으면 ( 그 무기를 들고 있으면 return ) 
-            {
-                               
-                return; 
-            }
-
-            if (slots[slotNumber].notHaving==true)
-            {
-                return; // 슬롯의 비어있음 bool 변수가 true면 return 하고 --> 이 부분은 리스폰 시 초기화 시켜줘야함. 
-            }
-            // 이게 무기 내부에 무기가 다 꺼져있으면 변경되면 안되는 작업을 맨 앞에서 해줘야 할 것 같음. --> ui가 변경되는 문제가 발생함. 
-
-            if (slotNumber== (int)slotType.PistolType || slotNumber==(int)slotType.ArType) // gun 
-            {
                 closeWeaponHUD.gameObject.SetActive(false);
                 bombHUD.gameObject.SetActive(false);
-
                 gunHUD.gameObject.SetActive(true);
 
-                StartCoroutine(ChangeWeaponCoroutine((slotType)slotNumber));
+                StartCoroutine(ChangeWeaponCoroutine());
+                break;
 
-            }
-            else if(slotNumber==(int)slotType.CloseWeaponType)
-            {
+            case AnimationController.AnimatorWeapon.Rifle:  // 소총 2번 
+                closeWeaponHUD.gameObject.SetActive(false);
+                bombHUD.gameObject.SetActive(false);
+                gunHUD.gameObject.SetActive(true);
+
+                StartCoroutine(ChangeWeaponCoroutine());
+
+                break;
+
+            case AnimationController.AnimatorWeapon.Sword:  // 칼 3번 
                 closeWeaponHUD.gameObject.SetActive(true);
                 bombHUD.gameObject.SetActive(false);
                 gunHUD.gameObject.SetActive(false);
-                StartCoroutine(ChangeWeaponCoroutine((slotType)slotNumber)); // 슬롯 번호에 따라 다른 전환작업
 
-            }
-            else if (slotNumber == (int)slotType.GrenadeType | slotNumber == (int)slotType.FlashBangType)
-            {
-                
+                StartCoroutine(ChangeWeaponCoroutine());
+
+                break;
+            case AnimationController.AnimatorWeapon.Throw: //수류탄 4번 
+
                 closeWeaponHUD.gameObject.SetActive(false);
                 bombHUD.gameObject.SetActive(true);
-
                 gunHUD.gameObject.SetActive(false);
-                StartCoroutine(ChangeWeaponCoroutine((slotType)slotNumber));
-            }
 
-            int numChild = slots[slotNumber].transform.childCount;
+                StartCoroutine(ChangeWeaponCoroutine());
 
-            for(int i=0;i<numChild;i++)
-            {
-                
-                // 켜져 있는 자식이 존재한다면. 그 무기로 바꿔주는 상황을 진행해줘야함.
-                if (slots[slotNumber].transform.GetChild(i).gameObject.activeSelf == true) //무기가 켜져 있으면 (즉 무기가 있는 상황)
-                {
-                    foreach (Slot slot in slots)
-                    {
-                        slot.gameObject.SetActive(false); //일단 모든 슬롯을 꺼주고. 
-                       
-                        // 나중에 확인
-                        // StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(quickSlots[selectedSlot].
-                        // item.weaponType, quickSlots[selectedSlot].item.itemName));
+                break;
+            case AnimationController.AnimatorWeapon.END: // 섬광탄용 마지막 위치 일단 넣어둠. -->(5번) 
 
-                    }
-                    slots[slotNumber].gameObject.SetActive(true); // 키가 눌린 슬롯만 켜주기. 
-                }
-            }
+                closeWeaponHUD.gameObject.SetActive(false);
+                bombHUD.gameObject.SetActive(true);
+                gunHUD.gameObject.SetActive(false);
+                StartCoroutine(ChangeWeaponCoroutine());
+
+                break;
         }
     }
+        // 슬롯 내부의 자식들을 체크해서 그 자식들이 켜져 있는지 확인하고 하나도 안켜져 있다면 return 해버리기
 
-    // Temp 로 1~5 번 슬롯까지 input 눌러서 바꾸는거 실험해보자.
+        // Temp 로 1~5 번 슬롯까지 input 눌러서 바꾸는거 실험해보자.
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {           
-            Excute(0); //여기서 스왑할 때 (공격 불가 + 재장전 불가등의 추가 작업을 진행해줘야함. )
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        private IEnumerator ChangeWeaponCoroutine()
+
         {
-            Excute(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            Excute(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            Excute(3);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            Excute(4);
+            // 공통으로 진행 할 무기 전환 작업 --> 공격 불가능 + 재장전 불가능 상태로 만들어줘야함. 
+
+            isChangeWeapon = true;
+
+            yield return new WaitForSeconds(changeWeaponDelayTime); // 무기 전환 시간동안 재 변환금지
+            isChangeWeapon = false;
+
         }
 
     }
 
-   private IEnumerator ChangeWeaponCoroutine(slotType type)
-     
-    {
-        // 공통으로 진행 할 무기 전환 작업 --> 공격 불가능 + 재장전 불가능 상태로 만들어줘야함. 
-
-        isChangeWeapon= true; 
-
-        switch (type)
-        {
-            case slotType.PistolType:
-
-                break;
-            case slotType.ArType:
-
-                break;
-            case slotType.CloseWeaponType:  // 근접 무기로 변경 시 해야 할 작업 
-
-                break;
-            case slotType.GrenadeType:  // 수류탄으로 변경 시 해야 할 작업 
-
-                break;
-            case slotType.FlashBangType: //섬광탄 으로 무기 변경 시 해야 할 작업 
-
-                break;
-        }
-
-        yield return new WaitForSeconds(changeWeaponDelayTime); // 무기 전환 시간동안 재 변환금지
-        isChangeWeapon = false;
-
-    }
-
-}

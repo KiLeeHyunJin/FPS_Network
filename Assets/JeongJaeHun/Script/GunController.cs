@@ -8,7 +8,7 @@ public class GunController : MonoBehaviour
     [SerializeField]
     private Gun currentGun; //현재 들고 있는 총의 Gun이 할당됨. 
 
-    public Gun GetGun() { return currentGun; } //프로퍼티 함수 
+    public Gun GetGun { get { return currentGun; } } //프로퍼티 함수 
 
     private float currentFireRate; //이 값이 0 보다 큰 동안에는 총알이 발사되지 않음. 
     // 초기 값은 연사속도인 Gun.cs의 fireRate 
@@ -22,7 +22,7 @@ public class GunController : MonoBehaviour
     private AudioSource audioSource; // 총 발사 소리 재생위한 오디오소스 
 
     private RaycastHit hitInfo; //총알의 충돌 정보
-    [SerializeField]
+    
     private Camera theCam; //카메라 시점에서 정 중앙에 발사할 것. 
 
     [SerializeField]
@@ -45,13 +45,11 @@ public class GunController : MonoBehaviour
         int numOfChild = this.transform.childCount;
         for (int i = 0; i < numOfChild; i++)
         {
-            // 지금 널 예외 오류 떠서 일단 켜져 있는거 체크함
-            if(transform.GetChild(i).gameObject.activeSelf==true)
-            {
+            
                 currentGun = transform.GetChild(i).GetComponent<Gun>();
                 audioSource.clip = currentGun.fire_Sound;
                 break;
-            }
+            
         }
     }
 
@@ -97,24 +95,6 @@ public class GunController : MonoBehaviour
             StopAllCoroutines(); //이거 올 코루틴 중지 막 돌려도 되는지는 모르겠네.
             isReload = false;
         }
-    }
-
-    //총으로 교체하고자 할 때 필요.. 호출은 WeaponManager에서 이루어짐
-    public void GunChange(Gun gun) //이거 매개변수가 gun형인데 왜 딕셔너리 name이 받을 수 있는지? 
-    {
-        if (WeaponManager.currentWeapon != null) //지금 손에 무기가 있으면 (current가 안 비어있다면)
-        {
-            WeaponManager.currentWeapon.gameObject.SetActive(false);
-        }
-
-        currentGun = gun;
-        WeaponManager.currentWeapon = currentGun.GetComponent<Transform>();
-        //WeaponManager.currentWeaponAnim=currentGun.anim; 애니메이션 교체 
-        currentGun.transform.localPosition = Vector3.zero; //위치 초기화
-        currentGun.gameObject.SetActive(true); //무기 켜주기. 
-
-        isActivate = true;
-
     }
 
 
@@ -195,7 +175,7 @@ public class GunController : MonoBehaviour
         // 카메라 월드 좌표 (localPosition이 아니다. )
         // 플레이어에게 달려있는 1인칭 카메라로부터 RaYcAST를 쏴서 충돌 지점을 총알이 맞은 위치로 판정할 것. 
         // 1인칭 카메라 이기 때문에 사실상 화면 정중앙에 총을 쏘게 되기 때문에. 
-        if (Physics.Raycast(theCam.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
+        if (Physics.Raycast(Camera.main.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
         {
             poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
 
