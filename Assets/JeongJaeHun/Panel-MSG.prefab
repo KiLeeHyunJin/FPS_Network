@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2507697884738459584}
   - component: {fileID: 7122028178182717646}
   - component: {fileID: 1400118672273364665}
-  m_Layer: 30
+  m_Layer: 5
   m_Name: Panel-MSG
-  m_TagString: Untagged
+  m_TagString: KillLog
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

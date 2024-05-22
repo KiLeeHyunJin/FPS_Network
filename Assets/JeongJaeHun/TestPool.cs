@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TestPool : MonoBehaviour
 {
 
-    [SerializeField]GameObject gg;
+    [SerializeField] Slider hpBar;
     private void Start()
     {
-        gg = GameObject.FindGameObjectWithTag("KillLog");
-        Debug.Log(gg.gameObject.name);
+        
     }
     
 
