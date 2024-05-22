@@ -7,6 +7,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviourPun, IPunObservable
 {
@@ -70,10 +71,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
     //Iattackable[] iattackables;
     Iattackable currentAttackable;
 
-    TMP_Text killLog; // 킬 로그 패널의 text 접근. 
-
-
-
+    [SerializeField]TMP_Text killLog; // 킬 로그 패널의 text 접근. 
+    [SerializeField] Slider HpBar; // 플레이어의 Hp bar 연계
+    [SerializeField] TapEntry tapEntry;
 
     private void Awake()
     {
@@ -85,16 +85,17 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (PhotonNetwork.InRoom)
         {
             Check();
-            killLog = GameObject.FindWithTag("KillLog").GetComponentInChildren<TextMeshProUGUI>();
+            killLog = GameObject.FindWithTag("KillLog")?.GetComponentInChildren<TextMeshProUGUI>();
+            HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
+            HpBar.value = hp; //hp가 SetData에서 maxHp로 할당되므로 
+
+            tapEntry= FindObjectOfType<TapEntry>();
+
 
         }
 
         else
             Destroy(gameObject);
-
-
-
-
 
     }
 
@@ -370,16 +371,15 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (requestController.Hit() == false)
             return;
 
-
-
         hp -= equipController.ShieldCheck(_damage);
-
-        // hpBar 깍는 연계도 해줘야하네.. 
+        if (HpBar != null)
+        {
+            HpBar.value = Percent(hp, maxHp);
+        }
 
         if (hp <= 0)
-        {
-            
-            if (Mine) //PhotonView.IsMine
+        {          
+            //if (Mine) //PhotonView.IsMine 쓰는거 맞나?? 잘 모르겠네... 
             {
                 Player deathPlayer = PhotonNetwork.CurrentRoom.GetPlayer(photonView.Owner.ActorNumber);
                 Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
@@ -388,11 +388,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
                     , deathPlayer.NickName, lastShooterPlayer.NickName);
                 photonView.RPC("LogMessage", RpcTarget.AllBufferedViaServer, msg);
 
-                
+               
 
             }
-
-
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
             ControllCharacterLayerChange(0, 0);
@@ -400,6 +398,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
             inputController.InputActive = false;
         }
 
+    }
+
+    // slider bar 조정 용 
+    public float Percent(float currentHp,float maxHp)
+    {
+        return currentHp!=0 && maxHp !=0 ? currentHp/maxHp : 0;
     }
 
     [PunRPC]

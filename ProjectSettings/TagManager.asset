@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bullet
   - KillLog
+  - HpBar
   layers:
   - Default
   - TransparentFX
