@@ -148,7 +148,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.      
         audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생.
 
-        Hit();
+        Hit(ActorNumber);
         StartCoroutine(RetroActionCoroutine());
 
 
@@ -160,14 +160,15 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     }
 
-    private void Hit() //bullet 연구해서 연계 가능한지 확인해보고 --> 피 터지는건 불렛에서 피 터지게 하면 될 것 같은데 
+    private void Hit(int ActorNumber) //bullet 연구해서 연계 가능한지 확인해보고 --> 피 터지는건 불렛에서 피 터지게 하면 될 것 같은데 
     {
         if (Physics.Raycast(Camera.main.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
 
         {
             if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage(currentGun.damage);
+                hitInfo.collider.GetComponent<Controller>();
+                damagable.TakeDamage(currentGun.damage,ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
             }
         }
     }

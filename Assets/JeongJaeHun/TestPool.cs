@@ -4,25 +4,14 @@ using UnityEngine;
 
 public class TestPool : MonoBehaviour
 {
-    int age;
 
+    [SerializeField]GameObject gg;
     private void Start()
     {
-        
+        gg = GameObject.FindGameObjectWithTag("KillLog");
+        Debug.Log(gg.gameObject.name);
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            age = Random.Range(1, 100);
-            PooledObject bullet=
-            Manager.Pool.GetBullet(transform.position, Quaternion.identity);
-            bullet.GetComponent<Bullet>().actorNumber = age;
-            
-            Debug.Log(bullet.GetComponent<Bullet>().actorNumber);
-        }
-    }
-
+    
 
 
 }
