@@ -37,7 +37,6 @@ public class SkillController2 : MonoBehaviourPun
         if (Input.GetKeyDown(KeyCode.H)) heal.Activate();
         if (Input.GetKeyDown(KeyCode.M)) mineSkill.Activate();
         if (Input.GetKeyDown(KeyCode.F)) spyCamController.Activate();
-        if (Input.GetKeyDown(KeyCode.Z)) timeRewind.Activate();
     }
 
     public void UseSkill(string skillName)
@@ -54,7 +53,6 @@ public class SkillController2 : MonoBehaviourPun
                 spyCamController.Activate();
                 break;
             case "TimeRewind":
-                timeRewind.Activate();
                 break;
             default:
                 Debug.LogError("Unknown skill: " + skillName);
