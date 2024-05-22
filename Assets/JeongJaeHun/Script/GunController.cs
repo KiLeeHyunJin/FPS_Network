@@ -69,23 +69,16 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         {
             currentGun = transform.GetChild(i).GetComponent<Gun>();
             audioSource.clip = currentGun.fire_Sound;
-
             // true 체크를 안하기 때문에 break를 걸어줄 필요가 없음 
         }
     }
-
-
-    private void Start()
-    {
-        
-    }
-
 
     // 인터페이스로 상속한 인터페이스 함수 --> 실제 플레이어 클릭 시 실행 할 함수임. 
     public bool Attack()
     {
         return TryFire();
     }
+
     public bool Reload()
     {
         return TryReload();
@@ -100,11 +93,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             //TryReload(); //재장전도 마찬가지 -> 키 눌렀을 때만 측정하면 되지 않을까? 
             //TryFineSight(); //정조준 
         }
-
-        if (Input.GetKeyDown(KeyCode.Mouse1)) //임시로 마우스 우측 버튼으로 리로드 시작. 
-        {
-            
-        }
     }
 
 
@@ -114,7 +102,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         {
             currentFireRate -= Time.deltaTime; // deltaTime만큼 지속적으로 감소 
         }
-
     }
 
     private bool TryFire() //발사 입력을 받음. --> 이 부분 EquipController에서 관리하므로 인풋을 넣을 필요없음
@@ -149,15 +136,12 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생.
 
         Hit(ActorNumber);
-        StartCoroutine(RetroActionCoroutine());
+        //StartCoroutine(RetroActionCoroutine());
 
 
         //Hit(); 피격 처리 --> 어차피 실제 불렛에서 진행할 예정이긴 함.. 
         //총기 반동 코루틴 실행
         // StopAllCoroutines(); //반동 코루틴 멈추고
-
-
-
     }
 
     private void Hit(int ActorNumber) //bullet 연구해서 연계 가능한지 확인해보고 --> 피 터지는건 불렛에서 피 터지게 하면 될 것 같은데 

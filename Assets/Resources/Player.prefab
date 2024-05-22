@@ -8010,6 +8010,8 @@ MonoBehaviour:
   miniCam: {fileID: 1490805060537847258}
   hp: 0
   killLog: {fileID: 0}
+  HpBar: {fileID: 0}
+  tapEntry: {fileID: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0

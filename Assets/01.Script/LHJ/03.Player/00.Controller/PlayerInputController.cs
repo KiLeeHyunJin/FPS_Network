@@ -50,6 +50,7 @@ public class PlayerInputController : MonoBehaviour
         inputs = GetComponent<PlayerInput>().actions;
         ChangeFireType = Define.FireType.One;
         actions = new Action[(int)Define.Key.END];
+        CurrentWeapon = AnimationController.AnimatorWeapon.Sword;
     }
     void OnLook(InputValue inputValue)
     {

@@ -70,7 +70,6 @@ public class InventoryController : MonoBehaviour
         //slots= gameObject.GetComponentsInChildren<Slot>();
         if (goldText != null)
             goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
-        Invoke("DropSword", 3);
     }
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
@@ -114,6 +113,10 @@ public class InventoryController : MonoBehaviour
 
         weapons[(int)weaponType] = Equip(weaponType, id);
     }
+    public void Throw(AnimationController.AnimatorWeapon weaponType)
+    {
+        Dequip(this[weaponType]);
+    }
 
     void Dequip(IKWeapon _weapon)
     {
@@ -127,7 +130,8 @@ public class InventoryController : MonoBehaviour
             _ => null,
         };
         _weapon.transform.SetParent(parent);
-        if(PhotonNetwork.IsMasterClient)
+        _weapon.gameObject.SetActive(false);
+        if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.Instantiate(_weapon.name, transform.position, transform.rotation );
     }
 
@@ -148,7 +152,7 @@ public class InventoryController : MonoBehaviour
             if (pos.saver.GetChild(i).TryGetComponent<IKWeapon>(out IKWeapon weapon) && weapon.InstanceId == id)
             {
                 weapon.transform.SetParent(pos.parent);
-
+                weapon.gameObject.SetActive(true);
                 weapon.transform.localPosition = Vector3.zero;
                 weapon.transform.localRotation = Quaternion.identity;
                 return weapon;

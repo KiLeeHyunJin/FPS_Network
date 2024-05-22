@@ -94,7 +94,7 @@ public class AnimationController : MonoBehaviourPun
             photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
     }
 
-    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckabl )
+    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckable )
     {
         if (currentWeapons[(int)type].childCount == 0)
         {
@@ -113,8 +113,7 @@ public class AnimationController : MonoBehaviourPun
 
         OnWeaponLayer(type);
         anim.SetTrigger(ChangeWeaponId);
-        if (currentWeapons[(int)type] is Iattackable temp)
-            atckabl = temp;
+        atckable = currentWeapons[(int)type].GetComponent<Iattackable>();
         return true;
     }
 

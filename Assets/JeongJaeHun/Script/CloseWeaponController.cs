@@ -53,7 +53,7 @@ public class CloseWeaponController : IKWeapon, Iattackable
         }
         if(trailRenderer!=null)
         trailRenderer.emitting = false; //공격하지 않을 때 렌더러가 생기지 않도록 꺼주기. 
-
+        isAttack = false;
         range = currentCloseWeapon.range; //캐싱? 해주기 
     }
 
@@ -109,7 +109,6 @@ public class CloseWeaponController : IKWeapon, Iattackable
         yield return new WaitForSeconds(currentCloseWeapon.attackDelay -
             currentCloseWeapon.attackDelayA - currentCloseWeapon.attackDelayB);
         isAttack = false;
-
     }
 
     Collider[] colliders = new Collider[20]; // overlap으로 정면 적 확인. 

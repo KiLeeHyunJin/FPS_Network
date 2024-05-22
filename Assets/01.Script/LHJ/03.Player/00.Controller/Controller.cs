@@ -88,11 +88,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Check();
             killLog = GameObject.FindWithTag("KillLog")?.GetComponentInChildren<TextMeshProUGUI>();
             HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
-            HpBar.value = hp; //hp가 SetData에서 maxHp로 할당되므로 
+            if(HpBar != null)
+                HpBar.value = hp; //hp가 SetData에서 maxHp로 할당되므로 
 
             tapEntry= FindObjectOfType<TapEntry>();
-
-
         }
 
         else
@@ -190,6 +189,19 @@ public class Controller : MonoBehaviourPun, IPunObservable
                 animController.ChangeWeapon(weapon.weaponType, ref currentAttackable);
                 inputController.SetWeaponType = weapon.weaponType;
                 weapon.PickUp();
+            }
+        }
+        else
+        {
+            if (inputController.CurrentWeapon == AnimationController.AnimatorWeapon.Sword || 
+                inputController.CurrentWeapon == AnimationController.AnimatorWeapon.Throw)
+                return;
+
+            if (inventoryController[inputController.CurrentWeapon] != null)
+            {
+                inventoryController.Throw(inputController.CurrentWeapon);
+                CallThree();
+                inputController.SetWeaponType = AnimationController.AnimatorWeapon.Sword;
             }
         }
     }
