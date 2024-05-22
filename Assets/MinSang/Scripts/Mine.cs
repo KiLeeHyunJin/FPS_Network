@@ -8,7 +8,7 @@ using static Define;
 public class Mine : MonoBehaviourPun
 {
     [SerializeField]
-    private float explosionRadius = 5.0f; // 폭발 범위
+    private float explosionRadius = 0.5f; // 폭발 범위
     [SerializeField]
     private float explosionForce = 10.0f;
     [SerializeField]
@@ -16,6 +16,7 @@ public class Mine : MonoBehaviourPun
 
     private bool hasExploded = false;
     private SphereCollider detectionCollider;
+    Controller controller;
 
     void Start()
     {
@@ -28,28 +29,34 @@ public class Mine : MonoBehaviourPun
     {
         if (!hasExploded && other.CompareTag("Player"))
         {
+            Debug.Log("지뢰 폭발");
             hasExploded = true;
             Explode();
+            Destroy(gameObject);
         }
     }
 
     private void Explode()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        List<IDamagable> damagables = new List<IDamagable>();
 
         foreach (Collider hit in colliders)
         {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-            if (rb != null)
+            if (hit.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             }
 
-            IDamagable damagable = hit.GetComponent<IDamagable>();
-            if (damagable != null)
+            if (hit.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                damagable.TakeDamage((int)damage);
+                damagables.Add(damagable);
             }
+        }
+
+        foreach (var damagable in damagables)
+        {
+            damagable.TakeDamage((int)damage);
         }
 
         Destroy(gameObject);

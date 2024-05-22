@@ -22,8 +22,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] public bool afterGame;
     const int BLUE = 1;
     const int RED = 2;
-
+ 
     UserData userData;
+
+    
 
     public UserData UserData { get { return userData; } }
 
@@ -155,11 +157,42 @@ public class GameManager : Singleton<GameManager>
     }
 
     
-    public void GoToLobby()
+    public void SetUpCount()
     {
         afterGame = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        SetIncreaseDB("PlayCount");
+
+        
+    }
+    public void SetIncreaseDB(string s)
+    {
+        DatabaseReference m_DB = FireBaseManager.DB
+             .GetReference("UserData")
+             .Child(FireBaseManager.Auth.CurrentUser.UserId);
+
+
+
+        m_DB.Child(s)
+            .GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.LogError($"Fail to {task.Exception}");
+                    return;
+                }
+
+                if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    int curCount = snapshot.Exists ? int.Parse(snapshot.Value.ToString()) : 0;
+
+
+                    m_DB.Child(s).SetValueAsync(curCount + 1);
+                }
+            });
+        GetUserData();
     }
 
 }

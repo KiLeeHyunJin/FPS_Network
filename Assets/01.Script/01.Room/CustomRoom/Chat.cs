@@ -69,6 +69,10 @@ public class Chat : MonoBehaviourPun
     void SendChat(string chat)
     {
         //내용을 보낸다.
+        if (chat == "")
+            return;
+        
+            
         SendMessageToTarget($"{PhotonNetwork.LocalPlayer.NickName} : {chat}");
         //입력창을 비우고 다시 활성화 상태로 변경한다.
         inputField.text = "";
@@ -81,7 +85,7 @@ public class Chat : MonoBehaviourPun
         //if (chatTarget == ChatType.TEAM) //팀 대화 목록이고
         //    if((int)teamCode != (int)PhotonNetwork.LocalPlayer.GetPhotonTeam().Code) //팀이 다르다면 종료
         //        return;
-
+        
         TMP_Text newMessage = Instantiate(chatTextPrefab);
 
         if(inChatType == InChatType.Lobby)
@@ -135,6 +139,13 @@ public class Chat : MonoBehaviourPun
         if (rect != null) // 스케일을 1로 변경
             rect.localScale = Vector3.one;
         scrollRect.verticalScrollbar.value = 0; //스크롤 뷰를 맨 밑으로 설정
+        if (inChatType == InChatType.InGame)
+        {
+            inputField.gameObject.SetActive(false);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+            
     }
 
 

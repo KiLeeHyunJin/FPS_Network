@@ -8009,6 +8009,7 @@ MonoBehaviour:
   teamCode: 0
   miniCam: {fileID: 1490805060537847258}
   hp: 0
+  killLog: {fileID: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21523,21 +21524,37 @@ PrefabInstance:
       propertyPath: m_TargetTexture
       value: 
       objectReference: {fileID: 8400000, guid: b8d45f3f9ab20de47ae0fcef563843b3, type: 2}
+    - target: {fileID: 3885494313623986568, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885494313623986568, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885494313623986568, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8997027517693550933, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
       propertyPath: m_TargetTexture
       value: 
       objectReference: {fileID: 8400000, guid: 8965a8b4f57558046a8b5a0c68b2dfe1, type: 2}
     - target: {fileID: 8997027517693550933, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 0.61960787
+      objectReference: {fileID: 0}
+    - target: {fileID: 8997027517693550933, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
       propertyPath: m_BackGroundColor.b
-      value: 0.5698112
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8997027517693550933, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
       propertyPath: m_BackGroundColor.g
-      value: 0.5698112
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8997027517693550933, guid: 259b15743ed1ea540b0983e8a7f59481, type: 3}
       propertyPath: m_BackGroundColor.r
-      value: 0.5698112
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

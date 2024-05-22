@@ -17,7 +17,7 @@ public class Bullet : PooledObject
 
     AudioSource audioSource;
 
-    [SerializeField] private float moveForce = 300f;
+    
 
     private void OnEnable()
     {
