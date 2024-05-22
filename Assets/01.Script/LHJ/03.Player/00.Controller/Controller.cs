@@ -47,7 +47,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] int teamCode;
     [SerializeField] GameObject miniCam;
 
-
+    Action[] FireAction;
 
     int maxHp;
     [SerializeField] int hp;
@@ -55,7 +55,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     public int TeamCode { get; private set; }
 
-    AttackProcess attackProcess;
     CameraController cameraController;
     PlayerInputController inputController;
     CharacterTransformProcess moveProcess;
@@ -66,6 +65,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     RequestController requestController;
     event Action Updates;
+
+    Iattackable[] iattackables;
+    Iattackable currentAttackable;
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
@@ -129,8 +131,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         }
         cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
-
-        attackProcess = new AttackProcess(this);
+        iattackables = animController.GetAttackableArray();
+        //attackProcess = new AttackProcess(this);
         inputController.Owner = this;
         SetData();
     }
@@ -187,28 +189,44 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CallOne()
     {
-        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle);
-        if(inputController.Zoom)
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle, ref currentAttackable))
+            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Rifle];
+
+        if (inputController.Zoom)
             cameraController.ZoomChange(false);
     }
     void CallTwo()
     {
-        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol);
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol, ref currentAttackable))
+            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Pistol];
+
         inputController.ChangeFireType = Define.FireType.One;
         if (inputController.Zoom)
             cameraController.ZoomChange(false);
     }
     void CallThree()
     {
-        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword);
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword, ref currentAttackable))
+            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Sword];
+
         inputController.ChangeFireType = Define.FireType.One;
         if (inputController.Zoom)
             cameraController.ZoomChange(false);
     }
     void CallFour()
     {
-        animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw);
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw, ref currentAttackable))
+            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Throw];
+
         inputController.ChangeFireType = Define.FireType.One;
+        if (inputController.Zoom)
+            cameraController.ZoomChange(false);
+    }
+
+    public void ChangeSlot(AnimationController.AnimatorWeapon weaponType)
+    {
+        //if (animController.ChangeWeapon(weaponType))
+        //    currentAttackable = iattackables[(int)weaponType];
         if (inputController.Zoom)
             cameraController.ZoomChange(false);
     }
@@ -322,6 +340,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
         }
+    }
+
+    public void SetActionFireEffect(Action action, int idx)
+    {
     }
 
     public void AddHp(int _healValue)

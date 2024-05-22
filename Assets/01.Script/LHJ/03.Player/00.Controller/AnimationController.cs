@@ -45,6 +45,7 @@ public class AnimationController : MonoBehaviourPun
 
     readonly string TRIGGER = "CallTriggerRPC";
     readonly string RIGIK = "RigIK";
+
     private void Start()
     {
         iKAnimation = new IKAnimationController
@@ -129,11 +130,11 @@ public class AnimationController : MonoBehaviourPun
         }
         return null;
     }
-    public void ChangeWeapon(AnimatorWeapon type)
+    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckabl )
     {
         IKWeapon changeWeapon = GetIKWeapon(type);
         if (changeWeapon == null)
-            return;
+            return false;
         
         if (anim.GetBool(weaponId[(int)type]) == false)
         {
@@ -141,7 +142,10 @@ public class AnimationController : MonoBehaviourPun
 
             OnWeapon(type);
             anim.SetTrigger(ChangeWeaponId);
+            atckabl = currentWeapons[(int)type] as Iattackable;
+            return true;
         }
+        return false;
     }
 
     public void Reload()
@@ -252,6 +256,16 @@ public class AnimationController : MonoBehaviourPun
         IKWeapon newWeapon = Manager.Resource.Load<IKWeapon>(ResourceManager.ResourceType.Weapon,rigWeaponStr);
         anim.SetTrigger(triggerId);
         iKAnimation.ChangeWeapon(newWeapon);
+    }
+
+    public Iattackable[] GetAttackableArray()
+    {
+        Iattackable[] reward = new Iattackable[(int)AnimatorWeapon.END];
+        for (int i = 0; i < (int)AnimatorWeapon.END; i++)
+        {
+            reward[i] = currentWeapons[i] as Iattackable;
+        }
+        return reward;
     }
 
     void SetState(AnimatorState type, bool state)
