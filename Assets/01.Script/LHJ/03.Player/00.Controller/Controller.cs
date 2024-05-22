@@ -138,7 +138,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         SetData();
     }
 
-    void SetData()
+    void SetData()  // 이 부분 start 내부에서 이미 체크하고 있음 (체력 초기화 완료됨) 
     {
         maxHp = maxHp <= 0 ? 100 : maxHp;
         if (photonView.Controller.GetPhotonTeam() != null)
@@ -330,7 +330,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         animController.VelocityY = jumpLeg;
     }
 
-    public void Damage(int _damage)
+    public void Damage(int _damage) // 데미지 받으면 여기로 들어와짐. 
     {
         if (requestController.Hit() == false)
             return;
@@ -338,6 +338,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         hp -= equipController.ShieldCheck(_damage);
         if (hp <= 0)
         {
+
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
             ControllCharacterLayerChange(0,0);
@@ -346,6 +347,42 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
     }
 
+    public void Damage(int _damage,int _actorNumber) // 총알의 주인 ActorNumber 
+    {
+        if (requestController.Hit() == false)
+            return;
+
+        
+
+        hp -= equipController.ShieldCheck(_damage);
+        if (hp <= 0)
+        {
+            // 죽인 사람 죽는 사람 체크 해주고. 
+            // 자신의 hp 동기화 해주고. 
+            
+            // 죽인 사람이 lastShooterPlayer이므로 
+            if (Mine) //PhotonView.IsMine
+            {
+                Player deathPlayer = PhotonNetwork.CurrentRoom.GetPlayer(photonView.Owner.ActorNumber);
+                Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
+
+                Debug.Log($"{deathPlayer.NickName}(이)가 {lastShooterPlayer.NickName}에게 죽음");
+
+            }
+
+
+            animController.Die();
+            Cursor.lockState = CursorLockMode.None;
+            ControllCharacterLayerChange(0, 0);
+            cameraController.CameraPriority = 0;
+            inputController.InputActive = false;
+        }
+
+    }
+
+
+
+    // 이 부분도 자신의 체력 동기화
     public void AddHp(int _healValue)
     {
         int other = maxHp - hp;

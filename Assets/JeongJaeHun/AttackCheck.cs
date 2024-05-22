@@ -1,36 +1,35 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class AttackProcess
+public class AttackCheck : MonoBehaviour
 {
-     // 다른 곳에서 생성자를 참조 하고 있어서.. 확인하고 주석처리 하기. 
+    float sleepTime; //슬립 타임? 
 
-    float sleepTime;
+    Transform aim; //자신의 총구 Aim 
 
-    Transform aim;
-    Controller owner;
-    Coroutine recoilCo;
-    public AttackProcess(Controller _owner)
+    Camera mainCamera;
+
+    private void Start()
     {
-        owner = _owner;
+        
     }
+
+
+
     public void SetAimTransform(Transform _aim)
-    => aim = _aim;
+    {
+        aim = _aim; //각각의 총들에서 CurrentGun의 Aim을 가져와서 저장 
+    }
 
-    void Recoil()
-        => owner.StartCoroutined(RecoilRoutine(), ref recoilCo);
-
-
-    public Vector3 Attack()
+    public Vector3 AttackVectorCheck()
     {
         if (sleepTime != 0)
             sleepTime = 0;
 
         if (aim == null)
             return Vector3.zero;
-
-        //Recoil();
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitInfo, Mathf.Infinity))
         {
@@ -43,14 +42,9 @@ public class AttackProcess
             }
         }
         return Vector3.zero;
+
     }
 
-    public IEnumerator RecoilRoutine()
-    {
-        while (true)
-        {
-            sleepTime += Time.deltaTime;
-            yield return null;
-        }
-    }
+
+
 }

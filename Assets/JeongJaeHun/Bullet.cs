@@ -1,8 +1,14 @@
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 public class Bullet : PooledObject
 {
+    // 총알의 주인이 누구 인지 알아야한다. 
+    public int actorNumber; 
+
+
     (int damage, float moveSpeed) data;
     int teamCode;
     Vector3 beforePos;
@@ -15,8 +21,9 @@ public class Bullet : PooledObject
 
     private void OnEnable()
     {
-        audioSource = GetComponent<AudioSource>();
-        Rigidbody rigidbody=GetComponent<Rigidbody>();
+        
+        audioSource = GetComponent<AudioSource>(); 
+        //Rigidbody rigidbody=GetComponent<Rigidbody>();
 
         //rigidbody.AddForce(transform.forward*moveForce);
     }
@@ -41,7 +48,9 @@ public class Bullet : PooledObject
             {
                 //if(teamCode != player.TeamCode)
                 {
-                    damagable.TakeDamage(data.damage);
+                    // bullet 자신의 actornumber이용.
+
+                    damagable.TakeDamage(data.damage,actorNumber);
                     Vector3 pos = hitInfo.point;
                     Quaternion rot = Quaternion.LookRotation(hitInfo.normal);
                     //사람에 맞으면 피 법선벡터로 생성 
