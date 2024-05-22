@@ -35,6 +35,14 @@ public class RoomPanel : MonoBehaviourShowInfo
     [SerializeField] List<Sprite> loadImages;
     [SerializeField] TMP_Text loadingMessage;
 
+    [SerializeField] TMP_Text killCount;
+    [SerializeField] TMP_Text deathCount;
+    [SerializeField] TMP_Text assistCount;
+    [SerializeField] TMP_Text playCount;
+    [SerializeField] TMP_Text winRate;
+    [SerializeField] Image profileImg;
+
+
     const int RED = 2;
     const int BLUE = 1;
     int halfCount;
@@ -55,6 +63,28 @@ public class RoomPanel : MonoBehaviourShowInfo
             loadImages.Add(Resources.Load<Sprite>($"Image/load{i+1}"));
         }
         
+    }
+    void InfoSetUp()
+    {
+        Manager.Game.GetUserData();
+        killCount.text = $"Kill Count : {Manager.Game.UserData.KillCount}";
+        deathCount.text = $"Death Count : {Manager.Game.UserData.DeathCount}";
+        assistCount.text = $"Assist Count : {Manager.Game.UserData.AssistCount}";
+        playCount.text = $"Play Count : {Manager.Game.UserData.PlayCount}";
+
+        string profileImageName = Manager.Game.UserData.profileImageName;
+        if (!string.IsNullOrEmpty(profileImageName))
+        {
+            Sprite profileImage = Resources.Load<Sprite>($"ProfileImage/{profileImageName}");
+            if (profileImage != null)
+            {
+                profileImg.GetComponent<Image>().sprite = profileImage;
+            }
+            else
+            {
+                Debug.LogWarning("Failed to load profile image from resources: " + profileImageName);
+            }
+        }
     }
     private void OnEnable()
     {
@@ -88,6 +118,8 @@ public class RoomPanel : MonoBehaviourShowInfo
         //우클릭 목록 비활성화
         if (playerProperty.gameObject.activeSelf)
             playerProperty.gameObject.SetActive(false);
+
+        InfoSetUp();
 
     }
     private void OnDisable()

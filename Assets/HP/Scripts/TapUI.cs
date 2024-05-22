@@ -4,6 +4,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TapUI : MonoBehaviour
@@ -16,6 +17,12 @@ public class TapUI : MonoBehaviour
     [SerializeField] TapEntry m_Entry;
 
     [SerializeField] List<TapEntry> entryList;
+
+    [SerializeField]public TMP_Text redScore;
+    [SerializeField]public TMP_Text blueScore;
+
+
+
     public void SetTapList()
     {
         for(int i = 0;i< PhotonNetwork.PlayerList.Length; i++)
@@ -31,7 +38,7 @@ public class TapUI : MonoBehaviour
                 m_Entry = tapIns;
         }
     }
-    public void SetUpScore( string scoreType,Player player,int value)
+    public void SetUpKDA( string scoreType,Player player,int value)
     {
         foreach(TapEntry entry in entryList)
         {
@@ -41,7 +48,6 @@ public class TapUI : MonoBehaviour
                 {
                     case "Kill":
                         entry.SetKill(value);
-                        
                         break;
                     case "Death":
                         entry.SetDeath(value);

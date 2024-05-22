@@ -9,6 +9,8 @@ public class UserData
     public int Level;
     public int PlayCount;
     public string profileImageName;
+    public int win;
+    public int lose;
     public UserData()
     {
         this.NickName = "non";
@@ -17,6 +19,8 @@ public class UserData
         this.DeathCount = 0;
         this.KillCount = 0;
         this.PlayCount = 0;
+        this.win = 0;
+        this.lose = 0;
     }
 
 }
