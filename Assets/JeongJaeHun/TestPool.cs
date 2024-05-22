@@ -1,28 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TestPool : MonoBehaviour
 {
-    int age;
 
+    [SerializeField] Slider hpBar;
     private void Start()
     {
         
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            age = Random.Range(1, 100);
-            PooledObject bullet=
-            Manager.Pool.GetBullet(transform.position, Quaternion.identity);
-            bullet.GetComponent<Bullet>().actorNumber = age;
-            
-            Debug.Log(bullet.GetComponent<Bullet>().actorNumber);
-        }
-    }
-
+    
 
 
 }
