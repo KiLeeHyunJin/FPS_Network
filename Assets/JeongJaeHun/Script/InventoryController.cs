@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static Define;
 
-public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviourPun
 {
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
@@ -113,6 +113,7 @@ public class InventoryController : MonoBehaviour
 
         weapons[(int)weaponType] = Equip(weaponType, id);
     }
+
     public void Throw(AnimationController.AnimatorWeapon weaponType)
     {
         Dequip(this[weaponType]);
@@ -131,8 +132,17 @@ public class InventoryController : MonoBehaviour
         };
         _weapon.transform.SetParent(parent);
         _weapon.gameObject.SetActive(false);
+
         if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.Instantiate(_weapon.name, transform.position, transform.rotation );
+            DropWeapon(_weapon.name);
+        else
+            photonView.RPC("DropWeapon", RpcTarget.MasterClient, _weapon.name);
+    }
+
+    [PunRPC]
+    void DropWeapon(string _weaponName)
+    {
+        PhotonNetwork.Instantiate(_weaponName, transform.position, transform.rotation);
     }
 
     IKWeapon Equip(AnimationController.AnimatorWeapon weaponType, int id)

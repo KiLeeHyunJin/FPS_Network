@@ -92,12 +92,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
                 HpBar.value = hp; //hp가 SetData에서 maxHp로 할당되므로 
 
             tapEntry= FindObjectOfType<TapEntry>();
+            CallThree();
         }
-
         else
             Destroy(gameObject);
-
-        CallThree();
     }
 
     void Check()
@@ -208,13 +206,14 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CallFire()
     {
+        Debug.Log("Call");
         if (currentAttackable != null && currentAttackable.Attack())
         {
             animController.Atck();
             cameraController.GetCamShakeRoutine();
 
-            equipController.Fire();
-            requestController.Fire();
+            //equipController.Fire();
+            //requestController.Fire();
         }
     }
     void CallReload()
