@@ -38,6 +38,7 @@ public class FrontSensor : MonoBehaviour
             yield return null;
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         colliders.Add(other);

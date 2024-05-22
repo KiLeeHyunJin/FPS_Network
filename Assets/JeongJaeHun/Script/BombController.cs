@@ -43,9 +43,9 @@ public class BombController : MonoBehaviour, Iattackable
         lineRenderer.enabled = true; // 렌더러 켜주기. 
         ShowTrajectory(); //폭탄을 들고 있는 상태가되면 궤적을 보여줌. 
     }
-    public void Attack()
+    public bool Attack()
     {
-        Throw();
+        return Throw();
     }
 
     private void OnDisable()
@@ -61,11 +61,11 @@ public class BombController : MonoBehaviour, Iattackable
         slot = GetComponent<Slot>(); //자신이 slot을 가지고 있으므로. 
     }
 
-    private void Throw() //투척 함수 
+    private bool Throw() //투척 함수 
     {
         if (currentBomb.currentBombNumber <= 0)
         {
-            return; //발사불가능
+            return false; //발사불가능
         }
 
         // 이게 손에 들어가 있는 상황에서는 transform을 어떻게 잡아줘야 될지 고민되네
@@ -99,6 +99,11 @@ public class BombController : MonoBehaviour, Iattackable
             currentBomb.gameObject.SetActive(false); //그런데 찾아지는 살짝의 버그있음. 
             slot.notHaving = true;
         }
+        return true;
+    }
+    public bool Reload()
+    {
+        return false;
     }
 
     private void ShowTrajectory() //궤도를 보여줌 (라인렌더러)

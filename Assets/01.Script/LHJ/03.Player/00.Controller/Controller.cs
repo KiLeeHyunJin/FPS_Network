@@ -47,8 +47,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] int teamCode;
     [SerializeField] GameObject miniCam;
 
-    Action[] FireAction;
-
     int maxHp;
     [SerializeField] int hp;
     public bool Mine { get; private set; }
@@ -58,7 +56,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     CameraController cameraController;
     PlayerInputController inputController;
     CharacterTransformProcess moveProcess;
-
+    InventoryController inventoryController;
     EquipController equipController;
     AnimationController animController;
     ProcessingController processingController;
@@ -66,7 +64,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     RequestController requestController;
     event Action Updates;
 
-    Iattackable[] iattackables;
+    //Iattackable[] iattackables;
     Iattackable currentAttackable;
     private void Awake()
     {
@@ -88,7 +86,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
         SetKeyAction();
         MoveProcessInit();
         SetUpdateAction();
-       
+
+        CallThree();
     }
 
     void CheckMine()
@@ -104,7 +103,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
-
+        inventoryController = GetComponent<InventoryController>();
         cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
 
         minimapIcon_m?.SetActive(true);
@@ -117,7 +116,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Destroy(miniCam);
             Destroy(inputController);
             Destroy(processingController);
-
+            Destroy(inventoryController);
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             if(PhotonNetwork.LocalPlayer.GetPhotonTeam() != null)
@@ -131,9 +130,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         }
         cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
-        iattackables = animController.GetAttackableArray();
+        //iattackables = animController.GetAttackableArray();
         //attackProcess = new AttackProcess(this);
         inputController.Owner = this;
+
         SetData();
     }
 
@@ -150,7 +150,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void CollidersSetting() //하위 객체를 돌며 충돌체가 있다면 6번 레이어로 변경 및 히트박스 부착
     {
         Player pl = PhotonNetwork.LocalPlayer;
-        Debug.Log($"LocalPlayer : {pl.ActorNumber},Controller : {photonView.Controller.ActorNumber} ");
 
         Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
         foreach (Collider collider in colliders)
@@ -165,16 +164,23 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CallFire()
     {
-        equipController.Fire();
-        requestController.Fire();
-        animController.Atck();
-        cameraController.GetCamShakeRoutine();
-        //Controller hitTarget = attackProcess?.Attack();
+        if (currentAttackable != null && currentAttackable.Attack())
+        {
+            animController.Atck();
+            cameraController.GetCamShakeRoutine();
+
+            equipController.Fire();
+            requestController.Fire();
+        }
     }
     void CallReload()
     {
-        animController.Reload();
-        equipController.Reload();
+        if(currentAttackable != null && currentAttackable.Reload())
+        {
+            animController.Reload();
+
+            equipController.Reload();
+        }
     }
 
     bool buttonType = false;
@@ -189,16 +195,22 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CallOne()
     {
-        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle, ref currentAttackable))
-            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Rifle];
+        if (inventoryController[AnimationController.AnimatorWeapon.Rifle] == null)
+            return;
+
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Rifle, ref currentAttackable) == false)
+            return;
 
         if (inputController.Zoom)
             cameraController.ZoomChange(false);
     }
     void CallTwo()
     {
-        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol, ref currentAttackable))
-            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Pistol];
+        if (inventoryController[AnimationController.AnimatorWeapon.Pistol] == null)
+            return;
+
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol, ref currentAttackable) == false)
+            return;
 
         inputController.ChangeFireType = Define.FireType.One;
         if (inputController.Zoom)
@@ -206,8 +218,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void CallThree()
     {
-        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword, ref currentAttackable))
-            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Sword];
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword, ref currentAttackable) == false)
+            return;
 
         inputController.ChangeFireType = Define.FireType.One;
         if (inputController.Zoom)
@@ -215,18 +227,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void CallFour()
     {
-        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw, ref currentAttackable))
-            currentAttackable = iattackables[(int)AnimationController.AnimatorWeapon.Throw];
+        if (inventoryController[AnimationController.AnimatorWeapon.Throw] == null)
+            return;
+
+        if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw, ref currentAttackable) == false)
+            return;
 
         inputController.ChangeFireType = Define.FireType.One;
-        if (inputController.Zoom)
-            cameraController.ZoomChange(false);
-    }
-
-    public void ChangeSlot(AnimationController.AnimatorWeapon weaponType)
-    {
-        //if (animController.ChangeWeapon(weaponType))
-        //    currentAttackable = iattackables[(int)weaponType];
         if (inputController.Zoom)
             cameraController.ZoomChange(false);
     }
@@ -292,10 +299,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Updates += moveProcess.Update;
         }
     }
-    public void AddWeapon(IKWeapon newWeapon)
-    {
-        animController.AddnewWeapon(newWeapon);
-    }
+
     void ControllCharacterLayerChange(int bodyNum, int handNum)
     {
         foreach (GameObject childeGameObject in FPSIgnoreObject)
@@ -340,10 +344,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
         }
-    }
-
-    public void SetActionFireEffect(Action action, int idx)
-    {
     }
 
     public void AddHp(int _healValue)

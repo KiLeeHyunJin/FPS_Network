@@ -6,10 +6,7 @@ using UnityEngine;
 
 public class RequestController : MonoBehaviourPun
 {
-    Action jumpAction;
-    Action<Vector2> moveAction;
     Controller controller;
-    [SerializeField] Bullet bulletPrefab;
     bool isMine;
     const string FireOnMaster = "FireOnMasterRPC";
     const string FireOnEffect = "FireOnEffectRPC";
@@ -33,8 +30,7 @@ public class RequestController : MonoBehaviourPun
     [PunRPC]
     public void FireOnMasterRPC()
     {
-        Bullet bullet = Instantiate(bulletPrefab, transform.position + transform.forward + Vector3.up, transform.rotation);
-        bullet.SetData(3, 3, 0, 0);
+
     }
 
     [PunRPC]

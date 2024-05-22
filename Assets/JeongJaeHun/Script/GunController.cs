@@ -65,9 +65,13 @@ public class GunController : MonoBehaviour, Iattackable
         // 이거 일단 빨간 줄 떠서 켜놓음. 
         theCam = Camera.main;
     }
-    public void Attack()
+    public bool Attack()
     {
-        TryFire();
+        return TryFire();
+    }
+    public bool Reload()
+    {
+        return TryReload();
     }
 
     private void Update()
@@ -82,7 +86,7 @@ public class GunController : MonoBehaviour, Iattackable
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) //임시로 마우스 우측 버튼으로 리로드 시작. 
         {
-            TryReload();
+            
         }
     }
 
@@ -96,19 +100,21 @@ public class GunController : MonoBehaviour, Iattackable
 
     }
 
-    private void TryFire() //발사 입력을 받음. --> 이 부분 EquipController에서 관리하므로 인풋을 넣을 필요없음
+    private bool TryFire() //발사 입력을 받음. --> 이 부분 EquipController에서 관리하므로 인풋을 넣을 필요없음
     {
         if (currentFireRate <= 0 && !isReload) //쿨타임 <=0 이고 재장전 중이 아닐 때만 Fire 실행. 
         {
             if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
             {
                 Shoot();
+                return true;
             }
             else
             {
                 //원본에서는 여기서 Reload를 실행하지만 우리 게임은 Reload를 키를 눌러서 진행할 예정이다.
             }
         }
+        return false;
     }
 
     private void Shoot() //실제 발사되는 과정 
@@ -146,15 +152,16 @@ public class GunController : MonoBehaviour, Iattackable
         // ParticleSystem hitEffect =GameManager.Pool.Get 이용!! --> pooled Object 상속해서 풀링해두기. 
     }
 
-    private void TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
+    private bool TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
     {
         if (!isReload)
         {
             
             //CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
             StartCoroutine(ReloadCoroutine());
-
+            return true;
         }
+        return false;
     }
 
     private void PlaySE(AudioClip _clip) //발사 소리 재생 

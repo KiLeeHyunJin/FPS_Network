@@ -7929,6 +7929,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 0}
+  weapons: []
+  pistolHolder: {fileID: 6645689630095728053}
+  rifleHolder: {fileID: 8296164532963933574}
+  swordHolder: {fileID: 4983004326694610994}
+  throwHolder: {fileID: 3630669043222935506}
 --- !u!114 &8544027938743297954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8013,20 +8018,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dampingSpeed: 0
   handRig: {fileID: 1244557321125575083}
-  rifleWeapon: {fileID: 475085407565391790}
-  pistolWeapon: {fileID: 5660361729610450175}
-  swordWeapon: {fileID: 2052427345127219892}
-  throwWeapon: {fileID: 3411624786301720531}
-  currentWeapons:
-  - {fileID: 6645689630095728053}
-  - {fileID: 8296164532963933574}
-  - {fileID: 4983004326694610994}
-  - {fileID: 3630669043222935506}
-  saveWeapons:
-  - {fileID: 8621067361844610791}
-  - {fileID: 2104039700890027392}
-  - {fileID: 475067165285954441}
-  - {fileID: 1028063607362966582}
   left: {fileID: 1175105020223948357}
   right: {fileID: 3146569453552303302}
   weaponParents:
@@ -11658,11 +11649,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.70000005, y: 0.7, z: 0.70000005}
+  m_LocalScale: {x: 0.7000001, y: 0.7, z: 0.7000001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 947338860529208512}
-  m_Father: {fileID: 475067165285954441}
+  m_Father: {fileID: 4983004326694610994}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2052427345127219892
 MonoBehaviour:
@@ -12034,8 +12025,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3176187071470092052}
+  m_Children: []
   m_Father: {fileID: 2640863731238187225}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4206755357105766244
@@ -20793,7 +20783,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0030000322, y: 0.11400008, z: 0.09000014}
+  m_LocalPosition: {x: 0.0030000322, y: 0.11400001, z: 0.09000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -21065,7 +21055,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3176187071470092052}
   m_Father: {fileID: 7777466239967728839}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &7436995320524475242
@@ -21611,17 +21602,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
---- !u!114 &475085407565391790 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
-  m_PrefabInstance: {fileID: 5187126083109251933}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3948655306005782123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &934477027309361178 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5407611864780272455, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}

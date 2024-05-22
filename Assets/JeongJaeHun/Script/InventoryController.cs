@@ -4,23 +4,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static Define;
 
 public class InventoryController : MonoBehaviour
 {
     
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
     public int Gold { get; set; }
-    public TextMeshProUGUI goldText;
+    public TextMeshProUGUI goldText; 
     
     private  Item item; //이 부분 p[ublic 참조 해야하나? 아닐 것 같은데 
-    private IKWeapon[] weapons;
+    [SerializeField] private IKWeapon[] weapons;
     [SerializeField] Transform pistolHolder;
     [SerializeField] Transform rifleHolder;
     [SerializeField] Transform swordHolder;
     [SerializeField] Transform throwHolder;
     public IKWeapon this[AnimationController.AnimatorWeapon weaponType]
     {
-        get { return weapons[(int)weaponType]; }
+        get {
+            Debug.Log($"List {weaponType}");
+            return weapons[(int)weaponType]; }
     }
     // int slotIndex; --> 미사용
 
@@ -46,6 +49,7 @@ public class InventoryController : MonoBehaviour
     private void Awake()
     {
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
+        weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
     }
     private void Start()
     {
@@ -75,8 +79,10 @@ public class InventoryController : MonoBehaviour
 
     public IKWeapon AddItem(Item _item,int ID) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {
-        item = _item;
-        return AddWeapon(_item.itemPrefab.GetInstanceID());
+        GameObject obj = _item.itemPrefab;
+        if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))
+            return null;
+        return AddWeapon(weapon.GetInstanceID());
     }
     public IKWeapon AddItem(IKWeapon _weapon)
     {
@@ -103,14 +109,6 @@ public class InventoryController : MonoBehaviour
             weapons[(int)weaponType] = newWeapon;
             SetWeapon(newWeapon);
 
-            //GetComponent<Controller>().AddWeapon(newWeapon);
-
-            //AnimationController animationController = GetComponentInParent<AnimationController>();
-
-            //if (animationController != null)
-            //{
-            //    animationController.GetWeapon(newWeapon.weaponType);
-            //}
             return beforeWeapon;
         }
         return null;
@@ -123,6 +121,7 @@ public class InventoryController : MonoBehaviour
 
 
     }
+
     void SetWeapon(IKWeapon _newWeapon)
     {
         if (_newWeapon == null)

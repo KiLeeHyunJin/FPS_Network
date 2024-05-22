@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
@@ -9,47 +10,49 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class IKAnimationController
 {
+    readonly Controller owner;
+
     readonly RigBuilder rigBuilder;
     readonly Rig handRig;
+
     readonly Transform[] currentWeapons;
-    readonly Transform[] saveWeapons;
     readonly MultiParentConstraint[] weaoponParent;
     readonly TwoBoneIKConstraint[] twoBoneIKConstraint;
-    readonly Controller owner;
+
     MultiParentConstraint currentWeaponParent;
 
     IKWeapon currentWeapon;
     int[] currentWeaponId;
-
-    AnimationController.AnimatorWeapon currentWeaponType;
+    public int this[AnimationController.AnimatorWeapon weaponType] 
+    { 
+        get { return currentWeaponId[(int)weaponType]; } 
+    }
     public IKAnimationController(
         Rig _handRig,
         RigBuilder _rigBuilder,
         TwoBoneIKConstraint _leftRig,
         TwoBoneIKConstraint _rightRig,
         MultiParentConstraint[] _Parents,
-        Transform[] _currentWeaopons,
-        Transform[] _saveWeapons,
         Controller _owner)
     {
-        currentWeaponId = new int[(int)AnimationController.AnimatorWeapon.END];
         handRig = _handRig;
         owner = _owner;
         rigBuilder = _rigBuilder;
-        currentWeapons = _currentWeaopons;
-        saveWeapons = _saveWeapons;
-        twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
         weaoponParent = _Parents;
+        twoBoneIKConstraint = new TwoBoneIKConstraint[] { _leftRig, _rightRig };
+        currentWeaponId = new int[(int)AnimationController.AnimatorWeapon.END];
+        currentWeapons = new Transform[weaoponParent.Length];
+        for (int i = 0; i < currentWeapons.Length; i++)
+            currentWeapons[i] = weaoponParent[i].data.constrainedObject;
     }
-
-    public void ChangeWeapon(IKWeapon _weapon, bool isMine = true)
+    public void ChangeWeapon(AnimationController.AnimatorWeapon weaponType, bool isMine = true)
     {
-        currentWeapon = _weapon;
+        Transform childObj = currentWeapons[(int)weaponType].GetChild(0);
+        currentWeapon = childObj.GetComponent<IKWeapon>();
         if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.GetInstanceID())
             EquipWeaponEnter(currentWeapon, isMine);
 
         ChangeWeaponWeight(currentWeapon.weaponType);
-        Transform part = currentWeaponParent.data.constrainedObject;
 
         owner.SetZoomPosition(currentWeapon.ZoomPos);
     }
@@ -139,16 +142,9 @@ public class IKAnimationController
     {
         int weaponTypeNum = isMine ? (int)weapon.weaponType : 0;
 
-
         currentWeaponId[weaponTypeNum] = weapon.GetInstanceID();
-
-        for (int i = 0; i < currentWeapons[weaponTypeNum].childCount; i++)
-            currentWeapons[weaponTypeNum].GetChild(i).transform.SetParent(saveWeapons[weaponTypeNum]);
-
-        weapon.transform.SetParent(currentWeapons[weaponTypeNum]);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
-        weapon.gameObject.SetActive(true);
     }
 
     IEnumerator FrameHandTarget()
@@ -170,7 +166,8 @@ public class IKAnimationController
             {
                 weaoponParent[i].data.sourceObjects[1].transform.position = currentWeapon.WeaponPos.transform.position;
                 currentWeaponParent = weaoponParent[i];
-                currentWeapon.gameObject.SetActive(true);
+                if(currentWeapon.gameObject.activeSelf == false)
+                    currentWeapon.gameObject.SetActive(true);
                 currentWeaponParent.data.constrainedObject.gameObject.SetActive(true);
                 HandOn();
             }

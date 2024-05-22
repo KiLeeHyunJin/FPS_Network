@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface Iattackable
 {
-    public void Attack();
+    public bool Attack();
+    public bool Reload();
 }

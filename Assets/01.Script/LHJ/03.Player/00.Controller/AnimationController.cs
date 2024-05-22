@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Assertions.Must;
 using static Define;
 
 
@@ -17,18 +18,10 @@ public class AnimationController : MonoBehaviourPun
 
     [SerializeField] Rig handRig;
 
-
-    [SerializeField] IKWeapon rifleWeapon;
-    [SerializeField] IKWeapon pistolWeapon;
-    [SerializeField] IKWeapon swordWeapon;
-    [SerializeField] IKWeapon throwWeapon;
-
-    [SerializeField] Transform[] currentWeapons;
-    [SerializeField] Transform[] saveWeapons;
-
     [SerializeField] TwoBoneIKConstraint left;
     [SerializeField] TwoBoneIKConstraint right;
     [SerializeField] MultiParentConstraint[] weaponParents;
+    Transform[] currentWeapons;
 
     int JumpEnterId;
     int StandId;
@@ -41,19 +34,27 @@ public class AnimationController : MonoBehaviourPun
     int[] layerId;
     int[] floatId;
     int[] weaponId;
-    //IKWeapon[] weapons;
 
     readonly string TRIGGER = "CallTriggerRPC";
     readonly string RIGIK = "RigIK";
+
+    private void Awake()
+    {
+        SetAnimID();
+        dampingSpeed = dampingSpeed <= 0 ? 0.15f : dampingSpeed;
+        dampingSpeed = 1 / dampingSpeed;
+        int length = weaponParents.Length;
+        currentWeapons = new Transform[length];
+        for (int i = 0; i < length; i++)
+            currentWeapons[i] = weaponParents[i].data.constrainedObject;
+    }
 
     private void Start()
     {
         iKAnimation = new IKAnimationController
             (handRig, GetComponent<RigBuilder>(), left, right,
             weaponParents,
-            currentWeapons, saveWeapons, GetComponent<Controller>());
-
-        // weapons = new IKWeapon[] { pistolWeapon, rifleWeapon, swordWeapon, throwWeapon };
+            GetComponent<Controller>());
     }
     public Vector2 MoveValue
     {
@@ -92,60 +93,29 @@ public class AnimationController : MonoBehaviourPun
             anim.GetBool(weaponId[(int)AnimatorWeapon.Throw]) )
             photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
     }
-    public void AddnewWeapon(IKWeapon newWeapon)
-    {
-        if (newWeapon == null || newWeapon.weaponType == AnimatorWeapon.END)
-            return;
 
-        switch (newWeapon.weaponType)
-        {
-            case AnimatorWeapon.Pistol:
-                pistolWeapon = newWeapon;
-                break;
-            case AnimatorWeapon.Rifle:
-                rifleWeapon = newWeapon;
-                break;
-            case AnimatorWeapon.Sword:
-                swordWeapon = newWeapon;
-                break;
-            case AnimatorWeapon.Throw:
-                throwWeapon = newWeapon;
-                break;
-            case AnimatorWeapon.END:
-                break;
-        }
-    }
-    public IKWeapon GetWeapon(AnimatorWeapon type)
-    {
-        switch (type)
-        {
-            case AnimatorWeapon.Pistol:
-                return pistolWeapon;
-            case AnimatorWeapon.Rifle:
-                return rifleWeapon;
-            case AnimatorWeapon.Sword:
-                return swordWeapon;
-            case AnimatorWeapon.Throw:
-                return throwWeapon;
-        }
-        return null;
-    }
     public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckabl )
     {
-        IKWeapon changeWeapon = GetIKWeapon(type);
-        if (changeWeapon == null)
-            return false;
-        
-        if (anim.GetBool(weaponId[(int)type]) == false)
+        if (currentWeapons[(int)type].childCount == 0)
         {
-            photonView.RPC(RIGIK, RpcTarget.Others, changeWeapon.name, ChangeWeaponId);
-
-            OnWeapon(type);
-            anim.SetTrigger(ChangeWeaponId);
-            atckabl = currentWeapons[(int)type] as Iattackable;
-            return true;
+            Debug.Log($"EquipChild Zero {currentWeapons[(int)type].name}");
+            return false;
         }
-        return false;
+
+        if (anim.GetBool(weaponId[(int)type]))
+        {
+            Debug.Log($"Current Same State {weaponId[(int)type]}");
+            return false;
+        }
+
+        photonView.RPC(RIGIK, RpcTarget.Others,
+            currentWeapons[(int)type].GetChild(0).name, ChangeWeaponId);
+
+        OnWeaponLayer(type);
+        anim.SetTrigger(ChangeWeaponId);
+        if (currentWeapons[(int)type] is Iattackable temp)
+            atckabl = temp;
+        return true;
     }
 
     public void Reload()
@@ -203,45 +173,11 @@ public class AnimationController : MonoBehaviourPun
         {
             if(anim.GetBool(weaponId[i]))
             {
-                IKWeapon weapon;
-                switch (i)
-                {
-                    case 0:
-                        weapon = pistolWeapon;
-                        break;
-                    case 1:
-                        weapon = rifleWeapon;
-                        break;
-                    case 2:
-                        weapon = swordWeapon;
-                        break;
-                    default:
-                        weapon = throwWeapon;
-                        break;
-                }
-                if (weapon != null)
-                {
-                    weapon.gameObject.SetActive(true);
-                    iKAnimation.ChangeWeapon(weapon);
-                }
+                currentWeapons[i].gameObject.SetActive(true);
+                iKAnimation.ChangeWeapon((AnimatorWeapon)i);
                 return;
             }
         }
-    }
-    IKWeapon GetIKWeapon(AnimatorWeapon type)
-    {
-        switch (type)
-        {
-            case AnimatorWeapon.Pistol:
-                return pistolWeapon;
-            case AnimatorWeapon.Rifle:
-                return rifleWeapon;
-            case AnimatorWeapon.Sword:
-                return swordWeapon;
-            case AnimatorWeapon.Throw:
-                return throwWeapon;
-        }
-        return null;
     }
 
     [PunRPC]
@@ -251,36 +187,23 @@ public class AnimationController : MonoBehaviourPun
     }
 
     [PunRPC]
-    void RigIK(string rigWeaponStr, int triggerId)
+    void RigIK(int _instanceId, int triggerId)
     {
-        IKWeapon newWeapon = Manager.Resource.Load<IKWeapon>(ResourceManager.ResourceType.Weapon,rigWeaponStr);
+        IKWeapon newWeapon = Manager.Pool.GetPool(_instanceId,Vector3.zero,Quaternion.identity).GetComponent<IKWeapon>();
         anim.SetTrigger(triggerId);
-        iKAnimation.ChangeWeapon(newWeapon);
+        newWeapon.transform.SetParent(currentWeapons[(int)newWeapon.weaponType]);
+        iKAnimation.ChangeWeapon(newWeapon.weaponType);
     }
 
-    public Iattackable[] GetAttackableArray()
-    {
-        Iattackable[] reward = new Iattackable[(int)AnimatorWeapon.END];
-        for (int i = 0; i < (int)AnimatorWeapon.END; i++)
-        {
-            reward[i] = currentWeapons[i] as Iattackable;
-        }
-        return reward;
-    }
 
     void SetState(AnimatorState type, bool state)
     {
         anim.SetBool(layerId[(int)type], state);
     }
+   
 
-    private void Awake()
-    {
-        SetAnimID();
-        dampingSpeed = dampingSpeed <= 0 ? 0.15f : dampingSpeed;
-        dampingSpeed = 1 / dampingSpeed;
-    }
 
-    void OnWeapon(AnimatorWeapon type)
+    void OnWeaponLayer(AnimatorWeapon type)
     {
         for (int i = 0; i < weaponId.Length; i++)
         {
@@ -321,7 +244,7 @@ public class AnimationController : MonoBehaviourPun
         weaponId = new int[] { pistolId, rifleId, swordId, throwId };
 
         dampingCo = new Coroutine[(int)AnimatorFloatValue.END];
-        anim.SetBool(pistolId, true);
+        //anim.SetBool(pistolId, true);
     }
 
     IEnumerator DampingAnimationRoutine(float value, float dampingValue, AnimatorFloatValue type)
