@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IKWeapon : PooledObject
+public class IKWeapon : MonoBehaviourPun
 {
     // 모든 무기가 상속을 해줘야하는 IkWeapon (역운동학을 위해서 )
     // 플레이어가 맞춰줘야 하니까. 각 무기들에 달아줘야함. 
@@ -19,6 +20,7 @@ public class IKWeapon : PooledObject
     public Quaternion OriginRot { get; protected set; }
     [SerializeField]
     public Vector3 OriginPos { get; protected set; }
+    [field : SerializeField] public int InstanceId { get; private set; }
 
 
     protected virtual void Awake()
@@ -26,5 +28,22 @@ public class IKWeapon : PooledObject
         OriginPos = transform.localPosition; 
         OriginRot = transform.localRotation;
     }
+    public void PickUp()
+    {
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
+            photonView.RPC("RPC_DestroyObject", photonView.Owner);
+        }
+    }
 
-}
+    [PunRPC]
+    void RPC_DestroyObject()
+    {
+        PhotonNetwork.Destroy(gameObject);
+    }
+
+    }

@@ -21,28 +21,28 @@ public class PoolContainer : MonoBehaviourPun //어차피 같은 이펙트 쓰�
         bloodEffect = Manager.Resource.basicLoad<PooledObject>(bloodPath);
         if (bloodEffect != null)
         {
-            Manager.Pool.CreatePool(bloodEffect, poolSize, poolCapacity);
+            Manager.Pool.CreateBasicPool(bloodEffect, poolSize, poolCapacity);
         }
 
         string markPath = "BulletMark"; //위랑 똑같은 작업 실시. 
         BulletMark = Manager.Resource.basicLoad<PooledObject>(markPath);
         if (BulletMark != null)
         {
-            Manager.Pool.CreatePool(BulletMark, poolSize, poolCapacity);
+            Manager.Pool.CreateBasicPool(BulletMark, poolSize, poolCapacity);
         }
 
         string sparkPath = "BulletSpark";
         BulletSpark = Manager.Resource.basicLoad<PooledObject>(sparkPath);
         if (BulletSpark != null)
         {
-            Manager.Pool.CreatePool(BulletSpark, poolSize, poolCapacity);
+            Manager.Pool.CreateBasicPool(BulletSpark, poolSize, poolCapacity);
         }
 
         string bulletPath = "Bullet";
         Bullet = Manager.Resource.basicLoad<PooledObject>(bulletPath);
         if (Bullet != null)
         {
-            Manager.Pool.CreatePool(Bullet, poolSize, poolCapacity);
+            Manager.Pool.CreateBasicPool(Bullet, poolSize, poolCapacity);
         }
 
     }

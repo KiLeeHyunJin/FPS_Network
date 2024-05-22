@@ -22,6 +22,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [Range(1f, 3f)]
     [SerializeField] float gravitySpeed;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] FrontSensor sensor;
 
     [SerializeField] GameObject rootBone;
     [SerializeField] GameObject foot;
@@ -78,6 +79,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Check();
         else
             Destroy(gameObject);
+
+        CallThree();
     }
 
     void Check()
@@ -88,9 +91,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         MoveProcessInit();
         SetUpdateAction();
 
-        CallThree();
     }
-
     void CheckMine()
     {
         if (photonView.Controller.GetPhotonTeam() == null)
@@ -117,7 +118,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Destroy(miniCam);
             Destroy(inputController);
             Destroy(processingController);
-            Destroy(inventoryController);
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             if(PhotonNetwork.LocalPlayer.GetPhotonTeam() != null)
@@ -131,10 +131,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         }
         cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
-        //iattackables = animController.GetAttackableArray();
-        //attackProcess = new AttackProcess(this);
         inputController.Owner = this;
-
+        sensor.StartInit();
         SetData();
     }
 
@@ -162,6 +160,21 @@ public class Controller : MonoBehaviourPun, IPunObservable
         => Updates?.Invoke();
     void FixedUpdate()
         => moveProcess?.FixedUpdate();
+
+    void CallPickUp()
+    {
+        Collider coll = sensor.FrontObj;
+        if(coll != null)
+        {
+            if (coll.TryGetComponent<IKWeapon>(out IKWeapon weapon))
+            {
+                inventoryController.AddItem(weapon);
+                animController.ChangeWeapon(weapon.weaponType, ref currentAttackable);
+                inputController.SetWeaponType = weapon.weaponType;
+                weapon.PickUp();
+            }
+        }
+    }
 
     void CallFire()
     {
@@ -245,7 +258,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         inputController.Init();
         inputController.SetKey(CallReload, Define.Key.R);
-
+        inputController.SetKey(CallPickUp, Define.Key.F);
         inputController.SetKey(CallOne, Define.Key.F1);
         inputController.SetKey(CallTwo, Define.Key.F2);
         inputController.SetKey(CallThree, Define.Key.F3);
@@ -338,7 +351,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         hp -= equipController.ShieldCheck(_damage);
         if (hp <= 0)
         {
-
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
             ControllCharacterLayerChange(0,0);
@@ -370,7 +382,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
             }
 
-
+            sensor.StopRoutine();
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
             ControllCharacterLayerChange(0, 0);
@@ -379,8 +391,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
 
     }
-
-
+    [PunRPC]
+    void SpawnItemRequest(int _id)
+    {
+        Manager.Pool.GetItem(_id, transform.position, Quaternion.identity);
+    }
 
     // 이 부분도 자신의 체력 동기화
     public void AddHp(int _healValue)

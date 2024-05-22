@@ -15,7 +15,7 @@ public class LoginPanelController : MonoBehaviour
 
     private void Start()
     {
-        Manager.Pool.CreatePool(infoPanel, 1, 1); //알림 창은 오브젝트 풀링으로 실행(어디서나 실행할 수 있게)
+        Manager.Pool.CreateBasicPool(infoPanel, 1, 1); //알림 창은 오브젝트 풀링으로 실행(어디서나 실행할 수 있게)
         SetActivePanel(Panel.Login);
     }
 

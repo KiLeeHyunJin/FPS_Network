@@ -39,19 +39,29 @@ public class ResourceManager : Singleton<ResourceManager>
 
     public T basicLoad<T>(string path) where T: Object
     {
+        return LoadTree<T>(path, basicResources);
+    }
+
+
+    private Dictionary<string, Object> ItemResources = new Dictionary<string, Object>();
+    public T LoadItem<T>(string path) where T : Object
+    {
+        return LoadTree<T>(path, ItemResources);
+    }
+
+    public T LoadTree<T>(string path, Dictionary<string, Object> resouceTree ) where T : Object
+    {
         string key = $"{path}_{typeof(T)}";
 
-        if (basicResources.TryGetValue(key, out Object obj))
+        if (resouceTree.TryGetValue(key, out Object obj))
         {
             return obj as T;
         }
         else
         {
             T resource = Resources.Load<T>(path);
-            basicResources.Add(key, resource);
+            resouceTree.Add(key, resource);
             return resource;
         }
     }
-
-
 }

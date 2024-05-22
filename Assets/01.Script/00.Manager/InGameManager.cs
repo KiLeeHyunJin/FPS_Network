@@ -245,7 +245,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 PhotonNetwork.CurrentRoom.SetLoadTime(0);
                 pv.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
                 yield return new WaitForSeconds(3f);
-                pv.RPC("RoundOver", RpcTarget.All);
+                //인게임 테스트를 위한 주석
+                //pv.RPC("RoundOver", RpcTarget.All);
                 
             }
         }

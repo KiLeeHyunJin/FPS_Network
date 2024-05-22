@@ -15,16 +15,17 @@ public class PlayerInputController : MonoBehaviour
     Controller owner;
     InputActionAsset inputs;
     public Controller Owner { set { owner = value; } }
-    public Define.InputWeaponType CurrentWeapon { get; private set; }
+    public AnimationController.AnimatorWeapon CurrentWeapon { get; private set; }
     public Define.FireType MainFireType { get; private set; }
     public bool Zoom { get; private set; }
     public Define.FireType Fire { get; private set; }
+    public AnimationController.AnimatorWeapon SetWeaponType { set { CurrentWeapon = value; } }
     public Define.FireType ChangeFireType
     {
         set
         {
             Fire = value;
-            if (CurrentWeapon == Define.InputWeaponType.MainWeapon)
+            if (CurrentWeapon == AnimationController.AnimatorWeapon.Rifle)
                 MainFireType = Fire;
         }
     }
@@ -68,32 +69,32 @@ public class PlayerInputController : MonoBehaviour
     void OnFirstWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F1].Invoke();
-        CurrentWeapon = Define.InputWeaponType.MainWeapon;
+        CurrentWeapon = AnimationController.AnimatorWeapon.Rifle;
         ChangeFireType = MainFireType;
     }
     void OnSecondWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F2].Invoke();
-        CurrentWeapon = Define.InputWeaponType.SubWeapon;
+        CurrentWeapon = AnimationController.AnimatorWeapon.Pistol;
     }
     void OnOtherWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F3].Invoke();
-        CurrentWeapon = Define.InputWeaponType.Default;
+        CurrentWeapon = AnimationController.AnimatorWeapon.Sword;
         Zoom = false;
     }
 
     void OnThrowWeapon(InputValue inputValue)
     {
         actions[(int)Define.Key.F4].Invoke();
-        CurrentWeapon = Define.InputWeaponType.Default;
+        CurrentWeapon = AnimationController.AnimatorWeapon.Throw;
         Zoom = false;
     }
 
     void OnZoom(InputValue inputValue)
     {
-        if(CurrentWeapon == Define.InputWeaponType.MainWeapon ||
-           CurrentWeapon == Define.InputWeaponType.SubWeapon)
+        if(CurrentWeapon == AnimationController.AnimatorWeapon.Rifle ||
+           CurrentWeapon == AnimationController.AnimatorWeapon.Pistol)
         {
             Zoom = !Zoom;
             zoomAction?.Invoke(Zoom);

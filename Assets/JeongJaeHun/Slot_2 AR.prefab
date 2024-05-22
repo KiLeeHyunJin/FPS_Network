@@ -66,8 +66,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGun: {fileID: 0}
   originPos: {x: 0, y: 0, z: 0}
-  theCam: {fileID: 0}
-  poolContainer: {fileID: 0}
+  FirePos: {fileID: 0}
+  pv: {fileID: 0}
 --- !u!82 &1763921070435193415
 AudioSource:
   m_ObjectHideFlags: 0

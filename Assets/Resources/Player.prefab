@@ -3040,13 +3040,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5187fda716c8bc4ca258e4b213f7d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoRelease: 0
-  releaseTime: 0
   <WeaponPos>k__BackingField: {fileID: 6018253840433533113}
   <leftGrip>k__BackingField: {fileID: 5855758541339562154}
   <RightGrip>k__BackingField: {fileID: 4985068261820418403}
   <ZoomPos>k__BackingField: {fileID: 0}
   <weaponType>k__BackingField: 3
+  <InstanceId>k__BackingField: 0
 --- !u!1 &1910069145140850999
 GameObject:
   m_ObjectHideFlags: 0
@@ -7145,7 +7144,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGun: {fileID: 0}
   originPos: {x: 0, y: 0, z: 0}
-  poolContainer: {fileID: 0}
+  FirePos: {fileID: 0}
+  pv: {fileID: 0}
 --- !u!82 &1525380330895399996
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7934,6 +7934,10 @@ MonoBehaviour:
   rifleHolder: {fileID: 8296164532963933574}
   swordHolder: {fileID: 4983004326694610994}
   throwHolder: {fileID: 3630669043222935506}
+  pistolSaver: {fileID: 8621067361844610791}
+  rifleSaver: {fileID: 2104039700890027392}
+  swordSaver: {fileID: 475067165285954441}
+  throwSaver: {fileID: 1028063607362966582}
 --- !u!114 &8544027938743297954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7957,6 +7961,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
+  sensor: {fileID: 981389053648957684}
   rootBone: {fileID: 3529253217596478610}
   foot: {fileID: 1650215173335207400}
   zoomIn: {fileID: 3553003569195549882}
@@ -8037,7 +8042,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9890e1c768d8a19468a17609131c8a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 4201698935279516926, guid: b4748506d4a4eaa468eebedba1d156a6, type: 3}
 --- !u!114 &2242058583393748136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8491,13 +8495,14 @@ GameObject:
   m_Component:
   - component: {fileID: 3594652464960816162}
   - component: {fileID: 3512418244858803011}
+  - component: {fileID: 981389053648957684}
   m_Layer: 13
   m_Name: Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3594652464960816162
 Transform:
   m_ObjectHideFlags: 0
@@ -8534,6 +8539,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.34, y: 1.6, z: 1}
   m_Center: {x: 0, y: 0.8, z: 0.2}
+--- !u!114 &981389053648957684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3217541504704313772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d8da7dccacf3f46bb8bfa74065f758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliders: []
 --- !u!1 &3267767433411109863
 GameObject:
   m_ObjectHideFlags: 0
@@ -11667,13 +11685,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a7167a9e871024284960d179a447e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoRelease: 0
-  releaseTime: 0
   <WeaponPos>k__BackingField: {fileID: 6482679058859350281}
   <leftGrip>k__BackingField: {fileID: 1998382069498178493}
   <RightGrip>k__BackingField: {fileID: 2409350013156442485}
   <ZoomPos>k__BackingField: {fileID: 0}
   <weaponType>k__BackingField: 2
+  <InstanceId>k__BackingField: 0
   weaponSprite: {fileID: 0}
   closeWeaponID: 0
   closeWeaponType: 0
@@ -15281,7 +15298,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGun: {fileID: 0}
   originPos: {x: 0, y: 0, z: 0}
-  poolContainer: {fileID: 0}
+  FirePos: {fileID: 0}
+  pv: {fileID: 0}
 --- !u!82 &1086287704117312395
 AudioSource:
   m_ObjectHideFlags: 0
@@ -15929,13 +15947,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoRelease: 0
-  releaseTime: 0
   <WeaponPos>k__BackingField: {fileID: 2671129392070243133}
   <leftGrip>k__BackingField: {fileID: 5671335728853804285}
   <RightGrip>k__BackingField: {fileID: 3546172645034901797}
   <ZoomPos>k__BackingField: {fileID: 5648791809857007273}
   <weaponType>k__BackingField: 0
+  <InstanceId>k__BackingField: 0
   gunSprite: {fileID: 454668989, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
   gunID: 1
   gunType: 3
@@ -20783,7 +20800,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0030000322, y: 0.11400001, z: 0.09000014}
+  m_LocalPosition: {x: 0.0030000322, y: 0.11400008, z: 0.09000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -21545,6 +21562,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2104039700890027392}
     m_Modifications:
+    - target: {fileID: 3244118640271991058, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 

@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,23 +10,33 @@ using static Define;
 
 public class InventoryController : MonoBehaviour
 {
-    
+
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
     public int Gold { get; set; }
-    public TextMeshProUGUI goldText; 
-    
-    private  Item item; //이 부분 p[ublic 참조 해야하나? 아닐 것 같은데 
+    public TextMeshProUGUI goldText;
+
+    private Item item; //이 부분 p[ublic 참조 해야하나? 아닐 것 같은데 
     [SerializeField] private IKWeapon[] weapons;
     [SerializeField] Transform pistolHolder;
     [SerializeField] Transform rifleHolder;
     [SerializeField] Transform swordHolder;
     [SerializeField] Transform throwHolder;
+
+    [SerializeField] Transform pistolSaver;
+    [SerializeField] Transform rifleSaver;
+    [SerializeField] Transform swordSaver;
+    [SerializeField] Transform throwSaver;
+
+    Controller owner;
     public IKWeapon this[AnimationController.AnimatorWeapon weaponType]
     {
-        get {
+        get
+        {
             Debug.Log($"List {weaponType}");
-            return weapons[(int)weaponType]; }
+            return weapons[(int)weaponType];
+        }
     }
+    #region
     // int slotIndex; --> 미사용
 
 
@@ -45,17 +57,20 @@ public class InventoryController : MonoBehaviour
     //public Image itemImage; --> 사실 이부분은 크게 중요하지는 않은듯함. -> hud에서 스프라이트 바꿔주면되서.. 
 
     // private List<GameObject> slotInventory= new List<GameObject>(); --> 나중에 list 인벤토리 필요할 때 
+    #endregion
 
     private void Awake()
     {
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
         weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
+        owner = GetComponent<Controller>();
     }
     private void Start()
     {
-       //slots= gameObject.GetComponentsInChildren<Slot>();
-       if(goldText != null)
+        //slots= gameObject.GetComponentsInChildren<Slot>();
+        if (goldText != null)
             goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
+        Invoke("DropSword", 3);
     }
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
@@ -66,7 +81,7 @@ public class InventoryController : MonoBehaviour
             goldText.text = $"{Gold}";
         }
     }
-    
+
     public void LoseCoin(int coin) //상점 아이템 구매 등
     {
         if (goldText == null)
@@ -76,72 +91,70 @@ public class InventoryController : MonoBehaviour
         goldText.text = $"{Gold}"; //골드텍스트 초기화 
     }
 
-
-    public IKWeapon AddItem(Item _item,int ID) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
+    public void AddItem(Item _item, int _id) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {
         GameObject obj = _item.itemPrefab;
         if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))
-            return null;
-        return AddWeapon(weapon.GetInstanceID());
-    }
-    public IKWeapon AddItem(IKWeapon _weapon)
-    {
-        return AddWeapon(_weapon.GetInstanceID());
-    }
-    public IKWeapon AddItem(int _id)
-    {
-        return AddWeapon(_id);
-    }
-    IKWeapon AddWeapon(int id)
-    {
-        PooledObject getPoolObject = Manager.Pool.GetPool(id, Vector3.zero, Quaternion.identity);
-
-        if (getPoolObject == null)
-            return null;
-
-        IKWeapon newWeapon = getPoolObject as IKWeapon;
-        if(newWeapon != null)
-        {
-            AnimationController.AnimatorWeapon weaponType = newWeapon.weaponType;
-
-            IKWeapon beforeWeapon = weapons[(int)weaponType] != null ? weapons[(int)weaponType]  : null;
-
-            weapons[(int)weaponType] = newWeapon;
-            SetWeapon(newWeapon);
-
-            return beforeWeapon;
-        }
-        return null;
-    }
-
-    public void RemoveItem() //인벤토리에서 아이템을 제거해주는 함수 --> 이거 무기 버리기 함수 가져오자. 어딨더라?
-    {
-        // 무기 떨구기. --> 기본적으로 id로 체크해서 id가 겹치면 그 프리팹을 생성해줘야하는데 어떻게 생성하지? 
-
-
-
-    }
-
-    void SetWeapon(IKWeapon _newWeapon)
-    {
-        if (_newWeapon == null)
             return;
-        Transform parentHolder = _newWeapon.weaponType switch
+        AddWeapon(weapon.weaponType,weapon.InstanceId);
+    }
+    public void AddItem(IKWeapon _weapon)
+    {
+        AddWeapon(_weapon.weaponType,_weapon.InstanceId);
+    }
+    public void AddItem(AnimationController.AnimatorWeapon weaponType, int id)
+    {
+        AddWeapon(weaponType, id);
+    }
+
+    void AddWeapon(AnimationController.AnimatorWeapon weaponType, int id)
+    {
+        if (weapons[(int)weaponType] != null)
+            Dequip(weapons[(int)weaponType]);
+
+        weapons[(int)weaponType] = Equip(weaponType, id);
+    }
+
+    void Dequip(IKWeapon _weapon)
+    {
+        Transform parent = _weapon.weaponType switch
         {
-            AnimationController.AnimatorWeapon.Pistol => pistolHolder,
-            AnimationController.AnimatorWeapon.Rifle => rifleHolder,
-            AnimationController.AnimatorWeapon.Sword => swordHolder,
-            AnimationController.AnimatorWeapon.Throw => throwHolder,
+            AnimationController.AnimatorWeapon.Pistol => pistolSaver,
+            AnimationController.AnimatorWeapon.Rifle => rifleSaver,
+            AnimationController.AnimatorWeapon.Sword => swordSaver,
+            AnimationController.AnimatorWeapon.Throw => throwSaver,
             AnimationController.AnimatorWeapon.END => null,
             _ => null,
         };
-        if (parentHolder != null)
-        {
-            _newWeapon.transform.SetParent(parentHolder);
+        _weapon.transform.SetParent(parent);
+        if(PhotonNetwork.IsMasterClient)
+            PhotonNetwork.Instantiate(_weapon.name, transform.position, transform.rotation );
+    }
 
-            _newWeapon.transform.localPosition = Vector3.zero;
-            _newWeapon.transform.localRotation = Quaternion.identity;
+    IKWeapon Equip(AnimationController.AnimatorWeapon weaponType, int id)
+    {
+        (Transform parent, Transform saver) pos = weaponType switch
+        {
+            AnimationController.AnimatorWeapon.Pistol =>(pistolHolder, pistolSaver),
+            AnimationController.AnimatorWeapon.Rifle => (rifleHolder, rifleSaver),
+            AnimationController.AnimatorWeapon.Sword => (swordHolder, swordSaver),
+            AnimationController.AnimatorWeapon.Throw => (throwHolder, throwSaver),
+            AnimationController.AnimatorWeapon.END => (null,null),
+            _ => (null, null),
+        };
+
+        for (int i = 0; i < pos.saver.childCount; i++)
+        {
+            if (pos.saver.GetChild(i).TryGetComponent<IKWeapon>(out IKWeapon weapon) && weapon.InstanceId == id)
+            {
+                weapon.transform.SetParent(pos.parent);
+
+                weapon.transform.localPosition = Vector3.zero;
+                weapon.transform.localRotation = Quaternion.identity;
+                return weapon;
+            }
         }
+        return null;
     }
 
 }
