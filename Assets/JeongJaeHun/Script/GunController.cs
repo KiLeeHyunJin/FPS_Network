@@ -34,17 +34,32 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     [Tooltip("총알이 생성 될 FirePos 위치 ")]
     [SerializeField]private Transform FirePos;
 
+    [Tooltip("부모의 photonView를 찾기 위한 변수")]
+    [SerializeField] private PhotonView pv;
+
 
     private void Awake()
     {
         //poolContainer = GameObject.FindObjectOfType<PoolContainer>();
         audioSource = GetComponent<AudioSource>();
+
+        // 부모 player의 포톤뷰 찾기.
+        pv = GetComponentInParent<PhotonView>();
+
+        originPos = Vector3.zero;
+
+        if (pv.IsMine) //각각 로컬의 메인카메라를 가져오도록 
+        {
+            theCam = Camera.main;
+        }
+
     }
+
 
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        if(!photonView.IsMine) // 자신의 로컬 객체가 아니면 onEnable 실행하지 않기. 
+        if(!pv.IsMine) // 자신의 로컬 객체가 아니면 onEnable 실행하지 않기. 
         {
             return; 
         }
@@ -55,8 +70,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             currentGun = transform.GetChild(i).GetComponent<Gun>();
             audioSource.clip = currentGun.fire_Sound;
 
-
-
             // true 체크를 안하기 때문에 break를 걸어줄 필요가 없음 
         }
     }
@@ -64,31 +77,18 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     private void Start()
     {
-        // Current Gun 찾기 
-
-        originPos = Vector3.zero;
-        //WeaponManager.currentWeapon=currentGun.GetComponent<Transform>(); //이부분 transform 으로 해주는게 맞나 ??? 
-        //기본적인 디폴트 무기를 Gun으로 삼기 위해 currentWeapon에 자기 자신의 transform을 할당해줌
         
-        //WeaponManager.currentWeaponAnim=currentGun.anim;
-
-        // 이거 일단 빨간 줄 떠서 켜놓음. 
-
-        if(photonView.IsMine) //각각 로컬의 메인카메라를 가져오도록 
-        {
-            theCam = Camera.main;
-        }
     }
 
 
     // 인터페이스로 상속한 인터페이스 함수 --> 실제 플레이어 클릭 시 실행 할 함수임. 
-
-
     public void Attack()
     {
-        if(photonView.IsMine)
+        if(pv.IsMine)
         {
-            TryFire(); // 로컬 플레이어만 총을 직접 사격 및 탄알 ui 갱신 가능 --> ui 연계도 로컬 상태로 갱신해줘야함. 
+            // 자신의 bullet 인지 체크하기 위한 ActorNumber를 인수로 넣어줌. 
+            TryFire(pv.Owner.ActorNumber); // 로컬만이 사격 가능해야함
+            pv.RPC("TryFire", RpcTarget.Others, pv.Owner.ActorNumber);
         }
         
     }
@@ -119,13 +119,13 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     }
 
-    private void TryFire() //발사 입력을 받음. --> 이 부분 EquipController에서 관리하므로 인풋을 넣을 필요없음
+    private void TryFire(int ActorNumber) //발사 입력을 받음. --> 이 부분 EquipController에서 관리하므로 인풋을 넣을 필요없음
     {
         if (currentFireRate <= 0 && !isReload) //쿨타임 <=0 이고 재장전 중이 아닐 때만 Fire 실행. 
         {
             if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
             {
-                Shoot();
+                Shoot(ActorNumber);
             }
             else
             {
@@ -134,32 +134,41 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         }
     }
 
-    private void Shoot() //실제 발사되는 과정 
+    [PunRPC] //Shoot을 실제 실행하는 Attack 에서는 isMine 체크.
+    private void Shoot(int ActorNumber) //실제 발사되는 과정 
     {
-        //muzzleEffect 생성 필요. + renderer 필요 시 추가 + 화염효과 추가 
-
+       
         currentGun.currentBulletCount--; //총알 감소 
         currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
+        
+        /*PooledObject bullet=
+        Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성.
+        bullet.GetComponent<Bullet>().actorNumber = ActorNumber; //pool로 */
 
-        Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성. 
         currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.      
-        audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생. 
+        audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생.
 
-        //피격 처리 --> 어차피 실제 불렛에서 진행할 예정이긴 함.. 
         Hit();
+        StartCoroutine(RetroActionCoroutine());
 
+
+        //Hit(); 피격 처리 --> 어차피 실제 불렛에서 진행할 예정이긴 함.. 
         //총기 반동 코루틴 실행
         // StopAllCoroutines(); //반동 코루틴 멈추고
-        StartCoroutine(RetroActionCoroutine());
+
+
 
     }
 
     private void Hit() //bullet 연구해서 연계 가능한지 확인해보고 --> 피 터지는건 불렛에서 피 터지게 하면 될 것 같은데 
     {
         if (Physics.Raycast(Camera.main.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
-        {
-            
 
+        {
+            if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                damagable.TakeDamage(currentGun.damage);
+            }
         }
     }
 

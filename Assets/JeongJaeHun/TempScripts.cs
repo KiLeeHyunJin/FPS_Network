@@ -228,4 +228,8 @@ slots[slotNumber].gameObject.SetActive(true); // 키가 눌린 슬롯만 켜주�
              FineSight(); //나중에 equipCont로 옮겨줄 예정. 일단 더 생각해보기. 
          }*//*
     }*/
+
+
+
+    // 건컨트롤러의 hit 체크 --> main camera 
 }

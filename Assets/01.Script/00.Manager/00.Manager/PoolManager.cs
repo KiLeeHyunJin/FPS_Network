@@ -64,9 +64,9 @@ public class PoolManager : Singleton<PoolManager>
         Manager.Pool.GetPool(BulletSpark, pos, quaternion);
     }
 
-    public void GetBullet(Vector3 pos, Quaternion quaternion) //총구에서 Fire 시 나갈 총알. 
+    public PooledObject GetBullet(Vector3 pos, Quaternion quaternion) //총구에서 Fire 시 나갈 총알. 
     {
-        Manager.Pool.GetPool(Bullet, pos, quaternion);
+          return Manager.Pool.GetPool(Bullet, pos, quaternion);
     }
 
 
