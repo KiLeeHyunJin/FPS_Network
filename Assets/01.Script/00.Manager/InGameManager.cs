@@ -325,7 +325,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 yield return new WaitForSeconds(3f);
                 //인게임 테스트를 위한 주석
                 //pv.RPC("RoundOver", RpcTarget.All);
-
+                Debug.Log("테스트로 인한 복귀 함수 주석 처리");
             }
         }
     }
