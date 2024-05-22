@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using static Define;
 
 public class MineSkill : MonoBehaviourPun
 {
@@ -18,7 +17,11 @@ public class MineSkill : MonoBehaviourPun
 
     public void Activate()
     {
-
+        if (minePrefab != null && mineSpawnPoint != null && Time.time > nextMineTime)
+        {
+            nextMineTime = Time.time + cooldownTime;
+            Instantiate(minePrefab, mineSpawnPoint.position, mineSpawnPoint.rotation);
+        }
     }
 
     void Update()
@@ -28,10 +31,9 @@ public class MineSkill : MonoBehaviourPun
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.M) && Time.time > nextMineTime)
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            nextMineTime = Time.time + cooldownTime;
-            Instantiate(minePrefab, mineSpawnPoint.position, mineSpawnPoint.rotation);
+            Activate();
         }
     }
 

@@ -8,8 +8,8 @@ public class SpyCamController : MonoBehaviourPun
 {
     [SerializeField] public CinemachineVirtualCamera spyCamVirtualCamera;
     [SerializeField] public GameObject spyCamPrefab;
-    [SerializeField] private bool isSpyCamActive = false;
-    [SerializeField] private bool isSpyCamPlaced = false;
+    private bool isSpyCamActive = false;
+    private bool isSpyCamPlaced = false;
 
     private GameObject currentSpyCam;
 
@@ -17,7 +17,10 @@ public class SpyCamController : MonoBehaviourPun
     {
         if (currentSpyCam != null)
         {
-            spyCamVirtualCamera.Priority = 0;
+            spyCamVirtualCamera.Priority = 120;
+            spyCamVirtualCamera.Follow = currentSpyCam.transform; // Follow 설정
+            spyCamVirtualCamera.LookAt = currentSpyCam.transform; // LookAt 설정
+            spyCamVirtualCamera.gameObject.SetActive(true);
             isSpyCamActive = true;
         }
     }
@@ -26,7 +29,10 @@ public class SpyCamController : MonoBehaviourPun
     {
         if (currentSpyCam != null)
         {
-            spyCamVirtualCamera.Priority = -2;
+            spyCamVirtualCamera.Priority = 0; // 우선순위를 낮춰 비활성화
+            spyCamVirtualCamera.Follow = null; // Follow 설정 해제
+            spyCamVirtualCamera.LookAt = null; // LookAt 설정 해제
+            spyCamVirtualCamera.gameObject.SetActive(false);
             isSpyCamActive = false;
         }
     }
@@ -53,17 +59,24 @@ public class SpyCamController : MonoBehaviourPun
         }
     }
 
-    void ToggleSpyCam()
+    void ToggleSpyCam() //
     {
         isSpyCamActive = !isSpyCamActive;
-        spyCamVirtualCamera.Priority = isSpyCamActive ? 10 : 0;
 
-        if (isSpyCamActive && currentSpyCam == null)
+        if (isSpyCamActive)
         {
-            Debug.Log("스파이캠 활성화");
-            StartCoroutine(PlaceSpyCam());
+            if (currentSpyCam == null)
+            {
+                Debug.Log("스파이캠 활성화");
+                StartCoroutine(PlaceSpyCam());
+            }
+            else
+            {
+                Debug.Log("스파이캠 시점 전환");
+                Activate();
+            }
         }
-        else if (isSpyCamActive && currentSpyCam != null)
+        else
         {
             Debug.Log("스파이캠 비활성화");
             Deactivate();
@@ -82,8 +95,8 @@ public class SpyCamController : MonoBehaviourPun
                     if (IsPlacementValid(hit.point))
                     {
                         photonView.RPC("RPC_PlacedSpyCam", RpcTarget.AllBuffered, hit.point, hit.normal);
-                        isSpyCamActive = false;
-                        isSpyCamPlaced = false;
+                        isSpyCamActive = false; // true로 변경하면 여러개가 생성되서 확인해봐야함
+                        isSpyCamPlaced = true;
                         spyCamVirtualCamera.Priority = 0;
                     }
                 }
@@ -109,7 +122,7 @@ public class SpyCamController : MonoBehaviourPun
         // 충돌 영역 검사
         if (Physics.CheckSphere(position, 0.5f))
         {
-            return true; // 충돌하는 물체가 있으면 설치, false로 바꾸면 설치 불가
+            return true; // 충돌하는 물체가 있으면 설치
         }
 
         // 지면 검사: 스파이캠이 특정 지면이나 벽에만 설치되도록 제한
@@ -146,4 +159,6 @@ public class SpyCamController : MonoBehaviourPun
             currentSpyCam.transform.Rotate(Vector3.up, 1f);
         }
     }
+
+    // 스파이캠 설치 갯수를 3개로 제한
 }

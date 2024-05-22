@@ -8,19 +8,14 @@ using static Define;
 public class Mine : MonoBehaviourPun
 {
     [SerializeField]
-    private float explosionRadius = 5.0f;
+    private float explosionRadius = 5.0f; // 폭발 범위
     [SerializeField]
     private float explosionForce = 10.0f;
     [SerializeField]
-    private float damage = 50.0f;
+    private float damage = 50f;
 
     private bool hasExploded = false;
     private SphereCollider detectionCollider;
-
-    public void Activate()
-    {
-
-    }
 
     void Start()
     {
