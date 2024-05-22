@@ -22999,6 +22999,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2972497000335913195, guid: 91be18526574e9747bd046466deea5f8, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8838363997734765342, guid: 91be18526574e9747bd046466deea5f8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -25281,6 +25285,8 @@ MonoBehaviour:
   miniCam: {fileID: 505634069}
   hp: 0
   killLog: {fileID: 0}
+  HpBar: {fileID: 0}
+  tapEntry: {fileID: 0}
 --- !u!4 &8556417763743330066
 Transform:
   m_ObjectHideFlags: 0
