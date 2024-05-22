@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviourPun, IPunObservable
 {
+    #region
     [Range(0.05f, 3f)]
     [SerializeField] float groundCheckLength;
     [Range(0.05f, 2f)]
@@ -319,7 +320,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
+   
     void SlideJump()
     {
         float runCycle =
@@ -329,7 +330,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         float jumpLeg = dir * inputController.MoveY;
         animController.VelocityY = jumpLeg;
     }
-
+    #endregion
     public void Damage(int _damage) // 데미지 받으면 여기로 들어와짐. 
     {
         if (requestController.Hit() == false)
@@ -368,6 +369,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
                 Debug.Log($"{deathPlayer.NickName}(이)가 {lastShooterPlayer.NickName}에게 죽음");
 
+
+
             }
 
 
@@ -379,8 +382,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
 
     }
-
-
 
     // 이 부분도 자신의 체력 동기화
     public void AddHp(int _healValue)
