@@ -7,7 +7,7 @@ public class ShopUIManager : MonoBehaviour
     public PopUpUI purChasePanelPrefab;
     public GameObject shopCanvas;
 
-    public Inventory inventory;
+    public InventoryController inventory;
 
     Button[] shopBtn;
     

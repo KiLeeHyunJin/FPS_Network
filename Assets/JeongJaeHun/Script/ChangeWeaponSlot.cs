@@ -52,7 +52,7 @@ public class ChangeWeaponSlot : MonoBehaviour
 
     //[SerializeField] private WeaponManager weaponManager;
 
-    Inventory inventory;
+    InventoryController inventory;
 
     public void Change()
     {
@@ -68,7 +68,7 @@ public class ChangeWeaponSlot : MonoBehaviour
 
     private void Start()
     {
-        inventory = GameObject.FindObjectOfType<Inventory>();
+        inventory = GameObject.FindObjectOfType<InventoryController>();
         slots = inventory.GetComponentsInChildren<Slot>();
         foreach (Slot slot in slots)
         {
