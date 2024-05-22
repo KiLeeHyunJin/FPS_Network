@@ -82,7 +82,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
 
     // 인터페이스로 상속한 인터페이스 함수 --> 실제 플레이어 클릭 시 실행 할 함수임. 
-    public void Attack()
+    public bool Attack()
     {
         return TryFire();
     }
@@ -123,7 +123,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         {
             if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
             {
-                Shoot();
+                Shoot(photonView.Controller.ActorNumber);
                 return true;
             }
             else
