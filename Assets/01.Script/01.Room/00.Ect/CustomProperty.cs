@@ -19,7 +19,9 @@ public static class DefinePropertyKey
     public static string STARTGAME = "StartInGame";
     public static string TIMER = "Timer";
 
-
+    public static string KILL = "Kill";
+    public static string DEATH = "Death";
+    public static string ASSIST = "Assist";
 
 }
 public static class CustomProperty

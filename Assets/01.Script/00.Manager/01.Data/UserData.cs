@@ -5,6 +5,7 @@ public class UserData
     public string NickName;
     public int DeathCount;
     public int KillCount;
+    public int AssistCount;
     public int Level;
     public int PlayCount;
     public string profileImageName;
