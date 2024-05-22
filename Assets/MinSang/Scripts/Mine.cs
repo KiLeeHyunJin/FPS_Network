@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using Photon.Pun;
-using static Define;
 
 public class Mine : MonoBehaviourPun
 {
@@ -16,7 +15,6 @@ public class Mine : MonoBehaviourPun
 
     private bool hasExploded = false;
     private SphereCollider detectionCollider;
-    Controller controller;
 
     void Start()
     {
