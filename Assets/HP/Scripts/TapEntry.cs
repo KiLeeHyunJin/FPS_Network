@@ -51,7 +51,7 @@ public class TapEntry : MonoBehaviour
     public int GetKill()
     {
         return player.GetProperty<int>(DefinePropertyKey.KILL);
-    }
+    } 
 
     public int GetDeath()
     {

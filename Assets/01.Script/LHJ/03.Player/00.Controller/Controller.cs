@@ -4,6 +4,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -68,6 +69,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     //Iattackable[] iattackables;
     Iattackable currentAttackable;
+
+    TMP_Text killLog; // 킬 로그 패널의 text 접근. 
+
+
+
+
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
@@ -76,9 +83,19 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void Start()
     {
         if (PhotonNetwork.InRoom)
+        {
             Check();
+            killLog = GameObject.FindWithTag("KillLog").GetComponentInChildren<TextMeshProUGUI>();
+
+        }
+
         else
             Destroy(gameObject);
+
+
+
+
+
     }
 
     void Check()
@@ -121,7 +138,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Destroy(inventoryController);
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
-            if(PhotonNetwork.LocalPlayer.GetPhotonTeam() != null)
+            if (PhotonNetwork.LocalPlayer.GetPhotonTeam() != null)
             {
                 if (teamCode == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
                 {
@@ -177,7 +194,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void CallReload()
     {
-        if(currentAttackable != null && currentAttackable.Reload())
+        if (currentAttackable != null && currentAttackable.Reload())
         {
             animController.Reload();
 
@@ -262,7 +279,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         moveProcess = new CharacterTransformProcess();
         moveProcess.Init(GetComponent<CharacterController>(), Mine);
         moveProcess.InitGroundCheckData(
-            foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer, 
+            foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer,
             jumpHeight, gravitySpeed);
 
         moveProcess.SetMotions(AnimationController.MoveType.Run, animController.MoveRun);
@@ -320,7 +337,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             }
         }
     }
-   
+
     void SlideJump()
     {
         float runCycle =
@@ -342,34 +359,36 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
-            ControllCharacterLayerChange(0,0);
+            ControllCharacterLayerChange(0, 0);
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
         }
     }
 
-    public void Damage(int _damage,int _actorNumber) // 총알의 주인 ActorNumber 
+    public void Damage(int _damage, int _actorNumber) // 총알의 주인 ActorNumber 
     {
         if (requestController.Hit() == false)
             return;
 
-        
+
 
         hp -= equipController.ShieldCheck(_damage);
+
+        // hpBar 깍는 연계도 해줘야하네.. 
+
         if (hp <= 0)
         {
-            // 죽인 사람 죽는 사람 체크 해주고. 
-            // 자신의 hp 동기화 해주고. 
             
-            // 죽인 사람이 lastShooterPlayer이므로 
             if (Mine) //PhotonView.IsMine
             {
                 Player deathPlayer = PhotonNetwork.CurrentRoom.GetPlayer(photonView.Owner.ActorNumber);
                 Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
 
-                Debug.Log($"{deathPlayer.NickName}(이)가 {lastShooterPlayer.NickName}에게 죽음");
+                string msg = string.Format("\n<color=#00ff00>{0}</color> 가 처치됨 by <color=#ff0000>{1}</color>"
+                    , deathPlayer.NickName, lastShooterPlayer.NickName);
+                photonView.RPC("LogMessage", RpcTarget.AllBufferedViaServer, msg);
 
-
+                
 
             }
 
@@ -382,6 +401,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
 
     }
+
+    [PunRPC]
+    void LogMessage(string msg)
+    {
+        killLog.text += msg;
+    }
+
 
     // 이 부분도 자신의 체력 동기화
     public void AddHp(int _healValue)
@@ -402,7 +428,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
             stream.SendNext(TeamCode);
         }
