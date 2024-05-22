@@ -2,8 +2,8 @@ using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 using UnityEditor;
+using System.Collections.Generic;
 
-// 게임 오브젝트가 이전 상태로 돌아갈 수 있도록 시간역행 기능을 제공
 public class TimeRewind : MonoBehaviourPun, IDamagable
 {
     public Controller Controller;
@@ -12,44 +12,27 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
     public KeyCode rewindKey = KeyCode.Z;
     [SerializeField] public int maxHealth = 100;
 
-    private Vector3[] positionHistory;
-    private int[] healthHistory;
-    private int historyIndex = 0;
+    private Queue<Vector3> positionHistory;
+    private Queue<int> healthHistory;
     private int currentHealth;
-    private int maxPositionHistoryCount;
     private Coroutine rewindCoroutine;
-    bool on;
+    private Coroutine recordCoroutine;
 
-    public void Activate()
-    {
-        StartCoroutine(RewindCoroutine());
-    }
-
-    // 역행을 비활성화할 때 모든 활성 코루틴을 중지
-    public void Deactivate()
-    {
-        StopAllCoroutines();
-    }
-
-    // 초기 상태와 이력 배열을 설정
     void Start()
     {
         Controller = GetComponent<Controller>();
         currentHealth = maxHealth;
-        maxPositionHistoryCount = Mathf.CeilToInt(rewindDuration / positionRecordInterval);
-
-        positionHistory = new Vector3[maxPositionHistoryCount];
-        healthHistory = new int[maxPositionHistoryCount];
-
+        positionHistory = new Queue<Vector3>();
+        healthHistory = new Queue<int>();
     }
 
-    // 매 프레임마다 입력을 처리하고 위치를 기록
     void Update()
     {
         if (!IsRewinding())
         {
-            if (!on)
-                StartCoroutine(RecordPositionAndHealth());
+            if (recordCoroutine == null)
+                recordCoroutine = StartCoroutine(RecordPositionAndHealth());
+
             if (Input.GetKeyDown(rewindKey))
             {
                 Debug.Log("시간 역행");
@@ -58,48 +41,52 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
         }
     }
 
-    IEnumerator RecordPositionAndHealth() // 위치와 체력 기록
+    IEnumerator RecordPositionAndHealth()
     {
-        if (!on)
+        while (true)
         {
-            on = true;
+            if (positionHistory.Count >= Mathf.CeilToInt(rewindDuration / positionRecordInterval))
+            {
+                positionHistory.Dequeue();
+                healthHistory.Dequeue();
+            }
 
-            positionHistory[historyIndex] = transform.position;
-            // Debug.Log($"index = {historyIndex} , position {positionHistory[historyIndex]}");
-            healthHistory[historyIndex] = currentHealth;
-            historyIndex = (historyIndex + 1) % maxPositionHistoryCount;
+            positionHistory.Enqueue(transform.position);
+            healthHistory.Enqueue(currentHealth);
+
             yield return new WaitForSeconds(positionRecordInterval);
-            on = false;
         }
-
-
-
     }
 
     IEnumerator RewindCoroutine()
     {
+        if (recordCoroutine != null)
+        {
+            StopCoroutine(recordCoroutine);
+            recordCoroutine = null;
+        }
+
         Controller.enabled = false;
         float time = 0;
+        var positionHistoryArray = positionHistory.ToArray();
+        var healthHistoryArray = healthHistory.ToArray();
+        int historyCount = positionHistoryArray.Length;
 
-        while (time < rewindDuration)
+        while (time < rewindDuration && historyCount > 0)
         {
-            int rewindIndex = (historyIndex - 1 - Mathf.FloorToInt(time / positionRecordInterval) + maxPositionHistoryCount) % maxPositionHistoryCount;
-            // Debug.Log($"RewindPos {positionHistory[rewindIndex]} , index {rewindIndex} ");
-            transform.position = positionHistory[rewindIndex];
-            currentHealth = healthHistory[rewindIndex];
+            int rewindIndex = Mathf.Clamp(historyCount - 1 - Mathf.FloorToInt(time / positionRecordInterval), 0, historyCount - 1);
+
+            transform.position = positionHistoryArray[rewindIndex];
+            currentHealth = healthHistoryArray[rewindIndex];
             time += Time.deltaTime;
             yield return null;
         }
 
         Controller.enabled = true;
-        if (rewindCoroutine != null)
-        {
-            StopCoroutine(rewindCoroutine);
-            rewindCoroutine = null;
-        }
+        rewindCoroutine = null;
+        recordCoroutine = StartCoroutine(RecordPositionAndHealth());
     }
 
-    // 객체가 피해를 입었을 때 호출되는 메소드로 현재 역행 중이 아닐 때만 실행
     public void TakeDamage(int damage)
     {
         if (!IsRewinding())
