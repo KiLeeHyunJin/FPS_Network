@@ -1,5 +1,6 @@
 using Photon.Realtime;
 using System;
+using System.Diagnostics;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public static class DefinePropertyKey
 {

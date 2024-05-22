@@ -36,7 +36,8 @@ public class BombController : MonoBehaviour, Iattackable
             }
         }
 
-        Rigidbody bombRigidbody = transform.GetChild(0).gameObject.GetComponent<Rigidbody>();
+        // 이 부분도 자식의 currentbomb에서 리지드바디 가져오는 부분인데 어떻게 할지 생각좀 해보자. 
+        Rigidbody bombRigidbody = currentBomb.gameObject.GetComponent<Rigidbody>();
         bombRigidbody.isKinematic = true;
         mainCamera = Camera.main;
         lineRenderer = currentBomb.GetComponent<LineRenderer>();

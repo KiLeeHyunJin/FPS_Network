@@ -49,14 +49,11 @@ public class MenuPanel : MonoBehaviour
     }
     private void Start()
     {
-
-
-
         data = GetComponentInParent<LobbyData>();
     }
     private void OnEnable()
     {
-        Debug.Log("Start");
+        
         FireBaseManager.DB
              .GetReference("Notice")
              .GetValueAsync().ContinueWithOnMainThread(task =>

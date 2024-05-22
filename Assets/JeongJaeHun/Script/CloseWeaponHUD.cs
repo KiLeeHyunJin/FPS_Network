@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class CloseWeaponHUD : MonoBehaviour
+public class CloseWeaponHUD : MonoBehaviourPun
 {
     // 어케 수정할지 생각좀 해보자. 
     // 켜져 있는 근접무기에 접근하여(3번 -> slot 내부의 자식들 순회 )
@@ -20,16 +21,18 @@ public class CloseWeaponHUD : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI weaponText;
     
-
     private void Update()
     {
-        // 다른 스크립트에서 on off 하니까 상관안해도 되나? 다른 sprite로 on할거니까? 
+     
+        if(!photonView.IsMine)
+        {
+            return;
+        }
+         
         CheckUi();
-       
-        
     }
 
-    private void CheckUi() //무기에 따른 스프라이트만 받아오면 된다. 
+    private void CheckUi() // 이 부분 로직을 어떻게 수정할지 생각해야함. --> closeWeapon 아래의 상황을 확인해야 하는지? 
     {
         for(int i=0;i<CloseWeaponController.Length;i++)
         {

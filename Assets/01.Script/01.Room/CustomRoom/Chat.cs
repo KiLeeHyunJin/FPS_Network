@@ -9,7 +9,8 @@ using UnityEngine.UI;
 public class Chat : MonoBehaviourPun
 {
     public enum ChatType { ALL, TARGET, TEAM, NEW, MY, END }
-
+    public enum InChatType { InGame,Lobby}
+    [SerializeField] public InChatType inChatType {  get; set; }   
     [SerializeField] Button chatResetButton; //대화창 초기화 버튼
     [SerializeField] TMP_InputField inputField; //입력창
     [SerializeField] RectTransform content; //대화목록 부모
@@ -22,6 +23,7 @@ public class Chat : MonoBehaviourPun
     {
         inputField.onSubmit.AddListener(SendChat); //엔터할때 전송하도록 이벤트 붙여넣는다.
         gameObject.GetOrAddComponent<PhotonView>(); //포톤뷰가 없을 경우 포톤뷰를 붙인다.
+        if(chatResetButton!=null)
         chatResetButton.onClick.AddListener(RemoveEntry); //초기화 버튼에 초기화 함수 이벤트를 붙여넣는다.
     }
     private void OnEnable()
@@ -82,25 +84,51 @@ public class Chat : MonoBehaviourPun
 
         TMP_Text newMessage = Instantiate(chatTextPrefab);
 
-        switch (chatType) //타입에 따라 폰트 색상 변경
+        if(inChatType == InChatType.Lobby)
         {
-            case ChatType.ALL: 
-                newMessage.color = Color.black;
-                break;
-            case ChatType.TARGET:
-                newMessage.color = Color.red;
-                break;
-            case ChatType.TEAM:
-                newMessage.color = Color.blue;
-                break;
-            case ChatType.MY:
-                newMessage.color = Color.green;
-                break;
-            case ChatType.NEW:
-                newMessage.color = Color.yellow;
-                newMessage.fontStyle |= FontStyles.Bold; //폰트를 두껍게 설정
-                break;
+            switch (chatType) //타입에 따라 폰트 색상 변경
+            {
+                case ChatType.ALL:
+                    newMessage.color = Color.black;
+                    break;
+                case ChatType.TARGET:
+                    newMessage.color = Color.red;
+                    break;
+                case ChatType.TEAM:
+                    newMessage.color = Color.blue;
+                    break;
+                case ChatType.MY:
+                    newMessage.color = Color.green;
+                    break;
+                case ChatType.NEW:
+                    newMessage.color = Color.yellow;
+                    newMessage.fontStyle |= FontStyles.Bold; //폰트를 두껍게 설정
+                    break;
+            }
         }
+        else if ( inChatType == InChatType.InGame)
+        {
+            switch (chatType) 
+            {
+                case ChatType.ALL:
+                    newMessage.color = Color.white;
+                    break;
+                case ChatType.TARGET:
+                    newMessage.color = Color.red;
+                    break;
+                case ChatType.TEAM:
+                    newMessage.color = Color.blue;
+                    break;
+                case ChatType.MY:
+                    newMessage.color = Color.green;
+                    break;
+                case ChatType.NEW:
+                    newMessage.color = Color.yellow;
+                    newMessage.fontStyle |= FontStyles.Bold; //폰트를 두껍게 설정
+                    break;
+            }
+        }
+        
         newMessage.text = message;  //내용 입력
         newMessage.transform.SetParent(content); //객체를 콘텐츠의 자식으로 설정
         RectTransform rect = newMessage.transform as RectTransform;

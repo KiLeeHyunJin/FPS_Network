@@ -216,4 +216,16 @@ slots[slotNumber].gameObject.SetActive(true); // 키가 눌린 슬롯만 켜주�
         }*/
 
 
+
+
+
+    // GunController에 있던 정조준 함수
+    /*private void TryFineSight() //정조준 실행. 
+    {
+        *//* if (Input.GetKeyDown("Fire2") && currentGun.gunType == Gun.GunType.SNIPER
+             && !isReload) //스나이퍼 일 때만 정조준 진행. (??) ++ 장전 중이 아닐 때만 조준 가능하도록..
+         {
+             FineSight(); //나중에 equipCont로 옮겨줄 예정. 일단 더 생각해보기. 
+         }*//*
+    }*/
 }
