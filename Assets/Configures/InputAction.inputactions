@@ -7,12 +7,12 @@
             "actions": [
                 {
                     "name": "Jump",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "1b9e0ab4-4032-4898-b6df-61a774cea3f6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Move",
@@ -439,12 +439,12 @@
             "actions": [
                 {
                     "name": "Tab",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "c72034e5-e381-4d77-abf6-7be01c93dad2",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Enter",
@@ -453,7 +453,7 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [

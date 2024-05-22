@@ -6,7 +6,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static Photon.Pun.UtilityScripts.TabViewManager;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
@@ -35,8 +37,16 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     [SerializeField] int curRound;
     [SerializeField] int roundCount;
+
+    [SerializeField] TapUI tapUi;
+
+    [SerializeField] PlayerInput playerInput;
+
+    
     void Start()
     {
+        
+        tapUi.SetTapList();
         bluePlayerList = new List<Player>();
         redPlayerList = new List<Player>();
         EntryListInit();
@@ -50,24 +60,33 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         
         AllPlayerReadyCheck();
     }
-   public void ChatOnOff()
+    public void OnTab(InputValue value)
     {
-        if(chatRoutine !=null)
-        StopCoroutine(chatRoutine);
-        chatRoutine= StartCoroutine(ChatViewRoutine());
-        chat.gameObject.SetActive(!chat.gameObject.activeSelf);
-        if (chat.gameObject.activeSelf)
-        {
-            chat.ActivateInputField();
-            Cursor.visible = chat.gameObject.activeSelf;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = chat.gameObject.activeSelf;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        
+          tapUi.gameObject.SetActive(!tapUi.gameObject.activeSelf);
+          tapUi.test(); 
+        
+    }
+   public void OnEnter(InputValue value)
+    {
+        chat.gameObject.SetActive(true);
+        if (chatRoutine != null)
+                StopCoroutine(chatRoutine);
+            chatRoutine = StartCoroutine(ChatViewRoutine());
             
+            if (chat.gameObject.activeSelf)
+            {
+                chat.ActivateInputField();
+                Cursor.visible = chat.gameObject.activeSelf;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                Cursor.visible = chat.gameObject.activeSelf;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        
+
     }
 
     IEnumerator ChatViewRoutine()
@@ -160,7 +179,18 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Debug.Log("OnRoomUpdate");
         InGamePropertiesUpdate(propertiesThatChanged);
     }
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        foreach (var key in changedProps.Keys)
+        {
+            string scoreType = key as string;
+            int scoreValue = (int)changedProps[key];
 
+           
+            tapUi.SetUpScore(scoreType, targetPlayer, scoreValue);
+        }
+
+    }
 
     public void InGamePropertiesUpdate(Hashtable propertiesThatChanged)
     {
@@ -253,7 +283,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     void RoundOver()
     {
+        tapUi.RecordKDA();
         Manager.Game.GoToLobby();
+        if(PhotonNetwork.IsMasterClient)
         PhotonNetwork.LoadLevel("LobbyScene");
     }
 }
