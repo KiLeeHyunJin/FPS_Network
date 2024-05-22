@@ -15,4 +15,9 @@ public class TargetPlayer : MonoBehaviour, IDamagable
             Debug.Log($"플레이어 사망!");
         }
     }
+
+    public void TakeDamage(int _damage, int _actorNumber)
+    {
+        
+    }
 }

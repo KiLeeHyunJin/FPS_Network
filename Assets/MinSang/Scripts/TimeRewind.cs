@@ -103,4 +103,9 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
     {
         return rewindCoroutine != null;
     }
+
+    public void TakeDamage(int _damage, int _actorNumber)
+    {
+        
+    }
 }
