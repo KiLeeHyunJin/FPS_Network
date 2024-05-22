@@ -121,7 +121,17 @@ public class TapUI : MonoBehaviour
     }
     public void test()
     {
-        m_Entry.IncreaseKill();
+        int r = Random.Range(0, 3);
+        switch (r)
+        {
+            case 0: m_Entry.IncreaseKill();
+                break;
+            case 1: m_Entry.IncreaseDeath();
+                break;
+            case 2: m_Entry.IncreaseAssist();
+                break;
+        }
+        
        
     }
 }

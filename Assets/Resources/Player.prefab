@@ -7146,6 +7146,7 @@ MonoBehaviour:
   currentGun: {fileID: 0}
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
+  pv: {fileID: 0}
 --- !u!82 &1525380330895399996
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8037,7 +8038,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9890e1c768d8a19468a17609131c8a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 4201698935279516926, guid: b4748506d4a4eaa468eebedba1d156a6, type: 3}
 --- !u!114 &2242058583393748136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15282,6 +15282,7 @@ MonoBehaviour:
   currentGun: {fileID: 0}
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
+  pv: {fileID: 0}
 --- !u!82 &1086287704117312395
 AudioSource:
   m_ObjectHideFlags: 0

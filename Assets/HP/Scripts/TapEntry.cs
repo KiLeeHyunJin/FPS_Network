@@ -41,21 +41,11 @@ public class TapEntry : MonoBehaviour
     }
     public void SetDeath(int deathCount)
     {
-        if (player.GetProperty<int>(DefinePropertyKey.DEATH) == deathCount)
-        {
             death.text = deathCount.ToString();
-            player.SetProperty(DefinePropertyKey.KILL, deathCount);
-        }
-
-        
     }
     public void SetAssist(int assistCount)
     {
-        if (player.GetProperty<int>(DefinePropertyKey.ASSIST) == assistCount)
-        {
             assist.text = assistCount.ToString();
-            player.SetProperty(DefinePropertyKey.KILL, assistCount);
-        }
     }
  
     public int GetKill()
@@ -80,11 +70,11 @@ public class TapEntry : MonoBehaviour
     public void IncreaseDeath()
     {
         player.SetProperty(DefinePropertyKey.DEATH, GetDeath() + 1);
-        Debug.Log($"Increased death {GetKill()}");
+        Debug.Log($"Increased death {GetDeath()}");
     }
     public void IncreaseAssist()
     {
         player.SetProperty(DefinePropertyKey.ASSIST, GetAssist() + 1);
-        Debug.Log($"Increased assist {GetKill()}");
+        Debug.Log($"Increased assist {GetAssist()}");
     }
 }
