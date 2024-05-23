@@ -405,7 +405,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {          
             //if (Mine) //PhotonView.IsMine 쓰는거 맞나?? 잘 모르겠네... 
             {
-                Player deathPlayer = PhotonNetwork.CurrentRoom.GetPlayer(photonView.Owner.ActorNumber);
+                Player deathPlayer = photonView.Owner;
                 Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
 
                 string msg = string.Format("\n<color=#00ff00>{0}</color> 가 처치됨 by <color=#ff0000>{1}</color>"
