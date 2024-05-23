@@ -72,7 +72,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     //Iattackable[] iattackables;
     Iattackable currentAttackable;
 
-    [SerializeField]TMP_Text killLog; // 킬 로그 패널의 text 접근. 
+    [SerializeField] KillLogPanel killLog; // 킬 로그 패널
     [SerializeField] Slider HpBar; // 플레이어의 Hp bar 연계
     [SerializeField] TapEntry tapEntry;
 
@@ -86,9 +86,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (PhotonNetwork.InRoom)
         {
             Check();
-            killLog = GameObject.FindWithTag("KillLog")?.GetComponentInChildren<TextMeshProUGUI>();
+            
             if(photonView.IsMine)
             {
+                killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
                 HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
                 if (HpBar != null)
                 {
@@ -418,9 +419,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
                 Player deathPlayer = photonView.Owner;
                 Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
 
-                string msg = string.Format("\n<color=#00ff00>{0}</color> 가 처치됨 by <color=#ff0000>{1}</color>"
-                    , deathPlayer.NickName, lastShooterPlayer.NickName);
-                photonView.RPC("LogMessage", RpcTarget.AllBufferedViaServer, msg);
+                photonView.RPC("LogMessage", RpcTarget.AllBufferedViaServer, lastShooterPlayer,deathPlayer);
 
                 deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH) + 1);
                 lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
@@ -452,9 +451,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
 
     [PunRPC]
-    void LogMessage(string msg)
+    void LogMessage(string killer,string dead/*,Gun Image?*/)
     {
-        killLog.text += msg;
+      KillLogEntry ins = Instantiate(killLog.killInfoEntry, killLog.entryPos);
+        ins.deadName.text = dead;
+        ins.killerName.text = killer;
+        ScrollRect rect = killLog.GetComponent<ScrollRect>();
+        rect.verticalScrollbar.value = 0;
     }
 
 
