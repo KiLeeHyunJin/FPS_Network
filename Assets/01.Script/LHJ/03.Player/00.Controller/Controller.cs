@@ -409,26 +409,17 @@ public class Controller : MonoBehaviourPun, IPunObservable
             inputController.InputActive = false;
         }
     }
-
-    public void Damage(int _damage, int _actorNumber) // 총알의 주인 ActorNumber 
+    [PunRPC]
+    void CallDamage(int _damage,int _actorNumber)
     {
-        if (PhotonNetwork.IsMasterClient == false)
-        {
-            Debug.Log("Is Not Master");
-            return;
-        }
-        Debug.Log($"Damage {_damage} ");
-
         hp -= equipController.ShieldCheck(_damage);
-        Debug.Log($"equipShield HP : {hp}");
-        
         if (HpBar != null)
         {
             HpBar.value = Percent(hp, maxHp);
         }
 
         if (hp <= 0)
-        {          
+        {
             //if (Mine) //PhotonView.IsMine 쓰는거 맞나?? 잘 모르겠네... 
             {
                 Player deathPlayer = photonView.Owner;
@@ -436,11 +427,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
                 photonView.RPC("LogMessage", RpcTarget.AllBufferedViaServer, lastShooterPlayer,deathPlayer);
 
-                deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH)+1);
-                lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL)+1);
+                deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH) + 1);
+                lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
 
             }
-
             sensor.StopRoutine();
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
@@ -448,6 +438,16 @@ public class Controller : MonoBehaviourPun, IPunObservable
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
         }
+    }
+
+    public void Damage(int _damage, int _actorNumber) // 총알의 주인 ActorNumber 
+    {
+        if (PhotonNetwork.IsMasterClient == false)
+        {
+            return;
+        }
+        photonView.RPC("CallDamage", photonView.Owner, _damage, _actorNumber);
+
     }
 
     // slider bar 조정 용 

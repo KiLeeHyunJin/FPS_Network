@@ -151,12 +151,10 @@ public class PlayerInputController : MonoBehaviour
         if (inputValue.isPressed)
         {
             pressCo = StartCoroutine(PressRoutine());
-            Debug.Log("Fire");
         }
         else
         {
             StopCoroutine(pressCo);
-            Debug.Log("Stop");
         }
     }
     Coroutine pressCo;
@@ -165,7 +163,6 @@ public class PlayerInputController : MonoBehaviour
         while (true)
         {
             actions[(int)Define.Key.Press]?.Invoke();
-            Debug.Log("Routine");
             yield return null;
         }
     }

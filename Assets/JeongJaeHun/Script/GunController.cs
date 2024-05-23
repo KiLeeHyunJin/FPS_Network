@@ -50,14 +50,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         pv = GetComponentInParent<PhotonView>();
 
         originPos = Vector3.zero;
-
-        if (pv.IsMine) //각각 로컬의 메인카메라를 가져오도록 
-        {
-            theCam = Camera.main;
-            
-            
-        }
-
     }
 
 
@@ -123,7 +115,10 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
                 currentGun.currentBulletCount--; //총알 감소 
                 currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
 
-                photonView.RPC("Shoot", RpcTarget.MasterClient, photonView.Controller.ActorNumber);
+                photonView.RPC("Shoot", RpcTarget.MasterClient,
+                    photonView.Controller.ActorNumber,
+                    Camera.main.transform.position,
+                    Camera.main.transform.forward);
                 photonView.RPC("Effect", RpcTarget.All);
                 return true;
             }
@@ -142,12 +137,27 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     }
 
     [PunRPC] //Shoot을 실제 실행하는 Attack 에서는 isMine 체크.
-    private void Shoot(int ActorNumber) //실제 발사되는 과정 
+    private void Shoot(int ActorNumber, Vector3 pos, Vector3 dir) //실제 발사되는 과정 
     {
         /*PooledObject bullet=
         Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성.
         bullet.GetComponent<Bullet>().actorNumber = ActorNumber; //pool로 */
-        Hit(ActorNumber);
+        Debug.DrawLine(pos + dir, pos + dir * currentGun.range, Color.cyan, 2);
+
+        if (Physics.Raycast(
+            pos + dir,
+            dir,
+            out hitInfo,
+            currentGun.range, HitLayer))
+        {
+            if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                hitInfo.collider.GetComponent<Controller>();
+                Debug.Log($"Hit Damage {currentGun.damage} ");
+
+                damagable.TakeDamage(currentGun.damage, ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
+            }
+        }
         //StartCoroutine(RetroActionCoroutine());
 
 
@@ -156,25 +166,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         // StopAllCoroutines(); //반동 코루틴 멈추고
     }
 
-    private void Hit(int ActorNumber) //bullet 연구해서 연계 가능한지 확인해보고 --> 피 터지는건 불렛에서 피 터지게 하면 될 것 같은데 
-    {
-        Debug.DrawLine(Camera.main.transform.position + transform.forward, (Camera.main.transform.position + transform.forward) * currentGun.range, Color.cyan, 2);
-
-        if (Physics.Raycast(
-            Camera.main.transform.position + transform.forward, 
-            theCam.transform.forward, 
-            out hitInfo, 
-            currentGun.range, HitLayer))
-        {
-            if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
-            {
-                hitInfo.collider.GetComponent<Controller>();
-                Debug.Log($"Hit Damage {currentGun.damage} ");
-
-                damagable.TakeDamage(currentGun.damage,ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
-            }
-        }
-    }
 
     private bool TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
     {
@@ -200,7 +191,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             currentGun.currentBulletCount = currentGun.maxBulletCount; //현재 총탄을 최대총탄 숫자로 맞춰줌.
             isReload = false;
         }
-
     }
     
 

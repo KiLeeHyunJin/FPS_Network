@@ -6053,6 +6053,7 @@ GameObject:
   - component: {fileID: 5569100246983958313}
   - component: {fileID: 6632997920356581901}
   - component: {fileID: 1525380330895399996}
+  - component: {fileID: 4258662608405736733}
   m_Layer: 24
   m_Name: Primary
   m_TagString: Untagged
@@ -6204,6 +6205,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4258662608405736733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2821494517716226320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 6632997920356581901}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2827437474235304820
 GameObject:
   m_ObjectHideFlags: 0
@@ -14079,6 +14103,7 @@ GameObject:
   - component: {fileID: 3890777154873243276}
   - component: {fileID: 8644913041405509699}
   - component: {fileID: 1086287704117312395}
+  - component: {fileID: 6539197545665744891}
   m_Layer: 24
   m_Name: Secondary
   m_TagString: Untagged
@@ -14230,6 +14255,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6539197545665744891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6174439273678831033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 8644913041405509699}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6182686886036145712
 GameObject:
   m_ObjectHideFlags: 0
@@ -19150,6 +19198,7 @@ GameObject:
   - component: {fileID: 4983004326694610994}
   - component: {fileID: 7436995320524475242}
   - component: {fileID: 7543617888352762341}
+  - component: {fileID: 7836484150925953477}
   m_Layer: 24
   m_Name: Sword
   m_TagString: Untagged
@@ -19291,6 +19340,28 @@ MonoBehaviour:
   isAttack: 0
   isSwing: 0
   closeWeapons: []
+--- !u!114 &7836484150925953477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9141832856700347183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &9158148387096990995
 GameObject:
   m_ObjectHideFlags: 0
