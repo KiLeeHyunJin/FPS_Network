@@ -2190,8 +2190,6 @@ MonoBehaviour:
   roundCount: 2
   tapUi: {fileID: 1779711445}
   playerInput: {fileID: 678307621}
-  redTeamScore: 0
-  blueTeamScore: 0
 --- !u!114 &678307621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2522,7 +2520,7 @@ Transform:
   m_GameObject: {fileID: 701296235}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.08715578, z: -0, w: 0.9961947}
-  m_LocalPosition: {x: 2.698583, y: 0.09400001, z: -6.1918883}
+  m_LocalPosition: {x: 2.698583, y: 3.154, z: -31.461887}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5404,6 +5402,8 @@ MonoBehaviour:
   tapInfoEntryPrefab: {fileID: 8914270738362204991, guid: 47352e79c555bc24daf1a9876518510b, type: 3}
   m_Entry: {fileID: 0}
   entryList: []
+  redScore: {fileID: 0}
+  blueScore: {fileID: 0}
 --- !u!1 &1825421600
 GameObject:
   m_ObjectHideFlags: 0
@@ -5741,17 +5741,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3552819859659342744, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: sceneViewId
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7708248345571052111, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6467,5 +6463,4 @@ SceneRoots:
   - {fileID: 1894551380}
   - {fileID: 1523685551}
   - {fileID: 942129898}
-  - {fileID: 1702215021}
   - {fileID: 1239339528}

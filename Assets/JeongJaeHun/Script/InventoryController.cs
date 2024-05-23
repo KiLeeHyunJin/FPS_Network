@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static Define;
 
-public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviourPun
 {
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
@@ -70,7 +70,6 @@ public class InventoryController : MonoBehaviour
         //slots= gameObject.GetComponentsInChildren<Slot>();
         if (goldText != null)
             goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
-        Invoke("DropSword", 3);
     }
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
@@ -115,6 +114,11 @@ public class InventoryController : MonoBehaviour
         weapons[(int)weaponType] = Equip(weaponType, id);
     }
 
+    public void Throw(AnimationController.AnimatorWeapon weaponType)
+    {
+        Dequip(this[weaponType]);
+    }
+
     void Dequip(IKWeapon _weapon)
     {
         Transform parent = _weapon.weaponType switch
@@ -127,8 +131,18 @@ public class InventoryController : MonoBehaviour
             _ => null,
         };
         _weapon.transform.SetParent(parent);
-        if(PhotonNetwork.IsMasterClient)
-            PhotonNetwork.Instantiate(_weapon.name, transform.position, transform.rotation );
+        _weapon.gameObject.SetActive(false);
+
+        if (PhotonNetwork.IsMasterClient)
+            DropWeapon(_weapon.name);
+        else
+            photonView.RPC("DropWeapon", RpcTarget.MasterClient, _weapon.name);
+    }
+
+    [PunRPC]
+    void DropWeapon(string _weaponName)
+    {
+        PhotonNetwork.Instantiate(_weaponName, transform.position, transform.rotation);
     }
 
     IKWeapon Equip(AnimationController.AnimatorWeapon weaponType, int id)
@@ -148,7 +162,7 @@ public class InventoryController : MonoBehaviour
             if (pos.saver.GetChild(i).TryGetComponent<IKWeapon>(out IKWeapon weapon) && weapon.InstanceId == id)
             {
                 weapon.transform.SetParent(pos.parent);
-
+                weapon.gameObject.SetActive(true);
                 weapon.transform.localPosition = Vector3.zero;
                 weapon.transform.localRotation = Quaternion.identity;
                 return weapon;

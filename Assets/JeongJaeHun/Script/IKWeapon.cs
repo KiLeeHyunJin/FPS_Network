@@ -30,13 +30,13 @@ public class IKWeapon : MonoBehaviourPun
     }
     public void PickUp()
     {
-        if (photonView.IsMine)
+        if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.Destroy(gameObject);
         }
         else
         {
-            photonView.RPC("RPC_DestroyObject", photonView.Owner);
+            photonView.RPC("RPC_DestroyObject", RpcTarget.MasterClient);
         }
     }
 
@@ -45,5 +45,4 @@ public class IKWeapon : MonoBehaviourPun
     {
         PhotonNetwork.Destroy(gameObject);
     }
-
-    }
+}

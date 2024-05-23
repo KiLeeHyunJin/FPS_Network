@@ -16,9 +16,10 @@ public class PlayerInputController : MonoBehaviour
     InputActionAsset inputs;
     public Controller Owner { set { owner = value; } }
     public AnimationController.AnimatorWeapon CurrentWeapon { get; private set; }
-    public Define.FireType MainFireType { get; private set; }
+    [field : SerializeField] public Define.FireType MainFireType { get; private set; }
+    [field: SerializeField] public Define.FireType Fire { get; private set; }
+
     public bool Zoom { get; private set; }
-    public Define.FireType Fire { get; private set; }
     public AnimationController.AnimatorWeapon SetWeaponType { set { CurrentWeapon = value; } }
     public Define.FireType ChangeFireType
     {
@@ -50,6 +51,7 @@ public class PlayerInputController : MonoBehaviour
         inputs = GetComponent<PlayerInput>().actions;
         ChangeFireType = Define.FireType.One;
         actions = new Action[(int)Define.Key.END];
+        CurrentWeapon = AnimationController.AnimatorWeapon.Sword;
     }
     void OnLook(InputValue inputValue)
     {
@@ -142,12 +144,20 @@ public class PlayerInputController : MonoBehaviour
     void OnFirePress(InputValue inputValue)
     {
         if (Define.FireType.One == Fire)
+        {
             return;
+        }
 
         if (inputValue.isPressed)
-            owner.StartCoroutined(PressRoutine(), ref pressCo);
+        {
+            pressCo = StartCoroutine(PressRoutine());
+            Debug.Log("Fire");
+        }
         else
-            owner.StopCoroutined(ref pressCo);
+        {
+            StopCoroutine(pressCo);
+            Debug.Log("Stop");
+        }
     }
     Coroutine pressCo;
     IEnumerator PressRoutine()
@@ -155,6 +165,7 @@ public class PlayerInputController : MonoBehaviour
         while (true)
         {
             actions[(int)Define.Key.Press]?.Invoke();
+            Debug.Log("Routine");
             yield return null;
         }
     }

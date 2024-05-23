@@ -22,7 +22,7 @@ public class AnimationController : MonoBehaviourPun
     [SerializeField] TwoBoneIKConstraint right;
     [SerializeField] MultiParentConstraint[] weaponParents;
     Transform[] currentWeapons;
-
+    InventoryController inventoryController;
     int JumpEnterId;
     int StandId;
     int CrouchId;
@@ -55,6 +55,7 @@ public class AnimationController : MonoBehaviourPun
             (handRig, GetComponent<RigBuilder>(), left, right,
             weaponParents,
             GetComponent<Controller>());
+        inventoryController = GetComponent<InventoryController>();
     }
     public Vector2 MoveValue
     {
@@ -94,7 +95,7 @@ public class AnimationController : MonoBehaviourPun
             photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
     }
 
-    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckabl )
+    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckable )
     {
         if (currentWeapons[(int)type].childCount == 0)
         {
@@ -113,8 +114,7 @@ public class AnimationController : MonoBehaviourPun
 
         OnWeaponLayer(type);
         anim.SetTrigger(ChangeWeaponId);
-        if (currentWeapons[(int)type] is Iattackable temp)
-            atckabl = temp;
+        atckable = currentWeapons[(int)type].GetComponent<Iattackable>();
         return true;
     }
 
@@ -189,7 +189,7 @@ public class AnimationController : MonoBehaviourPun
     [PunRPC]
     void RigIK(int type,int _instanceId, int triggerId)
     {
-        GetComponent<InventoryController>().AddItem((AnimatorWeapon)type, _instanceId);
+        inventoryController.AddItem((AnimatorWeapon)type, _instanceId);
         anim.SetTrigger(triggerId);
         iKAnimation.ChangeWeapon((AnimatorWeapon)type);
     }
