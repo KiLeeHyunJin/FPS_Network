@@ -45,6 +45,8 @@ public class CloseWeaponController : MonoBehaviour, Iattackable,IPunObservable
     [Tooltip("히트박스 hit layer")]
     [SerializeField] int HitLayer;
 
+    [Tooltip("스크립트의 활성화 여부")]
+    public bool isActivate { get; set; } = true; 
 
     public bool Attack()
     {
@@ -55,21 +57,16 @@ public class CloseWeaponController : MonoBehaviour, Iattackable,IPunObservable
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        HitLayer = 1 << LayerMask.NameToLayer("HitBox");
     }
 
 
     private void OnEnable()
     {
-
-
         int numOfChild = this.transform.childCount; //현재 활성화된 무기 검색. 
         for (int i = 0; i < numOfChild; i++)
         {
-            //if (transform.GetChild(i).gameObject.activeSelf == true)
-            //{
-
-            //    break;
-            //}
+            
             currentCloseWeapon = transform.GetChild(i).GetComponent<CloseWeapon>();
             trailRenderer = currentCloseWeapon.trailRenderer;
         }
@@ -77,12 +74,16 @@ public class CloseWeaponController : MonoBehaviour, Iattackable,IPunObservable
         trailRenderer.emitting = false; //공격하지 않을 때 렌더러가 생기지 않도록 꺼주기. 
         isAttack = false;
         range = currentCloseWeapon.range; //캐싱? 해주기 
+        isActivate = true;
+    }
+
+    private void OnDisable()
+    {
+        isActivate = false;
     }
 
     private void Start()
     {
-        
-
 
         for(int i=0;i< closeWeapons.Length;i++)
         {
@@ -93,16 +94,11 @@ public class CloseWeaponController : MonoBehaviour, Iattackable,IPunObservable
         {
             pv = GetComponentInParent<PhotonView>(); //부모의 포톤뷰를 가져와서
             if(pv != null)
-            {
-                Debug.Log("널 이 아닌 상태 진입 ");
+            {                
                 actorNumber = pv.Owner.ActorNumber; //해당 플레이어의 액터넘버.      
             }
            
         }
-       
-        
-
-
     }
 
     protected bool TryAttack() //EquipController의 fire에 연동하면 fire에서 input과 연결되어있다.

@@ -27,7 +27,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     private RaycastHit hitInfo; //총알의 충돌 정보
 
     [Tooltip("스크립트의 활성화 여부")]
-    public static bool isActivate { get; set; } = true;
+    public  bool isActivate { get; set; } = true;
 
     [Tooltip("총알이 생성 될 FirePos 위치 ")]
     [SerializeField]private Transform FirePos;
