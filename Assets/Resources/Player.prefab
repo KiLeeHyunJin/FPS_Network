@@ -8006,6 +8006,8 @@ MonoBehaviour:
   miniCam: {fileID: 1490805060537847258}
   hp: 0
   killLog: {fileID: 0}
+  HpBar: {fileID: 0}
+  tapEntry: {fileID: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20785,7 +20787,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0030000322, y: 0.11400001, z: 0.09000014}
+  m_LocalPosition: {x: 0.0030000322, y: 0, z: 0.09000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -24,7 +24,8 @@ public class GameManager : Singleton<GameManager>
     const int RED = 2;
  
     UserData userData;
-
+    public bool dbLoad;
+    public bool onShop;
     
 
     public UserData UserData { get { return userData; } }
@@ -49,6 +50,7 @@ public class GameManager : Singleton<GameManager>
     }
     public void GetUserData()
     {
+        dbLoad = true;
         FireBaseManager.DB
                .GetReference("UserData")
                .Child(FireBaseManager.Auth.CurrentUser.UserId)
@@ -68,7 +70,8 @@ public class GameManager : Singleton<GameManager>
                    if (snapshot.Exists)
                    {
                        string json = snapshot.GetRawJsonValue();
-                       userData = JsonUtility.FromJson<UserData>(json); 
+                       userData = JsonUtility.FromJson<UserData>(json);
+                       dbLoad = false;
                    }
                });
     }

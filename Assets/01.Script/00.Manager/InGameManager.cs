@@ -3,6 +3,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,6 +40,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] TapUI tapUi;
 
     [SerializeField] PlayerInput playerInput;
+    [SerializeField] GameObject ShopCanvasPrefab;
 
     Room curRoom = PhotonNetwork.CurrentRoom;
 
@@ -212,174 +214,176 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             else
             {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                ShopCanvasPrefab.SetActive(false);
+                Manager.Game.onShop = false;
                 Manager.Game.redTeamSpawner.gameObject.SetActive(false);
                 Manager.Game.blueTeamSpawner.gameObject.SetActive(false);
             }
-
         if ((propertiesThatChanged.ContainsKey(DefinePropertyKey.STARTGAME)))           //5
             if ((bool)propertiesThatChanged[DefinePropertyKey.STARTGAME])
                 StartCoroutine(StartGameTime());
-
-
     }
 
-    IEnumerator ShoppingTime()                                                          //3
-    {
-
-        double loadTime = PhotonNetwork.Time;
-
-
-        while (PhotonNetwork.Time - loadTime < countValue)
+        IEnumerator ShoppingTime()                                                          //3
         {
-            int remainTime = (int)(countValue - (PhotonNetwork.Time - loadTime));
-            inGameTimer.text = (remainTime + 1).ToString();
-            yield return null;
+
+            double loadTime = PhotonNetwork.Time;
+
+
+            while (PhotonNetwork.Time - loadTime < countValue)
+            {
+                int remainTime = (int)(countValue - (PhotonNetwork.Time - loadTime));
+                inGameTimer.text = (remainTime + 1).ToString();
+                yield return null;
+            }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                pv.RPC("MessageUp", RpcTarget.All, ($"GAME START "));
+
+                PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, false);
+                PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);                          //4
+                PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, true);
+
+            }
+
+
         }
-
-        if (PhotonNetwork.IsMasterClient)
+        public void TimeOver()
         {
-            pv.RPC("MessageUp", RpcTarget.All, ($"GAME START "));
 
-            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, false);
-            PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);                          //4
-            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, true);
+            int remainBlue = 0;
+            int remainRed = 0;
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                if (1 == player.GetPhotonTeam().Code)
+                    if (player.GetProperty<bool>(DefinePropertyKey.DEAD))
+                        return;
+                    else
+                        remainBlue++;
 
-        }
-
-
-    }
-    public void TimeOver()
-    {
-        
-        int remainBlue = 0;
-        int remainRed = 0;
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if (1 == player.GetPhotonTeam().Code)
+                else
                 if (player.GetProperty<bool>(DefinePropertyKey.DEAD))
                     return;
                 else
-                    remainBlue++;
+                    remainRed++;
+            }
+            if (remainBlue > remainRed)
+            {
+                int blueScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
+                curRoom.SetProperty(DefinePropertyKey.BLUESCORE, blueScore + 1);
+                Debug.Log(curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE));
+                pv.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
 
+            }
+            else if (remainRed > remainBlue)
+            {
+                int redScore = curRoom.GetProperty<int>(DefinePropertyKey.REDSCORE);
+                curRoom.SetProperty(DefinePropertyKey.REDSCORE, redScore + 1);
+                pv.RPC("MessageUp", RpcTarget.All, ("레드팀 +1점"));
+            }
             else
-            if(player.GetProperty<bool>(DefinePropertyKey.DEAD))
-                    return;
+            {
+                pv.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
+            }
+
+
+        }
+        IEnumerator StartGameTime()                                                     //6
+        {
+            double loadTime = PhotonNetwork.Time;
+
+
+            while (PhotonNetwork.Time - loadTime < roundTimeValue)
+            {
+                int remainTime = (int)(roundTimeValue - (PhotonNetwork.Time - loadTime));
+                int minutes = Mathf.FloorToInt((remainTime % 3600) / 60);
+                int seconds = Mathf.FloorToInt(remainTime % 60);
+
+                inGameTimer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+                yield return null;
+            }
+
+            if (PhotonNetwork.IsMasterClient)                                           //7
+            {
+                PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
+                Debug.Log("TimeOver");
+                TimeOver();
+                if (curRound < roundCount)
+                {
+
+                    pv.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
+
+                    yield return new WaitForSeconds(3f);
+                    pv.RPC("RoundStart", RpcTarget.All);
+                    curRound++;
+                }
                 else
-                remainRed++;
+                {
+                    PhotonNetwork.CurrentRoom.SetLoadTime(0);
+                    pv.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
+                    yield return new WaitForSeconds(1f);
+                    pv.RPC("RoundOver", RpcTarget.All);
+
+                }
+            }
         }
-        if (remainBlue > remainRed)
+        [PunRPC]
+        void RoundOver()
         {
-            int blueScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
-            curRoom.SetProperty(DefinePropertyKey.BLUESCORE, blueScore+1);
-            Debug.Log(curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE));
-            pv.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
+            int blueTeamScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
+            int redTeamScore = curRoom.GetProperty<int>(DefinePropertyKey.REDSCORE);
 
-        }
-        else if (remainRed > remainBlue)
-        {
-            int redScore = curRoom.GetProperty<int>(DefinePropertyKey.REDSCORE);
-            curRoom.SetProperty(DefinePropertyKey.REDSCORE, redScore+1);
-            pv.RPC("MessageUp", RpcTarget.All, ("레드팀 +1점"));
-        }
-        else
-        {
-            pv.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
-        }
-            
-
-    }
-    IEnumerator StartGameTime()                                                     //6
-    {
-        double loadTime = PhotonNetwork.Time;
-
-
-        while (PhotonNetwork.Time - loadTime < roundTimeValue)
-        {
-            int remainTime = (int)(roundTimeValue - (PhotonNetwork.Time - loadTime));
-            int minutes = Mathf.FloorToInt((remainTime % 3600) / 60);
-            int seconds = Mathf.FloorToInt(remainTime % 60);
-
-            inGameTimer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-
-            yield return null;
-        }
-
-        if (PhotonNetwork.IsMasterClient)                                           //7
-        {
-            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
-            Debug.Log("TimeOver");
-            TimeOver();
-            if (curRound < roundCount)
+            if (1 == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
             {
-                
-                pv.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
-                
-                yield return new WaitForSeconds(3f);
-                pv.RPC("RoundStart", RpcTarget.All);
-                curRound++;
+                if (blueTeamScore > redTeamScore)
+                {
+                    MessageUp("승리!");
+                    Manager.Game.SetIncreaseDB("win");
+
+                }
+                else if (blueTeamScore < redTeamScore)
+                {
+                    MessageUp("패배!");
+                    Manager.Game.SetIncreaseDB("lose");
+
+                }
+                else if (blueTeamScore == redTeamScore)
+                {
+                    MessageUp("무승부!");
+
+                }
             }
             else
             {
-                PhotonNetwork.CurrentRoom.SetLoadTime(0);
-                pv.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
-                yield return new WaitForSeconds(1f);
-                pv.RPC("RoundOver", RpcTarget.All);
-
+                if (blueTeamScore > redTeamScore)
+                {
+                    MessageUp("패배!");
+                    Manager.Game.SetIncreaseDB("lose");
+                }
+                else if (blueTeamScore < redTeamScore)
+                {
+                    MessageUp("승리!");
+                    Manager.Game.SetIncreaseDB("win");
+                }
+                else if (blueTeamScore == redTeamScore)
+                {
+                    MessageUp("무승부!");
+                }
             }
+            tapUi.RecordKDA();
+            Manager.Game.SetUpCount();
+            StartCoroutine(GoToLobby());
         }
-    }
-    [PunRPC]
-    void RoundOver()
-    {
-        int blueTeamScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
-           int redTeamScore = curRoom.GetProperty<int>(DefinePropertyKey.REDSCORE);
-
-        if (1 == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
+        IEnumerator GoToLobby()
         {
-            if (blueTeamScore > redTeamScore)
-            {
-                MessageUp("승리!");
-                Manager.Game.SetIncreaseDB("win");
- 
-            }
-            else if (blueTeamScore < redTeamScore)
-            {
-                MessageUp("패배!");
-                Manager.Game.SetIncreaseDB("lose");
-             
-            }
-            else if (blueTeamScore == redTeamScore)
-            {
-                MessageUp("무승부!");
-               
-            }
-        }
-        else
-        {
-            if (blueTeamScore > redTeamScore)
-            {
-                MessageUp("패배!");
-                Manager.Game.SetIncreaseDB("lose");
-            }
-            else if (blueTeamScore < redTeamScore)
-            {
-                MessageUp("승리!");
-                Manager.Game.SetIncreaseDB("win");
-            }
-            else if (blueTeamScore == redTeamScore)
-            {
-                MessageUp("무승부!");
-            }
-        }
-        tapUi.RecordKDA();
-        Manager.Game.SetUpCount();
-        StartCoroutine(GoToLobby());
-    }
-    IEnumerator GoToLobby()
-    {
-        yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(3f);
 
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.LoadLevel("LobbyScene");
+            if (PhotonNetwork.IsMasterClient)
+                PhotonNetwork.LoadLevel("LobbyScene");
+        }
     }
-}
+

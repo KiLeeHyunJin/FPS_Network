@@ -64,9 +64,17 @@ public class RoomPanel : MonoBehaviourShowInfo
         }
         
     }
-    void InfoSetUp()
+   public void InfoSetUp()
     {
         Manager.Game.GetUserData();
+        StartCoroutine(SettingRoutine());
+        
+    }
+    IEnumerator SettingRoutine()
+    {
+        while (Manager.Game.dbLoad)
+         yield return null;
+        
         killCount.text = $"Kill Count : {Manager.Game.UserData.KillCount}";
         deathCount.text = $"Death Count : {Manager.Game.UserData.DeathCount}";
         assistCount.text = $"Assist Count : {Manager.Game.UserData.AssistCount}";
@@ -85,6 +93,7 @@ public class RoomPanel : MonoBehaviourShowInfo
                 Debug.LogWarning("Failed to load profile image from resources: " + profileImageName);
             }
         }
+
     }
     private void OnEnable()
     {

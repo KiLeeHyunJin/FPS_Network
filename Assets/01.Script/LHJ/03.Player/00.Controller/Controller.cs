@@ -184,7 +184,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CallFire()
     {
-        if (currentAttackable != null && currentAttackable.Attack())
+
+        if (currentAttackable != null && currentAttackable.Attack()&&!Manager.Game.onShop)
         {
             animController.Atck();
             cameraController.GetCamShakeRoutine();
@@ -195,7 +196,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void CallReload()
     {
-        if (currentAttackable != null && currentAttackable.Reload())
+        if (currentAttackable != null && currentAttackable.Reload()&& !Manager.Game.onShop)
         {
             animController.Reload();
 

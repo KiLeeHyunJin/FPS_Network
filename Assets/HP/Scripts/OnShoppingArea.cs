@@ -6,6 +6,7 @@ using UnityEngine;
 public class OnShoppingArea : MonoBehaviour
 {
     [SerializeField]LayerMask playerLayer;
+    [SerializeField] GameObject ShopCanvasPrefab;
     private void OnEnable()
     {
         playerLayer = LayerMask.GetMask("Player");
@@ -19,7 +20,12 @@ public class OnShoppingArea : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (playerLayer.ContainCheck(other.gameObject.layer)&& PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.SHOPPINGTIME))
-        {  Debug.Log("ShopUp");
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Debug.Log("ShopOpen");
+            ShopCanvasPrefab.SetActive(true);
+            Manager.Game.onShop = true;
             //Open ShopList  
         }
         
@@ -29,14 +35,13 @@ public class OnShoppingArea : MonoBehaviour
     {
         if (playerLayer.ContainCheck(other.gameObject.layer))
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            ShopCanvasPrefab.SetActive(false);
+            Manager.Game.onShop = false;
             Debug.Log("ShopClose");
             //Close ShopList
         }
     }
 
-
-    public void ShopListPopUp()
-    {
-
-    }
 }

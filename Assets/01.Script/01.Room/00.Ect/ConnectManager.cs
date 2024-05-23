@@ -36,6 +36,7 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         {
             SetActivePanel(Panel.Room);
             Manager.Game.afterGame = false;
+            
         }
         else
         {
