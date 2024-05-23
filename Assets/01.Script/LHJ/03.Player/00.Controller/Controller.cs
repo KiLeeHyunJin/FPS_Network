@@ -377,7 +377,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (requestController.Hit() == false)
             return;
 
-        hp -= equipController.ShieldCheck(_damage);
+        //hp -= equipController.ShieldCheck(_damage); 실험 위한 주석처리 
+        hp -= _damage;
         if (hp <= 0)
         {
             animController.Die();
@@ -394,6 +395,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
 
         hp -= equipController.ShieldCheck(_damage);
+        
         if (HpBar != null)
         {
             HpBar.value = Percent(hp, maxHp);
@@ -410,6 +412,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
                     , deathPlayer.NickName, lastShooterPlayer.NickName);
                 photonView.RPC("LogMessage", RpcTarget.AllBufferedViaServer, msg);
 
+                deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH)+1);
+                lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL)+1);
+
             }
 
             sensor.StopRoutine();
@@ -419,7 +424,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
         }
-
     }
 
     // slider bar 조정 용 
