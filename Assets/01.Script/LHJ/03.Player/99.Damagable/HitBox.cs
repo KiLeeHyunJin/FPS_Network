@@ -12,7 +12,7 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
         if(mine)
             this.gameObject.layer = 12;
         else
-            this.gameObject.layer = 6;
+            this.gameObject.layer = LayerMask.NameToLayer("HitBox");
         if (collider != null && collider.isTrigger == false)
             collider.isTrigger = true;
     }

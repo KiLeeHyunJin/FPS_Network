@@ -41,7 +41,7 @@ public class UIManager : Singleton<UIManager>
         {
             popUpBlocker.gameObject.SetActive(true);
             prevTimeScale = Time.timeScale;
-            Time.timeScale = 0f;
+            //Time.timeScale = 0f;
         }
 
         T ui = Instantiate(popUpUI, popUpCanvas.transform);

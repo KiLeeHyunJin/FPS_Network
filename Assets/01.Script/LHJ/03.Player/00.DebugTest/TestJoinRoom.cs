@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class TestJoinRoom : MonoBehaviourPunCallbacks
 {
+    [SerializeField] string debugRoomName;
     private void Awake()
     {
         if (PhotonNetwork.IsConnected == false) //연결이 안되어있으면 연결
@@ -22,7 +23,7 @@ public class TestJoinRoom : MonoBehaviourPunCallbacks
     IEnumerator CreateRoom()
     {
         yield return new WaitForSeconds(2); //즉시 방 참여 진입 시 오류가 발생하기에 2초 후 생성
-        PhotonNetwork.JoinOrCreateRoom("1", new RoomOptions{ MaxPlayers = 8,IsVisible = false }, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(debugRoomName, new RoomOptions{ MaxPlayers = 8,IsVisible = false }, TypedLobby.Default);
     }
     public override void OnJoinedRoom() //방에 진입 시 객체 생성
     {
