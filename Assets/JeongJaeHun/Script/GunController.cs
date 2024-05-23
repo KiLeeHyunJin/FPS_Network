@@ -37,6 +37,8 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     [Tooltip("부모의 photonView를 찾기 위한 변수")]
     [SerializeField] private PhotonView pv;
 
+    [SerializeField] private CrossHair crossHair; //이거 기본적으로 꺼져 있어야 하나? 어떡하지. 그런데 꺼져있으면 못찾아서;; 
+
 
     private void Awake()
     {
@@ -51,6 +53,8 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         if (pv.IsMine) //각각 로컬의 메인카메라를 가져오도록 
         {
             theCam = Camera.main;
+            
+            
         }
 
     }

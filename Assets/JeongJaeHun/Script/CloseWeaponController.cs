@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,9 @@ using UnityEngine.UIElements;
 
 public class CloseWeaponController : IKWeapon, Iattackable
 {
+    int actorNumber; //플레이어의 ActorNumber; 
+    PhotonView pv; //플레이어의 포톤 뷰. 
+
     AudioSource audioSource;
     private RaycastHit hitInfo; //현재 무기에 닿은 것들의 정보 
 
@@ -68,12 +72,17 @@ public class CloseWeaponController : IKWeapon, Iattackable
         {
             DicCloseWeapon.Add(closeWeapons[i].closeWeaponName, closeWeapons[i]);
         }
-              
+
+        if(photonView.IsMine) //IsMine 체크가 필요한지?? 
+        {
+            pv = GetComponentInParent<PhotonView>(); //부모의 포톤뷰를 가져와서
+            actorNumber = pv.Owner.ActorNumber; //해당 플레이어의 액터넘버. 
+        }
+       
+        
+
+
     }
-
-
-
-
 
     protected bool TryAttack() //EquipController의 fire에 연동하면 fire에서 input과 연결되어있다.
                                // 따로 키 관련해서 처리할 필요는 없음. reload 와 swap도 마찬가지. 
@@ -102,7 +111,7 @@ public class CloseWeaponController : IKWeapon, Iattackable
 
         // StartCoroutine(HitCoroutine()); // 실제로 공격데미지가 들어가는 상황
         // 함수로 한 번 실행하는게 나을듯? 
-        AttackTiming(); // TEMP ; 
+        AttackTiming(actorNumber); // TEMP ; 
         
         yield return new WaitForSeconds(currentCloseWeapon.attackDelayB);
         isSwing = false;
@@ -114,13 +123,13 @@ public class CloseWeaponController : IKWeapon, Iattackable
 
     Collider[] colliders = new Collider[20]; // overlap으로 정면 적 확인. 
 
-    protected  IEnumerator HitCoroutine() //추상 코루틴도 가능하네 (실제 히트 효과니까 이걸 상속해서
+    protected  IEnumerator HitCoroutine() 
     {
 
         yield return null; 
     }
 
-   private void AttackTiming()
+   private void AttackTiming(int actorNumber)
     {
         int size = Physics.OverlapSphereNonAlloc(currentCloseWeapon.transform.position,
             range, colliders, layermask);
@@ -135,7 +144,7 @@ public class CloseWeaponController : IKWeapon, Iattackable
             }
 
             IDamagable damagable = colliders[i].GetComponent<IDamagable>(); //인터페이스 가져오고
-            damagable?.TakeDamage(currentCloseWeapon.damage); // 데미지 주기.                                                                            
+            damagable?.TakeDamage(currentCloseWeapon.damage,actorNumber); // 데미지 주기. + 액터넘버 확인.                                                                        
         }
 
     }
