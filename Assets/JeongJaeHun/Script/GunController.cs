@@ -56,10 +56,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        if (!pv.IsMine) // 자신의 로컬 객체가 아니면 onEnable 실행하지 않기. 
-        {
-            return;
-        }
+
 
         int numOfChild = transform.childCount;
         for (int i = 0; i < numOfChild; i++)

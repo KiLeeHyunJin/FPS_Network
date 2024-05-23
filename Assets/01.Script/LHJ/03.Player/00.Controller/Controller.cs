@@ -88,6 +88,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void Start()
     {
+        killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         if (PhotonNetwork.InRoom)
         {
@@ -95,7 +96,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             
             if(photonView.IsMine)
             {
-                killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
+                
                 HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
                 if (HpBar != null)
                 {
@@ -421,16 +422,16 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (hp <= 0)
         {
             //if (Mine) //PhotonView.IsMine 쓰는거 맞나?? 잘 모르겠네... 
-            {
-                Player deathPlayer = photonView.Owner;
-                Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
+            Debug.Log("you killed ");
+            Player deathPlayer = photonView.Owner;
+            Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
 
-                photonView.RPC("LogMessage", RpcTarget.AllBufferedViaServer, lastShooterPlayer,deathPlayer);
+            photonView.RPC("LogMessage", RpcTarget.All, lastShooterPlayer.NickName,deathPlayer.NickName);
 
-                deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH) + 1);
-                lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
+            deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH) + 1);
+            lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
 
-            }
+            
             sensor.StopRoutine();
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
@@ -459,13 +460,20 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC]
     void LogMessage(string killer,string dead/*,Gun Image?*/)
     {
-      KillLogEntry ins = Instantiate(killLog.killInfoEntry, killLog.entryPos);
+        Debug.Log("kill Log Updata");
+       
+        KillLogEntry ins = Instantiate(killLog.killInfoEntry, killLog.entryPos);
         ins.deadName.text = dead;
         ins.killerName.text = killer;
         ScrollRect rect = killLog.GetComponent<ScrollRect>();
         rect.verticalScrollbar.value = 0;
+        StartCoroutine(KillLogIns(ins));
     }
-
+    IEnumerator KillLogIns(KillLogEntry ins)
+    {
+        yield return new WaitForSeconds(3f);
+        Destroy(ins.gameObject);
+    }
 
     // 이 부분도 자신의 체력 동기화
     public void AddHp(int _healValue)
@@ -501,6 +509,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
     public void RewindEffectOn()
     {
         Debug.Log("other Rewind");
+        if (photonView.IsMine)
+            return;
         Instantiate(rewindEff, transform,false);
         foreach(SkinnedMeshRenderer renderer in renderers)
         {
@@ -510,9 +520,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void RewindEffectOff()
     {
+        if (photonView.IsMine)
+            return;
+
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
             renderer.enabled = true;
         }
+        
     }
 }

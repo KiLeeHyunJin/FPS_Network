@@ -214,12 +214,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                
                 ShopCanvasPrefab.SetActive(false);
                 Manager.Game.onShop = false;
                 Manager.Game.redTeamSpawner.gameObject.SetActive(false);
                 Manager.Game.blueTeamSpawner.gameObject.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
         if ((propertiesThatChanged.ContainsKey(DefinePropertyKey.STARTGAME)))           //5
             if ((bool)propertiesThatChanged[DefinePropertyKey.STARTGAME])
