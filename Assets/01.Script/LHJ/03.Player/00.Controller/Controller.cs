@@ -80,6 +80,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] int playerNum;
 
     [SerializeField] SkinnedMeshRenderer[] renderers;
+    [SerializeField] MeshRenderer[] mrenders;
+
+    [SerializeField] PhotonView pv;
 
     private void Awake()
     {
@@ -88,15 +91,17 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void Start()
     {
+       
         killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        mrenders = GetComponentsInChildren<MeshRenderer>();
         if (PhotonNetwork.InRoom)
         {
             Check();
             
             if(photonView.IsMine)
             {
-                
+                pv = GameObject.FindWithTag("InGameManager")?.GetComponent<PhotonView>();
                 HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
                 if (HpBar != null)
                 {
@@ -413,6 +418,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC]
     void CallDamage(int _damage,int _actorNumber)
     {
+        if (photonView.Owner.GetProperty<bool>(DefinePropertyKey.DEAD))
+            return;
         hp -= equipController.ShieldCheck(_damage);
         if (HpBar != null)
         {
@@ -425,9 +432,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Debug.Log("you killed ");
             Player deathPlayer = photonView.Owner;
             Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
+            deathPlayer.SetProperty(DefinePropertyKey.DEAD, true);
 
             photonView.RPC("LogMessage", RpcTarget.All, lastShooterPlayer.NickName,deathPlayer.NickName);
-
+            pv.RPC("MessageUp", photonView.Owner, ($"당신이 {lastShooterPlayer.NickName}에게 사망하였습니다. "));
+            pv.RPC("MessageUp", lastShooterPlayer, ($"당신이 {deathPlayer.NickName}를 처치했습니다. "));
             deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH) + 1);
             lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
 
@@ -438,6 +447,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             ControllCharacterLayerChange(0, 0);
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
+            
         }
     }
 
@@ -516,6 +526,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             renderer.enabled = false;
         }
+        foreach (MeshRenderer renderer in mrenders)
+        {
+            renderer.enabled = false;
+        }
     }
     [PunRPC]
     public void RewindEffectOff()
@@ -527,6 +541,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             renderer.enabled = true;
         }
-        
+        foreach (MeshRenderer renderer in mrenders)
+        {
+            renderer.enabled = true;
+        }
+
     }
 }

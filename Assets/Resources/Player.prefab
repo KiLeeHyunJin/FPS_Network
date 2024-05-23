@@ -7058,6 +7058,8 @@ MonoBehaviour:
   tapEntry: {fileID: 0}
   playerNum: 0
   renderers: []
+  mrenders: []
+  pv: {fileID: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7292,8 +7294,6 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  - {fileID: 6632997920356581901}
-  - {fileID: 8644913041405509699}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

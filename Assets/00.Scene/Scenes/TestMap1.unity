@@ -4356,6 +4356,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InGameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1001167652597414179, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
+      propertyPath: m_TagString
+      value: InGameManager
+      objectReference: {fileID: 0}
     - target: {fileID: 1880634750319136727, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.68
