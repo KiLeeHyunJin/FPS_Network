@@ -13,6 +13,9 @@ public class GunHUD : MonoBehaviourPun
     private GunController[] theGunController; //Holder 위치에 건 컨트롤러 삽입 및 참조 
     private Gun curretGun;
 
+    
+
+
     //총알 텍스트 ui들을 담았던 이미지 ui 할당. 필요할 때 hud 할당하고 필요 없으면 비활성화 기능 추가. 
     [SerializeField]
     private GameObject go_BulletHUD;
@@ -23,12 +26,28 @@ public class GunHUD : MonoBehaviourPun
     // 총알 개수를 텍스트 ui에 반영 
     public TextMeshProUGUI textBullet;
 
+    [SerializeField ] Controller controller;
 
-    //다른 스크립트에서 slot을 on/off 할 때 이 관련 hud를 끄고 켜주고 하면 되니까... 
-    // 그냥 이 hud 스크립트는 여기서 그냥 돌리자. (분리는 다른 스크립트에서 해주면됨. ) 
+    [SerializeField] InventoryController inventoryController;
+
+    // 이거 각 컨트롤러 들의 OnEnable을 가지고 있는 방법도 나쁘지 않을 것 같음. --> OnEnable 하는 식으로
+
+
 
     private void Awake() 
     {
+        
+    }
+
+    private void Start()
+    {
+        if(photonView.IsMine)
+        {
+            controller=FindObjectOfType<Controller>(); // 로컬의 player의  controller 
+        }
+
+        //Inveontory의 weapons[] 이용해보자. type과 weapon[]로 현재 총 의 ammo  접근이 필요함. 
+        
         
     }
 
