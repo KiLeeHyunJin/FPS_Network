@@ -6107,6 +6107,7 @@ MonoBehaviour:
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
   pv: {fileID: 0}
+  crossHair: {fileID: 0}
 --- !u!82 &1525380330895399996
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14073,6 +14074,7 @@ MonoBehaviour:
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
   pv: {fileID: 0}
+  crossHair: {fileID: 0}
 --- !u!82 &1086287704117312395
 AudioSource:
   m_ObjectHideFlags: 0

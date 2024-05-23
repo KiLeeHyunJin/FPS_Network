@@ -76,7 +76,12 @@ public class CloseWeaponController : IKWeapon, Iattackable
         if(photonView.IsMine) //IsMine 체크가 필요한지?? 
         {
             pv = GetComponentInParent<PhotonView>(); //부모의 포톤뷰를 가져와서
-            actorNumber = pv.Owner.ActorNumber; //해당 플레이어의 액터넘버. 
+            if(pv != null)
+            {
+                Debug.Log("널 이 아닌 상태 진입 ");
+                actorNumber = pv.Owner.ActorNumber; //해당 플레이어의 액터넘버.      
+            }
+           
         }
        
         
