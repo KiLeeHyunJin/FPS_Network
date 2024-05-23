@@ -32,6 +32,10 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] ArmorManager armorManager;
     [SerializeField] Armor currentArmor;
 
+    [SerializeField] GunHUD gunHud;
+    [SerializeField] CloseWeaponHUD CloseWeaponHUD;
+    [SerializeField] BombHUD BombHUD;
+
 
     const string SpawnItem = "DropWeapon";
     const string DestroyItem = "PickWeapon";
@@ -80,6 +84,18 @@ public class InventoryController : MonoBehaviourPun
         ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
         if (shopManager != null)
             shopManager.inventory = this;
+
+        if (photonView.IsMine)
+        {
+            gunHud = FindObjectOfType<GunHUD>();
+            CloseWeaponHUD = FindObjectOfType<CloseWeaponHUD>();
+            BombHUD = FindObjectOfType<BombHUD>();
+
+            gunHud.gameObject.SetActive(false);
+            CloseWeaponHUD.gameObject.SetActive(true);
+            BombHUD.gameObject.SetActive(false);
+        }
+
     }
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
@@ -197,6 +213,70 @@ public class InventoryController : MonoBehaviourPun
 
         return _damage;
     }
+
+    public void Test(IKWeapon weapon)
+    {
+        //무기 바뀌는 시점을 원하는 함수
+
+        switch (weapon.weaponType)
+        {
+            case AnimationController.AnimatorWeapon.Pistol:
+
+                Gun gun = weapon as Gun;
+
+                gunHud.CurrentGunCheck(gun);
+
+                Debug.Log(gun.name);
+
+
+                BombHUD.gameObject.SetActive(false);
+                CloseWeaponHUD.gameObject.SetActive(false);
+                gunHud.gameObject.SetActive(true);
+
+
+                break;
+            case AnimationController.AnimatorWeapon.Rifle:
+
+                Gun gun2 = weapon as Gun;
+                gunHud.CurrentGunCheck(gun2);
+
+                BombHUD.gameObject.SetActive(false);
+                CloseWeaponHUD.gameObject.SetActive(false);
+                gunHud.gameObject.SetActive(true);
+
+
+                break;
+            case AnimationController.AnimatorWeapon.Sword:
+
+                CloseWeapon closeWeapon = weapon as CloseWeapon;
+                CloseWeaponHUD.CurrentSwordCheck(closeWeapon);
+
+                gunHud.gameObject.SetActive(false);
+                BombHUD.gameObject.SetActive(false);
+
+                CloseWeaponHUD.gameObject.SetActive(true);
+
+                break;
+            case AnimationController.AnimatorWeapon.Throw:
+
+                Bomb bomb = weapon as Bomb;
+                BombHUD.SetCurrentBomb(bomb);
+
+                CloseWeaponHUD.gameObject.SetActive(false);
+                gunHud.gameObject.SetActive(false);
+                BombHUD.gameObject.SetActive(true);
+
+                break;
+            case AnimationController.AnimatorWeapon.END:
+                break;
+        }
+    }
+
+    void OnEnable()
+    {
+        ChangeWeaponCallback(Test); //메소드 지정
+    }
+
 
 
 
