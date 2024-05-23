@@ -37,12 +37,12 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     [Tooltip("부모의 photonView를 찾기 위한 변수")]
     [SerializeField] private PhotonView pv;
 
-
+    int HitLayer;
     private void Awake()
     {
         //poolContainer = GameObject.FindObjectOfType<PoolContainer>();
         audioSource = GetComponent<AudioSource>();
-
+        HitLayer = 1 << LayerMask.NameToLayer("HitBox");
         // 부모 player의 포톤뷰 찾기.
         pv = GetComponentInParent<PhotonView>();
 
@@ -151,11 +151,13 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     private void Hit(int ActorNumber) //bullet 연구해서 연계 가능한지 확인해보고 --> 피 터지는건 불렛에서 피 터지게 하면 될 것 같은데 
     {
+        Debug.DrawLine(Camera.main.transform.position + transform.forward, (Camera.main.transform.position + transform.forward) * currentGun.range, Color.cyan, 2);
+
         if (Physics.Raycast(
             Camera.main.transform.position + transform.forward, 
             theCam.transform.forward, 
             out hitInfo, 
-            currentGun.range))
+            currentGun.range, HitLayer))
         {
             if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
             {

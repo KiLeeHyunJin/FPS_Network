@@ -6103,6 +6103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentGun: {fileID: 0}
+  currentFireRate: 0
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
   pv: {fileID: 0}
@@ -6855,6 +6856,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1e02754bd992a4a88999443344af6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <MainFireType>k__BackingField: 0
+  <Fire>k__BackingField: 0
 --- !u!114 &7180232115379314661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14063,6 +14066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentGun: {fileID: 0}
+  currentFireRate: 0
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
   pv: {fileID: 0}

@@ -145,6 +145,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             }
             return;
         }
+        //Cursor.lockState = CursorLockMode.Locked;
         cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
         inputController.Owner = this;
         sensor.StartInit();
@@ -392,9 +393,13 @@ public class Controller : MonoBehaviourPun, IPunObservable
     public void Damage(int _damage, int _actorNumber) // 총알의 주인 ActorNumber 
     {
         if (requestController.Hit() == false)
+        {
+            Debug.Log("Return");
             return;
+        }
 
         hp -= equipController.ShieldCheck(_damage);
+        Debug.Log($"equipShield HP : {hp}");
         
         if (HpBar != null)
         {

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3460925675581500312}
   - component: {fileID: 357242743479425697}
   - component: {fileID: -6789971585591892331}
+  - component: {fileID: 7662563792234892679}
   m_Layer: 5
   m_Name: PurChasePanel
   m_TagString: Untagged
@@ -32,10 +33,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7710235204567528834}
-  - {fileID: 5020097416373672266}
-  - {fileID: 44529416010286141}
   - {fileID: 761688106599629798}
   - {fileID: 5845597361874768069}
+  - {fileID: 5020097416373672266}
+  - {fileID: 44529416010286141}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -93,6 +94,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c1633416a81e94aa3c1586c20425c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7662563792234892679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453157780900694080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f663d9db83b91d74195a5f9e9a1c39a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sucessText: {fileID: 2309662241811081966}
+  failText: {fileID: 2275828427351203842}
+  inventory: {fileID: 0}
+  item: {fileID: 0}
+  itemPickUp: {fileID: 0}
 --- !u!1 &717878405843606855
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +123,6 @@ GameObject:
   - component: {fileID: 3296994464241215333}
   - component: {fileID: 5400932241387170445}
   - component: {fileID: 3496869423878636684}
-  - component: {fileID: 5900074606066029303}
   m_Layer: 5
   m_Name: NoBtn
   m_TagString: Untagged
@@ -215,7 +232,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5900074606066029303}
+      - m_Target: {fileID: 7662563792234892679}
         m_TargetAssemblyTypeName: PurchasePrefab, Assembly-CSharp
         m_MethodName: NoPurchase
         m_Mode: 1
@@ -227,22 +244,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5900074606066029303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 717878405843606855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f663d9db83b91d74195a5f9e9a1c39a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sucessText: {fileID: 0}
-  failText: {fileID: 0}
-  inventory: {fileID: 0}
-  item: {fileID: 0}
 --- !u!1 &6872366956432894158
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,7 +390,6 @@ GameObject:
   - component: {fileID: 3842626392662845464}
   - component: {fileID: 4741499335061562556}
   - component: {fileID: 4243015127922195947}
-  - component: {fileID: 6828550263672750901}
   m_Layer: 5
   m_Name: YesBtn
   m_TagString: Untagged
@@ -499,7 +499,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6828550263672750901}
+      - m_Target: {fileID: 7662563792234892679}
         m_TargetAssemblyTypeName: PurchasePrefab, Assembly-CSharp
         m_MethodName: YesPurchase
         m_Mode: 1
@@ -511,22 +511,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6828550263672750901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7129195765292093060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f663d9db83b91d74195a5f9e9a1c39a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sucessText: {fileID: 0}
-  failText: {fileID: 0}
-  inventory: {fileID: 0}
-  item: {fileID: 0}
 --- !u!1 &7614106682822389845
 GameObject:
   m_ObjectHideFlags: 0

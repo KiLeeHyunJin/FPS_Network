@@ -73,8 +73,6 @@ public class CameraController //: MonoBehaviour
         SetUserCharacterLayer?.Invoke(ignoreLayer, ignore2Layer);
 
         Camera.main.cullingMask = ~ignoreFlag; //컬링 레이어 설정
-        Cursor.lockState = CursorLockMode.Locked;
-
         updateAction = UpdateMethod;
     }
     public void Update()
