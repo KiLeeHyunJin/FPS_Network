@@ -24,17 +24,12 @@ public class CloseWeaponHUD : MonoBehaviourPun
     private void Update()
     {
      
-        if(!photonView.IsMine)
-        {
-            return;
-        }
-         
         CheckUi();
     }
 
     private void CheckUi() // 이 부분 로직을 어떻게 수정할지 생각해야함. --> closeWeapon 아래의 상황을 확인해야 하는지? 
     {
-        for(int i=0;i<CloseWeaponController.Length;i++)
+        /*for(int i=0;i<CloseWeaponController.Length;i++)
         {
             if (CloseWeaponController[i] != null)
             {
@@ -43,13 +38,21 @@ public class CloseWeaponHUD : MonoBehaviourPun
                     currentSword = CloseWeaponController[i].GetCloseWeapon();                   
                 }
             }
-        }
+        }*/
 
-        WeaponImage.sprite = currentSword.weaponSprite; //스프라이트 
-        weaponText.text = currentSword.closeWeaponName; //이름 
+        if(currentSword!=null)
+        {
+            
+            WeaponImage.sprite = currentSword.weaponSprite; //스프라이트 
+            weaponText.text = currentSword.closeWeaponName; //이름 
+        }
 
     }
 
+    public void CurrentSwordCheck(CloseWeapon _closeWeapon)
+    {
+        currentSword = _closeWeapon;
+    }
     
 
 }

@@ -23,9 +23,6 @@ public class GunHUD : MonoBehaviourPun
     // 총알 개수를 텍스트 ui에 반영 
     public TextMeshProUGUI textBullet;
 
-
-
-
     [SerializeField ] Controller controller;
 
     [SerializeField] InventoryController inventoryController;
@@ -34,6 +31,11 @@ public class GunHUD : MonoBehaviourPun
     // 정 안되면 Inveontory의 weapons[] 이용해보자. type과 weapon[]로 현재 총 의 ammo  접근이 필요함. 
 
 
+    private void OnEnable()
+    {
+        Debug.Log(" 건 패널 켜짐. ");
+    }
+
     private void Awake() 
     {
         
@@ -41,35 +43,26 @@ public class GunHUD : MonoBehaviourPun
 
     private void Start()
     {
-        if(photonView.IsMine)
-        {
-            controller=FindObjectOfType<Controller>(); // 로컬의 player의  controller 
-            inventoryController = FindObjectOfType<InventoryController>(); //로컬 player의 inventory 
-        }
-        
+       
     }
-
 
     // change weapon update가 실행되는 순간에 --> 체인지 웨폰 콜백이 발동되고. 그 내부는
     // test 함수를 발동시키는 거임. 
 
-
-
-
     private void Update()
     {
-        if(!photonView.IsMine)
-        {
-            return;
-        }
 
-        CheckUI(); // 이거 무기 종류마다 패널을 바꾸자.
-        // 무기 onEnable 될 때마다 다른 패널을 꺼줘버리자. 
+       /* if(!photonView.IsMine)
+        {
+            return; 다른 곳에서 .isMine 체크하니까 괜찮을것 같은데 ?
+        }*/
+
+        CheckUI();
     }
 
     private void CheckUI() //수류탄일때는 어떻게 하지? 
     {
-        for(int i=0;i<theGunController.Length;i++)
+        /*for(int i=0;i<theGunController.Length;i++)
         {
             if (theGunController[i] != null)
             {
@@ -79,9 +72,11 @@ public class GunHUD : MonoBehaviourPun
                 }
             }
         }
-        // 총알 숫자 업데이트
+        // 총알 숫자 업데이트*/
 
-        if(curretGun!=null)
+        
+
+        if (curretGun!=null)
         {
             textBullet.text = $"{curretGun.currentBulletCount} / {curretGun.maxBulletCount}";
 
@@ -91,6 +86,12 @@ public class GunHUD : MonoBehaviourPun
 
         
     }
+
+    public void CurrentGunCheck(Gun _gun) // 외부에서 이미 부름. 
+    {
+        curretGun = _gun;
+    }
+
 
   
 
