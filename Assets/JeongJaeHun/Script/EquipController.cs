@@ -33,7 +33,7 @@ public class EquipController : MonoBehaviourPun
 
     public int ShieldCheck(int _damage)
     {
-        
+        return _damage;
         currentArmor= armorManager.GetCurrentArmor(); //현재 아머 가져오기.
 
         currentArmor.ArmorDurability--;

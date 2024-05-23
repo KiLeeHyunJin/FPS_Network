@@ -22,7 +22,7 @@ public class AnimationController : MonoBehaviourPun
     [SerializeField] TwoBoneIKConstraint right;
     [SerializeField] MultiParentConstraint[] weaponParents;
     Transform[] currentWeapons;
-
+    InventoryController inventoryController;
     int JumpEnterId;
     int StandId;
     int CrouchId;
@@ -55,6 +55,7 @@ public class AnimationController : MonoBehaviourPun
             (handRig, GetComponent<RigBuilder>(), left, right,
             weaponParents,
             GetComponent<Controller>());
+        inventoryController = GetComponent<InventoryController>();
     }
     public Vector2 MoveValue
     {
@@ -94,27 +95,26 @@ public class AnimationController : MonoBehaviourPun
             photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
     }
 
-    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckabl )
+    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckable )
     {
         if (currentWeapons[(int)type].childCount == 0)
         {
-            Debug.Log($"EquipChild Zero {currentWeapons[(int)type].name}");
             return false;
         }
 
         if (anim.GetBool(weaponId[(int)type]))
         {
-            Debug.Log($"Current Same State {weaponId[(int)type]}");
             return false;
         }
 
         photonView.RPC(RIGIK, RpcTarget.Others,
-            currentWeapons[(int)type].GetChild(0).name, ChangeWeaponId);
+            currentWeapons[(int)type].GetChild(0).GetComponent<IKWeapon>().weaponType,
+            currentWeapons[(int)type].GetChild(0).GetComponent<IKWeapon>().InstanceId, 
+            ChangeWeaponId);
 
         OnWeaponLayer(type);
         anim.SetTrigger(ChangeWeaponId);
-        if (currentWeapons[(int)type] is Iattackable temp)
-            atckabl = temp;
+        atckable = currentWeapons[(int)type].GetComponent<Iattackable>();
         return true;
     }
 
@@ -187,12 +187,11 @@ public class AnimationController : MonoBehaviourPun
     }
 
     [PunRPC]
-    void RigIK(int _instanceId, int triggerId)
+    void RigIK(int type,int _instanceId, int triggerId)
     {
-        IKWeapon newWeapon = Manager.Pool.GetPool(_instanceId,Vector3.zero,Quaternion.identity).GetComponent<IKWeapon>();
+        inventoryController.AddItem((AnimatorWeapon)type, _instanceId);
         anim.SetTrigger(triggerId);
-        newWeapon.transform.SetParent(currentWeapons[(int)newWeapon.weaponType]);
-        iKAnimation.ChangeWeapon(newWeapon.weaponType);
+        iKAnimation.ChangeWeapon((AnimatorWeapon)type);
     }
 
 

@@ -53,6 +53,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 0}
+  weapons: []
+  pistolHolder: {fileID: 0}
+  rifleHolder: {fileID: 0}
+  swordHolder: {fileID: 0}
+  throwHolder: {fileID: 0}
+  pistolSaver: {fileID: 0}
+  rifleSaver: {fileID: 0}
+  swordSaver: {fileID: 0}
+  throwSaver: {fileID: 0}
 --- !u!114 &763409810917371466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +266,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a7167a9e871024284960d179a447e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSword: {fileID: 0}
+  <WeaponPos>k__BackingField: {fileID: 0}
+  <leftGrip>k__BackingField: {fileID: 0}
+  <RightGrip>k__BackingField: {fileID: 0}
+  <ZoomPos>k__BackingField: {fileID: 0}
+  <weaponType>k__BackingField: 0
+  <InstanceId>k__BackingField: 0
   weaponSprite: {fileID: 0}
   closeWeaponID: 0
   closeWeaponType: 0

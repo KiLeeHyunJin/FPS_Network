@@ -44,16 +44,17 @@ public class CloseWeaponController : IKWeapon, Iattackable
         int numOfChild = this.transform.childCount; //현재 활성화된 무기 검색. 
         for (int i = 0; i < numOfChild; i++)
         {
-            if (transform.GetChild(i).gameObject.activeSelf == true)
-            {
-                currentCloseWeapon = transform.GetChild(i).GetComponent<CloseWeapon>();
-                trailRenderer=currentCloseWeapon.trailRenderer;
-                break;
-            }
+            //if (transform.GetChild(i).gameObject.activeSelf == true)
+            //{
+
+            //    break;
+            //}
+            currentCloseWeapon = transform.GetChild(i).GetComponent<CloseWeapon>();
+            trailRenderer = currentCloseWeapon.trailRenderer;
         }
         if(trailRenderer!=null)
         trailRenderer.emitting = false; //공격하지 않을 때 렌더러가 생기지 않도록 꺼주기. 
-
+        isAttack = false;
         range = currentCloseWeapon.range; //캐싱? 해주기 
     }
 
@@ -109,7 +110,6 @@ public class CloseWeaponController : IKWeapon, Iattackable
         yield return new WaitForSeconds(currentCloseWeapon.attackDelay -
             currentCloseWeapon.attackDelayA - currentCloseWeapon.attackDelayB);
         isAttack = false;
-
     }
 
     Collider[] colliders = new Collider[20]; // overlap으로 정면 적 확인. 

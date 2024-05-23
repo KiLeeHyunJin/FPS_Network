@@ -49,11 +49,10 @@ public class IKAnimationController
     {
         Transform childObj = currentWeapons[(int)weaponType].GetChild(0);
         currentWeapon = childObj.GetComponent<IKWeapon>();
-        if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.GetInstanceID())
+        if (currentWeaponId[(int)currentWeapon.weaponType] != currentWeapon.InstanceId)
             EquipWeaponEnter(currentWeapon, isMine);
 
         ChangeWeaponWeight(currentWeapon.weaponType);
-
         owner.SetZoomPosition(currentWeapon.ZoomPos);
     }
 
@@ -62,6 +61,7 @@ public class IKAnimationController
 
     public void DequipWeapon()
     {
+
         owner.StartCoroutined(
             FrameEndAction(SetWeight, 0), 
             ref SetWeightco);
@@ -93,8 +93,7 @@ public class IKAnimationController
         owner.StartCoroutined(
             FrameEndAction(SetWeight, 0),
             ref SetWeightco);
-
-        owner.StartCoroutined(
+            owner.StartCoroutined(
             FrameParentWeight(1, 0),
             ref trainsitionco);
     }
@@ -121,12 +120,16 @@ public class IKAnimationController
     }
     IEnumerator FrameParentAction(int value)
     {
+        if (currentWeaponParent == null)
+            yield break;
         yield return new WaitForEndOfFrame();
         currentWeaponParent.weight = value;
     }
 
     IEnumerator FrameParentWeight(float value1, float value2)
     {
+        if (currentWeaponParent == null)
+            yield break;
         yield return new WaitForEndOfFrame();
         WeightedTransformArray array = currentWeaponParent.data.sourceObjects;
         array.SetWeight(0, value1);
@@ -142,7 +145,7 @@ public class IKAnimationController
     {
         int weaponTypeNum = isMine ? (int)weapon.weaponType : 0;
 
-        currentWeaponId[weaponTypeNum] = weapon.GetInstanceID();
+        currentWeaponId[weaponTypeNum] = weapon.InstanceId;
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
     }

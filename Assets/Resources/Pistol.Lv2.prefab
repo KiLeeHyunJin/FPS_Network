@@ -349,7 +349,9 @@ GameObject:
   - component: {fileID: 1953602893666812674}
   - component: {fileID: 2175254609360078343}
   - component: {fileID: 686888504114998706}
-  m_Layer: 8
+  - component: {fileID: 5763189482123743299}
+  - component: {fileID: 6002850020406487379}
+  m_Layer: 11
   m_Name: Pistol.Lv2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,6 +394,7 @@ MonoBehaviour:
   <RightGrip>k__BackingField: {fileID: 6203652263283464167}
   <ZoomPos>k__BackingField: {fileID: 660282030555368400}
   <weaponType>k__BackingField: 0
+  <InstanceId>k__BackingField: 12
   gunSprite: {fileID: 1207196788, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
   gunID: 2
   gunType: 4
@@ -506,6 +509,54 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &5763189482123743299
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374467500805772026}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6002850020406487379
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374467500805772026}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2463628202106627811
 GameObject:
   m_ObjectHideFlags: 0
