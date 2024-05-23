@@ -51,6 +51,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] int teamCode;
     [SerializeField] GameObject miniCam;
 
+    [SerializeField] ParticleSystem rewindEff;
     int maxHp;
     [SerializeField] int hp;
     public bool Mine { get; private set; }
@@ -76,6 +77,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] Slider HpBar; // 플레이어의 Hp bar 연계
     [SerializeField] TapEntry tapEntry;
 
+    [SerializeField] int playerNum;
+
+    [SerializeField] SkinnedMeshRenderer[] renderers;
+
     private void Awake()
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
@@ -83,6 +88,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void Start()
     {
+        renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         if (PhotonNetwork.InRoom)
         {
             Check();
@@ -489,6 +495,24 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             TeamCode = (int)stream.ReceiveNext();
             hp = (int)stream.ReceiveNext();
+        }
+    }
+    [PunRPC]
+    public void RewindEffectOn()
+    {
+        Debug.Log("other Rewind");
+        Instantiate(rewindEff, transform,false);
+        foreach(SkinnedMeshRenderer renderer in renderers)
+        {
+            renderer.enabled = false;
+        }
+    }
+    [PunRPC]
+    public void RewindEffectOff()
+    {
+        foreach (SkinnedMeshRenderer renderer in renderers)
+        {
+            renderer.enabled = true;
         }
     }
 }

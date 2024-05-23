@@ -1578,7 +1578,7 @@ Transform:
   m_GameObject: {fileID: 701296235}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.08715578, z: -0, w: 0.9961947}
-  m_LocalPosition: {x: 2.698583, y: 0.09400001, z: -6.1918883}
+  m_LocalPosition: {x: 2.698583, y: 3.154, z: -31.461887}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3780,17 +3780,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2314896274677362847, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.11400008
+      objectReference: {fileID: 0}
     - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 3162171735836929336, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3552819859659342744, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: sceneViewId
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4599455779024753041, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: GroundLayer.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 4599455779024753041, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: teleportEffectPrefab
+      value: 
+      objectReference: {fileID: 5659367511549085570, guid: 22f945ca012cbeb4ba379344062837fb, type: 3}
+    - target: {fileID: 7118670613644641491, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
+      propertyPath: positionRecordInterval
+      value: 0.016
       objectReference: {fileID: 0}
     - target: {fileID: 7708248345571052111, guid: e53c57cd09754ca4b979ef53ccbe0749, type: 3}
       propertyPath: sceneViewId

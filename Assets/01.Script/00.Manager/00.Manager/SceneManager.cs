@@ -7,6 +7,7 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 public class SceneManager : Singleton<SceneManager>
 {
     [SerializeField] Image fade;
+    [SerializeField] Image timeRewindImg;
     [SerializeField] Slider loadingBar;
     [SerializeField] float fadeTime;
     [SerializeField] Sprite[] loadingImgs;
@@ -45,7 +46,7 @@ public class SceneManager : Singleton<SceneManager>
     IEnumerator LoadingRoutine(string sceneName)
     {
         fade.gameObject.SetActive(true);
-        yield return FadeOut();
+        yield return FadeOut(fade,1);
 
         Manager.Pool.ClearPool();
         Manager.Sound.StopSFX();
@@ -71,36 +72,36 @@ public class SceneManager : Singleton<SceneManager>
         loadingBar.gameObject.SetActive(false);
         Time.timeScale = 1f;
 
-        yield return FadeIn();
+        yield return FadeIn(fade,1);
         fade.gameObject.SetActive(false);
 
     }
     
-    IEnumerator FadeOut()
+    IEnumerator FadeOut(Image img,float f)
     {
         float rate = 0;
-        Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
-        Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
+        Color fadeOutColor = new Color(img.color.r, img.color.g, img.color.b, f);
+        Color fadeInColor = new Color(img.color.r, img.color.g, img.color.b, 0f);
 
         while (rate <= 1)
         {
             rate += Time.deltaTime / fadeTime;
-            fade.color = Color.Lerp(fadeInColor, fadeOutColor, rate);
+            img.color = Color.Lerp(fadeInColor, fadeOutColor, rate);
             yield return null;
         }
     }
 
-    IEnumerator FadeIn()
+    IEnumerator FadeIn(Image img,float f)
     {
         onFading = true;
         float rate = 0;
-        Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
-        Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
+        Color fadeOutColor = new Color(img.color.r, img.color.g, img.color.b, f);
+        Color fadeInColor = new Color(img.color.r, img.color.g, img.color.b, 0f);
 
         while (rate <= 1)
         {
             rate += Time.deltaTime / fadeTime;
-            fade.color = Color.Lerp(fadeOutColor, fadeInColor, rate);
+            img.color = Color.Lerp(fadeOutColor, fadeInColor, rate);
             yield return null;
         }
         onFading = false;
@@ -110,16 +111,8 @@ public class SceneManager : Singleton<SceneManager>
     public Coroutine StartFadeOut()
     {
       
-       return StartCoroutine(FadeOut());
+       return StartCoroutine(FadeOut(fade,1));
     }
-
-    // FadeIn을 호출할 공개 메서드
-    //public Coroutine StartFadeIn()
-    //{
-    //    Debug.Log("Call FadeIn");
-    //    return StartCoroutine(FadeIn());
-    //}
-
     Coroutine fadeInRoutine;
     public void StartFadeIn()
     {
@@ -127,6 +120,22 @@ public class SceneManager : Singleton<SceneManager>
         if (fadeInRoutine != null)
             StopCoroutine(fadeInRoutine);
 
-        fadeInRoutine = StartCoroutine(FadeIn());
+        fadeInRoutine = StartCoroutine(FadeIn(fade, 1));
     }
+    public Coroutine RewindOut()
+    {
+
+        return StartCoroutine(FadeOut(timeRewindImg,0.7f));
+    }
+
+    Coroutine rewindRoutine;
+    public void RewindIn()
+    {
+
+        if (rewindRoutine != null)
+            StopCoroutine(rewindRoutine);
+
+        rewindRoutine = StartCoroutine(FadeIn(timeRewindImg,0.7f));
+    }
+
 }

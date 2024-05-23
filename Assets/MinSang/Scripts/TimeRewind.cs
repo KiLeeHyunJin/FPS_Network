@@ -3,6 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEditor;
 using System.Collections.Generic;
+using Photon.Realtime;
 
 public class TimeRewind : MonoBehaviourPun, IDamagable
 {
@@ -17,9 +18,11 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
     private int currentHealth;
     private Coroutine rewindCoroutine;
     private Coroutine recordCoroutine;
+    PhotonView pv;
 
     void Start()
     {
+        pv = GetComponent<PhotonView>();    
         Controller = GetComponent<Controller>();
         currentHealth = maxHealth;
         positionHistory = new Queue<Vector3>();
@@ -36,13 +39,17 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
             if (Input.GetKeyDown(rewindKey))
             {
                 Debug.Log("시간 역행");
+                Manager.Scene.RewindOut();
+                
                 rewindCoroutine = StartCoroutine(RewindCoroutine());
+                
             }
         }
     }
 
     IEnumerator RecordPositionAndHealth()
     {
+       
         while (true)
         {
             if (positionHistory.Count >= Mathf.CeilToInt(rewindDuration / positionRecordInterval))
@@ -71,6 +78,7 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
         var positionHistoryArray = positionHistory.ToArray();
         var healthHistoryArray = healthHistory.ToArray();
         int historyCount = positionHistoryArray.Length;
+        pv.RPC("RewindEffectOn", RpcTarget.Others);
 
         while (time < rewindDuration && historyCount > 0)
         {
@@ -81,7 +89,8 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
             time += Time.deltaTime;
             yield return null;
         }
-
+        Manager.Scene.RewindIn();
+        pv.RPC("RewindEffectOff", RpcTarget.Others);
         Controller.enabled = true;
         rewindCoroutine = null;
         recordCoroutine = StartCoroutine(RecordPositionAndHealth());
