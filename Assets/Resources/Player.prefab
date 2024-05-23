@@ -6917,7 +6917,7 @@ MonoBehaviour:
   ignoreGroundCheckLength: 0.8
   jumpHeight: 1.5
   walkStandSpeed: 2.1
-  runStandSpeed: 3.5
+  runStandSpeed: 5.98
   walkCrouchSpeed: 0.5
   runCrouchSpeed: 1.7
   gravitySpeed: 2
@@ -7202,11 +7202,14 @@ MonoBehaviour:
   prefixField: -1
   Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 0
+  observableSearch: 2
   ObservedComponents:
+  - {fileID: 8544027938743297954}
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
+  - {fileID: 6632997920356581901}
+  - {fileID: 8644913041405509699}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

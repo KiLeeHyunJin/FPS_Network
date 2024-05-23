@@ -87,9 +87,17 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             Check();
             killLog = GameObject.FindWithTag("KillLog")?.GetComponentInChildren<TextMeshProUGUI>();
-            HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
-            if(HpBar != null)
-                HpBar.value = hp; //hp가 SetData에서 maxHp로 할당되므로 
+            if(photonView.IsMine)
+            {
+                HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
+                if (HpBar != null)
+                {
+                    Debug.Log("Hp init");
+                    HpBar.value = maxHp; //hp가 SetData에서 maxHp로 할당되므로 
+                }
+            }
+            
+                
 
             tapEntry= FindObjectOfType<TapEntry>();
             CallThree();
@@ -154,7 +162,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void SetData()  // 이 부분 start 내부에서 이미 체크하고 있음 (체력 초기화 완료됨) 
     {
+        
         maxHp = maxHp <= 0 ? 100 : maxHp;
+        Debug.Log("Data Setting");
         if (photonView.Controller.GetPhotonTeam() != null)
             teamCode = photonView.Controller.GetPhotonTeam().Code;
         else
@@ -471,10 +481,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(TeamCode);
+            stream.SendNext(hp);
         }
         else
         {
             TeamCode = (int)stream.ReceiveNext();
+            hp= (int)stream.ReceiveNext();
         }
     }
 }
