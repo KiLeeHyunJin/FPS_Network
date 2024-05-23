@@ -1,0 +1,219 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1001167652597414179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1880634750319136727}
+  - component: {fileID: 5633368061903827360}
+  - component: {fileID: 1899894854204855654}
+  - component: {fileID: 7243008007384791977}
+  m_Layer: 0
+  m_Name: InGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1880634750319136727
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001167652597414179}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.68, y: 3.0500002, z: 6.28}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5633368061903827360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001167652597414179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6637e327e4bbdc040b9dc0422701201b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  redLocation: {fileID: 0}
+  blueLocation: {fileID: 0}
+  readyPlayer: 0
+  pv: {fileID: 1899894854204855654}
+  inGameTimer: {fileID: 0}
+  countValue: 20
+  roundTimeValue: 20
+  blueTeamEntryList: {fileID: 0}
+  redTeamEntryList: {fileID: 0}
+  inGameEntryPrefab: {fileID: 7539548104374328566, guid: f7dd40e7c5ce6d646a9fb54698b606ae, type: 3}
+  chatPanel: {fileID: 0}
+  chat: {fileID: 0}
+  chatViewTime: 10
+  curRound: 1
+  roundCount: 2
+  tapUi: {fileID: 0}
+  playerInput: {fileID: 7243008007384791977}
+  ShopCanvasPrefab: {fileID: 0}
+--- !u!114 &1899894854204855654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001167652597414179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 5633368061903827360}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &7243008007384791977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001167652597414179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: d50dddbaa28d8254a8f6d509a7ed10b3, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1b9e0ab4-4032-4898-b6df-61a774cea3f6
+    m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 41a223a5-26ab-414f-b36f-e0dd30476ebb
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 83d7d3d5-4fb5-45a0-ac14-c1bc67fe90d9
+    m_ActionName: Player/FirstWeapon[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 89df048a-2b5a-4064-b933-55e5bf909e5d
+    m_ActionName: Player/SecondWeapon[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9931c441-6df0-4fd6-88d7-78249dd8318f
+    m_ActionName: Player/OtherWeapon[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 38825e91-992d-46f7-87f5-046558d94c77
+    m_ActionName: Player/ThrowWeapon[/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0c185b48-23c5-412f-8017-f639d548a045
+    m_ActionName: Player/Interaction[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 316f1208-0657-43c5-aeb3-2a69c2c04e94
+    m_ActionName: Player/C[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fb3e21c7-8e06-48a7-85df-43094ae800a4
+    m_ActionName: Player/X[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9e3bf92c-8207-41cf-81f9-57dacfde8938
+    m_ActionName: Player/Z[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 60a26bc6-bf6c-456f-a059-fd2db7188976
+    m_ActionName: Player/Shift[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a2857564-81aa-4b71-9bba-fe22b7cb4559
+    m_ActionName: Player/Look[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eee97c75-3e5a-403e-a820-9264e28d1d3b
+    m_ActionName: Player/R[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6f3f6b88-d855-4c40-83b8-5cf97b2bc8bf
+    m_ActionName: Player/V[/Keyboard/v]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 32bfc999-0efc-42ce-9b5e-6cbbc09052a6
+    m_ActionName: Player/Alt[/Keyboard/leftAlt]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f4e42906-67d3-4824-8956-c70b206af461
+    m_ActionName: Player/FirePress[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 21607c7d-fa0b-4022-8af2-eee46c5f2921
+    m_ActionName: Player/FireOne[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 052b9e2b-b8c5-4b5e-91c7-6bef97a4c1d6
+    m_ActionName: Player/Zoom[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c72034e5-e381-4d77-abf6-7be01c93dad2
+    m_ActionName: UI/Tab[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5633368061903827360}
+        m_TargetAssemblyTypeName: InGameManager, Assembly-CSharp
+        m_MethodName: ChatOnOff
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+    m_ActionId: f5622a0e-e66c-4924-adf5-be6e5c6cc97b
+    m_ActionName: UI/Enter[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e75571b7-bcdd-4a84-ad87-d61d87abd31b
+    m_ActionName: Camera/MousePos[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0b6b7bc4-24ca-418d-8a2c-5a2d9b1ee2bc
+    m_ActionName: Player/Enter[/Keyboard/enter]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
