@@ -7,6 +7,7 @@ using UnityEngine.Animations.Rigging;
 using UnityEngine.Assertions.Must;
 using UnityEngine.SocialPlatforms.Impl;
 using static Define;
+using static SoundManager;
 
 
 public class AnimationController : MonoBehaviourPun
@@ -31,6 +32,8 @@ public class AnimationController : MonoBehaviourPun
     int ChangeWeaponId;
     int ReloadId;
     int AtckId;
+    int DieId;
+    int LiveId;
 
     int[] layerId;
     int[] floatId;
@@ -132,6 +135,7 @@ public class AnimationController : MonoBehaviourPun
     {
         int upper = anim.GetLayerIndex("Upper");
         anim.SetLayerWeight(upper, 0);
+        photonView.RPC(TRIGGER, RpcTarget.AllViaServer, DieId);
     }
 
     public void MoveRun()
@@ -166,6 +170,11 @@ public class AnimationController : MonoBehaviourPun
     public void EquipWeapon()
     {
         iKAnimation?.EquipWeapon();
+    }
+
+    public void Alive()
+    {
+        photonView.RPC(TRIGGER, RpcTarget.AllViaServer, LiveId);
     }
 
     public void DequipWeapon()
@@ -231,6 +240,8 @@ public class AnimationController : MonoBehaviourPun
         ChangeWeaponId = Animator.StringToHash("ChangeWeapon");
         ReloadId = Animator.StringToHash("Reload");
         AtckId = Animator.StringToHash("Atck");
+        DieId = Animator.StringToHash("Die");
+        LiveId = Animator.StringToHash("Reset");
 
         int ForwardId = Animator.StringToHash("Forward");
         int TurnId = Animator.StringToHash("Turn");
@@ -297,6 +308,7 @@ public class AnimationController : MonoBehaviourPun
         Jump,
         JumpFinish,
         JumpSlide,
+
         END
     }
 }

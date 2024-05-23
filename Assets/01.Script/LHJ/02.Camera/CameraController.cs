@@ -57,19 +57,23 @@ public class CameraController //: MonoBehaviour
     public void Init(Action<int,int> _layerMethod,  Camera _overlayCam, float _mouseSensitivity)
     {
         mouseSensitivity = _mouseSensitivity;
-
+        SetUserCharacterLayer ??= _layerMethod;
         overlay = _overlayCam;
+
         Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(overlay);
+        Reset();
+    }
+    public void Reset()
+    {
         noise.m_AmplitudeGain = 0f;
         noise.m_FrequencyGain = 0f;
 
-        int ignoreLayer = LayerMask.NameToLayer("Door") ; //무시할 레이어 설정
+        int ignoreLayer = LayerMask.NameToLayer("Door"); //무시할 레이어 설정
         int ignore2Layer = LayerMask.NameToLayer("FPSIgnore"); //무시할 레이어 설정
         int iconignore1 = LayerMask.NameToLayer("MyMiniCam");
         int iconignore2 = LayerMask.NameToLayer("SearchEnemyCam");
-        int ignoreFlag = (1 << ignoreLayer) | (1 << iconignore1) | (1<<iconignore2) | (1<< ignore2Layer); //쉬프트연산
+        int ignoreFlag = (1 << ignoreLayer) | (1 << iconignore1) | (1 << iconignore2) | (1 << ignore2Layer); //쉬프트연산
 
-        SetUserCharacterLayer ??= _layerMethod;
         SetUserCharacterLayer?.Invoke(ignoreLayer, ignore2Layer);
 
         Camera.main.cullingMask = ~ignoreFlag; //컬링 레이어 설정

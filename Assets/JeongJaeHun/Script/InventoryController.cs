@@ -28,6 +28,11 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] Transform swordSaver;
     [SerializeField] Transform throwSaver;
 
+    // 웨폰 스왑 함수 발동시에 --> swap 컴포넌트의 변수 가져와서 스왑 방지 시켜주기. 
+    [SerializeField] ArmorManager armorManager;
+    [SerializeField] Armor currentArmor;
+
+
     const string SpawnItem = "DropWeapon";
     const string DestroyItem = "PickWeapon";
     public IKWeapon this[AnimationController.AnimatorWeapon weaponType]
@@ -177,18 +182,21 @@ public class InventoryController : MonoBehaviourPun
         return null;
     }
 
-    public void Test(IKWeapon weapon)
+
+    public int ShieldCheck(int _damage)
     {
-        //무기 바뀌는 시점을 원하는 함수
+        return _damage;
+        currentArmor = armorManager.GetCurrentArmor(); //현재 아머 가져오기.
+
+        currentArmor.ArmorDurability--;
+
+        if (currentArmor.ArmorDurability > 0)
+        {
+            _damage -= currentArmor.ArmorDefense;
+        }
+
+        return _damage;
     }
-
-    void OnEnable()
-    {
-        ChangeWeaponCallback(Test); //메소드 지정
-    }
-
-
-
 
 
 

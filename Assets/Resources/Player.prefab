@@ -6805,7 +6805,6 @@ GameObject:
   - component: {fileID: 6451079822198019901}
   - component: {fileID: 1603188683640465106}
   - component: {fileID: 1404201885252024400}
-  - component: {fileID: 7096750706993251039}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -6981,9 +6980,8 @@ MonoBehaviour:
   rifleSaver: {fileID: 2104039700890027392}
   swordSaver: {fileID: 475067165285954441}
   throwSaver: {fileID: 1028063607362966582}
-  gunHud: {fileID: 0}
-  CloseWeaponHUD: {fileID: 0}
-  BombHUD: {fileID: 0}
+  armorManager: {fileID: 0}
+  currentArmor: {fileID: 0}
 --- !u!114 &8544027938743297954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7496,20 +7494,6 @@ MonoBehaviour:
   - {fileID: 3698329442651796312}
   - {fileID: 0}
   - {fileID: 4280448145748883065}
---- !u!114 &7096750706993251039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3162171735836929336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84d2aa485622ea41a84741f90b3d9d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  armorManager: {fileID: 0}
-  currentArmor: {fileID: 0}
 --- !u!1 &3204037897197038457
 GameObject:
   m_ObjectHideFlags: 0
@@ -19332,16 +19316,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b5c06b051d2194f91679da94687bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponPos>k__BackingField: {fileID: 0}
-  <leftGrip>k__BackingField: {fileID: 0}
-  <RightGrip>k__BackingField: {fileID: 0}
-  <ZoomPos>k__BackingField: {fileID: 0}
-  <weaponType>k__BackingField: 0
-  <InstanceId>k__BackingField: 0
   currentCloseWeapon: {fileID: 0}
   isAttack: 0
   isSwing: 0
   closeWeapons: []
+  HitLayer: 0
 --- !u!114 &7836484150925953477
 MonoBehaviour:
   m_ObjectHideFlags: 0

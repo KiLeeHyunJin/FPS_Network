@@ -92,32 +92,30 @@ public class Controller : MonoBehaviourPun, IPunObservable
     }
     void Start()
     {
-       
+        if (PhotonNetwork.InRoom == false)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         mrenders = GetComponentsInChildren<MeshRenderer>();
-        if (PhotonNetwork.InRoom)
-        {
-            Check();
-            
-            if(photonView.IsMine)
-            {
-                pv = GameObject.FindWithTag("InGameManager")?.GetComponent<PhotonView>();
-                HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
-                if (HpBar != null)
-                {
-                    Debug.Log("Hp init");
-                    HpBar.value = maxHp; //hp가 SetData에서 maxHp로 할당되므로 
-                }
-            }
-            
-                
+        tapEntry = FindObjectOfType<TapEntry>();
 
-            tapEntry= FindObjectOfType<TapEntry>();
-            CallThree();
+        Check();
+        CallThree();
+
+        if (photonView.IsMine)
+        {
+            pv = GameObject.FindWithTag("InGameManager")?.GetComponent<PhotonView>();
+            HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
+            if (HpBar != null)
+            {
+                Debug.Log("Hp init");
+                HpBar.value = maxHp; //hp가 SetData에서 maxHp로 할당되므로 
+            }
         }
-        else
-            Destroy(gameObject);
     }
 
     void Check()
@@ -127,8 +125,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
         SetKeyAction();
         MoveProcessInit();
         SetUpdateAction();
-
     }
+
     void CheckMine()
     {
         if (photonView.Controller.GetPhotonTeam() == null)
@@ -243,9 +241,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             animController.Atck();
             cameraController.GetCamShakeRoutine();
-
-            //equipController.Fire();
-            //requestController.Fire();
         }
     }
     void CallReload()
@@ -253,8 +248,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (currentAttackable != null && currentAttackable.Reload()&& !Manager.Game.onShop)
         {
             animController.Reload();
-
-            equipController.Reload();
         }
     }
 
@@ -425,7 +418,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         if (photonView.Owner.GetProperty<bool>(DefinePropertyKey.DEAD))
             return;
-        hp -= equipController.ShieldCheck(_damage);
+        hp -= inventoryController.ShieldCheck(_damage);
         if (HpBar != null)
         {
             HpBar.value = Percent(hp, maxHp);
@@ -433,26 +426,25 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         if (hp <= 0)
         {
-            //if (Mine) //PhotonView.IsMine 쓰는거 맞나?? 잘 모르겠네... 
             Debug.Log("you killed ");
             Player deathPlayer = photonView.Owner;
             Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
             deathPlayer.SetProperty(DefinePropertyKey.DEAD, true);
 
             photonView.RPC("LogMessage", RpcTarget.All, lastShooterPlayer.NickName,deathPlayer.NickName);
+
             pv.RPC("MessageUp", photonView.Owner, ($"당신이 {lastShooterPlayer.NickName}에게 사망하였습니다. "));
             pv.RPC("MessageUp", lastShooterPlayer, ($"당신이 {deathPlayer.NickName}를 처치했습니다. "));
+
             deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH) + 1);
             lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
 
-            
             sensor.StopRoutine();
             animController.Die();
             Cursor.lockState = CursorLockMode.None;
             ControllCharacterLayerChange(0, 0);
             cameraController.CameraPriority = 0;
             inputController.InputActive = false;
-            
         }
     }
 
@@ -506,6 +498,16 @@ public class Controller : MonoBehaviourPun, IPunObservable
             StopCoroutine(co);
     }
 
+    public void ResettingPlayer()
+    {
+        animController.Alive();
+        SetData();
+        photonView.Controller.SetProperty(DefinePropertyKey.DEAD, false);
+        sensor.StartInit();
+        cameraController.Reset();
+        inputController.InputActive = true;
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -519,6 +521,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             hp = (int)stream.ReceiveNext();
         }
     }
+
     [PunRPC]
     public void RewindEffectOn()
     {
