@@ -71,6 +71,10 @@ public class InventoryController : MonoBehaviourPun
         //slots= gameObject.GetComponentsInChildren<Slot>();
         if (goldText != null)
             goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
+
+        ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
+        if (shopManager != null)
+            shopManager.inventory = this;
     }
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
@@ -91,7 +95,7 @@ public class InventoryController : MonoBehaviourPun
         goldText.text = $"{Gold}"; //골드텍스트 초기화 
     }
 
-    public void AddItem(Item _item, int _id) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
+    public void AddItem(Item _item) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {
         GameObject obj = _item.itemPrefab;
         if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))

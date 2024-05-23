@@ -69,6 +69,10 @@ public class PurchasePrefab : MonoBehaviour
         else  //가지고 있는 골드가 많거나 똑같으면 --> 구매 성공 
         {
             inventory.LoseCoin(price); //가격 만큼 골드 빼주기. 
+            inventory.AddItem(item);
+            Debug.Log($"{item.itemPrefab.name},{Id}"); //물건의 아이템 형과 id가 제대로 들어오는지 확인해보기. 
+
+
             if (coroutine != null)
             {
                 StopCoroutine(coroutine); //만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 
@@ -78,9 +82,7 @@ public class PurchasePrefab : MonoBehaviour
                                        // 프리팹을 인벤토리에 추가해줘야함. --> 내가 보유중인 아이템 목록의 최신화 
 
             // 인벤토리 추가 함수 부르기. 
-            inventory.AddItem(item, Id);
-            Debug.Log($"{item},{Id}"); //물건의 아이템 형과 id가 제대로 들어오는지 확인해보기. 
-
+           
             // 무기를 가지고 있으면 해당 panel을 비활성화 해줘야하는데 어떻게 할지 모르겟다 ㅠㅠ
         }
     }

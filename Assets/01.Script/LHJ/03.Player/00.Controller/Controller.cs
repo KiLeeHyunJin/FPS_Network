@@ -441,7 +441,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
             return;
         }
         photonView.RPC("CallDamage", photonView.Owner, _damage, _actorNumber);
-
     }
 
     // slider bar 조정 용 

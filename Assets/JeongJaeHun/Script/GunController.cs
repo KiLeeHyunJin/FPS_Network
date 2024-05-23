@@ -25,17 +25,12 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     private AudioSource audioSource; // 총 발사 소리 재생위한 오디오소스 
 
     private RaycastHit hitInfo; //총알의 충돌 정보
-    
-    private Camera theCam; //카메라 시점에서 정 중앙에 발사할 것. 
 
     [Tooltip("스크립트의 활성화 여부")]
     public static bool isActivate { get; set; } = true;
 
     [Tooltip("총알이 생성 될 FirePos 위치 ")]
     [SerializeField]private Transform FirePos;
-
-    [Tooltip("부모의 photonView를 찾기 위한 변수")]
-    [SerializeField] private PhotonView pv;
 
     [SerializeField] private CrossHair crossHair; //이거 기본적으로 꺼져 있어야 하나? 어떡하지. 그런데 꺼져있으면 못찾아서;; 
 
@@ -47,20 +42,12 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         audioSource = GetComponent<AudioSource>();
         HitLayer = 1 << LayerMask.NameToLayer("HitBox");
         // 부모 player의 포톤뷰 찾기.
-        pv = GetComponentInParent<PhotonView>();
 
         originPos = Vector3.zero;
     }
 
-
-
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        if (!pv.IsMine) // 자신의 로컬 객체가 아니면 onEnable 실행하지 않기. 
-        {
-            return;
-        }
-
         int numOfChild = transform.childCount;
         for (int i = 0; i < numOfChild; i++)
         {
@@ -97,7 +84,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         }
     }
 
-
     private void GunFireRateCalc() // 총의 쿨타임 
     {
         if (currentFireRate > 0)
@@ -119,6 +105,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
                     photonView.Controller.ActorNumber,
                     Camera.main.transform.position,
                     Camera.main.transform.forward);
+
                 photonView.RPC("Effect", RpcTarget.All);
                 return true;
             }
@@ -152,7 +139,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         {
             if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
-                hitInfo.collider.GetComponent<Controller>();
                 Debug.Log($"Hit Damage {currentGun.damage} ");
 
                 damagable.TakeDamage(currentGun.damage, ActorNumber); //actorNumber가 laycast의 주인 actorNumber 

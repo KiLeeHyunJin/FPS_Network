@@ -22,15 +22,19 @@ public class ShopUIManager : MonoBehaviour
         {
             shopBtn[i].onClick.AddListener(()=> 
             { 
-                onItemPanelClick(shopBtn[i].gameObject.GetComponent<ItemPickUp>()); 
+                OnItemPanelClick(shopBtn[i].gameObject.GetComponent<ItemPickUp>()); 
             });
         }
     }
 
-    public void onItemPanelClick(ItemPickUp _pickItem) //Item 버튼에 부여할 이벤트 
+    public void OnItemPanelClick(ItemPickUp _pickItem) //Item 버튼에 부여할 이벤트 
     {
         PopUpUI purChaseUI = Manager.UI.ShowPopUpUI(purChasePanelPrefab);
-        purChaseUI.GetComponent<PurchasePrefab>().SetItemData(_pickItem);
+        if(purChaseUI.TryGetComponent<PurchasePrefab>(out PurchasePrefab purchase))
+        {
+            purchase.inventory = inventory;
+            purchase.SetItemData(_pickItem);
+        }
     }
 
 
