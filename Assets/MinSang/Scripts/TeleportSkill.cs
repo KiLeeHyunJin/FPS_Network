@@ -8,7 +8,7 @@ public class TeleportSkill : MonoBehaviourPun
     public float teleportDistance = 10f;
     public GameObject teleportEffectPrefab; // 텔레포트 이펙트 프리팹
     public float effectDuration = 1.0f;
-    public LayerMask groundLayer; // 지형 레이어를 설정하여 맵 밖으로 나가는 것을 방지
+    public LayerMask GroundLayer; // 지형 레이어를 설정하여 맵 밖으로 나가는 것을 방지
 
     void Update()
     {
@@ -22,7 +22,6 @@ public class TeleportSkill : MonoBehaviourPun
     {
         Vector3 targetPosition = transform.position + transform.forward * teleportDistance;
 
-        // 레이캐스트를 사용하여 목표 위치가 맵 안에 있는지 확인
         if (IsValidTeleportPosition(targetPosition))
         {
             photonView.RPC("RPC_Teleport", RpcTarget.All, targetPosition);
@@ -35,14 +34,16 @@ public class TeleportSkill : MonoBehaviourPun
 
     bool IsValidTeleportPosition(Vector3 targetPosition)
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        // 목표 위치에서 수직으로 레이캐스트를 쏴서 지형에 닿는지 확인
+        Ray ray = new Ray(targetPosition + Vector3.up * 0.5f, Vector3.down);
         RaycastHit hit;
 
+        Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red);
         // 레이캐스트가 지형에 닿았는지 확인
-        if (Physics.Raycast(ray, out hit, teleportDistance, groundLayer))
+        if (Physics.Raycast(ray, out hit, 1f, GroundLayer))
         {
-            // 목표 위치가 레이캐스트가 닿은 지점 근처인지 확인
-            return Vector3.Distance(hit.point, targetPosition) < 1.0f;
+            // 목표 위치가 지형 위에 있는지 확인
+            return hit.collider != null;
         }
 
         return false;
@@ -51,6 +52,7 @@ public class TeleportSkill : MonoBehaviourPun
     [PunRPC]
     void RPC_Teleport(Vector3 targetPosition)
     {
+        // 시작 이펙트 생성
         GameObject startEffect = Instantiate(teleportEffectPrefab, transform.position, Quaternion.identity);
         Destroy(startEffect, effectDuration);
 
