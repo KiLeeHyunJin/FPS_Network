@@ -152,7 +152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2508323028576791547
 RectTransform:
   m_ObjectHideFlags: 0
@@ -477,6 +477,8 @@ MonoBehaviour:
   go_BulletHUD: {fileID: 4609781988719572643}
   gunImage: {fileID: 1452410285165245552}
   textBullet: {fileID: 3350504533379877911}
+  controller: {fileID: 0}
+  inventoryController: {fileID: 0}
 --- !u!1 &4774074298799921999
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +497,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1852203600789333789
 RectTransform:
   m_ObjectHideFlags: 0
@@ -828,7 +830,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2488375522861909338
 RectTransform:
   m_ObjectHideFlags: 0

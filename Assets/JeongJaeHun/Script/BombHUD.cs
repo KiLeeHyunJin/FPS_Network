@@ -20,10 +20,7 @@ public class BombHUD : MonoBehaviourPun
 
     private void Update()
     {
-        if(!photonView.IsMine)
-        {
-            return;
-        }
+
 
         CheckUi(); 
     }
@@ -31,7 +28,7 @@ public class BombHUD : MonoBehaviourPun
     private void CheckUi()
     {
 
-        for(int i=0;i<bombController.Length;i++)  // 붐컨이 2개니까.. 하나가 꺼져도 계속 getbomb이 됨. 
+        /*for(int i=0;i<bombController.Length;i++)  // 붐컨이 2개니까.. 하나가 꺼져도 계속 getbomb이 됨. 
         {
             if (bombController[i] !=null)
             {
@@ -43,15 +40,23 @@ public class BombHUD : MonoBehaviourPun
                 
 
             }
-        }
+        }*/
 
+        
         //폭탄 갯수 업데이트 ( 폭탄 이름 추가. )
-        textBomb.text = $"{currentBomb.bombName} \n {currentBomb.currentBombNumber} /{currentBomb.fullBombNumber} ";
+        if(currentBomb!=null)
+        {
+            textBomb.text = $"{currentBomb.bombName} \n {currentBomb.currentBombNumber} /{currentBomb.fullBombNumber} ";
 
-        bombImage.sprite = currentBomb.bombSprite; 
+            bombImage.sprite = currentBomb.bombSprite;
+        }
+        
     }
 
-    //폭탄 숫자는 폭탄 던질 때 해야지.. 
+    public void SetCurrentBomb(Bomb _bomb)
+    {
+        currentBomb= _bomb;
+    }
 
 
 
