@@ -2281,7 +2281,7 @@ MonoBehaviour:
   pv: {fileID: 678307619}
   inGameTimer: {fileID: 605212222}
   countValue: 20
-  roundTimeValue: 10
+  roundTimeValue: 180
   blueTeamEntryList: {fileID: 1426684345}
   redTeamEntryList: {fileID: 1581944064}
   inGameEntryPrefab: {fileID: 7539548104374328566, guid: f7dd40e7c5ce6d646a9fb54698b606ae, type: 3}

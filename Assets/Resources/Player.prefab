@@ -6107,6 +6107,7 @@ MonoBehaviour:
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
   pv: {fileID: 0}
+  crossHair: {fileID: 0}
 --- !u!82 &1525380330895399996
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6765,6 +6766,9 @@ GameObject:
   - component: {fileID: 2121747480424366495}
   - component: {fileID: 5045083684308435195}
   - component: {fileID: 8693427242519498167}
+  - component: {fileID: 264066126754691022}
+  - component: {fileID: 4599455779024753041}
+  - component: {fileID: 7118670613644641491}
   - component: {fileID: 7180232115379314661}
   - component: {fileID: 8751713840925892574}
   - component: {fileID: 8544027938743297954}
@@ -6858,6 +6862,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MainFireType>k__BackingField: 0
   <Fire>k__BackingField: 0
+--- !u!114 &264066126754691022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 768b4264025efd242ab4941d26d3d0ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCloaked: 0
+  CloakingMaterial: {fileID: -876546973899608171, guid: 32bc5ec8d39913d4f8f9b5832710ea9e, type: 3}
+  CloakDuration: 3
+  CloakTransparency: 1
+  CloakKey: 113
+--- !u!114 &4599455779024753041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b90c9968566daaa49be8e8430e48af6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportDistance: 10
+  teleportEffectPrefab: {fileID: 0}
+  effectDuration: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 512
+--- !u!114 &7118670613644641491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1faa5de0b8fe348b3ae5cd01a9efcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 8544027938743297954}
+  rewindDuration: 3
+  positionRecordInterval: 0.1
+  rewindKey: 122
+  maxHealth: 100
 --- !u!114 &7180232115379314661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7204,6 +7260,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 264066126754691022}
   - {fileID: 8544027938743297954}
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
@@ -14073,6 +14130,7 @@ MonoBehaviour:
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
   pv: {fileID: 0}
+  crossHair: {fileID: 0}
 --- !u!82 &1086287704117312395
 AudioSource:
   m_ObjectHideFlags: 0
