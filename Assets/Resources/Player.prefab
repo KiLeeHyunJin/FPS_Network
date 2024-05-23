@@ -6981,6 +6981,9 @@ MonoBehaviour:
   rifleSaver: {fileID: 2104039700890027392}
   swordSaver: {fileID: 475067165285954441}
   throwSaver: {fileID: 1028063607362966582}
+  gunHud: {fileID: 0}
+  CloseWeaponHUD: {fileID: 0}
+  BombHUD: {fileID: 0}
 --- !u!114 &8544027938743297954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7292,8 +7295,6 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  - {fileID: 6632997920356581901}
-  - {fileID: 8644913041405509699}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -10661,10 +10662,10 @@ MonoBehaviour:
   <ZoomPos>k__BackingField: {fileID: 0}
   <weaponType>k__BackingField: 2
   <InstanceId>k__BackingField: 0
-  weaponSprite: {fileID: 0}
+  weaponSprite: {fileID: -1869107078, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
   closeWeaponID: 0
   closeWeaponType: 0
-  closeWeaponName: 
+  closeWeaponName: "\uADFC\uC811\uBB34\uAE30"
   attackDelay: 1
   attackDelayA: 1
   attackDelayB: 1
