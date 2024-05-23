@@ -8,8 +8,4 @@ public class ItemPickUp : MonoBehaviour
 
     [field : SerializeField] public Item item { get; set; } // item 스크립터블 오브젝트를 참조하기 위함. 
 
-    
-
-
-
 }

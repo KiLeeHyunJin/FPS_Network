@@ -513,7 +513,7 @@ GameObject:
   - component: {fileID: 2374652814466249820}
   - component: {fileID: 2727193280482357593}
   - component: {fileID: 3630094988091136748}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: PistolLv2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -554,8 +554,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <WeaponPos>k__BackingField: {fileID: 0}
   <leftGrip>k__BackingField: {fileID: 0}
   <RightGrip>k__BackingField: {fileID: 0}
+  <ZoomPos>k__BackingField: {fileID: 0}
+  <weaponType>k__BackingField: 0
+  <InstanceId>k__BackingField: 0
   gunSprite: {fileID: 0}
   gunID: 2
   gunType: 4

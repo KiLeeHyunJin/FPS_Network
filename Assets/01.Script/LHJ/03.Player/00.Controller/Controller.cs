@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static Define;
 
 public class Controller : MonoBehaviourPun, IPunObservable
 {
@@ -154,6 +155,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
             }
             return;
         }
+        inventoryController.SetChangePose((_weaponType) =>
+        {
+            animController.ChangeWeapon(_weaponType, ref currentAttackable);
+            inputController.SetWeaponType = _weaponType;
+        });
         //Cursor.lockState = CursorLockMode.Locked;
         cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
         inputController.Owner = this;
@@ -193,15 +199,14 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void CallPickUp()
     {
-        Collider coll = sensor.FrontObj;
-        if(coll != null)
+        Collider fronwWeapon = sensor.FrontObj;
+        if(fronwWeapon != null)
         {
-            if (coll.TryGetComponent<IKWeapon>(out IKWeapon weapon))
+            if (fronwWeapon.TryGetComponent<IKWeapon>(out IKWeapon weapon))
             {
                 inventoryController.AddItem(weapon);
-                animController.ChangeWeapon(weapon.weaponType, ref currentAttackable);
-                inputController.SetWeaponType = weapon.weaponType;
                 weapon.PickUp();
+                //PhotonNetwork.Destroy(weapon.gameObject);
             }
         }
         else

@@ -38,17 +38,19 @@ public class PurchasePrefab : MonoBehaviour
         // 아이템 데이터 관련 함수를 불러옴. 
         CanPurchase();
     }
+    
     public void SetItemData(ItemPickUp _pickItem)
     {
         itemPickUp = _pickItem;
+        item = itemPickUp.item;
     }
+
     public void PanelClick() //패널을 클리했을 때 가져와야 하는 정보. 
     {
         // 아이템 버튼 패널을 클릭하면 가지고 있는 스크립트를 가져와서 item 형태와 id를 확인해줘야한다.
         itemPickUp = GetComponent<ItemPickUp>();
         Id = itemPickUp.item.itemID; // 아이템의 id를 저장. 
         price = itemPickUp.item.price; //아이템의 가격을 저장. 
-
         // 일단 정보를 저장해두고. --> 실제 구매시에 Gold를 체크해주는 방안을 실시해줘야함. 
     }
 
@@ -57,7 +59,7 @@ public class PurchasePrefab : MonoBehaviour
         if (inventory == null)
             return;
 
-        if (price < inventory.Gold) //보유 중인 골드보다 샵 아이템의 가격이 더 비싸면. 
+        if (price > inventory.Gold) //보유 중인 골드보다 샵 아이템의 가격이 더 비싸면. 
         {
             if (coroutine != null)
             {
@@ -72,13 +74,9 @@ public class PurchasePrefab : MonoBehaviour
             inventory.AddItem(item);
             Debug.Log($"{item.itemPrefab.name},{Id}"); //물건의 아이템 형과 id가 제대로 들어오는지 확인해보기. 
 
+            this.ReStartCoroutine(SucessPurchase(), ref coroutine);//만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 
 
-            if (coroutine != null)
-            {
-                StopCoroutine(coroutine); //만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 
-            }
-            coroutine = StartCoroutine(SucessPurchase());
-            Manager.UI.ClosePopUpUI(); //구매 창 닫아주기. 
+            Manager.UI?.ClosePopUpUI(); //구매 창 닫아주기. 
                                        // 프리팹을 인벤토리에 추가해줘야함. --> 내가 보유중인 아이템 목록의 최신화 
 
             // 인벤토리 추가 함수 부르기. 

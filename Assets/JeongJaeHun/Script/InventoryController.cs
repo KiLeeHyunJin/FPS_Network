@@ -13,9 +13,9 @@ public class InventoryController : MonoBehaviourPun
 {
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
-    public int Gold { get; set; }
+    [field : SerializeField] public int Gold { get; set; }
     public TextMeshProUGUI goldText;
-
+    Action<AnimationController.AnimatorWeapon> ChangeWeapon;
     private Item item; //이 부분 p[ublic 참조 해야하나? 아닐 것 같은데 
     [SerializeField] private IKWeapon[] weapons;
     [SerializeField] Transform pistolHolder;
@@ -28,12 +28,12 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] Transform swordSaver;
     [SerializeField] Transform throwSaver;
 
-    Controller owner;
+    const string SpawnItem = "DropWeapon";
+    const string DestroyItem = "PickWeapon";
     public IKWeapon this[AnimationController.AnimatorWeapon weaponType]
     {
         get
         {
-            Debug.Log($"List {weaponType}");
             return weapons[(int)weaponType];
         }
     }
@@ -62,9 +62,9 @@ public class InventoryController : MonoBehaviourPun
 
     private void Awake()
     {
+        Gold = 1000;
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
         weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
-        owner = GetComponent<Controller>();
     }
     private void Start()
     {
@@ -85,7 +85,10 @@ public class InventoryController : MonoBehaviourPun
             goldText.text = $"{Gold}";
         }
     }
-
+    public void SetChangePose(Action<AnimationController.AnimatorWeapon> action)
+    {
+        ChangeWeapon = action;
+    }
     public void LoseCoin(int coin) //상점 아이템 구매 등
     {
         if (goldText == null)
@@ -100,7 +103,7 @@ public class InventoryController : MonoBehaviourPun
         GameObject obj = _item.itemPrefab;
         if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))
             return;
-        AddWeapon(weapon.weaponType,weapon.InstanceId);
+        AddWeapon(weapon.weaponType, weapon.InstanceId);
     }
     public void AddItem(IKWeapon _weapon)
     {
@@ -116,12 +119,13 @@ public class InventoryController : MonoBehaviourPun
         if (weapons[(int)weaponType] != null)
             Dequip(weapons[(int)weaponType]);
 
+        ChangeWeapon?.Invoke(weaponType);
         weapons[(int)weaponType] = Equip(weaponType, id);
     }
 
     public void Throw(AnimationController.AnimatorWeapon weaponType)
     {
-        Dequip(this[weaponType]);
+        Dequip(weapons[(int)weaponType]);
     }
 
     void Dequip(IKWeapon _weapon)
@@ -137,11 +141,8 @@ public class InventoryController : MonoBehaviourPun
         };
         _weapon.transform.SetParent(parent);
         _weapon.gameObject.SetActive(false);
-
-        if (PhotonNetwork.IsMasterClient)
-            DropWeapon(_weapon.name);
-        else
-            photonView.RPC("DropWeapon", RpcTarget.MasterClient, _weapon.name);
+        weapons[(int)_weapon.weaponType] = null;
+        photonView.RPC(SpawnItem, RpcTarget.MasterClient, _weapon.name);
     }
 
     [PunRPC]

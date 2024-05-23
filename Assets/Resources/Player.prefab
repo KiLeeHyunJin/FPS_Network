@@ -6107,7 +6107,6 @@ MonoBehaviour:
   currentFireRate: 0
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
-  pv: {fileID: 0}
   crossHair: {fileID: 0}
 --- !u!82 &1525380330895399996
 AudioSource:
@@ -6918,9 +6917,9 @@ MonoBehaviour:
   teleportDistance: 10
   teleportEffectPrefab: {fileID: 0}
   effectDuration: 1
-  groundLayer:
+  GroundLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
 --- !u!114 &7118670613644641491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6971,6 +6970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad5188acd37e9a4aa43d51ea0d71607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Gold>k__BackingField: 0
   goldText: {fileID: 0}
   weapons: []
   pistolHolder: {fileID: 6645689630095728053}
@@ -14154,7 +14154,6 @@ MonoBehaviour:
   currentFireRate: 0
   originPos: {x: 0, y: 0, z: 0}
   FirePos: {fileID: 0}
-  pv: {fileID: 0}
   crossHair: {fileID: 0}
 --- !u!82 &1086287704117312395
 AudioSource:

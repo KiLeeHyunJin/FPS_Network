@@ -22,7 +22,7 @@ public class IKWeapon : MonoBehaviourPun
     public Vector3 OriginPos { get; protected set; }
     [field : SerializeField] public int InstanceId { get; private set; }
 
-
+    const string RemoveWeapon = "RPC_DestroyObject";
     protected virtual void Awake()
     {
         OriginPos = transform.localPosition; 
@@ -30,19 +30,16 @@ public class IKWeapon : MonoBehaviourPun
     }
     public void PickUp()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (photonView == null)
         {
-            PhotonNetwork.Destroy(gameObject);
+            return;
         }
-        else
-        {
-            photonView.RPC("RPC_DestroyObject", RpcTarget.MasterClient);
-        }
+        photonView.RPC("RPC_DestroyObject", photonView.Owner);
     }
 
     [PunRPC]
-    void RPC_DestroyObject()
+    public void RPC_DestroyObject()
     {
-        PhotonNetwork.Destroy(gameObject);
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }
