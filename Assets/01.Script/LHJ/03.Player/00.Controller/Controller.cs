@@ -64,7 +64,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     PlayerInput playerInput;
     CharacterTransformProcess moveProcess;
     InventoryController inventoryController;
-    EquipController equipController;
     AnimationController animController;
     ProcessingController processingController;
 
@@ -138,11 +137,14 @@ public class Controller : MonoBehaviourPun, IPunObservable
         inputController = gameObject.GetOrAddComponent<PlayerInputController>();
         processingController = GetComponent<ProcessingController>();
 
-        equipController = GetComponent<EquipController>();
         requestController = GetComponent<RequestController>();
         inventoryController = GetComponent<InventoryController>();
         cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
-
+        inventoryController.SetChangePose((_weaponType) =>
+        {
+            animController.ChangeWeapon(_weaponType, ref currentAttackable);
+            inputController.SetWeaponType = _weaponType;
+        });
         minimapIcon_m?.SetActive(true);
 
         if (Mine == false)
@@ -165,11 +167,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             }
             return;
         }
-        inventoryController.SetChangePose((_weaponType) =>
-        {
-            animController.ChangeWeapon(_weaponType, ref currentAttackable);
-            inputController.SetWeaponType = _weaponType;
-        });
+
         //Cursor.lockState = CursorLockMode.Locked;
         cameraController.Init(ControllCharacterLayerChange, overlayCam, mouseSensitivity);
         inputController.Owner = this;
@@ -216,7 +214,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
             {
                 inventoryController.AddItem(weapon);
                 weapon.PickUp();
-                //PhotonNetwork.Destroy(weapon.gameObject);
             }
         }
         else

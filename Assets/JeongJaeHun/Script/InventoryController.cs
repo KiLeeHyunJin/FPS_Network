@@ -124,8 +124,8 @@ public class InventoryController : MonoBehaviourPun
         if (weapons[(int)weaponType] != null)
             Dequip(weapons[(int)weaponType]);
 
-        ChangeWeapon?.Invoke(weaponType);
         weapons[(int)weaponType] = Equip(weaponType, id);
+        ChangeWeapon?.Invoke(weaponType);
     }
 
     public void Throw(AnimationController.AnimatorWeapon weaponType)

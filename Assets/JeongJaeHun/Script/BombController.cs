@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class BombController : MonoBehaviour, Iattackable
@@ -71,13 +72,12 @@ public class BombController : MonoBehaviour, Iattackable
 
         // 이게 손에 들어가 있는 상황에서는 transform을 어떻게 잡아줘야 될지 고민되네
         // local 인지 전역 position인지.. 
-        Vector3 position = transform.position;
         Vector3 forward = mainCamera.transform.forward; //카메라의 전방으로 라인을 그릴 거기 때문에 
         Vector3 startVelocity = throwPower * forward; // 전방으로 던지는 힘. 
         Vector3 startPosition = transform.position;
         startPosition.y += startPosition.y + 1f;
         
-        instanceBomb = Instantiate(currentBomb.gameObject, startPosition, Quaternion.identity);
+        instanceBomb = PhotonNetwork.Instantiate(currentBomb.name, startPosition, Quaternion.identity);
         
 
         // 실제 인벤토리의 아이템을 투척하는 것이 아니라 인스턴스를 생성하고 그것을 투척함. 
@@ -85,11 +85,8 @@ public class BombController : MonoBehaviour, Iattackable
         //Vector3 startPosition = transform.localPosition;  --> 이거 실험해보자. 
 
         //아무튼 실제로는 던져도 실물을 던지는게 아니라 복사본? 약간 그런걸 던지면됨. 
-        Rigidbody rigidGrenade = instanceBomb.gameObject.GetComponent<Rigidbody>();
-
-        rigidGrenade.isKinematic = false; //키네마틱 해제. 
-
-        rigidGrenade.AddForce(startVelocity, ForceMode.Impulse);
+        instanceBomb.GetComponent<Bomb>()?.Direction(startVelocity);
+        //rigidGrenade.isKinematic = false; //키네마틱 해제. 
 
         currentBomb.CountDownBomb(instanceBomb);  //현재 폭탄의 실제 폭발 함수 실행. -->내부에서 case에 따라 효과전환해줌. 
 

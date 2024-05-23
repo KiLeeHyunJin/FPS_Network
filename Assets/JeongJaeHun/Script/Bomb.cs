@@ -106,6 +106,11 @@ public class Bomb : IKWeapon
 
         damage = 50;
     }
+    public void Direction(Vector3 startVelocity)
+    {
+        rigidbody.isKinematic = false;
+        rigidbody.AddForce(startVelocity, ForceMode.Impulse);
+    }
 
 
     // 인보크 등 코루틴이던 다른 곳에서 실행 시켜줄? 아니면 여기서 실행할 수도 있고 생각해보자. 
@@ -127,7 +132,6 @@ public class Bomb : IKWeapon
                 ins.StartCoroutine(FlashBang(instanceBomb, ins));
 
                 break;
-
         }
     }
 
@@ -148,7 +152,6 @@ public class Bomb : IKWeapon
                 damagable?.TakeDamage(damage);
 
                 controller.GetComponent<ProcessingController>()?.HitEffect();
-
             }
         }
     }
