@@ -89,7 +89,7 @@ public class CloseWeaponController : MonoBehaviour, Iattackable,IPunObservable
             DicCloseWeapon.Add(closeWeapons[i].closeWeaponName, closeWeapons[i]);
         }
 
-        if(photonView.IsMine) //IsMine 체크가 필요한지?? 
+        /*if(photonView.IsMine) //IsMine 체크가 필요한지?? */
         {
             pv = GetComponentInParent<PhotonView>(); //부모의 포톤뷰를 가져와서
             if(pv != null)
