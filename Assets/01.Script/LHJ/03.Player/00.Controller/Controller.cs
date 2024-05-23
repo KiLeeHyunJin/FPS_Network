@@ -162,6 +162,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
         hp = maxHp;
     }
 
+    public AnimationController.AnimatorWeapon GetCurrentWeapon()
+    {
+        return inventoryController[inputController.CurrentWeapon].weaponType;
+    }
+
     void CollidersSetting() //하위 객체를 돌며 충돌체가 있다면 6번 레이어로 변경 및 히트박스 부착
     {
         Player pl = PhotonNetwork.LocalPlayer;
