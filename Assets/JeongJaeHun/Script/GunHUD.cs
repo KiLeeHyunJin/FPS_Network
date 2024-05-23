@@ -13,9 +13,6 @@ public class GunHUD : MonoBehaviourPun
     private GunController[] theGunController; //Holder 위치에 건 컨트롤러 삽입 및 참조 
     private Gun curretGun;
 
-    
-
-
     //총알 텍스트 ui들을 담았던 이미지 ui 할당. 필요할 때 hud 할당하고 필요 없으면 비활성화 기능 추가. 
     [SerializeField]
     private GameObject go_BulletHUD;
@@ -26,12 +23,15 @@ public class GunHUD : MonoBehaviourPun
     // 총알 개수를 텍스트 ui에 반영 
     public TextMeshProUGUI textBullet;
 
+
+
+
     [SerializeField ] Controller controller;
 
     [SerializeField] InventoryController inventoryController;
 
     // 이거 각 컨트롤러 들의 OnEnable을 가지고 있는 방법도 나쁘지 않을 것 같음. --> OnEnable 하는 식으로
-
+    // 정 안되면 Inveontory의 weapons[] 이용해보자. type과 weapon[]로 현재 총 의 ammo  접근이 필요함. 
 
 
     private void Awake() 
@@ -44,12 +44,16 @@ public class GunHUD : MonoBehaviourPun
         if(photonView.IsMine)
         {
             controller=FindObjectOfType<Controller>(); // 로컬의 player의  controller 
+            inventoryController = FindObjectOfType<InventoryController>(); //로컬 player의 inventory 
         }
-
-        //Inveontory의 weapons[] 이용해보자. type과 weapon[]로 현재 총 의 ammo  접근이 필요함. 
-        
         
     }
+
+
+    // change weapon update가 실행되는 순간에 --> 체인지 웨폰 콜백이 발동되고. 그 내부는
+    // test 함수를 발동시키는 거임. 
+
+
 
 
     private void Update()
