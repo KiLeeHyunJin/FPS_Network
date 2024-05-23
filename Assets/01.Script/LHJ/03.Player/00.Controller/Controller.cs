@@ -406,7 +406,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void CallDamage(int _damage,int _actorNumber)
     {
         hp -= equipController.ShieldCheck(_damage);
-        Debug.Log("CallDam");
         if (HpBar != null)
         {
             HpBar.value = Percent(hp, maxHp);
@@ -442,7 +441,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             return;
         }
-        Debug.Log("Damage");
         photonView.RPC("CallDamage", photonView.Owner, _damage, _actorNumber);
 
     }
