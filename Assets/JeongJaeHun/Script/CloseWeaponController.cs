@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CloseWeaponController : IKWeapon, Iattackable
+[RequireComponent(typeof(AudioSource))]
+public class CloseWeaponController : MonoBehaviour, Iattackable,IPunObservable
 {
+    [Tooltip("플레이어의 actorNumber")]
     int actorNumber; //플레이어의 ActorNumber; 
+
     PhotonView pv; //플레이어의 포톤 뷰. 
 
     AudioSource audioSource;
@@ -39,12 +42,26 @@ public class CloseWeaponController : IKWeapon, Iattackable
     private float range;
     LayerMask layermask;
 
+    [Tooltip("히트박스 hit layer")]
+    [SerializeField] int HitLayer;
+
+
     public bool Attack()
     {
         return TryAttack();
     }
+
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+
     private void OnEnable()
     {
+
+
         int numOfChild = this.transform.childCount; //현재 활성화된 무기 검색. 
         for (int i = 0; i < numOfChild; i++)
         {
@@ -64,9 +81,8 @@ public class CloseWeaponController : IKWeapon, Iattackable
 
     private void Start()
     {
-        audioSource=GetComponent<AudioSource>();
+        
 
-        // 자신의 모든 자식을 순회하면서 dic에 이름을 넣어놓기.
 
         for(int i=0;i< closeWeapons.Length;i++)
         {
@@ -173,5 +189,8 @@ public class CloseWeaponController : IKWeapon, Iattackable
         }
     }
 
-
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        
+    }
 }

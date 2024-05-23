@@ -190,15 +190,17 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
+       
         foreach (var key in changedProps.Keys)
         {
-            string scoreType = key as string;
-            int scoreValue = (int)changedProps[key];
-
-
-            tapUi.SetUpKDA(scoreType, targetPlayer, scoreValue);
+            if (key is string scoreType && (scoreType == "Kill" || scoreType == "Death" || scoreType == "Assist"))
+            {
+                if (changedProps[key] is int scoreValue)
+                {
+                    tapUi.SetUpKDA(scoreType, targetPlayer, scoreValue);
+                }
+            }
         }
-
     }
 
     public void InGamePropertiesUpdate(Hashtable propertiesThatChanged)
@@ -214,12 +216,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                
                 ShopCanvasPrefab.SetActive(false);
                 Manager.Game.onShop = false;
                 Manager.Game.redTeamSpawner.gameObject.SetActive(false);
                 Manager.Game.blueTeamSpawner.gameObject.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
         if ((propertiesThatChanged.ContainsKey(DefinePropertyKey.STARTGAME)))           //5
             if ((bool)propertiesThatChanged[DefinePropertyKey.STARTGAME])

@@ -3,7 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 
 
-[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(AudioSource))] 
 public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 {
     // 무기 holder에 붙일 건 컨트롤러 

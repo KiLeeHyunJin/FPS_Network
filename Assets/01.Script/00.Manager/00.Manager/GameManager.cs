@@ -95,6 +95,7 @@ public class GameManager : Singleton<GameManager>
     public void StartGame(Transform b, Transform r)
     {
         PhotonNetwork.Destroy(localPlayerIns);
+        PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.DEAD, false);
         Spawn(b, r);
         if (BLUE == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)
         localPlayerIns = PhotonNetwork.Instantiate("Player", blueTeamSpawner.position, blueTeamSpawner.rotation, 0);
