@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Assertions.Must;
+using UnityEngine.SocialPlatforms.Impl;
 using static Define;
 
 
@@ -118,6 +119,8 @@ public class AnimationController : MonoBehaviourPun
         return true;
     }
 
+
+
     public void Reload()
     {
         if (anim.GetBool(weaponId[(int)AnimatorWeapon.Rifle]) ||
@@ -173,13 +176,19 @@ public class AnimationController : MonoBehaviourPun
         {
             if(anim.GetBool(weaponId[i]))
             {
+                AnimatorWeapon weapon = (AnimatorWeapon)i;
                 currentWeapons[i].gameObject.SetActive(true);
-                iKAnimation.ChangeWeapon((AnimatorWeapon)i);
+                iKAnimation.ChangeWeapon(weapon);
+                inventoryController?.ChangeWeaponUpdate(weapon);
                 return;
             }
         }
     }
 
+    public IKWeapon ChangedWeapon(AnimatorWeapon weapon)
+    {
+        return inventoryController[weapon];
+    }
     [PunRPC]
     void CallTriggerRPC(int triggerId)
     {

@@ -162,9 +162,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     void SetData()  // 이 부분 start 내부에서 이미 체크하고 있음 (체력 초기화 완료됨) 
     {
-        
         maxHp = maxHp <= 0 ? 100 : maxHp;
-        Debug.Log("Data Setting");
         if (photonView.Controller.GetPhotonTeam() != null)
             teamCode = photonView.Controller.GetPhotonTeam().Code;
         else
@@ -407,11 +405,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     public void Damage(int _damage, int _actorNumber) // 총알의 주인 ActorNumber 
     {
-        if (requestController.Hit() == false)
+        if (PhotonNetwork.IsMasterClient == false)
         {
-            Debug.Log("Return");
+            Debug.Log("Is Not Master");
             return;
         }
+        Debug.Log($"Damage {_damage} ");
 
         hp -= equipController.ShieldCheck(_damage);
         Debug.Log($"equipShield HP : {hp}");
@@ -486,7 +485,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         else
         {
             TeamCode = (int)stream.ReceiveNext();
-            hp= (int)stream.ReceiveNext();
+            hp = (int)stream.ReceiveNext();
         }
     }
 }

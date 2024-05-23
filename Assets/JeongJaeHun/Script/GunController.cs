@@ -64,9 +64,9 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
-        if(!pv.IsMine) // 자신의 로컬 객체가 아니면 onEnable 실행하지 않기. 
+        if (!pv.IsMine) // 자신의 로컬 객체가 아니면 onEnable 실행하지 않기. 
         {
-            return; 
+            return;
         }
 
         int numOfChild = transform.childCount;
@@ -120,7 +120,11 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         {
             if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
             {
-                Shoot(photonView.Controller.ActorNumber);
+                currentGun.currentBulletCount--; //총알 감소 
+                currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
+
+                photonView.RPC("Shoot", RpcTarget.MasterClient, photonView.Controller.ActorNumber);
+                photonView.RPC("Effect", RpcTarget.All);
                 return true;
             }
             else
@@ -130,21 +134,19 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         }
         return false;
     }
+    [PunRPC]
+    private void Effect()
+    {
+        currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.      
+        audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생.
+    }
 
     [PunRPC] //Shoot을 실제 실행하는 Attack 에서는 isMine 체크.
     private void Shoot(int ActorNumber) //실제 발사되는 과정 
     {
-       
-        currentGun.currentBulletCount--; //총알 감소 
-        currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
-        
         /*PooledObject bullet=
         Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성.
         bullet.GetComponent<Bullet>().actorNumber = ActorNumber; //pool로 */
-
-        currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.      
-        audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생.
-
         Hit(ActorNumber);
         //StartCoroutine(RetroActionCoroutine());
 
@@ -167,6 +169,8 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
                 hitInfo.collider.GetComponent<Controller>();
+                Debug.Log($"Hit Damage {currentGun.damage} ");
+
                 damagable.TakeDamage(currentGun.damage,ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
             }
         }
@@ -182,12 +186,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             return true;
         }
         return false;
-    }
-
-    private void PlaySE(AudioClip _clip) //발사 소리 재생 
-    {
-        audioSource.clip = _clip;
-        
     }
 
     IEnumerator ReloadCoroutine() //재장전 코루틴. 
