@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -169,6 +170,31 @@ public class InventoryController : MonoBehaviourPun
             }
         }
         return null;
+    }
+
+    public void Test(IKWeapon weapon)
+    {
+        //무기 바뀌는 시점을 원하는 함수
+    }
+
+    void OnEnable()
+    {
+        ChangeWeaponCallback(Test); //메소드 지정
+    }
+
+
+
+
+
+
+    Action<IKWeapon> changeWeaponCallback;
+    public void ChangeWeaponCallback(Action<IKWeapon> setChangeWeapon) //무기가 바뀔때마다 호출을 원하는 함수를 지정
+    {
+        changeWeaponCallback = setChangeWeapon;
+    }
+    public void ChangeWeaponUpdate(AnimationController.AnimatorWeapon weaponType) //애니메이션에서 무기가 변경되는 타임에 무기 업데이트호출(지정한 함수 호출)
+    {
+        changeWeaponCallback?.Invoke(weapons[(int)weaponType]);
     }
 
 }
