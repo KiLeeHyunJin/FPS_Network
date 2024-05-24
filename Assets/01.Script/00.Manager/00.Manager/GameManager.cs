@@ -25,7 +25,7 @@ public class GameManager : Singleton<GameManager>
  
     UserData userData;
     public bool dbLoad;
-    public bool onShop;
+    public bool onShop { get; set;}
     
 
     public UserData UserData { get { return userData; } }
@@ -94,7 +94,8 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGame(Transform b, Transform r)
     {
-        PhotonNetwork.Destroy(localPlayerIns);
+        if(localPlayerIns != null)
+            PhotonNetwork.Destroy(localPlayerIns);
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.DEAD, false);
         Spawn(b, r);
         if (BLUE == PhotonNetwork.LocalPlayer.GetPhotonTeam().Code)

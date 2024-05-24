@@ -54,7 +54,7 @@ public class Bullet : PooledObject
                     Vector3 pos = hitInfo.point;
                     Quaternion rot = Quaternion.LookRotation(hitInfo.normal);
                     //사람에 맞으면 피 법선벡터로 생성 
-                    Manager.Pool.GetBloodEffect(pos, rot);
+                    //Manager.Pool.GetBloodEffect(pos, rot);
                     Release();
 
                 }
@@ -63,8 +63,8 @@ public class Bullet : PooledObject
             {
                 Vector3 pos = hitInfo.point;
                 Quaternion rot = Quaternion.LookRotation(hitInfo.normal);
-                Manager.Pool.GetbulletMarks(pos, rot);
-                Manager.Pool.GetBulletSpark(pos, rot);
+                //Manager.Pool.GetbulletMarks(pos, rot);
+                //Manager.Pool.GetBulletSpark(pos, rot);
                 Release();
 
             }

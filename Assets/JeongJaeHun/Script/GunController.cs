@@ -1,16 +1,16 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
-using Photon.Pun;
 
 
-[RequireComponent(typeof(AudioSource))] 
-public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
+[RequireComponent(typeof(AudioSource))]
+public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
 {
     // 무기 holder에 붙일 건 컨트롤러 
 
     [SerializeField]
     private Gun currentGun; //현재 들고 있는 총의 Gun이 할당됨. 
-
+    [SerializeField] Controller controller;
     public Gun GetGun { get { return currentGun; } } //프로퍼티 함수 
 
     [SerializeField] private float currentFireRate; //이 값이 0 보다 큰 동안에는 총알이 발사되지 않음. 
@@ -30,21 +30,31 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     public bool isActivate { get; set; } = true;
 
     [Tooltip("총알이 생성 될 FirePos 위치 ")]
-    [SerializeField]private Transform FirePos;
+    [SerializeField] private Transform FirePos;
 
     [SerializeField] private CrossHair crossHair; //이거 기본적으로 꺼져 있어야 하나? 어떡하지. 그런데 꺼져있으면 못찾아서;; 
 
     int HitLayer;
 
+    [Header("바닥이나 벽에 총탄이 부딪히면 발생할 이펙트를 위한 레이어 체크")]
+    [SerializeField] int groundWallLayer;
+
+    [Tooltip("풀 컨테이너 참조 --> 매니저생성으로 인한 파괴 방지 ")]
+    [SerializeField] PoolContainer poolContainer;
+
     private void Awake()
     {
         //poolContainer = GameObject.FindObjectOfType<PoolContainer>();
         audioSource = GetComponent<AudioSource>();
-        HitLayer = 1 << LayerMask.NameToLayer("HitBox");
-        // 부모 player의 포톤뷰 찾기.
+        //HitLayer = 1 << LayerMask.NameToLayer("HitBox");
+
+        // 그라운드에 총이 맞으면 이펙트를 띄워주기 위한 레이어 체크
+        HitLayer = (1 << 9) | (1 << 23) | ( 1 << LayerMask.NameToLayer("HitBox"));
+
 
         originPos = Vector3.zero;
     }
+
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
@@ -57,10 +67,16 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         }
         isActivate = true;
     }
+    void Start()
+    {
+        controller = GetComponentInParent<Controller>();
+        poolContainer = FindObjectOfType<PoolContainer>();
+    }
     private void OnDisable()
     {
         isActivate = false;
     }
+
 
     // 인터페이스로 상속한 인터페이스 함수 --> 실제 플레이어 클릭 시 실행 할 함수임. 
     public bool Attack()
@@ -101,10 +117,14 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
                 currentGun.currentBulletCount--; //총알 감소 
                 currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
 
+                (Vector3 firePos, Vector3 fireDir) fireData = controller.Zoom ?
+                    (Camera.main.transform.position, Camera.main.transform.forward) :
+                    (currentGun.muzzleFlash.transform.position, Camera.main.transform.forward);
+
                 photonView.RPC("Shoot", RpcTarget.MasterClient,
                     photonView.Controller.ActorNumber,
-                    Camera.main.transform.position,
-                    Camera.main.transform.forward);
+                    fireData.firePos,
+                    controller.Zoom);
 
                 photonView.RPC("Effect", RpcTarget.All);
                 return true;
@@ -124,12 +144,14 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     }
 
     [PunRPC] //Shoot을 실제 실행하는 Attack 에서는 isMine 체크.
-    private void Shoot(int ActorNumber, Vector3 pos, Vector3 dir) //실제 발사되는 과정 
+    private void Shoot(int ActorNumber, Vector3 pos, bool zoomState) //실제 발사되는 과정 
     {
         /*PooledObject bullet=
         Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성.
         bullet.GetComponent<Bullet>().actorNumber = ActorNumber; //pool로 */
+        Vector3 dir = zoomState ? (pos - controller.target.position).normalized : controller.transform.forward;
         Debug.DrawLine(pos + dir, pos + dir * currentGun.range, Color.cyan, 2);
+
 
         if (Physics.Raycast(
             pos + dir,
@@ -137,27 +159,44 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             out hitInfo,
             currentGun.range, HitLayer))
         {
+            bool ishit = false;
             if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
                 Debug.Log($"Hit Damage {currentGun.damage} ");
 
                 damagable.TakeDamage(currentGun.damage, ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
+                ishit = true;
+                /*poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));*/
             }
+            else
+            {
+                /*poolContainer.GetbulletMarks(hitInfo.point - (hitInfo.normal * 0.1f), Quaternion.LookRotation(hitInfo.normal));
+                poolContainer.GetBulletSpark(hitInfo.point, Quaternion.LookRotation(-hitInfo.normal));*/
+            }
+            photonView.RPC("HitEffect", RpcTarget.All,hitInfo.point, hitInfo.normal,ishit);
         }
-        //StartCoroutine(RetroActionCoroutine());
-
-
-        //Hit(); 피격 처리 --> 어차피 실제 불렛에서 진행할 예정이긴 함.. 
-        //총기 반동 코루틴 실행
-        // StopAllCoroutines(); //반동 코루틴 멈추고
     }
+
+    [PunRPC]
+    void HitEffect(Vector3 pos, Vector3 nor, bool isHit)
+    {
+        if (isHit)
+            poolContainer.GetBloodEffect(pos, Quaternion.LookRotation(nor));
+        else
+        {
+            poolContainer.GetbulletMarks(pos + (nor * 0.1f), Quaternion.LookRotation(nor));
+            poolContainer.GetBulletSpark(pos, Quaternion.LookRotation(-nor));
+        }
+    }
+
+
 
 
     private bool TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
     {
         if (!isReload)
         {
-            
+
             //CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
             StartCoroutine(ReloadCoroutine());
             return true;
@@ -178,7 +217,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             isReload = false;
         }
     }
-    
+
 
     private void FineSight()
     {
@@ -274,6 +313,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        
+
     }
 }

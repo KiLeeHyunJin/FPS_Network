@@ -11,11 +11,11 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] PooledObject BulletSpark; // 벽에 부딪히면 생길 스파크 
     [SerializeField] PooledObject Bullet;  // 실제 날아갈 총알. 
     [SerializeField] public IKWeapon AR;  // 실제 날아갈 총알. 
-    [SerializeField] private int poolSize = 20;
-    [SerializeField] private int poolCapacity = 20;
+   /* [SerializeField] private int poolSize = 20;
+    [SerializeField] private int poolCapacity = 20;*/
 
 
-    private void Start()
+   /* private void Start()
     {
         string bloodPath = "BloodEffect";
         bloodEffect = Manager.Resource.basicLoad<PooledObject>(bloodPath);
@@ -45,11 +45,11 @@ public class PoolManager : Singleton<PoolManager>
             Manager.Pool.CreateBasicPool(Bullet, poolSize, poolCapacity);
         }
 
-    }
+    }*/
 
 
 
-    public void GetBloodEffect(Vector3 pos, Quaternion quaternion)
+   /* public void GetBloodEffect(Vector3 pos, Quaternion quaternion)
     {
         // 생성 위치와 회전은 실제 부르는 곳에서 매개변수로 넣어주기. 
         // 위치는-> 피격 위치 회전값은 -> 노멀벡터로 총알 맞는 방향 ( + normal 값) 
@@ -70,7 +70,7 @@ public class PoolManager : Singleton<PoolManager>
     {
           return Manager.Pool.GetPool(Bullet, pos, quaternion);
     }
-
+*/
 
     // 아래는 원본 함수들 
 
@@ -82,16 +82,14 @@ public class PoolManager : Singleton<PoolManager>
 
     void CreateObj(PooledObject prefab, int key, int size, int capacity, Dictionary<int, ObjectPool> dic)
     {
-        if (!dic.ContainsKey(key)) // 이미 있으면 안함
-        {
-            GameObject gameObject = new GameObject();
-            gameObject.name = $"Pool_{prefab.name}";
+        DestroyObj(key, dic);
+        GameObject gameObject = new GameObject();
+        gameObject.name = $"Pool_{prefab.name}";
 
-            ObjectPool objectPool = gameObject.AddComponent<ObjectPool>();
-            objectPool.CreatePool(prefab, size, capacity);
+        ObjectPool objectPool = gameObject.AddComponent<ObjectPool>();
+        objectPool.CreatePool(prefab, size, capacity);
 
-            dic.Add(key, objectPool);
-        }
+        dic.Add(key, objectPool);
     }
 
 
@@ -110,9 +108,11 @@ public class PoolManager : Singleton<PoolManager>
     {
         if(dic.ContainsKey(key))
         {
-            ObjectPool objectPool = poolDic[key];
-            Destroy(objectPool.gameObject);
-            poolDic.Remove(key);
+            if(dic[key] != null)
+            {
+                Destroy(dic[key].gameObject);
+            }
+            dic.Remove(key);
         }
     }
 

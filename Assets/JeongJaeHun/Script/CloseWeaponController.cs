@@ -19,9 +19,6 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
     [Tooltip("각 근접 무기의 trail renderer")]
     private TrailRenderer trailRenderer;
 
-    [Tooltip("데미지 체크할 플레이어의 Layer")]
-    private LayerMask layerMask;
-
     [Tooltip("현재 공격중인지?")]
     public bool isAttack = false;
     [Tooltip("팔을 휘두르는 중인지?")]
@@ -29,10 +26,7 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
     // isSwing=true 일 때만 데미지를 적용해 줘야한다. --> 제대로 사용을 못 하고 있어... 
 
     private float range;
-    LayerMask layermask;
-
-    [Tooltip("히트박스 hit layer")]
-    [SerializeField] int HitLayer;
+    int HitLayer;
 
     [Tooltip("스크립트의 활성화 여부")]
     public bool isActivate { get; set; } = true;
@@ -47,6 +41,7 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        HitLayer =  1 << LayerMask.NameToLayer("HitBox");
     }
 
 
@@ -122,22 +117,28 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
     private void AttackTiming(int actorNumber)
     {
         int size = Physics.OverlapSphereNonAlloc(transform.position,
-            range, colliders, layermask);
+            range, colliders, HitLayer);
 
         // player 1명 당 IDamagable이 1개면 딱히 큰 상관 안해도 괜찮을듯함. 
         // CurrentWeapon.transform 대신 그냥 transform 써도 별 상관 없을듯 함. 
-
+        Debug.Log($"hit Colliders Num {size}");
         for (int i = 0; i < size; i++)
         {
-            Vector3 dirToTarget = (colliders[i].transform.position - transform.position).normalized;
-
-            if (Vector3.Dot(transform.position, dirToTarget) < currentCloseWeapon.CosAngle)
+            
+            if (colliders[i].TryGetComponent<HitBox>(out HitBox hitbox))
             {
-                continue; //범위 바깥에 존재하면 continue로 넘기기 
-            }
+                if(hitbox.GetActNum != photonView.Controller.ActorNumber)
+                {
+                    Vector3 dirToTarget = (colliders[i].transform.position - transform.position).normalized;
 
-            IDamagable damagable = colliders[i].GetComponent<IDamagable>(); //인터페이스 가져오고
-            damagable?.TakeDamage(currentCloseWeapon.damage, actorNumber); // 데미지 주기. + 액터넘버 확인.                                                                        
+                    if (Vector3.Dot(transform.position, dirToTarget) < currentCloseWeapon.CosAngle)
+                        continue; //범위 바깥에 존재하면 continue로 넘기기 
+
+                    IDamagable damagable = colliders[i].GetComponent<IDamagable>(); //인터페이스 가져오고
+                    damagable?.TakeDamage(currentCloseWeapon.damage, actorNumber); // 데미지 주기. + 액터넘버 확인.          
+                }
+            }
+                                                                         
         }
 
     }

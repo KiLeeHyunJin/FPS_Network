@@ -108,13 +108,9 @@ public class InventoryController : MonoBehaviourPun
 
     private void Start()
     {
-        
-        
 
-        ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
         skill = FindObjectOfType<SkillHolder>();
-        if (shopManager != null)
-            shopManager.inventory = this;
+
 
         if (photonView.IsMine)
         {
@@ -129,8 +125,11 @@ public class InventoryController : MonoBehaviourPun
             Gold = 100; //시작 시에 100원으로 초기화. 
 
             if (goldText != null)
-                goldText.text = $"{Gold}"; 
+                goldText.text = $"{Gold}";
 
+            ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
+            if (shopManager != null)
+                shopManager.inventory = this;
         }
         bombController = throwHolder.gameObject.GetComponent<BombController>();
     }
@@ -301,7 +300,14 @@ public class InventoryController : MonoBehaviourPun
     public void Test(IKWeapon weapon)
     {
         //무기 바뀌는 시점을 원하는 함수
-        return;
+        // 잘 찾아지나 확인. 
+
+        if(BombHUD.gameObject!=null || CloseWeaponHUD.gameObject!=null 
+            || gunHud.gameObject!=null)
+        {
+            return;
+        }
+
 
         switch (weapon.weaponType)
         {
@@ -375,4 +381,17 @@ public class InventoryController : MonoBehaviourPun
         changeWeaponCallback?.Invoke(weapons[(int)weaponType]);
     }
 
+
+
+    private void OnDestroy() // 라운드 재시작 시 player 파괴 후 재생성 하는 것 같음. --> hud를 켜줘야함. 
+    {
+        Debug.Log("플레이어 디스트로이");
+        if(photonView.IsMine)
+        {
+            gunHud.gameObject.SetActive(true);
+            BombHUD.gameObject.SetActive(true);
+            CloseWeaponHUD.gameObject.SetActive(true); //일단 다시 켜보기. 
+        }
+       
+    }
 }
