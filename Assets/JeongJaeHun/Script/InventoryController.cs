@@ -183,7 +183,12 @@ public class InventoryController : MonoBehaviourPun
         else if (_item.itemType == Item.ItemType.Armor) // 아머 류 구매. --> 구매 시 골드 비교가 필요함. 
         {
             Debug.Log("인벤토리 컨트롤러의 AddItem이 발동됨 ");
-            int ArmorLevel = _item.itemID; 
+            int ArmorLevel = _item.itemID;
+            int armorDe = _item.Defense;
+            int armorDu = _item.Durability;
+            armorController.ArmorPurChase(ArmorLevel,armorDe,armorDu);
+
+
 
         }
         else // 무기류 구매 
