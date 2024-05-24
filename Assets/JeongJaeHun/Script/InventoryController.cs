@@ -323,11 +323,11 @@ public class InventoryController : MonoBehaviourPun
         //무기 바뀌는 시점을 원하는 함수
         // 잘 찾아지나 확인. 
 
-       /* if (BombHUD != null || CloseWeaponHUD != null
-            || gunHud != null)
+        if (BombHUD == null || CloseWeaponHUD == null
+            || gunHud == null)
         {
             return;
-        }*/
+        }
 
         switch (weapon.weaponType)
         {
