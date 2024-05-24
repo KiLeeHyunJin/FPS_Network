@@ -10,8 +10,8 @@ public class Armor : MonoBehaviour
     private int armorDurability; //아머의 내구도 
 
     //Set 금지. 
-    public int ArmorLevel { get { return armorLevel; } }
-    public int ArmorDefense { get { return armorDefense; } }
+    public int ArmorLevel { get { return armorLevel; } set { armorLevel = value; } }
+    public int ArmorDefense { get { return armorDefense; } set { ArmorDefense = value; } }
 
     public int ArmorDurability { get { return armorDurability; } set { armorDurability = value; } }
 

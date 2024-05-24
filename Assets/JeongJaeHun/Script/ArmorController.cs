@@ -36,16 +36,13 @@ public class ArmorController : MonoBehaviourPun
 
         if (armorHUD != null)
         {
-            CurrentArmorCheck(0); //0번 아머 키기 --> Lv.0 Armor 
-            ArmorControllerUpdate( false); // 파괴되지 않은 0번 아머 전송. 
+            CurrentArmorCheck(0,0,0); //0번 아머 키기 --> Lv.0 Armor 
+            ArmorControllerUpdate(false); // 파괴되지 않은 0번 아머 전송. 
         }
-
-
-
     }
 
     //매개변수로 armorId를 주면 ok. (0 1 2 ) 
-    public void CurrentArmorCheck(int num) // 외부에서 armor 변경 시 (아머 구입 ) --> 이 함수 호출해주면 됨. 
+    public void CurrentArmorCheck(int lv,int defense,int durablity) // 외부에서 armor 변경 시 (아머 구입 ) --> 이 함수 호출해주면 됨. 
     {
         int childOfNum = transform.childCount;
 
@@ -54,8 +51,13 @@ public class ArmorController : MonoBehaviourPun
             transform.GetChild(i).gameObject.SetActive(false);
         }
 
-        transform.GetChild(num).gameObject.SetActive(true); //0번 아머는 켜줘야함 start 시에 
-        currentArmor = transform.GetChild(num).GetComponent<Armor>();
+
+        transform.GetChild(lv).gameObject.SetActive(true); //0번 아머는 켜줘야함 start 시에 
+        currentArmor = transform.GetChild(lv).GetComponent<Armor>();
+        currentArmor.ArmorDefense = defense;
+        currentArmor.ArmorDurability = durablity;
+        
+        
 
     }
 
@@ -69,9 +71,9 @@ public class ArmorController : MonoBehaviourPun
         // -> controller의 Armor LV와 inventory에서 받을 아머 파괴를 확인하고 hud에 업데이트 해주기. 
     }
 
-    public void ArmorPurChase(int ArmorLevel)
+    public void ArmorPurChase(int ArmorLevel,int ArmorDefense,int ArmorDurability)
     {
-        CurrentArmorCheck(ArmorLevel);
+        CurrentArmorCheck(ArmorLevel, ArmorDefense, ArmorDurability);
 
         Debug.Log(currentArmor.ArmorLevel + "아머레벨");
         Debug.Log(currentArmor.ArmorDefense+"아머 디펜스");
