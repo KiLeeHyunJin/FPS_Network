@@ -4627,6 +4627,22 @@ PrefabInstance:
       propertyPath: keyCode
       value: 101
       objectReference: {fileID: 0}
+    - target: {fileID: 1069077924209317378, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069077924209317378, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069077924209317378, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069077924209317378, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 2845224366665830185, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
