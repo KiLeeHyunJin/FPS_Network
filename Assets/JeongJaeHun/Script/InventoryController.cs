@@ -13,7 +13,7 @@ public class InventoryController : MonoBehaviourPun
 {
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
-    [field : SerializeField] public int Gold { get; set; }
+    [field : SerializeField] public int Gold { get ; set; }
     public TextMeshProUGUI goldText;
     Action<AnimationController.AnimatorWeapon> ChangeWeapon;
     private Item item; 

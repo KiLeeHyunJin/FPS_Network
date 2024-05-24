@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfe311a150452f94b86fc9195efd5a21, type: 3}
-  m_Name: AR1
+  m_Name: Pistol.Lv2
   m_EditorClassIdentifier: 
-  itemType: 2
+  itemType: 3
   price: 100
-  itemPrefab: {fileID: 8156070210601514294, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
+  itemPrefab: {fileID: 1374467500805772026, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
   prefabName: 
   itemID: 0
-  itemName: "\uB3CC\uACA9\uC18C\uCD1D"
-  itemImage: {fileID: -212108495, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
+  itemName: "\uD2B9\uC218\uAD8C\uCD1D"
+  itemImage: {fileID: -1810414701, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
   weaponType: 
   weaponSpec: 

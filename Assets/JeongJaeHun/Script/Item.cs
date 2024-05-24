@@ -53,8 +53,10 @@ public class Item : ScriptableObject //게임 오브젝트에 붙일 필요가 �
     
 
     public string weaponType; //무기 유형 
+    [TextArea(1,2)]
+    public string weaponSpec; //무기 유형 
 
-    
+
 
 
 }

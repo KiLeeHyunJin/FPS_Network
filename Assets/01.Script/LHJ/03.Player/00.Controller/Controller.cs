@@ -145,6 +145,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             animController.ChangeWeapon(_weaponType, ref currentAttackable);
             inputController.SetWeaponType = _weaponType;
+            cameraController.SetZoomPosition(inventoryController[_weaponType].ZoomPos);
         });
         minimapIcon_m?.SetActive(true);
 
@@ -219,6 +220,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             if (fronwWeapon.TryGetComponent<IKWeapon>(out IKWeapon weapon))
             {
+                ChangeWeaponState();
+
                 inventoryController.AddItem(weapon);
                 weapon.PickUp();
             }

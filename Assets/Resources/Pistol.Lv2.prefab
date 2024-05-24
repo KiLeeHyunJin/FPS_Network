@@ -402,7 +402,7 @@ MonoBehaviour:
   gunName: Pistol2
   range: 100
   accuracy: 1
-  fireRate: 1
+  fireRate: 0.2
   reloadTime: 2
   trailEffect: {fileID: 0}
   damage: 15
