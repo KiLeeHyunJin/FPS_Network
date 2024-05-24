@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class TeleportSkill : MonoBehaviourPun
+public class TeleportSkill : Skill
 {
     public float teleportDistance = 10f;
     public GameObject teleportEffectPrefab; // 텔레포트 이펙트 프리팹
     public float effectDuration = 1.0f;
     public LayerMask GroundLayer; // 지형 레이어를 설정하여 맵 밖으로 나가는 것을 방지
 
+    public override void SkillOn()
+    {
+        Debug.Log(SkillName + "SkillOn");
+    }
+
+    public override void SkillOff()
+    {
+        Debug.Log(SkillName + "SkillOff");
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
