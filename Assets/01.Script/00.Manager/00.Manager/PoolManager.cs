@@ -15,7 +15,7 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private int poolCapacity = 20;
 
 
-    private void Start()
+   /* private void Start()
     {
         string bloodPath = "BloodEffect";
         bloodEffect = Manager.Resource.basicLoad<PooledObject>(bloodPath);
@@ -45,11 +45,11 @@ public class PoolManager : Singleton<PoolManager>
             Manager.Pool.CreateBasicPool(Bullet, poolSize, poolCapacity);
         }
 
-    }
+    }*/
 
 
 
-    public void GetBloodEffect(Vector3 pos, Quaternion quaternion)
+   /* public void GetBloodEffect(Vector3 pos, Quaternion quaternion)
     {
         // 생성 위치와 회전은 실제 부르는 곳에서 매개변수로 넣어주기. 
         // 위치는-> 피격 위치 회전값은 -> 노멀벡터로 총알 맞는 방향 ( + normal 값) 
@@ -70,7 +70,7 @@ public class PoolManager : Singleton<PoolManager>
     {
           return Manager.Pool.GetPool(Bullet, pos, quaternion);
     }
-
+*/
 
     // 아래는 원본 함수들 
 
