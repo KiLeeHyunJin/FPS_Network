@@ -36,7 +36,7 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] CloseWeaponHUD CloseWeaponHUD;
     [SerializeField] BombHUD BombHUD;
 
-    [SerializeField] Skill skill;
+    [SerializeField] SkillHolder skill;
 
 
     const string SpawnItem = "DropWeapon";
@@ -112,7 +112,7 @@ public class InventoryController : MonoBehaviourPun
         
 
         ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
-        skill = FindObjectOfType<Skill>();
+        skill = FindObjectOfType<SkillHolder>();
         if (shopManager != null)
             shopManager.inventory = this;
 
