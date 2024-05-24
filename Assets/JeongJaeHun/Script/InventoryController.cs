@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ public class InventoryController : MonoBehaviourPun
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
     [field : SerializeField] public int Gold { get; set; }
+    public GameObject goldPanel;
     public TextMeshProUGUI goldText;
     Action<AnimationController.AnimatorWeapon> ChangeWeapon;
     private Item item; 
@@ -35,6 +37,8 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] GunHUD gunHud;
     [SerializeField] CloseWeaponHUD CloseWeaponHUD;
     [SerializeField] BombHUD BombHUD;
+
+    
 
 
     const string SpawnItem = "DropWeapon";
@@ -84,6 +88,18 @@ public class InventoryController : MonoBehaviourPun
         if (shopManager != null)
             shopManager.inventory = this;
 
+        // 골드 텍스트가 널인 상황이라 이 부분 해결 
+
+
+        goldPanel = GameObject.FindGameObjectWithTag("GoldText");
+        goldText=goldPanel?.GetComponent<TextMeshProUGUI>();
+        
+        
+
+        if (goldText != null)
+            goldText.text = $"{Gold}";
+
+
         if (photonView.IsMine)
         {
             gunHud = FindObjectOfType<GunHUD>();
@@ -93,11 +109,6 @@ public class InventoryController : MonoBehaviourPun
             gunHud.gameObject.SetActive(false);
             CloseWeaponHUD.gameObject.SetActive(true);
             BombHUD.gameObject.SetActive(false);
-             
-            Gold = 100; //시작 시에 100원으로 초기화. 
-
-            if (goldText != null)
-                goldText.text = $"{Gold}"; 
 
         }
 

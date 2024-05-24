@@ -13,8 +13,6 @@ public class ItemSpawnManager : MonoBehaviour
     [SerializeField] List<Transform> healPackPosition;
 
 
-
-
     private void Start()
     {
         if(PhotonNetwork.IsMasterClient)  //호스트에서만 아이템 생성 가능 
@@ -24,8 +22,7 @@ public class ItemSpawnManager : MonoBehaviour
                 ItemSpawn();
             }
             
-        }
-        
+        }       
     }
 
 
@@ -33,7 +30,7 @@ public class ItemSpawnManager : MonoBehaviour
     {
         foreach (var coins in coinPosition)
         {
-            PhotonNetwork.Instantiate("GoldCoin",coins.position,Quaternion.identity);
+            PhotonNetwork.Instantiate("Coin",coins.position,Quaternion.identity);
         }
 
         foreach (var healpacks in healPackPosition)

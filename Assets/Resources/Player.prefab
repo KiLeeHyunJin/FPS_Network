@@ -6971,6 +6971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Gold>k__BackingField: 0
+  goldPanel: {fileID: 0}
   goldText: {fileID: 0}
   weapons: []
   pistolHolder: {fileID: 6645689630095728053}

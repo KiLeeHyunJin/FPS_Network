@@ -8,6 +8,8 @@ TagManager:
   - KillLog
   - HpBar
   - InGameManager
+  - Item
+  - GoldText
   layers:
   - Default
   - TransparentFX
