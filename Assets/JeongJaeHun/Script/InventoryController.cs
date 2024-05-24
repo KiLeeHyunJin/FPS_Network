@@ -109,10 +109,8 @@ public class InventoryController : MonoBehaviourPun
     private void Start()
     {
 
-        ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
         skill = FindObjectOfType<SkillHolder>();
-        if (shopManager != null)
-            shopManager.inventory = this;
+
 
         if (photonView.IsMine)
         {
@@ -127,8 +125,11 @@ public class InventoryController : MonoBehaviourPun
             Gold = 100; //시작 시에 100원으로 초기화. 
 
             if (goldText != null)
-                goldText.text = $"{Gold}"; 
+                goldText.text = $"{Gold}";
 
+            ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
+            if (shopManager != null)
+                shopManager.inventory = this;
         }
         bombController = throwHolder.gameObject.GetComponent<BombController>();
     }
