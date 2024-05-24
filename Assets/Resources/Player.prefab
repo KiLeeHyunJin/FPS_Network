@@ -6097,7 +6097,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6632997920356581901}
-  sceneViewId: 16
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &2827437474235304820
@@ -6770,6 +6770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 768b4264025efd242ab4941d26d3d0ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillData: {fileID: 0}
   isCloaked: 0
   CloakingMaterial: {fileID: -876546973899608171, guid: 32bc5ec8d39913d4f8f9b5832710ea9e, type: 3}
   CloakDuration: 3
@@ -6787,6 +6788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b90c9968566daaa49be8e8430e48af6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillData: {fileID: 0}
   teleportDistance: 10
   teleportEffectPrefab: {fileID: 0}
   effectDuration: 1
@@ -7177,7 +7179,7 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  sceneViewId: 17
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -14186,7 +14188,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8644913041405509699}
-  sceneViewId: 15
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &6182686886036145712
@@ -14536,7 +14538,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 13
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!120 &6761206449484161702
@@ -19428,7 +19430,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7543617888352762341}
-  sceneViewId: 14
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &695706050568986886
@@ -19518,7 +19520,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5525885597568803731, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: sceneViewId
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 188740774871733813, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: m_Name
@@ -19645,7 +19647,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8711553453801057852, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8711553453801057852, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -19774,7 +19776,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3244118640271991058, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: sceneViewId
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: <WeaponPos>k__BackingField
@@ -19976,7 +19978,7 @@ PrefabInstance:
       objectReference: {fileID: 2671129392070243133}
     - target: {fileID: 6252304339226794055, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
       propertyPath: sceneViewId
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20003,7 +20005,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -6829125046911157737, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 303163471660486714, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: m_Name
@@ -20138,7 +20140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7579393447868919905, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: sceneViewId
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7831276082611668189, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: m_Name

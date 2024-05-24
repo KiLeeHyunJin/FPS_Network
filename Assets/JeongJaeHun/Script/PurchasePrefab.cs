@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PurchasePrefab : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PurchasePrefab : MonoBehaviour
     private int Id;
     private int price;
 
+    public Button button;
     private void OnEnable()
     {
         sucessText.enabled = false;
@@ -72,13 +74,15 @@ public class PurchasePrefab : MonoBehaviour
         {
             inventory.LoseCoin(price); //가격 만큼 골드 빼주기. 
             inventory.AddItem(item);
-            if(item.itemPrefab!=null)
+            if(item.itemType == Item.ItemType.Skill)
+                button.interactable = false;
+            if (item.itemPrefab!=null)
             Debug.Log($"{item.itemPrefab.name},{Id}"); //물건의 아이템 형과 id가 제대로 들어오는지 확인해보기. 
 
             this.ReStartCoroutine(SucessPurchase(), ref coroutine);//만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 
 
             Manager.UI?.ClosePopUpUI(); //구매 창 닫아주기. 
-                                       // 프리팹을 인벤토리에 추가해줘야함. --> 내가 보유중인 아이템 목록의 최신화 
+                                      // 프리팹을 인벤토리에 추가해줘야함. --> 내가 보유중인 아이템 목록의 최신화 
 
             // 인벤토리 추가 함수 부르기. 
            

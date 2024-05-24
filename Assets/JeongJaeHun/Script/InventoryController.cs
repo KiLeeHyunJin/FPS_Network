@@ -170,6 +170,7 @@ public class InventoryController : MonoBehaviourPun
                 {
                     AddSkill(_item,i);
                     Debug.Log("스킬 추가");
+                    
                     return;
                 }
             }

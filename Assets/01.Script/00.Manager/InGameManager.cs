@@ -42,6 +42,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] PlayerInput playerInput;
     [SerializeField] GameObject ShopCanvasPrefab;
 
+    [SerializeField] ShopUIManager shopManager;
     Room curRoom = PhotonNetwork.CurrentRoom;
 
     void Start()
@@ -350,7 +351,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
 
                     pv.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
-
+                    shopManager.InitList();
                     yield return new WaitForSeconds(3f);
                     pv.RPC("RoundStart", RpcTarget.All);
                     curRound++;

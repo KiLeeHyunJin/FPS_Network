@@ -23,21 +23,22 @@ public class ShopUIManager : MonoBehaviour
             button.onClick.AddListener(
                 () =>
             {
-                OnItemPanelClick(button.gameObject.GetComponent<ItemPickUp>());
+                OnItemPanelClick(button.gameObject.GetComponent<ItemPickUp>(),button);
             });
         }
     }
 
-    public void OnItemPanelClick(ItemPickUp _pickItem) //Item 버튼에 부여할 이벤트 
+    public void OnItemPanelClick(ItemPickUp _pickItem,Button button) //Item 버튼에 부여할 이벤트 
     {
         PopUpUI purChaseUI = Manager.UI.ShowPopUpUI(purChasePanelPrefab);
         if(purChaseUI.TryGetComponent<PurchasePrefab>(out PurchasePrefab purchase))
         {
             purchase.inventory = inventory;
             purchase.SetItemData(_pickItem);
+            purchase.button = button;
         }
     }
-
+    
 
     // input을 이용한 상점 창 열기 -->임시임. 
     public void OnX(InputValue value)
@@ -49,6 +50,12 @@ public class ShopUIManager : MonoBehaviour
 
     }
 
+    public void InitList()
+    {
+        foreach (Button button in shopBtn)
+                  button.interactable = true;
+        
+    }
 
 
     
