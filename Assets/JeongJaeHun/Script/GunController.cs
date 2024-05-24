@@ -1,10 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
-using Photon.Pun;
 
 
-[RequireComponent(typeof(AudioSource))] 
-public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
+[RequireComponent(typeof(AudioSource))]
+public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
 {
     // 무기 holder에 붙일 건 컨트롤러 
 
@@ -30,21 +30,31 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     public bool isActivate { get; set; } = true;
 
     [Tooltip("총알이 생성 될 FirePos 위치 ")]
-    [SerializeField]private Transform FirePos;
+    [SerializeField] private Transform FirePos;
 
     [SerializeField] private CrossHair crossHair; //이거 기본적으로 꺼져 있어야 하나? 어떡하지. 그런데 꺼져있으면 못찾아서;; 
 
     int HitLayer;
 
+    [Header("바닥이나 벽에 총탄이 부딪히면 발생할 이펙트를 위한 레이어 체크")]
+    [SerializeField] int groundWallLayer;
+
+    [Tooltip("풀 컨테이너 참조 --> 매니저생성으로 인한 파괴 방지 ")]
+    [SerializeField] PoolContainer poolContainer;
+
     private void Awake()
     {
         //poolContainer = GameObject.FindObjectOfType<PoolContainer>();
         audioSource = GetComponent<AudioSource>();
-        HitLayer = 1 << LayerMask.NameToLayer("HitBox");
-        // 부모 player의 포톤뷰 찾기.
+        //HitLayer = 1 << LayerMask.NameToLayer("HitBox");
+
+        // 그라운드에 총이 맞으면 이펙트를 띄워주기 위한 레이어 체크
+        HitLayer = (1 << 9) | (1 << 23) | ( 1 << LayerMask.NameToLayer("HitBox"));
+
 
         originPos = Vector3.zero;
     }
+
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
@@ -60,6 +70,12 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     private void OnDisable()
     {
         isActivate = false;
+    }
+
+    private void Start()
+    {
+
+        poolContainer = FindObjectOfType<PoolContainer>();
     }
 
     // 인터페이스로 상속한 인터페이스 함수 --> 실제 플레이어 클릭 시 실행 할 함수임. 
@@ -131,6 +147,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         bullet.GetComponent<Bullet>().actorNumber = ActorNumber; //pool로 */
         Debug.DrawLine(pos + dir, pos + dir * currentGun.range, Color.cyan, 2);
 
+
         if (Physics.Raycast(
             pos + dir,
             dir,
@@ -142,22 +159,26 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
                 Debug.Log($"Hit Damage {currentGun.damage} ");
 
                 damagable.TakeDamage(currentGun.damage, ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
+                poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+            }
+            else
+            {
+                poolContainer.GetbulletMarks(hitInfo.point - (dir*0.5f), Quaternion.LookRotation(hitInfo.normal));
+                poolContainer.GetBulletSpark(hitInfo.point, Quaternion.LookRotation(-hitInfo.normal));
             }
         }
-        //StartCoroutine(RetroActionCoroutine());
-
-
-        //Hit(); 피격 처리 --> 어차피 실제 불렛에서 진행할 예정이긴 함.. 
-        //총기 반동 코루틴 실행
-        // StopAllCoroutines(); //반동 코루틴 멈추고
     }
+
+
+
+
 
 
     private bool TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
     {
         if (!isReload)
         {
-            
+
             //CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
             StartCoroutine(ReloadCoroutine());
             return true;
@@ -178,7 +199,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
             isReload = false;
         }
     }
-    
+
 
     private void FineSight()
     {
@@ -274,6 +295,6 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        
+
     }
 }

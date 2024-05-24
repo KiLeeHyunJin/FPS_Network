@@ -11,8 +11,9 @@ public class CloseWeaponHUD : MonoBehaviourPun
     // 켜져 있는 근접무기에 접근하여(3번 -> slot 내부의 자식들 순회 )
     // 그 무기의 sprite에 접근하여 sprite 띄워주기. 
 
+    
+    //private CloseWeaponController[] CloseWeaponController; //얘는 controllger 가 abstract라서.. 
     [SerializeField]
-    private CloseWeaponController[] CloseWeaponController; //얘는 controllger 가 abstract라서.. 
     private CloseWeapon currentSword;
 
     [SerializeField]
