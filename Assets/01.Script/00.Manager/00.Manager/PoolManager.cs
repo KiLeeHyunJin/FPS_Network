@@ -11,8 +11,8 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] PooledObject BulletSpark; // 벽에 부딪히면 생길 스파크 
     [SerializeField] PooledObject Bullet;  // 실제 날아갈 총알. 
     [SerializeField] public IKWeapon AR;  // 실제 날아갈 총알. 
-    [SerializeField] private int poolSize = 20;
-    [SerializeField] private int poolCapacity = 20;
+   /* [SerializeField] private int poolSize = 20;
+    [SerializeField] private int poolCapacity = 20;*/
 
 
    /* private void Start()
@@ -82,16 +82,14 @@ public class PoolManager : Singleton<PoolManager>
 
     void CreateObj(PooledObject prefab, int key, int size, int capacity, Dictionary<int, ObjectPool> dic)
     {
-        if (!dic.ContainsKey(key)) // 이미 있으면 안함
-        {
-            GameObject gameObject = new GameObject();
-            gameObject.name = $"Pool_{prefab.name}";
+        DestroyObj(key, dic);
+        GameObject gameObject = new GameObject();
+        gameObject.name = $"Pool_{prefab.name}";
 
-            ObjectPool objectPool = gameObject.AddComponent<ObjectPool>();
-            objectPool.CreatePool(prefab, size, capacity);
+        ObjectPool objectPool = gameObject.AddComponent<ObjectPool>();
+        objectPool.CreatePool(prefab, size, capacity);
 
-            dic.Add(key, objectPool);
-        }
+        dic.Add(key, objectPool);
     }
 
 
@@ -110,9 +108,11 @@ public class PoolManager : Singleton<PoolManager>
     {
         if(dic.ContainsKey(key))
         {
-            ObjectPool objectPool = poolDic[key];
-            Destroy(objectPool.gameObject);
-            poolDic.Remove(key);
+            if(dic[key] != null)
+            {
+                Destroy(dic[key].gameObject);
+            }
+            dic.Remove(key);
         }
     }
 
