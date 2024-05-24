@@ -358,7 +358,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1953602893666812674
 Transform:
   m_ObjectHideFlags: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   gunID: 2
   gunType: 4
   gunName: Pistol2
-  range: 100
+  range: 500
   accuracy: 1
   fireRate: 0.2
   reloadTime: 2

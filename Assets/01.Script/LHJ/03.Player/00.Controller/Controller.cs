@@ -409,7 +409,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         if (requestController.Hit() == false)
             return;
-
+        if (hp <= 0)
+            return;
         //hp -= equipController.ShieldCheck(_damage); 실험 위한 주석처리 
         hp -= _damage;
         if (hp <= 0)
@@ -426,7 +427,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         if (photonView.Owner.GetProperty<bool>(DefinePropertyKey.DEAD))
             return;
+        if (hp <= 0)
+            return;
+
         hp -= inventoryController.ShieldCheck(_damage);
+        processingController.HitEffect();
+
         if (HpBar != null)
         {
             HpBar.value = Percent(hp, maxHp);

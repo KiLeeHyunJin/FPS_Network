@@ -21,3 +21,5 @@ MonoBehaviour:
   itemImage: {fileID: -212108495, guid: fae372c4fdcb8fa41a8341a175c80740, type: 3}
   weaponType: 
   weaponSpec: 
+  maxBullet: 30
+  totalBullet: 180

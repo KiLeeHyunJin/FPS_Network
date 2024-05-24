@@ -182,14 +182,21 @@ public class InventoryController : MonoBehaviourPun
             GameObject obj = _item.itemPrefab;
             if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))
                 return;
-            AddWeapon(weapon.weaponType, weapon.InstanceId);
+            AddWeapon(weapon.weaponType, weapon.InstanceId, _item.maxBullet, _item.totalBullet);
         }
             
        
     }
     public void AddItem(IKWeapon _weapon)
     {
-        AddWeapon(_weapon.weaponType,_weapon.InstanceId);
+        if (_weapon.weaponType == AnimationController.AnimatorWeapon.Pistol ||
+            _weapon.weaponType == AnimationController.AnimatorWeapon.Rifle)
+        {
+            Gun gun = _weapon as Gun;
+            AddWeapon(_weapon.weaponType, _weapon.InstanceId, gun.currentBulletCount , gun.otherBullet);
+        }
+        else
+            AddWeapon(_weapon.weaponType, _weapon.InstanceId);
     }
     public void AddItem(AnimationController.AnimatorWeapon weaponType, int id)
     {
@@ -218,12 +225,19 @@ public class InventoryController : MonoBehaviourPun
             }
         }
     }
-    void AddWeapon(AnimationController.AnimatorWeapon weaponType, int id)
+    void AddWeapon(AnimationController.AnimatorWeapon weaponType, int id, int currentBullet = -1, int otherBullet = -1)
     {
         if (weapons[(int)weaponType] != null)
             Dequip(weapons[(int)weaponType]);
 
         weapons[(int)weaponType] = Equip(weaponType, id);
+        if (currentBullet >= 0   &&
+            weaponType == AnimationController.AnimatorWeapon.Pistol ||
+            weaponType == AnimationController.AnimatorWeapon.Rifle)
+        {
+            Gun gun = weapons[(int)weaponType] as Gun;
+            gun.SetData(currentBullet, otherBullet);
+        }
         ChangeWeapon?.Invoke(weaponType);
     }
 
@@ -245,14 +259,21 @@ public class InventoryController : MonoBehaviourPun
         };
         _weapon.transform.SetParent(parent);
         _weapon.gameObject.SetActive(false);
+        Gun dequipWeapon = _weapon as Gun;
+        photonView.RPC(SpawnItem, 
+            RpcTarget.MasterClient, 
+            _weapon.name, 
+            dequipWeapon.currentBulletCount, 
+            dequipWeapon.otherBullet);
+
         weapons[(int)_weapon.weaponType] = null;
-        photonView.RPC(SpawnItem, RpcTarget.MasterClient, _weapon.name);
     }
 
     [PunRPC]
-    void DropWeapon(string _weaponName)
+    void DropWeapon(string _weaponName,int currentBullet, int otherBullet)
     {
-        PhotonNetwork.Instantiate(_weaponName, transform.position, transform.rotation);
+        GameObject weapon = PhotonNetwork.Instantiate(_weaponName, transform.position, transform.rotation);
+        weapon?.GetComponent<Gun>().SetData(currentBullet, otherBullet);
     }
 
     IKWeapon Equip(AnimationController.AnimatorWeapon weaponType, int id)

@@ -1,8 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
-public class Gun : IKWeapon
+public class Gun : IKWeapon, IPunObservable
 {
     // 모든 종류의 총들이 공통적으로 갖고 있는 속성들 
 
@@ -37,6 +39,8 @@ public class Gun : IKWeapon
     [Tooltip("총의 데미지")]
     public int damage; //총의 공격력
 
+    public int otherBullet;
+
     [Header("총의 총알 갯수 관련")]
 
     [Tooltip("탄창에 남아있는 총알의 개수")]
@@ -62,8 +66,23 @@ public class Gun : IKWeapon
     {
         base.Awake();
     }
+    public void SetData(int current, int other)
+    {
+        currentBulletCount = current;
+        otherBullet = other;
+    }
 
-
-
-
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
+        {
+            stream.SendNext(currentBulletCount);
+            stream.SendNext(otherBullet);
+        }
+        else
+        {
+            currentBulletCount = (int)stream.ReceiveNext();
+            otherBullet = (int)stream.ReceiveNext();
+        }
+    }
 }
