@@ -21,7 +21,7 @@ public class Item : ScriptableObject //게임 오브젝트에 붙일 필요가 �
     // 여러 아이템의 공통적인 데이터 
     public enum ItemType  //아이템 유형
     {
-        Bomb,Sword,Gun,Pistol,Armor
+        Bomb,Sword,Gun,Pistol,Armor,Skill
     }
 
     [Tooltip("아이템의 유형")]
