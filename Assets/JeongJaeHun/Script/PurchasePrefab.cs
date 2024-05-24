@@ -72,6 +72,7 @@ public class PurchasePrefab : MonoBehaviour
         {
             inventory.LoseCoin(price); //가격 만큼 골드 빼주기. 
             inventory.AddItem(item);
+            if(item.itemPrefab!=null)
             Debug.Log($"{item.itemPrefab.name},{Id}"); //물건의 아이템 형과 id가 제대로 들어오는지 확인해보기. 
 
             this.ReStartCoroutine(SucessPurchase(), ref coroutine);//만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 

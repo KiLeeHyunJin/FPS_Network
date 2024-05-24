@@ -4,6 +4,7 @@ using Photon.Pun;
 using UnityEditor;
 using System.Collections.Generic;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class TimeRewind : MonoBehaviourPun, IDamagable
 {
@@ -19,6 +20,9 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
     private Coroutine rewindCoroutine;
     private Coroutine recordCoroutine;
     PhotonView pv;
+
+    public SkillEntry thisEntry;
+    public Image skillEntryImg;
 
     void Start()
     {
@@ -94,6 +98,14 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
         Controller.enabled = true;
         rewindCoroutine = null;
         recordCoroutine = StartCoroutine(RecordPositionAndHealth());
+        GetComponent<TimeRewind>().enabled = false;
+        skillEntryImg.sprite = null;
+        skillEntryImg.gameObject.SetActive(false);
+        skillEntryImg = null;
+        thisEntry.isIt = false;
+        thisEntry = null;
+
+
     }
 
     public void TakeDamage(int damage)
