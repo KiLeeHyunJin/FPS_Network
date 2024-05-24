@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfe311a150452f94b86fc9195efd5a21, type: 3}
-  m_Name: AR1
+  m_Name: TimeRewind
   m_EditorClassIdentifier: 
-  itemType: 2
-  price: 100
-  itemPrefab: {fileID: 8156070210601514294, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
-  prefabName: 
+  itemType: 5
+  price: 0
+  itemPrefab: {fileID: 0}
+  prefabName: TimeRewind
   itemID: 0
-  itemName: 
-  itemImage: {fileID: 0}
+  itemName: TimeRewind
+  itemImage: {fileID: 21300000, guid: bd293dc32f4aaf94e8274f2fac2cdf89, type: 3}
   weaponType: 

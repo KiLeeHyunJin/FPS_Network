@@ -6849,7 +6849,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3162171735836929336}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 768b4264025efd242ab4941d26d3d0ee, type: 3}
   m_Name: 
@@ -6866,7 +6866,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3162171735836929336}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b90c9968566daaa49be8e8430e48af6e, type: 3}
   m_Name: 
@@ -6884,7 +6884,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3162171735836929336}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e1faa5de0b8fe348b3ae5cd01a9efcb, type: 3}
   m_Name: 
@@ -6894,6 +6894,8 @@ MonoBehaviour:
   positionRecordInterval: 0.016
   rewindKey: 122
   maxHealth: 100
+  thisEntry: {fileID: 0}
+  skillEntryImg: {fileID: 0}
 --- !u!114 &7180232115379314661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6943,6 +6945,7 @@ MonoBehaviour:
   gunHud: {fileID: 0}
   CloseWeaponHUD: {fileID: 0}
   BombHUD: {fileID: 0}
+  skill: {fileID: 0}
 --- !u!114 &8544027938743297954
 MonoBehaviour:
   m_ObjectHideFlags: 0
