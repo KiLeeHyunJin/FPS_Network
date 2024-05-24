@@ -124,22 +124,21 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
         yield return null;
     }
 
-
-
     [PunRPC]
     private void AttackTiming(int actorNumber)
     {
-        int size = Physics.OverlapSphereNonAlloc(currentCloseWeapon.transform.position,
+        
+        int size = Physics.OverlapSphereNonAlloc(transform.position,
             range, colliders, layermask);
 
         // player 1명 당 IDamagable이 1개면 딱히 큰 상관 안해도 괜찮을듯함. 
-
+        // CurrentWeapon.transform 대신 그냥 transform 써도 별 상관 없을듯 함. 
 
         for (int i = 0; i < size; i++)
         {
-            Vector3 dirToTarget = (colliders[i].transform.position - currentCloseWeapon.transform.position).normalized;
+            Vector3 dirToTarget = (colliders[i].transform.position - transform.position).normalized;
 
-            if (Vector3.Dot(currentCloseWeapon.transform.position, dirToTarget) < currentCloseWeapon.CosAngle)
+            if (Vector3.Dot(transform.position, dirToTarget) < currentCloseWeapon.CosAngle)
             {
                 continue; //범위 바깥에 존재하면 continue로 넘기기 
             }
