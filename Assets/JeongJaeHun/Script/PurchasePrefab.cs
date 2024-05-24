@@ -8,7 +8,7 @@ public class PurchasePrefab : MonoBehaviour
     public TextMeshProUGUI sucessText;
     public TextMeshProUGUI failText;
 
-    public InventoryController inventory;
+    public InventoryController inventory; 
 
     public Item item; // --> 여기에 price/ prefab 등 다 있는 곳 
 
