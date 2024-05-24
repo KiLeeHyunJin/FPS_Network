@@ -3,47 +3,27 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ArmorHUD : MonoBehaviour
+public class ArmorHUD : MonoBehaviour //Player는 항상 ArmorHUD 보다 늦게 생성 ?? 되기 때문에
 {
     [SerializeField]
     private TextMeshProUGUI ArmorText; //아머 레벨을 적어줄 텍스트 
 
-    [SerializeField]
-    private ArmorManager ArmorManager; //아머를 관리하고 있는 slot인 armorManager에 접근 
-
-    [SerializeField]
-    private Armor CurrentArmor;
-
-    [SerializeField]
-    private int ArmorID; 
-
-
     private void Start()
     {
-        
+        ArmorText=GetComponent<TextMeshProUGUI>(); // 아머의 레벨을 적어줄 텍스트 
     }
-
-    private void Update()
+    public void UpdateArmorUI(int ArmorLevel , bool destroyedArmor)
     {
-        CheckArmorUI();
-    }
-
-    private void CheckArmorUI() //아머의 ui를 체크해줌.
-    {
-        CurrentArmor = ArmorManager.currentArmor;
-        ArmorID = CurrentArmor.ArmorID; 
-
-        if(ArmorID!=0 && CurrentArmor.ArmorDurability<=0 ) //아머 깨진 상황임. 
+        // 0 레벨 아머는 파괴되지 않음. 
+        if(ArmorLevel!=0 && destroyedArmor==true) //아머가 레벨 0 이 아니면서 아머가 파괴되었으면
         {
-            ArmorText.text = "아머 파괴."; 
+            ArmorText.text = "아머 파괴";
+
         }
         else
         {
-            ArmorText.text = $"Armor Lv. {ArmorID} ";
+            ArmorText.text = $"Armor Lv. {ArmorLevel}";
         }
-
-       
-        
     }
 
 

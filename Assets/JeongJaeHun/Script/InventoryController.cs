@@ -1,22 +1,16 @@
-using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using static Define;
 
 public class InventoryController : MonoBehaviourPun
 {
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
-    [field : SerializeField] public int Gold { get ; set; }
+    [field: SerializeField] public int Gold { get; set; }
     public TextMeshProUGUI goldText;
     Action<AnimationController.AnimatorWeapon> ChangeWeapon;
-    private Item item; 
+    private Item item;
     [SerializeField] private IKWeapon[] weapons;
     [SerializeField] Transform pistolHolder;
     [SerializeField] Transform rifleHolder;
@@ -29,12 +23,14 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] Transform throwSaver;
 
     // 웨폰 스왑 함수 발동시에 --> swap 컴포넌트의 변수 가져와서 스왑 방지 시켜주기. 
-    [SerializeField] ArmorManager armorManager;
+    [SerializeField] ArmorController armorController;
     [SerializeField] Armor currentArmor;
 
     [SerializeField] GunHUD gunHud;
     [SerializeField] CloseWeaponHUD CloseWeaponHUD;
     [SerializeField] BombHUD BombHUD;
+    
+    
 
     [SerializeField] SkillHolder skill;
 
@@ -49,13 +45,14 @@ public class InventoryController : MonoBehaviourPun
     }
 
     private BombController bombController;
-    public bool BombUsePossible { 
-        get 
+    public bool BombUsePossible
+    {
+        get
         {
             if (bombController == null)
             {
                 bombController = throwHolder.gameObject.GetComponent<BombController>();
-                if(bombController == null)
+                if (bombController == null)
                 {
                     Debug.Log("Not Find Controller");
                     return false;
@@ -67,13 +64,13 @@ public class InventoryController : MonoBehaviourPun
                 return false;
 
             }
-            if(bombController.CurrentBomb.currentBombNumber <= 0)
+            if (bombController.CurrentBomb.currentBombNumber <= 0)
             {
                 Debug.Log("Not Enought");
                 return false;
             }
             return true;
-        } 
+        }
     }
 
     #region
@@ -101,9 +98,11 @@ public class InventoryController : MonoBehaviourPun
 
     private void Awake()
     {
-        Gold = 1000;
+        Gold = 1000; // (임시) 시작 시 1000원 
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
         weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
+
+        armorController = GetComponent<ArmorController>(); //Player에게 붙어있는 Armor 컨트롤러 가져오기. 
     }
 
     private void Start()
@@ -117,12 +116,14 @@ public class InventoryController : MonoBehaviourPun
             gunHud = FindObjectOfType<GunHUD>();
             CloseWeaponHUD = FindObjectOfType<CloseWeaponHUD>();
             BombHUD = FindObjectOfType<BombHUD>();
+            
+            
 
             gunHud?.gameObject.SetActive(false);
             CloseWeaponHUD?.gameObject.SetActive(true);
-            BombHUD?.gameObject.SetActive(false);
-             
-            Gold = 100; //시작 시에 100원으로 초기화. 
+            BombHUD?.gameObject.SetActive(false);           
+            // GoldText가 시작 되는 시점에 ShopCanvas가 꺼져 있기 때문에 못 찾는 문제가 발생함. 
+            
 
             if (goldText != null)
                 goldText.text = $"{Gold}";
@@ -130,6 +131,7 @@ public class InventoryController : MonoBehaviourPun
             ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
             if (shopManager != null)
                 shopManager.inventory = this;
+
         }
         bombController = throwHolder.gameObject.GetComponent<BombController>();
     }
@@ -155,10 +157,11 @@ public class InventoryController : MonoBehaviourPun
         goldText.text = $"{Gold}"; //골드텍스트 초기화 
     }
 
+    //버튼 클릭시 가격 비교 후 AddItem 실행. 
     public void AddItem(Item _item) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {
 
-        if (_item.itemType == Item.ItemType.Skill)
+        if (_item.itemType == Item.ItemType.Skill) // 스킬류 구매 
         {
             for (int i = 0; i < skill.skillSlots.Length; i++)
             {
@@ -167,29 +170,39 @@ public class InventoryController : MonoBehaviourPun
                     continue;
                 else
                 {
-                    AddSkill(_item,i);
+                    AddSkill(_item, i);
                     Debug.Log("스킬 추가");
-                    
+
                     return;
                 }
             }
             Debug.Log("남은 스킬 슬롯 없음");
-            
-            
+
+
         }
-        else
+        else if (_item.itemType == Item.ItemType.Armor) // 아머 류 구매. --> 구매 시 골드 비교가 필요함. 
+        {
+            Debug.Log("인벤토리 컨트롤러의 AddItem이 발동됨 ");
+            int ArmorLevel = _item.itemID; 
+           
+
+            
+
+        }
+        else // 무기류 구매 
         {
             GameObject obj = _item.itemPrefab;
             if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))
                 return;
             AddWeapon(weapon.weaponType, weapon.InstanceId);
         }
-            
-       
+
+
+
     }
     public void AddItem(IKWeapon _weapon)
     {
-        AddWeapon(_weapon.weaponType,_weapon.InstanceId);
+        AddWeapon(_weapon.weaponType, _weapon.InstanceId);
     }
     public void AddItem(AnimationController.AnimatorWeapon weaponType, int id)
     {
@@ -259,11 +272,11 @@ public class InventoryController : MonoBehaviourPun
     {
         (Transform parent, Transform saver) pos = weaponType switch
         {
-            AnimationController.AnimatorWeapon.Pistol =>(pistolHolder, pistolSaver),
+            AnimationController.AnimatorWeapon.Pistol => (pistolHolder, pistolSaver),
             AnimationController.AnimatorWeapon.Rifle => (rifleHolder, rifleSaver),
             AnimationController.AnimatorWeapon.Sword => (swordHolder, swordSaver),
             AnimationController.AnimatorWeapon.Throw => (throwHolder, throwSaver),
-            AnimationController.AnimatorWeapon.END => (null,null),
+            AnimationController.AnimatorWeapon.END => (null, null),
             _ => (null, null),
         };
 
@@ -284,15 +297,23 @@ public class InventoryController : MonoBehaviourPun
 
     public int ShieldCheck(int _damage)
     {
-        return _damage;
-        currentArmor = armorManager.GetCurrentArmor(); //현재 아머 가져오기.
+        
+        currentArmor = armorController.GetCurrentArmor(); //현재 아머 가져오기.
 
-        currentArmor.ArmorDurability--;
+        currentArmor.ArmorDurability--; //내구도 감소 시키기. 
+
+
 
         if (currentArmor.ArmorDurability > 0)
         {
-            _damage -= currentArmor.ArmorDefense;
+            _damage -= currentArmor.ArmorDefense; // 데미지 감소시키기.
+            Debug.Log("감소된 데미지   ->"  + _damage);
         }
+        else if(currentArmor.ArmorDurability<=0) // 아머가 파괴된 상태라면 데미지 감소 x 
+        {
+            armorController.ArmorControllerUpdate(true); //파괴된 상태 전달. 
+        }
+        
 
         return _damage;
     }
@@ -302,12 +323,11 @@ public class InventoryController : MonoBehaviourPun
         //무기 바뀌는 시점을 원하는 함수
         // 잘 찾아지나 확인. 
 
-        if(BombHUD!=null || CloseWeaponHUD!=null 
-            || gunHud!=null)
+       /* if (BombHUD != null || CloseWeaponHUD != null
+            || gunHud != null)
         {
             return;
-        }
-
+        }*/
 
         switch (weapon.weaponType)
         {
@@ -369,8 +389,6 @@ public class InventoryController : MonoBehaviourPun
     }
 
 
-
-
     Action<IKWeapon> changeWeaponCallback;
     public void ChangeWeaponCallback(Action<IKWeapon> setChangeWeapon) //무기가 바뀔때마다 호출을 원하는 함수를 지정
     {
@@ -381,17 +399,15 @@ public class InventoryController : MonoBehaviourPun
         changeWeaponCallback?.Invoke(weapons[(int)weaponType]);
     }
 
-
-
     private void OnDestroy() // 라운드 재시작 시 player 파괴 후 재생성 하는 것 같음. --> hud를 켜줘야함. 
     {
         Debug.Log("플레이어 디스트로이");
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
             gunHud.gameObject.SetActive(true);
             BombHUD.gameObject.SetActive(true);
             CloseWeaponHUD.gameObject.SetActive(true); //일단 다시 켜보기. 
         }
-       
+
     }
 }
