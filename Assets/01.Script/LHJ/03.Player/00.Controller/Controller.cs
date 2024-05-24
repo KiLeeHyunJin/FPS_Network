@@ -52,8 +52,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] int teamCode;
     [SerializeField] GameObject miniCam;
 
-    [SerializeField] ParticleSystem rewindEff;
-    [SerializeField] ParticleSystem outRewindEff;
+
     int maxHp;
     [SerializeField] int hp;
     public bool Mine { get; private set; }
@@ -80,8 +79,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     [SerializeField] int playerNum;
 
-    [SerializeField] SkinnedMeshRenderer[] renderers;
-    [SerializeField] MeshRenderer[] mrenders;
+
 
     [SerializeField] PhotonView pv;
 
@@ -99,7 +97,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
 
         killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
-        renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+
        
         tapEntry = FindObjectOfType<TapEntry>();
 
@@ -550,38 +548,5 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
     }
 
-    [PunRPC]
-    public void RewindEffectOn()
-    {
-        mrenders = GetComponentsInChildren<MeshRenderer>();
-        Debug.Log("other Rewind");
-        if (photonView.IsMine)
-            return;
-       Instantiate(rewindEff, transform.position,Quaternion.identity);
-        foreach(SkinnedMeshRenderer renderer in renderers)
-        {
-            renderer.enabled = false;
-        }
-        foreach (MeshRenderer renderer in mrenders)
-        {
-            renderer.enabled = false;
-        }
-    }
-    [PunRPC]
-    public void RewindEffectOff()
-    {
-        mrenders = GetComponentsInChildren<MeshRenderer>();
-        if (photonView.IsMine)
-            return;
-        Instantiate(outRewindEff, transform.position, Quaternion.identity);
-        foreach (SkinnedMeshRenderer renderer in renderers)
-        {
-            renderer.enabled = true;
-        }
-        foreach (MeshRenderer renderer in mrenders)
-        {
-            renderer.enabled = true;
-        }
-
-    }
+   
 }

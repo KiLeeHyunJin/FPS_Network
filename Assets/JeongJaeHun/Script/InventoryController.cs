@@ -169,7 +169,7 @@ public class InventoryController : MonoBehaviourPun
                 else
                 {
                     AddSkill(_item,i);
-                    Debug.Log("스킬 추가");
+                    Debug.Log($"{_item.itemName} 스킬 추가");
                     
                     return;
                 }
@@ -210,7 +210,7 @@ public class InventoryController : MonoBehaviourPun
                 skill.skillSlots[i].img.sprite = item.itemImage;
                 skill.skillSlots[i].img.gameObject.SetActive(true);
                 skillComponent.GetType().GetField("skillEntryImg").SetValue(skillComponent, skill.skillSlots[i].img);
-                skillComponent.GetType().GetField("rewindKey").SetValue(skillComponent, skill.skillSlots[i].KeyCode);
+                skillComponent.GetType().GetField("skillKey").SetValue(skillComponent, skill.skillSlots[i].KeyCode);
                 skillComponent.GetType().GetField("thisEntry").SetValue(skillComponent, skill.skillSlots[i]);
 
 

@@ -7,6 +7,7 @@ using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CloakingEffect : Skill, IPunObservable
 {
@@ -14,13 +15,15 @@ public class CloakingEffect : Skill, IPunObservable
     public Material CloakingMaterial;
     public float CloakDuration = 3f;
     public float CloakTransparency = 1f;
-    public KeyCode CloakKey = KeyCode.Q;
-    private Renderer[] renderers;
+    public KeyCode skillKey;
+    public Renderer[] renderers;
 
-    private List<Material> originalMaterials = new List<Material>();
-    private List<Color> originalColors = new List<Color>();
+    [SerializeField] List<Material> originalMaterials = new List<Material>();
+    [SerializeField] List<Color> originalColors = new List<Color>();
 
-    private DatabaseReference databaseReference;
+
+    public SkillEntry thisEntry;
+    public Image skillEntryImg;
 
     public override void SkillOn()
     {
@@ -52,6 +55,12 @@ public class CloakingEffect : Skill, IPunObservable
             }
             isCloaked = false;
             Debug.Log("클로킹 해제");
+            GetComponent<CloakingEffect>().enabled = false;
+            skillEntryImg.sprite = null;
+            skillEntryImg.gameObject.SetActive(false);
+            skillEntryImg = null;
+            thisEntry.isIt = false;
+            thisEntry = null;
         }
     }
 
@@ -72,13 +81,9 @@ public class CloakingEffect : Skill, IPunObservable
             {
                 originalColors.Add(renderer.material.GetColor("_Color"));
             }
+            else
+                originalColors.Add(Color.white);
         }
-
-        // Firebase 초기화
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
-            FirebaseApp app = FirebaseApp.DefaultInstance;
-            databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        });
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -95,9 +100,9 @@ public class CloakingEffect : Skill, IPunObservable
 
     void Update()
     {
-        if (Input.GetKeyDown(CloakKey) && photonView.IsMine)  // "Q" 키를 누를 경우
+        if (Input.GetKeyDown(skillKey)) 
         {
-            Debug.Log("클로킹");
+            Debug.Log("Cloacking");
             ToggleCloak();
         }
     }
@@ -111,7 +116,6 @@ public class CloakingEffect : Skill, IPunObservable
         else
         {
             Activate();
-            UpdateFirebaseCloakStatus(true);
         }
     }
     [PunRPC]
@@ -121,14 +125,11 @@ public class CloakingEffect : Skill, IPunObservable
 
         for (int i = 0; i < renderers.Length; i++)
         {
-            // 투명도 적용
-            if (i < originalColors.Count)
-            {
-                Color cloakColor = originalColors[i];
-                cloakColor.a = CloakTransparency;
-                renderers[i].material = CloakingMaterial;
-                CloakingMaterial.color = cloakColor;
-            }
+           Color cloakColor = originalColors[i];
+           cloakColor.a = CloakTransparency;
+           renderers[i].material = CloakingMaterial;
+           CloakingMaterial.color = cloakColor;
+        
         }
 
         // 지정된 시간 동안 대기
@@ -136,14 +137,5 @@ public class CloakingEffect : Skill, IPunObservable
 
         // 클로킹 비활성화
         Deactivate();
-    }
-
-    void UpdateFirebaseCloakStatus(bool status)
-    {
-        if (databaseReference != null)
-        {
-            string userId = PhotonNetwork.LocalPlayer.UserId;
-            databaseReference.Child("users").Child(userId).Child("isCloaked").SetValueAsync(status);
-        }
     }
 }

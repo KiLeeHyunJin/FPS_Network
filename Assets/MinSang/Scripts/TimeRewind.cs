@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using Photon.Realtime;
 using UnityEngine.UI;
 
-public class TimeRewind : MonoBehaviourPun, IDamagable
+public class TimeRewind : MonoBehaviourPun
 {
     public Controller Controller;
     public float rewindDuration = 3.0f;
-    public float positionRecordInterval = 0.1f;
-    public KeyCode rewindKey = KeyCode.Z;
+    public float positionRecordInterval = 0.016f;
+    public KeyCode skillKey;
     [SerializeField] public int maxHealth = 100;
 
     private Queue<Vector3> positionHistory;
@@ -19,10 +19,15 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
     private int currentHealth;
     private Coroutine rewindCoroutine;
     private Coroutine recordCoroutine;
-    PhotonView pv;
+    public PhotonView pv;
 
     public SkillEntry thisEntry;
     public Image skillEntryImg;
+
+    [SerializeField] ParticleSystem rewindEff;
+    [SerializeField] ParticleSystem outRewindEff;
+    [SerializeField] SkinnedMeshRenderer[] renderers;
+    [SerializeField] MeshRenderer[] mrenders;
 
     void Start()
     {
@@ -40,9 +45,9 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
             if (recordCoroutine == null)
                 recordCoroutine = StartCoroutine(RecordPositionAndHealth());
 
-            if (Input.GetKeyDown(rewindKey))
+            if (Input.GetKeyDown(skillKey))
             {
-                Debug.Log("시간 역행");
+                Debug.LogError("시간 역행");
                 Manager.Scene.RewindOut();
                 
                 rewindCoroutine = StartCoroutine(RewindCoroutine());
@@ -71,6 +76,7 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
 
     IEnumerator RewindCoroutine()
     {
+        Debug.LogError("InRewind Coroutine");
         if (recordCoroutine != null)
         {
             StopCoroutine(recordCoroutine);
@@ -82,7 +88,8 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
         var positionHistoryArray = positionHistory.ToArray();
         var healthHistoryArray = healthHistory.ToArray();
         int historyCount = positionHistoryArray.Length;
-        pv.RPC("RewindEffectOn", RpcTarget.Others);
+        Debug.LogError($"PosHistory count is {positionHistory.Count}");
+        pv.RPC("RewindEffectOn",RpcTarget.Others);
 
         while (time < rewindDuration && historyCount > 0)
         {
@@ -124,9 +131,35 @@ public class TimeRewind : MonoBehaviourPun, IDamagable
     {
         return rewindCoroutine != null;
     }
-
-    public void TakeDamage(int _damage, int _actorNumber)
+    [PunRPC]
+    public void RewindEffectOn()
     {
-        
+        renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        mrenders = GetComponentsInChildren<MeshRenderer>();
+        Debug.Log("other Rewind");
+        Instantiate(rewindEff, transform.position, Quaternion.identity);
+        foreach (SkinnedMeshRenderer renderer in renderers)
+        {
+            renderer.enabled = false;
+        }
+        foreach (MeshRenderer renderer in mrenders)
+        {
+            renderer.enabled = false;
+        }
+    }
+    [PunRPC]
+    public void RewindEffectOff()
+    {
+        mrenders = GetComponentsInChildren<MeshRenderer>();
+        Instantiate(outRewindEff, transform.position, Quaternion.identity);
+        foreach (SkinnedMeshRenderer renderer in renderers)
+        {
+            renderer.enabled = true;
+        }
+        foreach (MeshRenderer renderer in mrenders)
+        {
+            renderer.enabled = true;
+        }
+
     }
 }

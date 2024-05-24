@@ -6775,7 +6775,12 @@ MonoBehaviour:
   CloakingMaterial: {fileID: -876546973899608171, guid: 32bc5ec8d39913d4f8f9b5832710ea9e, type: 3}
   CloakDuration: 3
   CloakTransparency: 1
-  CloakKey: 113
+  skillKey: 0
+  renderers: []
+  originalMaterials: []
+  originalColors: []
+  thisEntry: {fileID: 0}
+  skillEntryImg: {fileID: 0}
 --- !u!114 &4599455779024753041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6810,10 +6815,15 @@ MonoBehaviour:
   Controller: {fileID: 8544027938743297954}
   rewindDuration: 3
   positionRecordInterval: 0.016
-  rewindKey: 122
+  skillKey: 0
   maxHealth: 100
+  pv: {fileID: 0}
   thisEntry: {fileID: 0}
   skillEntryImg: {fileID: 0}
+  rewindEff: {fileID: 198856239026640498, guid: 64f68c1b2a2b5fb459543de1e10e11b4, type: 3}
+  outRewindEff: {fileID: 198856239026640498, guid: f9d122c7b591d7a42b4597435d857403, type: 3}
+  renderers: []
+  mrenders: []
 --- !u!114 &7180232115379314661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6933,15 +6943,11 @@ MonoBehaviour:
   enemyIcon: {fileID: 6942377918979610229}
   teamCode: 0
   miniCam: {fileID: 1490805060537847258}
-  rewindEff: {fileID: 198856239026640498, guid: 64f68c1b2a2b5fb459543de1e10e11b4, type: 3}
-  outRewindEff: {fileID: 198856239026640498, guid: f9d122c7b591d7a42b4597435d857403, type: 3}
   hp: 0
   killLog: {fileID: 0}
   HpBar: {fileID: 0}
   tapEntry: {fileID: 0}
   playerNum: 0
-  renderers: []
-  mrenders: []
   pv: {fileID: 0}
 --- !u!114 &2848950838868627797
 MonoBehaviour:
