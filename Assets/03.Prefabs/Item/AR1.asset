@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe311a150452f94b86fc9195efd5a21, type: 3}
   m_Name: AR1
   m_EditorClassIdentifier: 
-  itemType: 2
+  itemType: 0
   price: 100
   itemPrefab: {fileID: 8156070210601514294, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
   prefabName: 
