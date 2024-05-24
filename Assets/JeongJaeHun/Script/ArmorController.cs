@@ -51,6 +51,7 @@ public class ArmorController : MonoBehaviourPun
             transform.GetChild(i).gameObject.SetActive(false);
         }
 
+        Debug.Log($"{lv} + {defense} + {durablity} + ");
 
         transform.GetChild(lv).gameObject.SetActive(true); //0번 아머는 켜줘야함 start 시에 
         currentArmor = transform.GetChild(lv).GetComponent<Armor>();

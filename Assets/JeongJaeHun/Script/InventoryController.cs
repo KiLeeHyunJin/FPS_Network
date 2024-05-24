@@ -102,7 +102,7 @@ public class InventoryController : MonoBehaviourPun
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
         weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
 
-        armorController = GetComponent<ArmorController>(); //Player에게 붙어있는 Armor 컨트롤러 가져오기. 
+        armorController = GetComponentInChildren<ArmorController>(); //Player에게 붙어있는 Armor 컨트롤러 가져오기. 
     }
 
     private void Start()
@@ -183,9 +183,14 @@ public class InventoryController : MonoBehaviourPun
         else if (_item.itemType == Item.ItemType.Armor) // 아머 류 구매. --> 구매 시 골드 비교가 필요함. 
         {
             Debug.Log("인벤토리 컨트롤러의 AddItem이 발동됨 ");
+            Debug.Log(_item.itemID);
+            Debug.Log(_item.Defense);
+            Debug.Log(_item.Durability);
+                
             int ArmorLevel = _item.itemID;
             int armorDe = _item.Defense;
             int armorDu = _item.Durability;
+
             armorController.ArmorPurChase(ArmorLevel,armorDe,armorDu);
 
 
