@@ -86,7 +86,7 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
 
     public bool Reload()
     {
-        return TryReload();
+        return currentGun.otherBullet > 0 ? TryReload() : false;
     }
 
     private void Update()
@@ -117,13 +117,13 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
                 currentGun.currentBulletCount--; //총알 감소 
                 currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
 
-                (Vector3 firePos, Vector3 fireDir) fireData = controller.Zoom ?
-                    (Camera.main.transform.position, Camera.main.transform.forward) :
-                    (currentGun.muzzleFlash.transform.position, Camera.main.transform.forward);
+                Vector3 firePos = controller.Zoom ?
+                    currentGun.muzzleFlash.transform.position:
+                    Camera.main.transform.position;
 
                 photonView.RPC("Shoot", RpcTarget.MasterClient,
                     photonView.Controller.ActorNumber,
-                    fireData.firePos,
+                    firePos,
                     controller.Zoom);
 
                 photonView.RPC("Effect", RpcTarget.All);
@@ -136,6 +136,7 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
         }
         return false;
     }
+
     [PunRPC]
     private void Effect()
     {
@@ -149,7 +150,10 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
         /*PooledObject bullet=
         Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성.
         bullet.GetComponent<Bullet>().actorNumber = ActorNumber; //pool로 */
-        Vector3 dir = zoomState ? (pos - controller.target.position).normalized : controller.transform.forward;
+        Vector3 dir = zoomState ?
+            currentGun.transform.forward :
+            (controller.target.position - pos).normalized;// : 
+            //(controller.target.position - currentGun.muzzleFlash.transform.position).normalized;
         Debug.DrawLine(pos + dir, pos + dir * currentGun.range, Color.cyan, 2);
 
 
@@ -190,13 +194,10 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
     }
 
 
-
-
     private bool TryReload() //리로드 또한 장비컨트롤러에서 실제 키와 연결되어 있으므로 인풋 제한 걸 필요없다.
     {
         if (!isReload)
         {
-
             //CancelFineSight(); //정조준 상태 해제 후 리로드 시작. 
             StartCoroutine(ReloadCoroutine());
             return true;
@@ -210,10 +211,20 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
         {
             //현재 총탄의 갯수가 최대 총탄의 갯수보다 적으면 리로딩 진행
             isReload = true;
+            currentGun.otherBullet += currentGun.currentBulletCount;
+          
             //currentGun.anim.SetTrigger("Reload"); 여기서 애니메이션을 수행해야 된다면 재생.
             yield return new WaitForSeconds(currentGun.reloadTime); //재장전 애니메이션 동안 대기 
-
-            currentGun.currentBulletCount = currentGun.maxBulletCount; //현재 총탄을 최대총탄 숫자로 맞춰줌.
+            if (currentGun.maxBulletCount <= currentGun.otherBullet)
+            {
+                currentGun.otherBullet -= currentGun.maxBulletCount;
+                currentGun.currentBulletCount = currentGun.maxBulletCount; //현재 총탄을 최대총탄 숫자로 맞춰줌.
+            }
+            else
+            {
+                currentGun.currentBulletCount = currentGun.otherBullet;
+                currentGun.otherBullet = 0;
+            }
             isReload = false;
         }
     }
