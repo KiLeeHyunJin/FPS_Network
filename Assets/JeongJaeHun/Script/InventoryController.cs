@@ -339,7 +339,7 @@ public class InventoryController : MonoBehaviourPun
         }
         else if(currentArmor.ArmorDurability<=0) // 아머가 파괴된 상태라면 데미지 감소 x 
         {
-            armorController.ArmorControllerUpdate(true); //파괴된 상태 전달. 
+            armorController.ArmorControllerUpdate(currentArmor.ArmorDurability,true); //파괴된 상태 전달. 
         }
         
 

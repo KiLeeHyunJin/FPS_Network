@@ -37,7 +37,7 @@ public class ArmorController : MonoBehaviourPun
         if (armorHUD != null)
         {
             CurrentArmorCheck(0,0,0); //0번 아머 키기 --> Lv.0 Armor 
-            ArmorControllerUpdate(false); // 파괴되지 않은 0번 아머 전송. 
+            ArmorControllerUpdate(currentArmor.ArmorDurability,false); // 파괴되지 않은 0번 아머 전송. 
         }
     }
 
@@ -55,17 +55,19 @@ public class ArmorController : MonoBehaviourPun
 
         transform.GetChild(lv).gameObject.SetActive(true); //0번 아머는 켜줘야함 start 시에 
         currentArmor = transform.GetChild(lv).GetComponent<Armor>();
+        currentArmor.ArmorLevel = lv;
         currentArmor.ArmorDefense = defense;
         currentArmor.ArmorDurability = durablity;
         
+        armorHUD.UpdateArmorUI(currentArmor.ArmorLevel,currentArmor.ArmorDurability, false); // 새로 구매하는 경우 이므로 무조건 false 보내주면 될듯? 
         
 
     }
 
-    public void ArmorControllerUpdate(bool Destroyed)
+    public void ArmorControllerUpdate(int currentDurabilty,bool Destroyed)
     {
 
-        armorHUD.UpdateArmorUI(currentArmor.ArmorLevel, Destroyed); // UI에 표기되는 TEXT를 업데이트 해줘야함. --> 매개변수 필요. 
+        armorHUD.UpdateArmorUI(currentArmor.ArmorLevel,currentArmor.ArmorDurability, Destroyed); // UI에 표기되는 TEXT를 업데이트 해줘야함. --> 매개변수 필요. 
         // 실제 변경 함수는 아이템 구매시에 인벤토리에서 진행해준다. 
         // 어차피 실드 데미지 체크는 인벤토리에서 진행하기 때문에 UI는 한 번만 업데이트 해주면 된다. 
 

@@ -496,10 +496,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         Destroy(ins.gameObject);
     }
 
-
-
-
-
     [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
@@ -519,10 +515,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         hp = newHp;
     }
-
-
-
-
 
     public void StartCoroutined(IEnumerator routine, ref Coroutine co)
         => this.ReStartCoroutine(routine, ref co);
