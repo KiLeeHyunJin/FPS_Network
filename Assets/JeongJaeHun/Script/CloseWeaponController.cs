@@ -70,14 +70,7 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
         isActivate = false;
     }
 
-    private void Start()
-    {
-
-
-    }
-
-    protected bool TryAttack() //EquipController의 fire에 연동하면 fire에서 input과 연결되어있다.
-                               // 따로 키 관련해서 처리할 필요는 없음. reload 와 swap도 마찬가지. 
+    protected bool TryAttack() //EquipController의 fire에 연동하면 fire에서 input과 연결되어있다.// 따로 키 관련해서 처리할 필요는 없음. reload 와 swap도 마찬가지. 
     {
         if (!isAttack) //코루틴에서 변수 넣어주는 거보다 바깥에서 변수 넣어주는게 더 깔끔해보이는듯?
         {
@@ -92,6 +85,7 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
     {
         return false;
     }
+
     IEnumerator AttackCoroutine() // 공격 루틴 
     {
         isAttack = true;
@@ -127,7 +121,6 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
     [PunRPC]
     private void AttackTiming(int actorNumber)
     {
-        
         int size = Physics.OverlapSphereNonAlloc(transform.position,
             range, colliders, layermask);
 

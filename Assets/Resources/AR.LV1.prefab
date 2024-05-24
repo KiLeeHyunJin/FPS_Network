@@ -263,7 +263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5407611864780272455
 Transform:
   m_ObjectHideFlags: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponPos>k__BackingField: {fileID: 7134654979487140297}
+  <WeaponPos>k__BackingField: {fileID: 0}
   <leftGrip>k__BackingField: {fileID: 7197115665491334895}
   <RightGrip>k__BackingField: {fileID: 3934920495548451098}
   <ZoomPos>k__BackingField: {fileID: 3979680578942320169}
@@ -375,7 +375,7 @@ MonoBehaviour:
   gunName: AR1
   range: 100
   accuracy: 30
-  fireRate: 0.1
+  fireRate: 0.15
   reloadTime: 2
   trailEffect: {fileID: 0}
   damage: 10

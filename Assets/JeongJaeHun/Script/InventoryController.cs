@@ -13,7 +13,7 @@ public class InventoryController : MonoBehaviourPun
 {
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
-    [field : SerializeField] public int Gold { get; set; }
+    [field : SerializeField] public int Gold { get ; set; }
     public TextMeshProUGUI goldText;
     Action<AnimationController.AnimatorWeapon> ChangeWeapon;
     private Item item; 
@@ -35,6 +35,8 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] GunHUD gunHud;
     [SerializeField] CloseWeaponHUD CloseWeaponHUD;
     [SerializeField] BombHUD BombHUD;
+
+    [SerializeField] SkillHolder skill;
 
 
     const string SpawnItem = "DropWeapon";
@@ -110,6 +112,7 @@ public class InventoryController : MonoBehaviourPun
         
 
         ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
+        skill = FindObjectOfType<SkillHolder>();
         if (shopManager != null)
             shopManager.inventory = this;
 
@@ -155,10 +158,35 @@ public class InventoryController : MonoBehaviourPun
 
     public void AddItem(Item _item) // 매개변수로 ID 받아서 그 ID에 맞춘 자식 오브젝트 활성화 시키기. 
     {
-        GameObject obj = _item.itemPrefab;
-        if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))
-            return;
-        AddWeapon(weapon.weaponType, weapon.InstanceId);
+
+        if (_item.itemType == Item.ItemType.Skill)
+        {
+            for (int i = 0; i < skill.skillSlots.Length; i++)
+            {
+                SkillEntry skillEntry = skill.skillSlots[i];
+                if (skillEntry.isIt)
+                    continue;
+                else
+                {
+                    AddSkill(_item,i);
+                    Debug.Log("스킬 추가");
+                    
+                    return;
+                }
+            }
+            Debug.Log("남은 스킬 슬롯 없음");
+            
+            
+        }
+        else
+        {
+            GameObject obj = _item.itemPrefab;
+            if (!obj.TryGetComponent<IKWeapon>(out IKWeapon weapon))
+                return;
+            AddWeapon(weapon.weaponType, weapon.InstanceId);
+        }
+            
+       
     }
     public void AddItem(IKWeapon _weapon)
     {
@@ -168,7 +196,29 @@ public class InventoryController : MonoBehaviourPun
     {
         AddWeapon(weaponType, id);
     }
+    public void AddSkill(Item item, int i)
+    {
+        string skillName = item.itemName;
+        Type skillType = Type.GetType(skillName);
+        if (skillType != null)
+        {
+            Component skillComponent = gameObject.GetComponent(skillType);
+            if (skillComponent != null)
+            {
+                skillComponent.GetType().GetProperty("enabled").SetValue(skillComponent, true);
+                skill.skillSlots[i].isIt = true;
+                skill.skillSlots[i].img.sprite = item.itemImage;
+                skill.skillSlots[i].img.gameObject.SetActive(true);
+                skillComponent.GetType().GetField("skillEntryImg").SetValue(skillComponent, skill.skillSlots[i].img);
+                skillComponent.GetType().GetField("rewindKey").SetValue(skillComponent, skill.skillSlots[i].KeyCode);
+                skillComponent.GetType().GetField("thisEntry").SetValue(skillComponent, skill.skillSlots[i]);
 
+
+
+                Debug.Log($"스킬 : {skillName} 활성화됨.");
+            }
+        }
+    }
     void AddWeapon(AnimationController.AnimatorWeapon weaponType, int id)
     {
         if (weapons[(int)weaponType] != null)

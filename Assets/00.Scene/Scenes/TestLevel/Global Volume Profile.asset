@@ -25,7 +25,7 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
+          value: 0.8568047
           inSlope: 1
           outSlope: 1
           tangentMode: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.8111338
   clamp:
     m_OverrideState: 1
     m_Value: 0.2
@@ -304,7 +304,7 @@ MonoBehaviour:
   active: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.99000895
 --- !u!114 &-1490667162591807876
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -320,7 +320,7 @@ MonoBehaviour:
   active: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.8568047
   xMultiplier:
     m_OverrideState: 0
     m_Value: 1
@@ -371,13 +371,13 @@ MonoBehaviour:
     m_Value: 1
   gaussianStart:
     m_OverrideState: 0
-    m_Value: 30
+    m_Value: 13.740641
   gaussianEnd:
     m_OverrideState: 0
     m_Value: 59
   gaussianMaxRadius:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 1.0419786
   highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
