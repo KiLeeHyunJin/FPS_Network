@@ -51,7 +51,9 @@ public class Item : ScriptableObject //게임 오브젝트에 붙일 필요가 �
     public string itemName; //아이템의 이름 
     public Sprite itemImage; //아이템 스프라이트 --> ui 인데 이미 다른 스크립트에 있기는 해서.. 생각해보기. 
 
-    
+    [Header("Armor와 관련된 Spec")]
+    public int Defense;
+    public int Durability; 
 
 
 

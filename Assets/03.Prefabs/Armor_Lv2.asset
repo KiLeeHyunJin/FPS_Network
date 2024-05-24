@@ -19,5 +19,9 @@ MonoBehaviour:
   itemID: 2
   itemName: "2\uB819 \uAC11\uC637"
   itemImage: {fileID: 254408738, guid: a3199f7e15eb94d469e00051113bf9b2, type: 3}
+  Defense: 6
+  Durability: 6
   weaponType: Armor
   weaponSpec: "2\uB808\uBCA8 \uC544\uBA38\uC774\uB2E4. "
+  maxBullet: 0
+  totalBullet: 0
