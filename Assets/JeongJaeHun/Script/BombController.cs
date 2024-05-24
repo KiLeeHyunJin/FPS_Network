@@ -46,8 +46,6 @@ public class BombController : MonoBehaviourPun, Iattackable
     {
         // currentBomb을 찾으려면?? --> 자기 자신의 자식들 중에서 (active 되어 있는 것을 찾아서 넣어주자.)
         // 이 부분도 자식의 currentbomb에서 리지드바디 가져오는 부분인데 어떻게 할지 생각좀 해보자. 
-        Rigidbody bombRigidbody = currentBomb.gameObject.GetComponent<Rigidbody>();
-        bombRigidbody.isKinematic = true;
         mainCamera = Camera.main;
         if(TryGetComponent<LineRenderer>(out lineRenderer))
         {

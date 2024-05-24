@@ -6097,7 +6097,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6632997920356581901}
-  sceneViewId: 0
+  sceneViewId: 16
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &2827437474235304820
@@ -7174,7 +7174,7 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  sceneViewId: 0
+  sceneViewId: 17
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -14183,7 +14183,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8644913041405509699}
-  sceneViewId: 0
+  sceneViewId: 15
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &6182686886036145712
@@ -14533,7 +14533,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 0
+  sceneViewId: 13
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!120 &6761206449484161702
@@ -19425,7 +19425,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7543617888352762341}
-  sceneViewId: 0
+  sceneViewId: 14
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &695706050568986886
@@ -19515,7 +19515,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5525885597568803731, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: sceneViewId
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 188740774871733813, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: m_Name
@@ -19642,7 +19642,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8711553453801057852, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
       propertyPath: sceneViewId
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8711553453801057852, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -19771,7 +19771,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3244118640271991058, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: sceneViewId
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: <WeaponPos>k__BackingField
@@ -19973,7 +19973,7 @@ PrefabInstance:
       objectReference: {fileID: 2671129392070243133}
     - target: {fileID: 6252304339226794055, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
       propertyPath: sceneViewId
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20000,7 +20000,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -6829125046911157737, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: sceneViewId
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 303163471660486714, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: m_Name
@@ -20135,7 +20135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7579393447868919905, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: sceneViewId
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7831276082611668189, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: m_Name

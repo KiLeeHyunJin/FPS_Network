@@ -119,9 +119,9 @@ public class InventoryController : MonoBehaviourPun
             CloseWeaponHUD = FindObjectOfType<CloseWeaponHUD>();
             BombHUD = FindObjectOfType<BombHUD>();
 
-            gunHud.gameObject.SetActive(false);
-            CloseWeaponHUD.gameObject.SetActive(true);
-            BombHUD.gameObject.SetActive(false);
+            gunHud?.gameObject.SetActive(false);
+            CloseWeaponHUD?.gameObject.SetActive(true);
+            BombHUD?.gameObject.SetActive(false);
              
             Gold = 100; //시작 시에 100원으로 초기화. 
 
