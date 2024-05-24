@@ -494,10 +494,25 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
+        if(hp<=0) //죽은 상황을 체크할 수 있는 변수가 있으면 그 변수를 사용하자. 
+        {
+            return; 
+        }
         int other = maxHp - hp;
         _healValue = other < _healValue ? other : _healValue;
         hp += _healValue;
+        photonView.RPC("UpdateHp", RpcTarget.Others,hp);
+        photonView.RPC("AddHp", RpcTarget.Others, _healValue);
     }
+
+    [PunRPC]
+    public void UpdateHp(int newHp)
+    {
+        hp = newHp;
+    }
+
+
+
 
 
     public void StartCoroutined(IEnumerator routine, ref Coroutine co)

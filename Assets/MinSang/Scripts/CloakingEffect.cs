@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CloakingEffect : MonoBehaviourPun, IPunObservable
+public class CloakingEffect : Skill, IPunObservable
 {
     public bool isCloaked = false;
     public Material CloakingMaterial;
@@ -21,6 +21,16 @@ public class CloakingEffect : MonoBehaviourPun, IPunObservable
     private List<Color> originalColors = new List<Color>();
 
     private DatabaseReference databaseReference;
+
+    public override void SkillOn()
+    {
+        Debug.Log(SkillName + "SkillOn");
+    }
+
+    public override void SkillOff()
+    {
+        Debug.Log(SkillName + "SkillOff");
+    }
     public void Activate()
     {
         StartCoroutine(CloakRoutine());
