@@ -70,17 +70,13 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
     void Start()
     {
         controller = GetComponentInParent<Controller>();
+        poolContainer = FindObjectOfType<PoolContainer>();
     }
     private void OnDisable()
     {
         isActivate = false;
     }
 
-    private void Start()
-    {
-
-        poolContainer = FindObjectOfType<PoolContainer>();
-    }
 
     // 인터페이스로 상속한 인터페이스 함수 --> 실제 플레이어 클릭 시 실행 할 함수임. 
     public bool Attack()
