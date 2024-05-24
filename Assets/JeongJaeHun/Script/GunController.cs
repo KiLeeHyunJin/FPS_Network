@@ -10,7 +10,7 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
 
     [SerializeField]
     private Gun currentGun; //현재 들고 있는 총의 Gun이 할당됨. 
-
+    [SerializeField] Controller controller;
     public Gun GetGun { get { return currentGun; } } //프로퍼티 함수 
 
     [SerializeField] private float currentFireRate; //이 값이 0 보다 큰 동안에는 총알이 발사되지 않음. 
@@ -57,6 +57,10 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
         }
         isActivate = true;
     }
+    void Start()
+    {
+        controller = GetComponentInParent<Controller>();
+    }
     private void OnDisable()
     {
         isActivate = false;
@@ -101,10 +105,14 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
                 currentGun.currentBulletCount--; //총알 감소 
                 currentFireRate = currentGun.fireRate; //연사 속도 재계산 ( deltaTime 빼줘서 0 되기전까지 다시 발사 중지)
 
+                (Vector3 firePos, Vector3 fireDir) fireData = controller.Zoom ?
+                    (Camera.main.transform.position, Camera.main.transform.forward) :
+                    (currentGun.muzzleFlash.transform.position, Camera.main.transform.forward);
+
                 photonView.RPC("Shoot", RpcTarget.MasterClient,
                     photonView.Controller.ActorNumber,
-                    Camera.main.transform.position,
-                    Camera.main.transform.forward);
+                    fireData.firePos,
+                    controller.Zoom);
 
                 photonView.RPC("Effect", RpcTarget.All);
                 return true;
@@ -124,11 +132,12 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
     }
 
     [PunRPC] //Shoot을 실제 실행하는 Attack 에서는 isMine 체크.
-    private void Shoot(int ActorNumber, Vector3 pos, Vector3 dir) //실제 발사되는 과정 
+    private void Shoot(int ActorNumber, Vector3 pos, bool zoomState) //실제 발사되는 과정 
     {
         /*PooledObject bullet=
         Manager.Pool.GetBullet(FirePos.position, Quaternion.identity); //총구에서 총알 생성.
         bullet.GetComponent<Bullet>().actorNumber = ActorNumber; //pool로 */
+        Vector3 dir = zoomState ? (pos - controller.target.position).normalized : controller.transform.forward;
         Debug.DrawLine(pos + dir, pos + dir * currentGun.range, Color.cyan, 2);
 
         if (Physics.Raycast(
@@ -142,6 +151,10 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
                 Debug.Log($"Hit Damage {currentGun.damage} ");
 
                 damagable.TakeDamage(currentGun.damage, ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
+            }
+            else
+            {
+                Manager.Pool.GetBulletSpark(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             }
         }
         //StartCoroutine(RetroActionCoroutine());

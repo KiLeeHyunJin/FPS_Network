@@ -38,7 +38,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] GameObject[] FPSIgnoreObject;
     [SerializeField] GameObject[] FPSHand;
     [SerializeField] GameObject[] weaponObj;
-    [SerializeField] Transform target;
+    [field: SerializeField] public Transform target { get; private set; }
 
     [SerializeField] Transform cameraRoot;
     [SerializeField] Camera overlayCam;
@@ -59,7 +59,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     public bool Mine { get; private set; }
 
     public int TeamCode { get; private set; }
-
+    public bool Zoom { get { return inputController.Zoom; } }
     CameraController cameraController;
     PlayerInputController inputController;
     PlayerInput playerInput;
