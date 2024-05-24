@@ -346,6 +346,10 @@ public class InventoryController : MonoBehaviourPun
         {
             return;
         }
+        BombHUD.gameObject.SetActive(false);
+        CloseWeaponHUD.gameObject.SetActive(false);
+        gunHud.gameObject.SetActive(false);
+
 
         switch (weapon.weaponType)
         {
@@ -357,20 +361,13 @@ public class InventoryController : MonoBehaviourPun
 
                 Debug.Log(gun.name);
 
-
-                BombHUD.gameObject.SetActive(false);
-                CloseWeaponHUD.gameObject.SetActive(false);
                 gunHud.gameObject.SetActive(true);
-
 
                 break;
             case AnimationController.AnimatorWeapon.Rifle:
 
                 Gun gun2 = weapon as Gun;
                 gunHud.CurrentGunCheck(gun2);
-
-                BombHUD.gameObject.SetActive(false);
-                CloseWeaponHUD.gameObject.SetActive(false);
                 gunHud.gameObject.SetActive(true);
 
 
@@ -379,10 +376,6 @@ public class InventoryController : MonoBehaviourPun
 
                 CloseWeapon closeWeapon = weapon as CloseWeapon;
                 CloseWeaponHUD.CurrentSwordCheck(closeWeapon);
-
-                gunHud.gameObject.SetActive(false);
-                BombHUD.gameObject.SetActive(false);
-
                 CloseWeaponHUD.gameObject.SetActive(true);
 
                 break;
@@ -390,9 +383,6 @@ public class InventoryController : MonoBehaviourPun
 
                 Bomb bomb = weapon as Bomb;
                 BombHUD.SetCurrentBomb(bomb);
-
-                CloseWeaponHUD.gameObject.SetActive(false);
-                gunHud.gameObject.SetActive(false);
                 BombHUD.gameObject.SetActive(true);
 
                 break;
@@ -414,6 +404,9 @@ public class InventoryController : MonoBehaviourPun
     }
     public void ChangeWeaponUpdate(AnimationController.AnimatorWeapon weaponType) //애니메이션에서 무기가 변경되는 타임에 무기 업데이트호출(지정한 함수 호출)
     {
+        if (weaponType == AnimationController.AnimatorWeapon.Throw)
+            if (weapons[(int)weaponType] == null)
+                weapons[(int)weaponType] = bombController.CurrentBomb;
         changeWeaponCallback?.Invoke(weapons[(int)weaponType]);
     }
 
