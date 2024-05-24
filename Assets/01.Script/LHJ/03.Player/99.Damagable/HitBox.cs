@@ -6,6 +6,8 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
 {
     Controller controller;
     [SerializeField] float multiple = 1;
+    [field: SerializeField] public BodyPartType PartType { get; private set; }
+    public void SetMultiple(float value) { multiple = value; }
     public int GetActNum { get { return controller.photonView.Controller.ActorNumber; } }
     public void SetOwner(Controller _controller, bool mine)
     {
@@ -20,9 +22,13 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
 
     public void TakeDamage(int _damage, int _actorNumber)
     {
-        controller.Damage((int)(_damage * multiple));      
+        controller.Damage((int)(_damage * multiple));
     }
 
-    
+
+    public enum BodyPartType
+    { 
+        Foot, Leg, Body, Arm, Hand, Neck, Head
+    }
 
 }

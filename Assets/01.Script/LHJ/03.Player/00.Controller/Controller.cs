@@ -196,9 +196,27 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         Player pl = PhotonNetwork.LocalPlayer;
 
-        Collider[] colliders = rootBone.GetComponentsInChildren<Collider>();
-        foreach (Collider collider in colliders)
-            collider.gameObject.AddComponent<HitBox>().SetOwner(this, Mine);
+        HitBox[] hitBoxs = rootBone.GetComponentsInChildren<HitBox>();
+        foreach (HitBox hitBox in hitBoxs)
+        {
+            hitBox.SetOwner(this, Mine);
+            float multipleValue = hitBox.PartType switch
+            {
+                HitBox.BodyPartType.Foot => 0.3f,
+                HitBox.BodyPartType.Hand => 0.3f,
+
+                HitBox.BodyPartType.Leg => 0.5f,
+                HitBox.BodyPartType.Arm => 0.5f,
+
+                HitBox.BodyPartType.Body => 1f,
+
+                HitBox.BodyPartType.Neck => 0.75f,
+                HitBox.BodyPartType.Head => 100f,
+
+                _ => 1,
+            };
+            hitBox.SetMultiple(multipleValue);
+        }
     }
     public void SetZoomPosition(Transform _zoom)
         => cameraController.SetZoomPosition(_zoom);
