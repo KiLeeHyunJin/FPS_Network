@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TimeRewind
   m_EditorClassIdentifier: 
   itemType: 5
-  price: 0
+  price: 100
   itemPrefab: {fileID: 0}
   prefabName: TimeRewind
   itemID: 0
