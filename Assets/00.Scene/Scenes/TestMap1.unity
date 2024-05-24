@@ -4498,7 +4498,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3247464127874776459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bcf60591e38ab8478805f656231cc2b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c94ff2402e7e474ea5c84cf196ec0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   skillSlots:
