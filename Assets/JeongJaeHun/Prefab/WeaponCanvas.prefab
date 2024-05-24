@@ -569,8 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79701be5dbb43ea47a5713862818c1e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CloseWeaponController:
-  - {fileID: 0}
+  currentSword: {fileID: 0}
   WeaponImage: {fileID: 3227803956598942168}
   weaponText: {fileID: 3248134320132517469}
 --- !u!1 &5501269241816700402
