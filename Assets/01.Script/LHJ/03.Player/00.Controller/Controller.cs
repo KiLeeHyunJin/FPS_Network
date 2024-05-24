@@ -53,6 +53,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] GameObject miniCam;
 
     [SerializeField] ParticleSystem rewindEff;
+    [SerializeField] ParticleSystem outRewindEff;
     int maxHp;
     [SerializeField] int hp;
     public bool Mine { get; private set; }
@@ -99,7 +100,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
-        mrenders = GetComponentsInChildren<MeshRenderer>();
+       
         tapEntry = FindObjectOfType<TapEntry>();
 
         Check();
@@ -426,6 +427,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (HpBar != null)
         {
             HpBar.value = Percent(hp, maxHp);
+            pv.RPC("AttackedEffect", photonView.Owner);
         }
 
         if (hp <= 0)
@@ -485,7 +487,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
         Destroy(ins.gameObject);
     }
 
-    // 이 부분도 자신의 체력 동기화
+
+
+
+
+    [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
         int other = maxHp - hp;
@@ -529,10 +535,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void RewindEffectOn()
     {
+        mrenders = GetComponentsInChildren<MeshRenderer>();
         Debug.Log("other Rewind");
         if (photonView.IsMine)
             return;
-        Instantiate(rewindEff, transform,false);
+       Instantiate(rewindEff, transform.position,Quaternion.identity);
         foreach(SkinnedMeshRenderer renderer in renderers)
         {
             renderer.enabled = false;
@@ -545,9 +552,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void RewindEffectOff()
     {
+        mrenders = GetComponentsInChildren<MeshRenderer>();
         if (photonView.IsMine)
             return;
-
+        Instantiate(outRewindEff, transform.position, Quaternion.identity);
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
             renderer.enabled = true;

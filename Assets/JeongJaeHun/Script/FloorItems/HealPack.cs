@@ -1,37 +1,26 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealPack : MonoBehaviour,IInteractable
+public class HealPack : MonoBehaviourPun,IInteractable
 {
-
+    [SerializeField] int heal = 50;
     
 
-    public int heal = 50;
-
-    // 어차피 player에서 처리 할 예정임. 
-    //public Slider slider;
-    //public TextMeshProUGUI text;
-
-    private void Start()
-    {
-        
-    }
-
-    
     public void Interaction(GameObject player)
     {
         Controller controller= player.GetComponent<Controller>();
         
         //Controller 컴포넌트가 있다면
-        if(controller != null)
+        if(controller != null && photonView.IsMine)
         {
             controller.AddHp(heal);
         }
 
-        Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 
   

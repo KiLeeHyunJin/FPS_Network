@@ -8,6 +8,7 @@ public class SceneManager : Singleton<SceneManager>
 {
     [SerializeField] Image fade;
     [SerializeField] Image timeRewindImg;
+    [SerializeField] Image atkedImg;
     [SerializeField] Slider loadingBar;
     [SerializeField] float fadeTime;
     [SerializeField] Sprite[] loadingImgs;
@@ -107,7 +108,18 @@ public class SceneManager : Singleton<SceneManager>
         onFading = false;
         fadeInRoutine = null;
     }
-
+    public IEnumerator AtkedEffect()
+    {
+        float rate = 0;
+        Color littleRedColor = new Color(1, fade.color.g, fade.color.b, 0.3f);
+        Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
+        while (rate <= 1f)
+        {
+            rate += Time.deltaTime / 0.5f;
+            fade.color = Color.Lerp(littleRedColor, fadeInColor, rate);
+            yield return null;
+        }
+    }
     public Coroutine StartFadeOut()
     {
       

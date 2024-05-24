@@ -16,7 +16,7 @@ public class InventoryController : MonoBehaviourPun
     [field : SerializeField] public int Gold { get; set; }
     public TextMeshProUGUI goldText;
     Action<AnimationController.AnimatorWeapon> ChangeWeapon;
-    private Item item; //이 부분 p[ublic 참조 해야하나? 아닐 것 같은데 
+    private Item item; 
     [SerializeField] private IKWeapon[] weapons;
     [SerializeField] Transform pistolHolder;
     [SerializeField] Transform rifleHolder;
@@ -106,9 +106,8 @@ public class InventoryController : MonoBehaviourPun
 
     private void Start()
     {
-        //slots= gameObject.GetComponentsInChildren<Slot>();
-        if (goldText != null)
-            goldText.text = $"{0}"; //시작 시에 0원으로 초기화 
+        
+        
 
         ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
         if (shopManager != null)
@@ -123,6 +122,12 @@ public class InventoryController : MonoBehaviourPun
             gunHud.gameObject.SetActive(false);
             CloseWeaponHUD.gameObject.SetActive(true);
             BombHUD.gameObject.SetActive(false);
+             
+            Gold = 100; //시작 시에 100원으로 초기화. 
+
+            if (goldText != null)
+                goldText.text = $"{Gold}"; 
+
         }
         bombController = throwHolder.gameObject.GetComponent<BombController>();
     }
