@@ -254,30 +254,55 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
         }
-        public void TimeOver()
+        public void GameOver()
         {
-
+        Debug.Log("GameOver");
+        if (PhotonNetwork.IsMasterClient)
+        {
             int remainBlue = 0;
             int remainRed = 0;
+            Debug.Log(PhotonNetwork.PlayerList.Length);
             foreach (Player player in PhotonNetwork.PlayerList)
             {
+                Debug.Log($"playerCheck : {player.ActorNumber}player ");
                 if (1 == player.GetPhotonTeam().Code)
+                {
                     if (player.GetProperty<bool>(DefinePropertyKey.DEAD))
-                        return;
+                    {
+                        Debug.Log($"{player.ActorNumber} player is Dead");
+                        continue;
+                    }
+                        
                     else
+                    {
+                        Debug.Log($"Blue is {remainBlue}");
                         remainBlue++;
+                    }
+                }
+                else if (2 == player.GetPhotonTeam().Code)
+                {
+                    if (player.GetProperty<bool>(DefinePropertyKey.DEAD))
+                    {
+                        Debug.Log($"{player.ActorNumber} player is Dead");
+                        continue;
+                    }
+                        
+                    else
+                    {
+                        Debug.Log($"Red is {remainRed}");
+                        remainRed++;
+                    }
+                }
+                else
+                    Debug.Log($"player team code is {player.GetPhotonTeam().Code}");
 
-                else
-                if (player.GetProperty<bool>(DefinePropertyKey.DEAD))
-                    return;
-                else
-                    remainRed++;
+
             }
+
             if (remainBlue > remainRed)
             {
                 int blueScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
                 curRoom.SetProperty(DefinePropertyKey.BLUESCORE, blueScore + 1);
-                Debug.Log(curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE));
                 pv.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
 
             }
@@ -291,6 +316,12 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 pv.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
             }
+        }
+        else
+        {
+            Debug.Log("isnot");
+            MessageUp("i'm NOt Master");
+        }
 
 
         }
@@ -309,12 +340,12 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
                 yield return null;
             }
-
-            if (PhotonNetwork.IsMasterClient)                                           //7
+        GameOver();
+        if (PhotonNetwork.IsMasterClient)                                           //7
             {
                 PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
-                Debug.Log("TimeOver");
-                TimeOver();
+               
+                
                 if (curRound < roundCount)
                 {
 
@@ -388,5 +419,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.LoadLevel("LobbyScene");
         }
+
+    [PunRPC]
+    public void AttackedEffect()
+    {
+       StartCoroutine(Manager.Scene.AtkedEffect());
     }
+}
 
