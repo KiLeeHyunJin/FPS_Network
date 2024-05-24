@@ -302,6 +302,13 @@ public class InventoryController : MonoBehaviourPun
         //무기 바뀌는 시점을 원하는 함수
         // 잘 찾아지나 확인. 
 
+        if(BombHUD.gameObject!=null || CloseWeaponHUD.gameObject!=null 
+            || gunHud.gameObject!=null)
+        {
+            return;
+        }
+
+
         switch (weapon.weaponType)
         {
             case AnimationController.AnimatorWeapon.Pistol:
