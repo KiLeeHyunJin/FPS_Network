@@ -20,8 +20,6 @@ public class Coin : MonoBehaviourPun, IInteractable
 
     }
 
-    
-
     public CoinType GetRandomEnumValue()
     {
         var enumValues = System.Enum.GetValues(enumType: typeof(CoinType));
