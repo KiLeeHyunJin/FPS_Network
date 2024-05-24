@@ -142,6 +142,13 @@ public class GunController : MonoBehaviourPun, Iattackable,IPunObservable
                 Debug.Log($"Hit Damage {currentGun.damage} ");
 
                 damagable.TakeDamage(currentGun.damage, ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
+
+                Manager.Pool.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+            }
+            else
+            {
+                Manager.Pool.GetbulletMarks(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Manager.Pool.GetBulletSpark(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             }
         }
         //StartCoroutine(RetroActionCoroutine());

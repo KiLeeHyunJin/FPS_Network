@@ -487,9 +487,30 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
-        int other = maxHp - hp;
-        _healValue = other < _healValue ? other : _healValue;
-        hp += _healValue;
+        if(hp<=0) // 사망한 경우를 체크 할 수 있는 변수가 있다면 그 변수로 바꿔줄 것. 
+        { return; }
+
+        if(PhotonNetwork.IsMasterClient) //호스트만 체력을 직접 갱신 가능 
+        {
+            int other = maxHp - hp;
+            _healValue = other < _healValue ? other : _healValue;
+            hp += _healValue;
+
+            //호스트에서 클라이언트로 동기화. 
+            photonView.RPC("ApplyUpdateHealth", RpcTarget.Others, hp);
+            photonView.RPC("AddHp", RpcTarget.Others, _healValue);
+
+        }
+
+        
+    }
+
+
+    // 호스트 -> 모든 클라이언트 방향으로 체력을 동기화. 
+    [PunRPC]
+    private void ApplyUpdateHealth(int newHp)
+    {
+        hp = newHp;
     }
 
 
