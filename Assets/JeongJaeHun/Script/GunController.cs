@@ -154,22 +154,35 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
             out hitInfo,
             currentGun.range, HitLayer))
         {
+            bool ishit = false;
             if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
             {
                 Debug.Log($"Hit Damage {currentGun.damage} ");
 
                 damagable.TakeDamage(currentGun.damage, ActorNumber); //actorNumber가 laycast의 주인 actorNumber 
-                poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                ishit = true;
+                /*poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));*/
             }
             else
             {
-                poolContainer.GetbulletMarks(hitInfo.point - (dir*0.5f), Quaternion.LookRotation(hitInfo.normal));
-                poolContainer.GetBulletSpark(hitInfo.point, Quaternion.LookRotation(-hitInfo.normal));
+                /*poolContainer.GetbulletMarks(hitInfo.point - (hitInfo.normal * 0.1f), Quaternion.LookRotation(hitInfo.normal));
+                poolContainer.GetBulletSpark(hitInfo.point, Quaternion.LookRotation(-hitInfo.normal));*/
             }
+            photonView.RPC("HitEffect", RpcTarget.All,hitInfo.point, hitInfo.normal,ishit);
         }
     }
 
-
+    [PunRPC]
+    void HitEffect(Vector3 pos, Vector3 nor, bool isHit)
+    {
+        if (isHit)
+            poolContainer.GetBloodEffect(pos, Quaternion.LookRotation(nor));
+        else
+        {
+            poolContainer.GetbulletMarks(pos + (nor * 0.1f), Quaternion.LookRotation(nor));
+            poolContainer.GetBulletSpark(pos, Quaternion.LookRotation(-nor));
+        }
+    }
 
 
 
