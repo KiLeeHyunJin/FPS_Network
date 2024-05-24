@@ -103,7 +103,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         tapEntry = FindObjectOfType<TapEntry>();
 
         Check();
-        CallThree();
+        CallDefaultPose();
 
         if (photonView.IsMine)
         {
@@ -205,6 +205,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void FixedUpdate()
         => moveProcess?.FixedUpdate();
 
+    public void CallDefaultPose()
+    {
+        CallThree();
+        inputController.SetWeaponType = AnimationController.AnimatorWeapon.Sword;
+    }
+
     void CallPickUp()
     {
         Collider fronwWeapon = sensor.FrontObj;
@@ -225,8 +231,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             if (inventoryController[inputController.CurrentWeapon] != null)
             {
                 inventoryController.Throw(inputController.CurrentWeapon);
-                CallThree();
-                inputController.SetWeaponType = AnimationController.AnimatorWeapon.Sword;
+                CallDefaultPose();
             }
         }
     }
@@ -277,27 +282,29 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol, ref currentAttackable) == false)
             return;
 
-        inputController.ChangeFireType = Define.FireType.One;
-        if (inputController.Zoom)
-            cameraController.ZoomChange(false);
+        ChangeWeaponState();
     }
     void CallThree()
     {
         if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword, ref currentAttackable) == false)
             return;
 
-        inputController.ChangeFireType = Define.FireType.One;
-        if (inputController.Zoom)
-            cameraController.ZoomChange(false);
+        ChangeWeaponState();
     }
     void CallFour()
     {
-        if (inventoryController[AnimationController.AnimatorWeapon.Throw] == null)
+        //if (inventoryController[AnimationController.AnimatorWeapon.Throw] == null)
+        //    return;
+        if (inventoryController.BombUsePossible == false)
             return;
-
         if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw, ref currentAttackable) == false)
             return;
 
+        ChangeWeaponState();
+    }
+
+    void ChangeWeaponState()
+    {
         inputController.ChangeFireType = Define.FireType.One;
         if (inputController.Zoom)
             cameraController.ZoomChange(false);

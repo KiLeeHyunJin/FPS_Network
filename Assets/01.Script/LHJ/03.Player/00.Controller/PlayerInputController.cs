@@ -100,7 +100,16 @@ public class PlayerInputController : MonoBehaviour
         {
             Zoom = !Zoom;
             zoomAction?.Invoke(Zoom);
+            if(Zoom)
+            {
+                StartCoroutine(ReCamePos());
+            }
         }
+    }
+    IEnumerator ReCamePos()
+    {
+        yield return new WaitForSeconds(0.2f);
+        zoomAction?.Invoke(true);
     }
 
     void OnInteraction(InputValue inputValue)

@@ -71,12 +71,10 @@ public class Bomb : IKWeapon
     public AudioClip FlashSoundClip;
 
 
-   new Rigidbody rigidbody;
+    new Rigidbody rigidbody;
 
     AudioSource audioSource;
-
-
-
+    GameObject particle;
     LineRenderer lineRenderer;
 
 
@@ -84,6 +82,7 @@ public class Bomb : IKWeapon
     {
         /*lineRenderer=GetComponent<LineRenderer>(); 
         lineRenderer.enabled=true;  */
+        rigidbody = gameObject.GetOrAddComponent<Rigidbody>();
     }
     private void OnDisable()
     {
@@ -95,51 +94,35 @@ public class Bomb : IKWeapon
         base.Awake();
     }
 
-    public void Start()  //일단 기본적으로 시작할 때 rigidbody kinematic 실시해줘야함. 
+    public void Direction(Vector3 startVelocity, int type)
     {
-        rigidbody = GetComponent<Rigidbody>();
-
         audioSource = GetComponent<AudioSource>();  //폭탄에 붙어 있는데 어째서 ??
-
         audioSource.loop = false;  //  loop 꺼주기.
         audioSource.playOnAwake = false; //시작하자마자 소리 키기 꺼주기. 
-
         damage = 50;
-    }
-    public void Direction(Vector3 startVelocity)
-    {
+
         rigidbody.isKinematic = false;
         rigidbody.AddForce(startVelocity, ForceMode.Impulse);
-    }
-
-
-    // 인보크 등 코루틴이던 다른 곳에서 실행 시켜줄? 아니면 여기서 실행할 수도 있고 생각해보자. 
-    public void CountDownBomb(GameObject instanceBomb) //폭탄 투척시 카운트 다운임. --?컨트롤러에서 투척 실행 시 이 함수를 부르자.
-    {
-        if (instanceBomb == null)
-            return;
-
-        Bomb ins = instanceBomb.GetComponent<Bomb>();
-
-
-        switch (ins.bombType)  //자신의 타입에 따라 다른 함수 실행. 
-        {
-            case BombType.GRENADE:
-                ins.StartCoroutine(Grenade(instanceBomb, ins));
-
-                break;
-            case BombType.FLASHBANG:
-                ins.StartCoroutine(FlashBang(instanceBomb, ins));
-
-                break;
-        }
+        bombType = (BombType)type;
+        StartCoroutine(Routine());
     }
 
     Collider[] colliders = new Collider[20];
 
-    private void BombFindTarget()
+
+    IEnumerator Routine()
     {
-        
+        yield return new WaitForSeconds(delayTime); //지금 이 뒤로 진행이 안되는데?
+        photonView.RPC("RPC_SetEffect", Photon.Pun.RpcTarget.AllViaServer, transform.position);
+        photonView.RPC("RPC_AttackCheck", Photon.Pun.RpcTarget.MasterClient);
+        yield return new WaitForSeconds(2f);
+        Debug.Log("펑!");
+        if (particle != null)
+            Destroy(particle);
+        PickUp();
+    }
+    protected override void AttackCheck()
+    {
         int size = Physics.OverlapSphereNonAlloc(transform.position, range, colliders, targetLayerMask);
 
         for (int i = 0; i < size; i++) //한 번 player가 체크되면 데미지 주고 빠져나가야함. 
@@ -148,58 +131,33 @@ public class Bomb : IKWeapon
 
             if (controller != null) //targetLayer가 controller를 가지고 있다면. 데미지 주기. 
             {
-                IDamagable damagable= colliders[i].gameObject.GetComponent<IDamagable>();
-                damagable?.TakeDamage(damage);
-
-                controller.GetComponent<ProcessingController>()?.HitEffect();
+                if(bombType == BombType.FLASHBANG)
+                    controller.GetComponent<ProcessingController>().FlashEffect();
+                else
+                {
+                    IDamagable damagable = colliders[i].gameObject.GetComponentInChildren<IDamagable>();
+                    damagable?.TakeDamage(damage);
+                }
             }
         }
     }
-
-    private void FlashFindTarget()
+    protected override void SetEffect(Vector3 setPosition) 
     {
-        //범위내에 사람이 존재 한다면 processing 효과 진행.
-
-        int size = Physics.OverlapSphereNonAlloc(transform.position, range, colliders, targetLayerMask);
-
-        for (int i = 0; i < size; i++)
-        {
-            Controller controller = colliders[i].gameObject.GetComponent<Controller>();
-            if (controller != null)
-            {
-                controller.GetComponent<ProcessingController>()?.FlashEffect();
-            }
-        }
-    }
-    private IEnumerator Grenade(GameObject instanceBomb, Bomb bomb) //수류탄 터질 시 발생할 함수
-    {
-
-        yield return new WaitForSeconds(delayTime); //지금 이 뒤로 진행이 안되는데?
-        BombFindTarget();
-
-
-        GameObject bombFxIns = Instantiate(bombFX, instanceBomb.transform.position, Quaternion.identity);
-        bomb.audioSource.PlayOneShot(bombSoundClip, 1.0f); //특정 클립 한 번만 재생 --> 매개변수 2번째는 소리크기 조절.
-        yield return new WaitForSeconds(2f);
-
-        Destroy(instanceBomb.gameObject);
-        Destroy(bombFxIns);
-
+        if (bombType == BombType.FLASHBANG)
+            FlashEffect(setPosition);
+        else
+            BombEffect(setPosition);
     }
 
-    private IEnumerator FlashBang(GameObject instanceBomb, Bomb bomb) // 섬광탄 터질 시 발생할 함수 
+    void BombEffect(Vector3 setPosition)
     {
-        yield return new WaitForSeconds(delayTime);
-
-        FlashFindTarget();
-
-        GameObject flashFxINS = Instantiate(flashFX, instanceBomb.transform.position, Quaternion.identity);
-
-        bomb.audioSource.PlayOneShot(FlashSoundClip, 1.0f); //섬광탄 소리 
-        yield return new WaitForSeconds(2f);
-        Destroy(instanceBomb.gameObject);
-        Destroy(flashFxINS);
-
+        audioSource.PlayOneShot(FlashSoundClip, 1.0f); //특정 클립 한 번만 재생 --> 매개변수 2번째는 소리크기 조절.
+        particle = Instantiate(bombFX, setPosition, Quaternion.identity);
+    }
+    void FlashEffect(Vector3 setPosition)
+    {
+        audioSource.PlayOneShot(bombSoundClip, 1.0f); //특정 클립 한 번만 재생 --> 매개변수 2번째는 소리크기 조절.
+        particle = Instantiate(flashFX, setPosition, Quaternion.identity);
     }
 
 
