@@ -184,9 +184,6 @@ public class InventoryController : MonoBehaviourPun
         {
             Debug.Log("인벤토리 컨트롤러의 AddItem이 발동됨 ");
             int ArmorLevel = _item.itemID; 
-           
-
-            
 
         }
         else // 무기류 구매 
