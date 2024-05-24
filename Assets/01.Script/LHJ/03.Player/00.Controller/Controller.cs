@@ -480,7 +480,11 @@ public class Controller : MonoBehaviourPun, IPunObservable
         Destroy(ins.gameObject);
     }
 
-    // 이 부분도 자신의 체력 동기화
+
+
+
+
+    [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
         int other = maxHp - hp;

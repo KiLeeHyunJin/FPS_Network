@@ -18,12 +18,10 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
 
     public void TakeDamage(int _damage, int _actorNumber)
     {
+        
         controller.Damage(_damage, _actorNumber);      
     }
 
-    void Start()
-    {
-
-    }
+    
 
 }
