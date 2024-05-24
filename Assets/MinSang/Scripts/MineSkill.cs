@@ -2,7 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 
 
-public class MineSkill : MonoBehaviourPun
+public class MineSkill : Skill
 {
     [SerializeField]
     private GameObject minePrefab;
@@ -13,6 +13,15 @@ public class MineSkill : MonoBehaviourPun
 
     private float nextMineTime = 3f;
 
+    public override void SkillOn()
+    {
+        Debug.Log(SkillName + "SkillOn");
+    }
+
+    public override void SkillOff()
+    {
+        Debug.Log(SkillName + "SkillOff");
+    }
     public void Activate()
     {
         if (Time.time > nextMineTime)

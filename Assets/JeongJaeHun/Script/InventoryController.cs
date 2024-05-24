@@ -36,11 +36,10 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] CloseWeaponHUD CloseWeaponHUD;
     [SerializeField] BombHUD BombHUD;
 
-    [SerializeField] Skill skill;
+    [SerializeField] SkillHolder skill;
 
 
     const string SpawnItem = "DropWeapon";
-    const string DestroyItem = "PickWeapon";
     public IKWeapon this[AnimationController.AnimatorWeapon weaponType]
     {
         get
@@ -48,6 +47,35 @@ public class InventoryController : MonoBehaviourPun
             return weapons[(int)weaponType];
         }
     }
+
+    private BombController bombController;
+    public bool BombUsePossible { 
+        get 
+        {
+            if (bombController == null)
+            {
+                bombController = throwHolder.gameObject.GetComponent<BombController>();
+                if(bombController == null)
+                {
+                    Debug.Log("Not Find Controller");
+                    return false;
+                }
+            }
+            if (bombController.CurrentBomb == null)
+            {
+                Debug.Log("No Has Bomb");
+                return false;
+
+            }
+            if(bombController.CurrentBomb.currentBombNumber <= 0)
+            {
+                Debug.Log("Not Enought");
+                return false;
+            }
+            return true;
+        } 
+    }
+
     #region
     // int slotIndex; --> 미사용
 
@@ -77,13 +105,14 @@ public class InventoryController : MonoBehaviourPun
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
         weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
     }
+
     private void Start()
     {
         
         
 
         ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
-        skill = FindObjectOfType<Skill>();
+        skill = FindObjectOfType<SkillHolder>();
         if (shopManager != null)
             shopManager.inventory = this;
 
@@ -93,9 +122,9 @@ public class InventoryController : MonoBehaviourPun
             CloseWeaponHUD = FindObjectOfType<CloseWeaponHUD>();
             BombHUD = FindObjectOfType<BombHUD>();
 
-            gunHud.gameObject.SetActive(false);
-            CloseWeaponHUD.gameObject.SetActive(true);
-            BombHUD.gameObject.SetActive(false);
+            gunHud?.gameObject.SetActive(false);
+            CloseWeaponHUD?.gameObject.SetActive(true);
+            BombHUD?.gameObject.SetActive(false);
              
             Gold = 100; //시작 시에 100원으로 초기화. 
 
@@ -103,7 +132,7 @@ public class InventoryController : MonoBehaviourPun
                 goldText.text = $"{Gold}"; 
 
         }
-
+        bombController = throwHolder.gameObject.GetComponent<BombController>();
     }
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
@@ -271,6 +300,7 @@ public class InventoryController : MonoBehaviourPun
     public void Test(IKWeapon weapon)
     {
         //무기 바뀌는 시점을 원하는 함수
+        return;
 
         switch (weapon.weaponType)
         {

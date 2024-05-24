@@ -5,13 +5,23 @@ using Photon.Pun;
 using UnityEditor;
 using Firebase.Database;
 
-public class Heal : MonoBehaviourPun
+public class Heal : Skill
 {
     Controller Controller;
     DatabaseReference dbReference;
 
     int maxHealth = 100;
     int currentHealth = 100;
+
+    public override void SkillOn()
+    {
+        Debug.Log(SkillName + "SkillOn");
+    }
+
+    public override void SkillOff()
+    {
+        Debug.Log(SkillName + "SkillOff");
+    }
 
     public void Activate()
     {

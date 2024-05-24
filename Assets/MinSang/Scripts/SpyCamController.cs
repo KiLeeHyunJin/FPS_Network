@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-public class SpyCamController : MonoBehaviourPun
+public class SpyCamController : Skill
 {
     [SerializeField] private CinemachineVirtualCamera spyCamVirtualCamera;
     [SerializeField] private GameObject spyCamPrefab;
@@ -16,6 +16,15 @@ public class SpyCamController : MonoBehaviourPun
     private List<GameObject> spyCams = new List<GameObject>();
     private const int maxSpyCams = 3; // 최대 스파이 캠 수
     PhotonView pv;
+    public override void SkillOn()
+    {
+        Debug.Log(SkillName + "SkillOn");
+    }
+
+    public override void SkillOff()
+    {
+        Debug.Log(SkillName + "SkillOff");
+    }
 
     // 초기 설정 함수
     private void Start()

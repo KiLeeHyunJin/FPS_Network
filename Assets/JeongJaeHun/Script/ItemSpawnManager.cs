@@ -33,7 +33,7 @@ public class ItemSpawnManager : MonoBehaviour
     {
         foreach (var coins in coinPosition)
         {
-            PhotonNetwork.Instantiate("GoldCoin",coins.position,Quaternion.identity);
+            PhotonNetwork.Instantiate("Coin",coins.position,Quaternion.identity);
         }
 
         foreach (var healpacks in healPackPosition)

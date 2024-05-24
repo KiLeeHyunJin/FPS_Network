@@ -42,4 +42,20 @@ public class IKWeapon : MonoBehaviourPun
     {
         PhotonNetwork.Destroy(this.gameObject);
     }
+
+    [PunRPC]
+    protected void RPC_AttackCheck()
+    {
+        AttackCheck();
+    }
+
+    [PunRPC]
+    protected void RPC_SetEffect(Vector3 setPosition)
+    {
+        SetEffect(setPosition);
+    }
+
+    protected virtual void SetEffect(Vector3 setPosition) { }
+    protected virtual void AttackCheck(){}
+
 }

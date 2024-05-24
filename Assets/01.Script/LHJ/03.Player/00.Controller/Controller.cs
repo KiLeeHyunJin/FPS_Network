@@ -104,7 +104,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         tapEntry = FindObjectOfType<TapEntry>();
 
         Check();
-        CallThree();
+        CallDefaultPose();
 
         if (photonView.IsMine)
         {
@@ -206,6 +206,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
     void FixedUpdate()
         => moveProcess?.FixedUpdate();
 
+    public void CallDefaultPose()
+    {
+        CallThree();
+        inputController.SetWeaponType = AnimationController.AnimatorWeapon.Sword;
+    }
+
     void CallPickUp()
     {
         Collider fronwWeapon = sensor.FrontObj;
@@ -226,8 +232,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             if (inventoryController[inputController.CurrentWeapon] != null)
             {
                 inventoryController.Throw(inputController.CurrentWeapon);
-                CallThree();
-                inputController.SetWeaponType = AnimationController.AnimatorWeapon.Sword;
+                CallDefaultPose();
             }
         }
     }
@@ -278,27 +283,29 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Pistol, ref currentAttackable) == false)
             return;
 
-        inputController.ChangeFireType = Define.FireType.One;
-        if (inputController.Zoom)
-            cameraController.ZoomChange(false);
+        ChangeWeaponState();
     }
     void CallThree()
     {
         if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Sword, ref currentAttackable) == false)
             return;
 
-        inputController.ChangeFireType = Define.FireType.One;
-        if (inputController.Zoom)
-            cameraController.ZoomChange(false);
+        ChangeWeaponState();
     }
     void CallFour()
     {
-        if (inventoryController[AnimationController.AnimatorWeapon.Throw] == null)
+        //if (inventoryController[AnimationController.AnimatorWeapon.Throw] == null)
+        //    return;
+        if (inventoryController.BombUsePossible == false)
             return;
-
         if (animController.ChangeWeapon(AnimationController.AnimatorWeapon.Throw, ref currentAttackable) == false)
             return;
 
+        ChangeWeaponState();
+    }
+
+    void ChangeWeaponState()
+    {
         inputController.ChangeFireType = Define.FireType.One;
         if (inputController.Zoom)
             cameraController.ZoomChange(false);
@@ -487,10 +494,25 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
+        if(hp<=0) //죽은 상황을 체크할 수 있는 변수가 있으면 그 변수를 사용하자. 
+        {
+            return; 
+        }
         int other = maxHp - hp;
         _healValue = other < _healValue ? other : _healValue;
         hp += _healValue;
+        photonView.RPC("UpdateHp", RpcTarget.Others,hp);
+        photonView.RPC("AddHp", RpcTarget.Others, _healValue);
     }
+
+    [PunRPC]
+    public void UpdateHp(int newHp)
+    {
+        hp = newHp;
+    }
+
+
+
 
 
     public void StartCoroutined(IEnumerator routine, ref Coroutine co)
