@@ -5,6 +5,7 @@ using UnityEngine;
 public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
 {
     Controller controller;
+    public int GetActNum { get { return controller.photonView.Controller.ActorNumber; } }
     public void SetOwner(Controller _controller, bool mine)
     {
         controller = _controller;

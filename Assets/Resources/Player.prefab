@@ -6924,7 +6924,7 @@ MonoBehaviour:
   - {fileID: 6691384336238584315}
   - {fileID: 8856288203328000890}
   - {fileID: 4350266485558895694}
-  <target>k__BackingField: {fileID: 0}
+  <target>k__BackingField: {fileID: 4501719902224000900}
   cameraRoot: {fileID: 7381128346349104171}
   overlayCam: {fileID: 5508522945110184497}
   cam: {fileID: 8114579742163348247}
@@ -19409,7 +19409,6 @@ MonoBehaviour:
   currentCloseWeapon: {fileID: 0}
   isAttack: 0
   isSwing: 0
-  HitLayer: 0
 --- !u!114 &7836484150925953477
 MonoBehaviour:
   m_ObjectHideFlags: 0
