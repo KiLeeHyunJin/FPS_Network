@@ -22,7 +22,8 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
 
     public void TakeDamage(int _damage, int _actorNumber)
     {
-        controller.Damage((int)(_damage * multiple));
+        Debug.Log("TakeDamage");
+        controller.Damage((int)(_damage * multiple),_actorNumber);      
     }
 
 

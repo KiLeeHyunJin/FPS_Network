@@ -53,7 +53,10 @@ public class ShopUIManager : MonoBehaviour
     public void InitList()
     {
         foreach (Button button in shopBtn)
-                  button.interactable = true;
+        {
+            button.interactable = true;
+        }
+                  
     }
 
 
