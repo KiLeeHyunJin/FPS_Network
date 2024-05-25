@@ -6786,6 +6786,9 @@ MonoBehaviour:
   originalColors: []
   thisEntry: {fileID: 0}
   skillEntryImg: {fileID: 0}
+  rewindEff: {fileID: 198706150799401992, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
+  outRewindEff: {fileID: 198706150799401992, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
+  effRend: []
 --- !u!114 &4599455779024753041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6822,7 +6825,6 @@ MonoBehaviour:
   positionRecordInterval: 0.016
   skillKey: 0
   maxHealth: 100
-  pv: {fileID: 0}
   thisEntry: {fileID: 0}
   skillEntryImg: {fileID: 0}
   rewindEff: {fileID: 198856239026640498, guid: 64f68c1b2a2b5fb459543de1e10e11b4, type: 3}
@@ -7183,7 +7185,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 264066126754691022}
   - {fileID: 4599455779024753041}
   - {fileID: 8544027938743297954}
   - {fileID: 6451079822198019901}
@@ -19294,7 +19295,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0030000322, y: 0.11400008, z: 0.09000014}
+  m_LocalPosition: {x: 0.0030000322, y: 0.11400001, z: 0.09000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

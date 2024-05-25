@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CloakingEffect : Skill, IPunObservable
+public class CloakingEffect : Skill
 {
     public bool isCloaked = false;
     public Material CloakingMaterial;
@@ -24,6 +24,10 @@ public class CloakingEffect : Skill, IPunObservable
 
     public SkillEntry thisEntry;
     public Image skillEntryImg;
+
+    [SerializeField] ParticleSystem rewindEff;
+    [SerializeField] ParticleSystem outRewindEff;
+    [SerializeField] Renderer[] effRend;
 
     public override void SkillOn()
     {
@@ -53,6 +57,8 @@ public class CloakingEffect : Skill, IPunObservable
                     originalMaterials[i].color = originalColors[i];
                 }
             }
+            if (photonView.IsMine)
+                photonView.RPC("CloakEffectOff", RpcTarget.Others);
             isCloaked = false;
             Debug.Log("클로킹 해제");
             GetComponent<CloakingEffect>().enabled = false;
@@ -72,6 +78,7 @@ public class CloakingEffect : Skill, IPunObservable
         {
             Debug.Log("Renderer가 할당되지 않았습니다! 이 스크립트는 Renderer 컴포넌트가 필요합니다.");
             return;
+            
         }
 
         foreach (Renderer renderer in renderers)
@@ -86,17 +93,6 @@ public class CloakingEffect : Skill, IPunObservable
         }
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(isCloaked);
-        }
-        else
-        {
-            isCloaked = (bool)stream.ReceiveNext();
-        }
-    }
 
     void Update()
     {
@@ -118,11 +114,11 @@ public class CloakingEffect : Skill, IPunObservable
             Activate();
         }
     }
-    [PunRPC]
     IEnumerator CloakRoutine()
     {
         isCloaked = true;
-
+        if (photonView.IsMine)
+            photonView.RPC("CloakEffectOn", RpcTarget.Others);
         for (int i = 0; i < renderers.Length; i++)
         {
            Color cloakColor = originalColors[i];
@@ -137,5 +133,28 @@ public class CloakingEffect : Skill, IPunObservable
 
         // 클로킹 비활성화
         Deactivate();
+    }
+    [PunRPC]
+    public void CloakEffectOn()
+    {
+        effRend = GetComponentsInChildren<Renderer>();
+        Debug.Log("other Rewind");
+        Instantiate(rewindEff, transform.position, Quaternion.identity);
+        foreach (Renderer renderer in effRend)
+        {
+            renderer.enabled = false;
+        }
+
+    }
+    [PunRPC]
+    public void CloakEffectOff()
+    {
+        effRend = GetComponentsInChildren<Renderer>();
+        Instantiate(outRewindEff, transform.position, Quaternion.identity);
+        foreach (Renderer renderer in effRend)
+        {
+            renderer.enabled = true;
+        }
+
     }
 }

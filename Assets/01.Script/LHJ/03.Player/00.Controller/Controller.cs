@@ -425,9 +425,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         if (photonView.Owner.GetProperty<bool>(DefinePropertyKey.DEAD))
             return;
-        if (hp <= 0)
-            return;
-
         hp -= inventoryController.ShieldCheck(_damage);
         processingController.HitEffect();
 
