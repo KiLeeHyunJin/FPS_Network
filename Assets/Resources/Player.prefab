@@ -6205,7 +6205,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6632997920356581901}
-  sceneViewId: 17
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &2827437474235304820
@@ -6787,6 +6787,7 @@ GameObject:
   - component: {fileID: 1603188683640465106}
   - component: {fileID: 1404201885252024400}
   - component: {fileID: 5995634273059352960}
+  - component: {fileID: 3963931885534309705}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -7288,7 +7289,7 @@ MonoBehaviour:
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}
   - {fileID: 4390238531330680963}
-  sceneViewId: 18
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6451079822198019901
@@ -7589,6 +7590,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3963931885534309705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162171735836929336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a3b986b9eff5e540a36ac81fe1a055f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  signClip: []
+  jumpClip: {fileID: 8300000, guid: ba9ccd1474055dc4c89125a11278c22a, type: 3}
+  landClip: {fileID: 8300000, guid: 37e7f00e04459dc41b703a6c1b1b66aa, type: 3}
+  walkClip:
+  - {fileID: 8300000, guid: 59b110c9097a06141956286b28d2cd33, type: 3}
+  - {fileID: 8300000, guid: 42f7edaf35ef2254ea18ebbf49d3b04f, type: 3}
+  swapClip: {fileID: 8300000, guid: ee0ed61efb71d16438131387fb0e06a2, type: 3}
 --- !u!1 &3204037897197038457
 GameObject:
   m_ObjectHideFlags: 0
@@ -10781,7 +10801,7 @@ MonoBehaviour:
   attackDelayA: 1
   attackDelayB: 1
   anim: {fileID: 0}
-  swordSoundClip: {fileID: 8300000, guid: e03ad7113ade04346a590b345f2f9977, type: 3}
+  swordSoundClip: {fileID: 8300000, guid: bc4bc2457db07f249947bb0d13fa295d, type: 3}
   trailRenderer: {fileID: 0}
   range: 4
   angle: 135
@@ -14540,7 +14560,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8644913041405509699}
-  sceneViewId: 16
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &6182686886036145712
@@ -14890,7 +14910,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 14
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!120 &6761206449484161702
@@ -19787,7 +19807,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7543617888352762341}
-  sceneViewId: 15
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &695706050568986886
@@ -19983,12 +20003,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7423986836749367114, guid: 1736895515ad693458cc192d944338ca, type: 3}
       propertyPath: sceneViewId
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7423986836749367114, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423986836749367114, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 8810553498175261814}
     - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
       propertyPath: range
       value: 2000
       objectReference: {fileID: 0}
+    - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: fire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 99978dc4052a48f49bb718ed8e5a45ca, type: 3}
+    - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: reload_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 61ea246f3bfc0c5458534be5b1026e3e, type: 3}
+    - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: dryFire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: e8b2ebb588127c7408c52a129d9a0f7a, type: 3}
     - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
@@ -20008,6 +20048,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3102785311499460292, guid: 1736895515ad693458cc192d944338ca, type: 3}
   m_PrefabInstance: {fileID: 1679858727747844746}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8810553498175261814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
+  m_PrefabInstance: {fileID: 1679858727747844746}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4350266485558895694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3405396697614932044
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20018,8 +20069,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5525885597568803731, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: sceneViewId
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5525885597568803731, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5525885597568803731, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 8267489848396068596}
     - target: {fileID: 188740774871733813, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: m_Name
       value: Win94
@@ -20028,6 +20087,18 @@ PrefabInstance:
       propertyPath: range
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: fire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: f8532ba8ea6840e4e861a315e3d09c7a, type: 3}
+    - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: reload_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 8ae094f01fc584847815912d13804ad0, type: 3}
+    - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: dryFire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 0c83e2c3371942d488ee577cd46d975c, type: 3}
     - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
@@ -20087,6 +20158,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9136021524397805875, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
   m_PrefabInstance: {fileID: 3405396697614932044}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8267489848396068596 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+  m_PrefabInstance: {fileID: 3405396697614932044}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3304776798364814969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3463489565945242961
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20145,7 +20227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8711553453801057852, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8711553453801057852, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -20274,7 +20356,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3244118640271991058, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: sceneViewId
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3979680578942320169, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20320,6 +20402,18 @@ PrefabInstance:
       propertyPath: range
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
+      propertyPath: fire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: b23fede33878d1c459d8b7eb1f275a77, type: 3}
+    - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
+      propertyPath: reload_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 8560ee871570d0e47950b77be4f2ecdb, type: 3}
+    - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
+      propertyPath: dryFire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: b414a30d8fdea7f4a9dd75a0892ccf48, type: 3}
     - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
@@ -20484,13 +20578,33 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+      propertyPath: fire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 5d19d225542f4db4aa9feb1bba9f4883, type: 3}
+    - target: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+      propertyPath: reload_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: c04b8dbe64e5aff40aca813c3e3094f3, type: 3}
+    - target: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+      propertyPath: dryFire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: c5ad68158f0afe441828d006800d8037, type: 3}
+    - target: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
       objectReference: {fileID: 2671129392070243133}
     - target: {fileID: 6252304339226794055, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
       propertyPath: sceneViewId
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6252304339226794055, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6252304339226794055, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 5202744429785300562}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20501,6 +20615,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1374467500805772026, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
   m_PrefabInstance: {fileID: 6198029460098185301}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5202744429785300562 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+  m_PrefabInstance: {fileID: 6198029460098185301}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4976693214667221679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5557236948795489111 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1953602893666812674, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
@@ -20516,8 +20641,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -6829125046911157737, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6829125046911157737, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6829125046911157737, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 5660361729610450175}
     - target: {fileID: 303163471660486714, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: m_Name
       value: Pistol.Lv1
@@ -20566,6 +20699,18 @@ PrefabInstance:
       propertyPath: range
       value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: fire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a98e269d895f994da6528efece57115, type: 3}
+    - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: reload_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 12528c570bba7404dbe48ba160e98179, type: 3}
+    - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: dryFire_Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: e26604d074c9f234eb4743cfcdc50e23, type: 3}
     - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
@@ -20616,6 +20761,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1387438552448175609, guid: 024ecd8e197910e4786af16e85905601, type: 3}
   m_PrefabInstance: {fileID: 6406826817930375617}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5660361729610450175 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+  m_PrefabInstance: {fileID: 6406826817930375617}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6691384336238584315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e5892d7e24159478d2ac4a14033f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6691384336238584315 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 303163471660486714, guid: 024ecd8e197910e4786af16e85905601, type: 3}
@@ -20691,7 +20847,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7579393447868919905, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: sceneViewId
-      value: 13
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7831276082611668189, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: m_Name

@@ -60,6 +60,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     public int TeamCode { get; private set; }
     public bool Zoom { get { return inputController.Zoom; } }
+    public AudioController Audio { get; private set; }
     CameraController cameraController;
     PlayerInputController inputController;
     PlayerInput playerInput;
@@ -100,7 +101,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
-       
+        Audio = GetComponent<AudioController>();
         tapEntry = FindObjectOfType<TapEntry>();
 
         Check();
@@ -143,7 +144,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
         inventoryController.SetChangePose((_weaponType) =>
         {
-            animController.ChangeWeapon(_weaponType, ref currentAttackable);
+            animController.ChangeWeapon(_weaponType, ref currentAttackable, false);
             inputController.SetWeaponType = _weaponType;
             cameraController.SetZoomPosition(inventoryController[_weaponType].ZoomPos);
         });
@@ -157,6 +158,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             Destroy(miniCam);
             Destroy(inputController);
             Destroy(processingController);
+            Destroy(GetComponent<CharacterController>());
             if (TryGetComponent<PlayerInput>(out var input))
                 Destroy(input);
             if (PhotonNetwork.LocalPlayer.GetPhotonTeam() != null)
@@ -352,7 +354,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         if (Mine == false)
             return;
         moveProcess = new CharacterTransformProcess();
-        moveProcess.Init(GetComponent<CharacterController>(), Mine);
+        moveProcess.Init(GetComponent<CharacterController>());
         moveProcess.InitGroundCheckData(
             foot.transform, groundCheckLength, ignoreGroundCheckLength, groundLayer,
             jumpHeight, gravitySpeed);

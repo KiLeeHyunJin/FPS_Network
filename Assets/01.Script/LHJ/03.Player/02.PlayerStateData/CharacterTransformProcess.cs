@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using UnityEngine;
 public class CharacterTransformProcess
 {
     CharacterController controller;
+    AudioController audio;
     Transform foot;
 
     Action[] motions;
@@ -40,14 +42,13 @@ public class CharacterTransformProcess
     bool IsRun;
     bool IsIgnoreSpace;
 
-    bool IsMine;
-    public void Init(CharacterController characterController, bool _isMine)
+    public void Init(CharacterController characterController)
     {
-        IsMine = _isMine;
         controller = characterController;
         limitAngle = controller.slopeLimit;
         checkRadius = controller.radius * 0.9f;
         motions = new Action[(int)AnimationController.MoveType.END];
+        audio = characterController.gameObject.GetComponent<AudioController>();
     }
 
     public void InitGroundCheckData(Transform _foot, float _groundCheckLenth, float _ignoreGroundCheckLenth, int _groundLayer, float _jumpHeight, float _gravitySpeed)
@@ -69,7 +70,16 @@ public class CharacterTransformProcess
     public void SetMoveType(bool state)
     {
         IsRun = state;
-        walkMotion = state ? motions[(int)AnimationController.MoveType.Run] : motions[(int)AnimationController.MoveType.Walk];
+        if(state)
+        {
+            audio.PlayMoveSound(AudioController.ClipType.Run);
+            walkMotion = motions[(int)AnimationController.MoveType.Run];
+        }
+        else
+        {
+            audio.PlayMoveSound(AudioController.ClipType.Walk);
+            walkMotion = motions[(int)AnimationController.MoveType.Walk];
+        }
         if (IsCrouch)
         {
             currentSpeed = state ? runCrouchSpeed : walkCrouchSpeed;
@@ -109,10 +119,12 @@ public class CharacterTransformProcess
         {
             motions[(int)AnimationController.MoveType.Stop]?.Invoke();
             IsMove = false;
+            audio.PlayMoveSound(AudioController.ClipType.Stop);
             return;
         }
         if (IsMove == false)
             IsMove = true;
+        audio.PlayMoveSound(AudioController.ClipType.Walk);
     }
     public void Crouch()
     {
@@ -135,6 +147,7 @@ public class CharacterTransformProcess
             JumpMotion(true);
         }
     }
+    
     public void Update()
     {
         Gravity();
@@ -182,7 +195,9 @@ public class CharacterTransformProcess
         {
             //Slide(hitInfo);
             if (velocity < 0)
+            {
                 JumpMotion(false);
+            }
         }
         else
         {
@@ -236,10 +251,19 @@ public class CharacterTransformProcess
                     Crouch(); //일어서게 하고
                 }
                 motions[(int)AnimationController.MoveType.Jump]?.Invoke();
+                audio.PlayMoveSound(AudioController.ClipType.Jump);
             }
             else
             {
                 motions[(int)AnimationController.MoveType.JumpFinish]?.Invoke();
+                audio.PlayMoveSound(AudioController.ClipType.Land);
+                if(IsMove)
+                {
+                    if(IsRun)
+                        audio.PlayMoveSound(AudioController.ClipType.Run);
+                    else
+                        audio.PlayMoveSound(AudioController.ClipType.Walk);
+                }
             }
         }
         else if (state)

@@ -25,6 +25,7 @@ public class AnimationController : MonoBehaviourPun
     [SerializeField] MultiParentConstraint[] weaponParents;
     Transform[] currentWeapons;
     InventoryController inventoryController;
+    AudioController audio;
     int JumpEnterId;
     int StandId;
     int CrouchId;
@@ -45,21 +46,18 @@ public class AnimationController : MonoBehaviourPun
     private void Awake()
     {
         SetAnimID();
+        inventoryController = GetComponent<InventoryController>();
+        audio = GetComponent<AudioController>();
+        iKAnimation = new IKAnimationController
+            (handRig, GetComponent<RigBuilder>(), left, right,
+             weaponParents,
+            GetComponent<Controller>());
         dampingSpeed = dampingSpeed <= 0 ? 0.15f : dampingSpeed;
         dampingSpeed = 1 / dampingSpeed;
         int length = weaponParents.Length;
         currentWeapons = new Transform[length];
         for (int i = 0; i < length; i++)
             currentWeapons[i] = weaponParents[i].data.constrainedObject;
-    }
-
-    private void Start()
-    {
-        iKAnimation = new IKAnimationController
-            (handRig, GetComponent<RigBuilder>(), left, right,
-            weaponParents,
-            GetComponent<Controller>());
-        inventoryController = GetComponent<InventoryController>();
     }
     public Vector2 MoveValue
     {
@@ -99,16 +97,23 @@ public class AnimationController : MonoBehaviourPun
             photonView.RPC(TRIGGER, RpcTarget.AllViaServer, AtckId);
     }
 
-    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckable )
+    public bool ChangeWeapon(AnimatorWeapon type, ref Iattackable atckable, bool isKey = true )
     {
         if (currentWeapons[(int)type].childCount == 0)
         {
             return false;
         }
-
-        if (anim.GetBool(weaponId[(int)type]))
+        if(anim.GetBool(weaponId[(int)type]))
         {
-            return false;
+            if(isKey == true)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            atckable = currentWeapons[(int)type].GetComponent<Iattackable>();
+            OnWeaponLayer(type);
         }
 
         photonView.RPC(RIGIK, RpcTarget.Others,
@@ -116,9 +121,7 @@ public class AnimationController : MonoBehaviourPun
             currentWeapons[(int)type].GetChild(0).GetComponent<IKWeapon>().InstanceId, 
             ChangeWeaponId);
 
-        OnWeaponLayer(type);
         anim.SetTrigger(ChangeWeaponId);
-        atckable = currentWeapons[(int)type].GetComponent<Iattackable>();
         return true;
     }
 
@@ -170,6 +173,7 @@ public class AnimationController : MonoBehaviourPun
     public void EquipWeapon()
     {
         iKAnimation?.EquipWeapon();
+        audio.SwapWeapon();
     }
 
     public void Alive()
@@ -180,7 +184,6 @@ public class AnimationController : MonoBehaviourPun
     public void DequipWeapon()
     {
         iKAnimation?.DequipWeapon();
-
         for (int i = 0; i < weaponId.Length; i++)
         {
             if(anim.GetBool(weaponId[i]))

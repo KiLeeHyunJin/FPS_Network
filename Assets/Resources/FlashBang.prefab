@@ -137,8 +137,8 @@ MonoBehaviour:
   damage: 0
   bombFX: {fileID: 7592836665400797895, guid: c537389c762fa06408efe0df0b98f1d3, type: 3}
   flashFX: {fileID: 7960365579161666208, guid: b2834f004b1c80646bdd73d845389d50, type: 3}
-  bombSoundClip: {fileID: 8300000, guid: 419336aa8912ae0468e104596863a0a1, type: 3}
-  FlashSoundClip: {fileID: 8300000, guid: 64baa1f44691afc42a584e482cd9a27d, type: 3}
+  bombSoundClip: {fileID: 8300000, guid: 169f0f113dd5c79448914fbf61723d49, type: 3}
+  FlashSoundClip: {fileID: 8300000, guid: f2f4220339a2f9742860d21b41eb61c1, type: 3}
 --- !u!120 &8444831734665732322
 LineRenderer:
   serializedVersion: 2

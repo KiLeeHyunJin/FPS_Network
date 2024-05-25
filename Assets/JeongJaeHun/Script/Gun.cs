@@ -60,6 +60,8 @@ public class Gun : IKWeapon, IPunObservable
     public Animator anim; //총의 애니메이션을 재생할 애니메이터
     public ParticleSystem muzzleFlash; //화염구 이펙트 재생 담당 -->파티클 시스템 
     public AudioClip fire_Sound; //총 발사 소리 오디오클립 
+    public AudioClip reload_Sound; //총 발사 소리 오디오클립 
+    public AudioClip dryFire_Sound; //총 발사 소리 오디오클립 
 
 
     protected override void Awake()

@@ -242,8 +242,11 @@ public class InventoryController : MonoBehaviourPun
     }
     void AddWeapon(AnimationController.AnimatorWeapon weaponType, int id, int currentBullet = -1, int otherBullet = -1)
     {
-        if (weapons[(int)weaponType] != null)
-            Dequip(weapons[(int)weaponType]);
+        if(photonView.IsMine)
+        {
+            if (weapons[(int)weaponType] != null)
+                Dequip(weapons[(int)weaponType]);
+        }
 
         weapons[(int)weaponType] = Equip(weaponType, id);
         if (currentBullet >= 0   &&

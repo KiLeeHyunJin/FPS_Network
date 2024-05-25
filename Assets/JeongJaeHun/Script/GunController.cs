@@ -46,6 +46,8 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
     {
         //poolContainer = GameObject.FindObjectOfType<PoolContainer>();
         audioSource = GetComponent<AudioSource>();
+        audioSource.loop = false;
+        audioSource.playOnAwake = false;
         //HitLayer = 1 << LayerMask.NameToLayer("HitBox");
 
         // 그라운드에 총이 맞으면 이펙트를 띄워주기 위한 레이어 체크
@@ -131,6 +133,7 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
             }
             else
             {
+                audioSource.PlayOneShot(currentGun.dryFire_Sound);
                 //원본에서는 여기서 Reload를 실행하지만 우리 게임은 Reload를 키를 눌러서 진행할 예정이다.
             }
         }
@@ -141,7 +144,7 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
     private void Effect()
     {
         currentGun.muzzleFlash.Play(); //총 발사시에 이펙트 발생.      
-        audioSource.PlayOneShot(audioSource.clip); //현재 gun의 fireSound 재생.
+        audioSource.Play(); //현재 gun의 fireSound 재생.
     }
 
     [PunRPC] //Shoot을 실제 실행하는 Attack 에서는 isMine 체크.
@@ -226,6 +229,7 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
                 currentGun.otherBullet = 0;
             }
             isReload = false;
+            audioSource.PlayOneShot(currentGun.reload_Sound);
         }
     }
 
