@@ -19,7 +19,7 @@ public class TimeRewind : MonoBehaviourPun
     private int currentHealth;
     private Coroutine rewindCoroutine;
     private Coroutine recordCoroutine;
-    public PhotonView pv;
+    
 
     public SkillEntry thisEntry;
     public Image skillEntryImg;
@@ -30,8 +30,7 @@ public class TimeRewind : MonoBehaviourPun
     [SerializeField] MeshRenderer[] mrenders;
 
     void Start()
-    {
-        pv = GetComponent<PhotonView>();    
+    { 
         Controller = GetComponent<Controller>();
         currentHealth = maxHealth;
         positionHistory = new Queue<Vector3>();
@@ -89,7 +88,8 @@ public class TimeRewind : MonoBehaviourPun
         var healthHistoryArray = healthHistory.ToArray();
         int historyCount = positionHistoryArray.Length;
         Debug.LogError($"PosHistory count is {positionHistory.Count}");
-        pv.RPC("RewindEffectOn",RpcTarget.Others);
+        if(photonView.IsMine)
+        photonView.RPC("RewindEffectOn",RpcTarget.Others);
 
         while (time < rewindDuration && historyCount > 0)
         {
@@ -101,7 +101,8 @@ public class TimeRewind : MonoBehaviourPun
             yield return null;
         }
         Manager.Scene.RewindIn();
-        pv.RPC("RewindEffectOff", RpcTarget.Others);
+        if (photonView.IsMine)
+            photonView.RPC("RewindEffectOff", RpcTarget.Others);
         Controller.enabled = true;
         rewindCoroutine = null;
         recordCoroutine = StartCoroutine(RecordPositionAndHealth());
