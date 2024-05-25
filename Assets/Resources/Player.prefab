@@ -6780,10 +6780,10 @@ MonoBehaviour:
   CloakingMaterial: {fileID: -876546973899608171, guid: 32bc5ec8d39913d4f8f9b5832710ea9e, type: 3}
   CloakDuration: 3
   CloakTransparency: 1
-  skillKey: 0
   renderers: []
   originalMaterials: []
   originalColors: []
+  skillKey: 0
   thisEntry: {fileID: 0}
   skillEntryImg: {fileID: 0}
   rewindEff: {fileID: 198706150799401992, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
@@ -6807,7 +6807,10 @@ MonoBehaviour:
   effectDuration: 1
   GroundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
+  skillKey: 0
+  thisEntry: {fileID: 0}
+  skillEntryImg: {fileID: 0}
 --- !u!114 &7118670613644641491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7185,7 +7188,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 4599455779024753041}
   - {fileID: 8544027938743297954}
   - {fileID: 6451079822198019901}
   - {fileID: 1603188683640465106}

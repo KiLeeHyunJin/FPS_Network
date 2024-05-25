@@ -138,7 +138,7 @@ public class TimeRewind : MonoBehaviourPun
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         mrenders = GetComponentsInChildren<MeshRenderer>();
         Debug.Log("other Rewind");
-        Instantiate(rewindEff, transform.position, Quaternion.identity);
+        Instantiate(rewindEff, transform.position + new Vector3(0,1.5f,0), Quaternion.identity);
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
             renderer.enabled = false;
@@ -152,7 +152,7 @@ public class TimeRewind : MonoBehaviourPun
     public void RewindEffectOff()
     {
         mrenders = GetComponentsInChildren<MeshRenderer>();
-        Instantiate(outRewindEff, transform.position, Quaternion.identity);
+        Instantiate(outRewindEff, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
             renderer.enabled = true;

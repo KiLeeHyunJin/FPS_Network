@@ -15,13 +15,13 @@ public class CloakingEffect : Skill
     public Material CloakingMaterial;
     public float CloakDuration = 3f;
     public float CloakTransparency = 1f;
-    public KeyCode skillKey;
+    
     public Renderer[] renderers;
 
     [SerializeField] List<Material> originalMaterials = new List<Material>();
     [SerializeField] List<Color> originalColors = new List<Color>();
 
-
+    public KeyCode skillKey;
     public SkillEntry thisEntry;
     public Image skillEntryImg;
 
@@ -60,7 +60,7 @@ public class CloakingEffect : Skill
             if (photonView.IsMine)
                 photonView.RPC("CloakEffectOff", RpcTarget.Others);
             isCloaked = false;
-            Debug.Log("클로킹 해제");
+
             GetComponent<CloakingEffect>().enabled = false;
             skillEntryImg.sprite = null;
             skillEntryImg.gameObject.SetActive(false);

@@ -8475,6 +8475,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 114396, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2101139776482195901}
+    - targetCorrespondingSourceObject: {fileID: 114396, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9130215685859988107}
   m_SourcePrefab: {fileID: 100100000, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
 --- !u!114 &8878024297846300208 stripped
 MonoBehaviour:
@@ -8536,6 +8539,23 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &9130215685859988107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8878024297852223360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3d0be23e2b9c943837d4f2b8fbbe20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <item>k__BackingField: {fileID: 11400000, guid: 07f47d42bc09da14db01ac6ae0f9043b, type: 2}
+  icon: {fileID: 5845604992286575644}
+  weawponName: {fileID: 5519271914276898332}
+  price: {fileID: 3663116375009454034}
+  spec: {fileID: 1490072950993326041}
 --- !u!224 &8878024297865603676 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 22407936, guid: 5ebbd0f43136f4d08aa0be9e8932b251, type: 3}
