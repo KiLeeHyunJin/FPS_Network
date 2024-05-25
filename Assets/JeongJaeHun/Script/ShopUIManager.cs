@@ -31,7 +31,8 @@ public class ShopUIManager : MonoBehaviour
     public void OnItemPanelClick(ItemPickUp _pickItem,Button button) //Item 버튼에 부여할 이벤트 
     {
         PopUpUI purChaseUI = Manager.UI.ShowPopUpUI(purChasePanelPrefab);
-        if(purChaseUI.TryGetComponent<PurchasePrefab>(out PurchasePrefab purchase))
+        purChaseUI.transform.SetParent(shopCanvas.transform);
+        if (purChaseUI.TryGetComponent<PurchasePrefab>(out PurchasePrefab purchase))
         {
             purchase.inventory = inventory;
             purchase.SetItemData(_pickItem);
@@ -47,18 +48,15 @@ public class ShopUIManager : MonoBehaviour
         {
             shopCanvas.SetActive(!shopCanvas.activeSelf);
         }
-
     }
 
     public void InitList()
     {
         foreach (Button button in shopBtn)
                   button.interactable = true;
-        
     }
 
 
-    
 
 
 }

@@ -10,13 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfe311a150452f94b86fc9195efd5a21, type: 3}
-  m_Name: Armor_LV2
+  m_Name: Armor_Lv1
   m_EditorClassIdentifier: 
   itemType: 4
-  price: 0
-  itemPrefab: {fileID: 0}
-  prefabName: 
-  itemID: 2
-  itemName: BasicArmor
-  itemImage: {fileID: 0}
+  price: 100
+  itemPrefab: {fileID: 2378845020452134489, guid: bc3b29fb248f9ed4da912cbe17f76e41, type: 3}
+  prefabName: ArmorvLv1
+  itemID: 1
+  itemName: "1\uB819 \uAC11\uC637"
+  itemImage: {fileID: 916170993, guid: a3199f7e15eb94d469e00051113bf9b2, type: 3}
+  Defense: 4
+  Durability: 4
   weaponType: Armor
+  weaponSpec: "1\uB808\uBCA8 \uC544\uBA38\uC774\uB2E4. "
+  maxBullet: 0
+  totalBullet: 0

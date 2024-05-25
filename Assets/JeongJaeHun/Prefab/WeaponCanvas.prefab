@@ -171,7 +171,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -17, y: 15}
+  m_AnchoredPosition: {x: -17, y: 24}
   m_SizeDelta: {x: 600, y: 215}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &8331928872060739653
@@ -418,7 +418,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -17, y: 15}
+  m_AnchoredPosition: {x: -17, y: 24}
   m_SizeDelta: {x: 600, y: 215}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &5006627924479414576
@@ -516,7 +516,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -17, y: 15}
+  m_AnchoredPosition: {x: -17, y: 24}
   m_SizeDelta: {x: 600, y: 215}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &5287436101499471262
@@ -829,7 +829,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2488375522861909338
 RectTransform:
   m_ObjectHideFlags: 0
@@ -846,7 +846,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -372, y: 29}
+  m_AnchoredPosition: {x: -362.7, y: 52.4}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &5087280452639780003
@@ -877,7 +877,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Armor LV xx
+  m_text: "Armor LV xx\n\uB0B4\uAD6C : xx "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c66b88e17cc250f41b5f7797542e22d7, type: 2}
   m_sharedMaterial: {fileID: -2276028608179396842, guid: c66b88e17cc250f41b5f7797542e22d7, type: 2}
@@ -904,8 +904,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -959,9 +959,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ArmorText: {fileID: 6202418601257851179}
-  ArmorManager: {fileID: 0}
-  CurrentArmor: {fileID: 0}
-  ArmorID: 0
 --- !u!1 &6861083007989273158
 GameObject:
   m_ObjectHideFlags: 0

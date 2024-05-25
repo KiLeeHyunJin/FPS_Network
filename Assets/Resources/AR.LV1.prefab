@@ -379,6 +379,7 @@ MonoBehaviour:
   reloadTime: 2
   trailEffect: {fileID: 0}
   damage: 10
+  otherBullet: 180
   currentBulletCount: 30
   maxBulletCount: 30
   retroActionForce: 0.1
@@ -405,7 +406,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 4714011078597266675}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

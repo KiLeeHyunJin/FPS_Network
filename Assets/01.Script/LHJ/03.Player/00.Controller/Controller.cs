@@ -407,7 +407,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         if (requestController.Hit() == false)
             return;
-
+        if (hp <= 0)
+            return;
         //hp -= equipController.ShieldCheck(_damage); 실험 위한 주석처리 
         hp -= _damage;
         if (hp <= 0)
@@ -424,7 +425,12 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         if (photonView.Owner.GetProperty<bool>(DefinePropertyKey.DEAD))
             return;
+        if (hp <= 0)
+            return;
+
         hp -= inventoryController.ShieldCheck(_damage);
+        processingController.HitEffect();
+
         if (HpBar != null)
         {
             HpBar.value = Percent(hp, maxHp);
@@ -488,10 +494,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         Destroy(ins.gameObject);
     }
 
-
-
-
-
     [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
@@ -511,10 +513,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         hp = newHp;
     }
-
-
-
-
 
     public void StartCoroutined(IEnumerator routine, ref Coroutine co)
         => this.ReStartCoroutine(routine, ref co);

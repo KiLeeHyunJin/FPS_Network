@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 
-public class SpyCamController : Skill
+public class SpyCamController : Skill, IPunObservable
 {
     [SerializeField] private CinemachineVirtualCamera spyCamVirtualCamera;
     [SerializeField] private GameObject spyCamPrefab;
@@ -241,5 +241,10 @@ public class SpyCamController : Skill
         {
             currentSpyCam.transform.Rotate(Vector3.up, 1f); // 오른쪽 화살표 키를 누르면 우회전
         }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        throw new System.NotImplementedException();
     }
 }

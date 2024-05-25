@@ -5,6 +5,7 @@ using UnityEngine;
 public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
 {
     Controller controller;
+    [SerializeField] float multiple = 1;
     public int GetActNum { get { return controller.photonView.Controller.ActorNumber; } }
     public void SetOwner(Controller _controller, bool mine)
     {
@@ -15,12 +16,11 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
             collider.isTrigger = true;
     }
     public void TakeDamage(int _damage)
-        => controller.Damage(_damage);
+        => controller.Damage((int)(_damage * multiple));
 
     public void TakeDamage(int _damage, int _actorNumber)
     {
-        
-        controller.Damage(_damage, _actorNumber);      
+        controller.Damage((int)(_damage * multiple));      
     }
 
     
