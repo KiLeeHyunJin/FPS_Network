@@ -66,7 +66,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
 
         tapUi.gameObject.SetActive(!tapUi.gameObject.activeSelf);
-        tapUi.test();
 
     }
     public void OnEnter(InputValue value)
@@ -202,6 +201,27 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 }
             }
         }
+
+        if (changedProps.ContainsKey(DefinePropertyKey.DEAD) && (bool)changedProps[DefinePropertyKey.DEAD])
+        {
+            int teamCode = targetPlayer.GetPhotonTeam().Code;
+            List<Player> playerList = teamCode == 1 ? bluePlayerList : redPlayerList;
+            bool allDead = true;
+            foreach (Player player in playerList)
+            {
+                if (!player.GetProperty<bool>(DefinePropertyKey.DEAD))
+                {
+                    allDead = false;
+                    break;
+                }
+
+            }
+            if (allDead)
+                StartCoroutine(GameOverCall());
+
+
+        }
+
     }
 
     public void InGamePropertiesUpdate(Hashtable propertiesThatChanged)
@@ -255,6 +275,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
         }
+    
         public void GameOver()
         {
         Debug.Log("GameOver");
@@ -341,31 +362,36 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
                 yield return null;
             }
-        GameOver();
+        StartCoroutine(GameOverCall());
+        
+        }
+    IEnumerator GameOverCall()
+    {
+        GameOver(); shopManager.InitList();
         if (PhotonNetwork.IsMasterClient)                                           //7
+        {
+            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
+
+            yield return new WaitForSeconds(2f);
+            if (curRound < roundCount)
             {
-                PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
-               
+
+                pv.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
                 
-                if (curRound < roundCount)
-                {
+                yield return new WaitForSeconds(3f);
+                pv.RPC("RoundStart", RpcTarget.All);
+                curRound++;
+            }
+            else
+            {
+                PhotonNetwork.CurrentRoom.SetLoadTime(0);
+                pv.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
+                yield return new WaitForSeconds(2f);
+                pv.RPC("RoundOver", RpcTarget.All);
 
-                    pv.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
-                    shopManager.InitList();
-                    yield return new WaitForSeconds(3f);
-                    pv.RPC("RoundStart", RpcTarget.All);
-                    curRound++;
-                }
-                else
-                {
-                    PhotonNetwork.CurrentRoom.SetLoadTime(0);
-                    pv.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
-                    yield return new WaitForSeconds(1f);
-                    pv.RPC("RoundOver", RpcTarget.All);
-
-                }
             }
         }
+    }
         [PunRPC]
         void RoundOver()
         {

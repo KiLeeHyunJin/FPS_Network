@@ -405,12 +405,14 @@ public class Controller : MonoBehaviourPun, IPunObservable
     #endregion
     public void Damage(int _damage) // 데미지 받으면 여기로 들어와짐. 
     {
+        Debug.Log("none ActNum Damage");
         if (requestController.Hit() == false)
             return;
         if (hp <= 0)
             return;
         //hp -= equipController.ShieldCheck(_damage); 실험 위한 주석처리 
         hp -= _damage;
+        
         if (hp <= 0)
         {
             animController.Die();
@@ -423,6 +425,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [PunRPC]
     void CallDamage(int _damage,int _actorNumber)
     {
+        Debug.Log("Call Damage");
         if (photonView.Owner.GetProperty<bool>(DefinePropertyKey.DEAD))
             return;
         hp -= inventoryController.ShieldCheck(_damage);

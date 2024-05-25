@@ -43,6 +43,9 @@ TagManager:
   - 
   - Weapon
   m_SortingLayers:
+  - name: Icon
+    uniqueID: 599243673
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
