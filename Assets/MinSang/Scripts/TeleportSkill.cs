@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
-public class TeleportSkill : Skill, IPunObservable
+public class TeleportSkill : Skill
 {
     public float teleportDistance = 10f;
     public GameObject teleportEffectPrefab; // 텔레포트 이펙트 프리팹
     public float effectDuration = 1.0f;
     public LayerMask GroundLayer; // 지형 레이어를 설정하여 맵 밖으로 나가는 것을 방지
-    PhotonView pv;
     CharacterController characterController;
+
+
+    public KeyCode skillKey;
+    public SkillEntry thisEntry;
+    public Image skillEntryImg;
     public override void SkillOn()
     {
         Debug.Log(SkillName + "SkillOn");
@@ -23,21 +28,13 @@ public class TeleportSkill : Skill, IPunObservable
 
     void Start()
     {
-        pv = GetComponent<PhotonView>();
         characterController = GetComponent<CharacterController>();
-        if (pv == null)
-        {
-            Debug.Log("pv를 찾을 수 없습니다.");
-        }
-        else if (pv.IsMine)
-        {
-            pv.gameObject.SetActive(true);
-        }
+       
     }
 
     void Update()
     {
-        if (pv.IsMine && Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(skillKey))
         {
             Teleport();
         }
@@ -47,10 +44,17 @@ public class TeleportSkill : Skill, IPunObservable
     {
         Vector3 targetPosition = transform.position + transform.forward * teleportDistance;
 
-        if (IsValidTeleportPosition(targetPosition))
+        if (IsValidTeleportPosition(targetPosition)&&photonView.IsMine)
         {
-            pv.RPC("RPC_Teleport", RpcTarget.All, targetPosition);
+            photonView.RPC("RPC_Teleport", RpcTarget.All, targetPosition);
             transform.position = targetPosition;
+
+            GetComponent<TeleportSkill>().enabled = false;
+            skillEntryImg.sprite = null;
+            skillEntryImg.gameObject.SetActive(false);
+            skillEntryImg = null;
+            thisEntry.isIt = false;
+            thisEntry = null;
         }
         else
         {
@@ -94,9 +98,7 @@ public class TeleportSkill : Skill, IPunObservable
             characterController.enabled = true; // 다시 활성화
         }
         else
-        {
             transform.position = targetPosition;
-        }
 
         Debug.Log("Player position set to: " + transform.position);
         // 새로운 위치에 텔레포트 이펙트 생성
@@ -104,20 +106,6 @@ public class TeleportSkill : Skill, IPunObservable
         {
             GameObject endEffect = Instantiate(teleportEffectPrefab, targetPosition, Quaternion.identity);
             Destroy(endEffect, effectDuration);
-        }
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // 로컬 플레이어의 데이터를 다른 클라이언트에 보냄
-            stream.SendNext(transform.position);
-        }
-        else
-        {
-            // 다른 클라이언트의 데이터를 수신
-            transform.position = (Vector3)stream.ReceiveNext();
         }
     }
 }

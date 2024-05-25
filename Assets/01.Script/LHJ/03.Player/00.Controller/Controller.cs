@@ -52,8 +52,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     [SerializeField] int teamCode;
     [SerializeField] GameObject miniCam;
 
-    [SerializeField] ParticleSystem rewindEff;
-    [SerializeField] ParticleSystem outRewindEff;
+
     int maxHp;
     [SerializeField] int hp;
     public bool Mine { get; private set; }
@@ -81,8 +80,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     [SerializeField] int playerNum;
 
-    [SerializeField] SkinnedMeshRenderer[] renderers;
-    [SerializeField] MeshRenderer[] mrenders;
+
 
     [SerializeField] PhotonView pv;
 
@@ -447,9 +445,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         if (photonView.Owner.GetProperty<bool>(DefinePropertyKey.DEAD))
             return;
-        if (hp <= 0)
-            return;
-
         hp -= inventoryController.ShieldCheck(_damage);
         processingController.HitEffect();
 
@@ -516,10 +511,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
         Destroy(ins.gameObject);
     }
 
-
-
-
-
     [PunRPC] //체력 회복 동기화 필요 
     public void AddHp(int _healValue)
     {
@@ -539,10 +530,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         hp = newHp;
     }
-
-
-
-
 
     public void StartCoroutined(IEnumerator routine, ref Coroutine co)
         => this.ReStartCoroutine(routine, ref co);
@@ -576,38 +563,5 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
     }
 
-    [PunRPC]
-    public void RewindEffectOn()
-    {
-        mrenders = GetComponentsInChildren<MeshRenderer>();
-        Debug.Log("other Rewind");
-        if (photonView.IsMine)
-            return;
-       Instantiate(rewindEff, transform.position,Quaternion.identity);
-        foreach(SkinnedMeshRenderer renderer in renderers)
-        {
-            renderer.enabled = false;
-        }
-        foreach (MeshRenderer renderer in mrenders)
-        {
-            renderer.enabled = false;
-        }
-    }
-    [PunRPC]
-    public void RewindEffectOff()
-    {
-        mrenders = GetComponentsInChildren<MeshRenderer>();
-        if (photonView.IsMine)
-            return;
-        Instantiate(outRewindEff, transform.position, Quaternion.identity);
-        foreach (SkinnedMeshRenderer renderer in renderers)
-        {
-            renderer.enabled = true;
-        }
-        foreach (MeshRenderer renderer in mrenders)
-        {
-            renderer.enabled = true;
-        }
-
-    }
+   
 }
