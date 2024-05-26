@@ -153,11 +153,13 @@ public class Bomb : IKWeapon
     {
         audioSource.PlayOneShot(FlashSoundClip, 1.0f); //특정 클립 한 번만 재생 --> 매개변수 2번째는 소리크기 조절.
         particle = Instantiate(bombFX, setPosition, Quaternion.identity);
+        Debug.Log("붐이펙트 발동");
     }
     void FlashEffect(Vector3 setPosition)
     {
         audioSource.PlayOneShot(bombSoundClip, 1.0f); //특정 클립 한 번만 재생 --> 매개변수 2번째는 소리크기 조절.
         particle = Instantiate(flashFX, setPosition, Quaternion.identity);
+        Debug.Log("플래시 이펙트 발동");
     }
 
 

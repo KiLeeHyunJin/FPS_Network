@@ -51,8 +51,6 @@ public class ArmorController : MonoBehaviourPun
             transform.GetChild(i).gameObject.SetActive(false);
         }
 
-        Debug.Log($"{lv} + {defense} + {durablity} + ");
-
         transform.GetChild(lv).gameObject.SetActive(true); //0번 아머는 켜줘야함 start 시에 
         currentArmor = transform.GetChild(lv).GetComponent<Armor>();
         currentArmor.ArmorLevel = lv;
@@ -77,10 +75,6 @@ public class ArmorController : MonoBehaviourPun
     public void ArmorPurChase(int ArmorLevel,int ArmorDefense,int ArmorDurability)
     {
         CurrentArmorCheck(ArmorLevel, ArmorDefense, ArmorDurability);
-
-        Debug.Log(currentArmor.ArmorLevel + "아머레벨");
-        Debug.Log(currentArmor.ArmorDefense+"아머 디펜스");
-        Debug.Log(currentArmor.ArmorDurability+"아머 내구도");
 
         // 이거 item에 spec 붙여야 숫자 초기화 안될듯? 
         

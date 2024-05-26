@@ -16,12 +16,12 @@ public class PoolContainer : MonoBehaviourPun //어차피 같은 이펙트 쓰�
 
     private void Awake()
     {
-        Debug.Log("시작");
+        
         string bloodPath = "BloodEffect";
         bloodEffect = Manager.Resource.basicLoad<PooledObject>(bloodPath);
         if (bloodEffect != null)
         {
-            Debug.Log("생성");
+            
             Manager.Pool.CreateBasicPool(bloodEffect, poolSize, poolCapacity);
         }
 
