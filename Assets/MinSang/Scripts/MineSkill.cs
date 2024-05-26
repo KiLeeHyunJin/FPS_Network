@@ -1,7 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
 
-
 public class MineSkill : Skill
 {
     [SerializeField]
@@ -11,7 +10,7 @@ public class MineSkill : Skill
     [SerializeField]
     private float spawnDistance = 2.0f; // 플레이어 앞의 지뢰 생성 거리
 
-    private float nextMineTime = 3f;
+    private float nextMineTime = 0f;
 
     public override void SkillOn()
     {
@@ -22,6 +21,7 @@ public class MineSkill : Skill
     {
         Debug.Log(SkillName + "SkillOff");
     }
+
     public void Activate()
     {
         if (Time.time > nextMineTime)
@@ -30,8 +30,16 @@ public class MineSkill : Skill
 
             // 플레이어 앞의 위치 계산
             Vector3 spawnPosition = transform.position + transform.forward * spawnDistance;
-            Instantiate(minePrefab, spawnPosition, Quaternion.identity);
+
+            // RPC를 호출하여 모든 클라이언트에 지뢰 생성
+            photonView.RPC("RPC_SpawnMine", RpcTarget.All, spawnPosition);
         }
+    }
+
+    [PunRPC]
+    void RPC_SpawnMine(Vector3 spawnPosition)
+    {
+        Instantiate(minePrefab, spawnPosition, Quaternion.identity);
     }
 
     void Update()
