@@ -8,6 +8,7 @@ public class ShopUIManager : MonoBehaviour
     public GameObject shopCanvas;
     Button[] shopBtn;
     public InventoryController inventory;
+    public SkillHolder skillHolder;
     //버튼 클릭 시 나오는 -> 구매 yes / no 팝업은 --> 팝업 ui 매니저 이용하기. 
     //no하면 그냥 팝업 꺼주면 되는데 yes 하면 여러 작업을 진행해야함. 
 
@@ -52,8 +53,17 @@ public class ShopUIManager : MonoBehaviour
 
     public void InitList()
     {
+        Debug.Log("InitList");
+        foreach(SkillEntry entry in skillHolder.skillSlots)
+        {
+            entry.img.sprite = null;
+            entry.img.gameObject.SetActive(false);
+            entry.isIt = false;
+           
+        }
         foreach (Button button in shopBtn)
         {
+            Debug.Log(button.name);
             button.interactable = true;
         }
                   

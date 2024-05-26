@@ -98,7 +98,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
 
         killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
-        renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        
         Audio = GetComponent<AudioController>();
         tapEntry = FindObjectOfType<TapEntry>();
 

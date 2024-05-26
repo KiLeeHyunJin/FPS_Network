@@ -6,12 +6,4 @@ public class SkillHolder : MonoBehaviour
 {
     public SkillEntry[] skillSlots = new SkillEntry[3];
 
-    private void Start()
-    {
-      
-        
-    }
-
-
-
 }
