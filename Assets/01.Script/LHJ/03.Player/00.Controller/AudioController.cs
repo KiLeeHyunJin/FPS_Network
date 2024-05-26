@@ -11,10 +11,8 @@ public class AudioController : MonoBehaviourPun
     [SerializeField] AudioClip swapClip;
     new AudioSource audio;
     ClipType currentState;
-    ClipType nextState;
     float checkTime = 0;
 
-    // Start is called before the first frame update
     private void Awake()
     {
         audio = GetComponent<AudioSource>();

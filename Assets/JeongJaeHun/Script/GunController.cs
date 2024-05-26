@@ -63,9 +63,13 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
         int numOfChild = transform.childCount;
         for (int i = 0; i < numOfChild; i++)
         {
-            currentGun = transform.GetChild(i).GetComponent<Gun>();
-            audioSource.clip = currentGun.fire_Sound;
-            // true 체크를 안하기 때문에 break를 걸어줄 필요가 없음 
+            if(transform.GetChild(i) != null)
+            {
+                currentGun = transform.GetChild(i).GetComponent<Gun>();
+                audioSource.clip = currentGun.fire_Sound;
+                break;
+                // true 체크를 안하기 때문에 break를 걸어줄 필요가 없음 
+            }
         }
         isActivate = true;
     }

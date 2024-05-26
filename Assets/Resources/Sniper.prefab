@@ -142,12 +142,13 @@ MonoBehaviour:
   gunID: 2
   gunType: 2
   gunName: SNIPER1
-  range: 300
+  range: 2000
   accuracy: 1
   fireRate: 2
   reloadTime: 3
   trailEffect: {fileID: 0}
   damage: 50
+  otherBullet: 0
   currentBulletCount: 5
   maxBulletCount: 5
   retroActionForce: 0
@@ -155,7 +156,9 @@ MonoBehaviour:
   fineSightOriginPos: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   muzzleFlash: {fileID: 4488245867443518134}
-  fire_Sound: {fileID: 0}
+  fire_Sound: {fileID: 8300000, guid: 99978dc4052a48f49bb718ed8e5a45ca, type: 3}
+  reload_Sound: {fileID: 8300000, guid: 61ea246f3bfc0c5458534be5b1026e3e, type: 3}
+  dryFire_Sound: {fileID: 8300000, guid: e8b2ebb588127c7408c52a129d9a0f7a, type: 3}
 --- !u!135 &1690305558141963626
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -222,7 +225,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 7860277944964364028}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

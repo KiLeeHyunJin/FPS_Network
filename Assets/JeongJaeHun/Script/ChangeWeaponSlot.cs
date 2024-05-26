@@ -74,8 +74,8 @@ public class ChangeWeaponSlot : MonoBehaviour
         {
             slot.gameObject.SetActive(false); //일단 모든 슬롯을 꺼주고. 
         }
-
-        slots[0].gameObject.SetActive(true); //0번 슬롯 --> 즉 피스톨 부분만 start 시에 켜줘서 시작해주기. 
+        if(slots != null && slots.Length > 0)
+            slots[0].gameObject.SetActive(true); //0번 슬롯 --> 즉 피스톨 부분만 start 시에 켜줘서 시작해주기. 
     }
 
     // 무기 버리는 경우가 있을 수 있으니까 만약 slot 내부에 모든 종류의 아이템이 꺼져 있다면 

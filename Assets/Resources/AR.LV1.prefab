@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918899445651171162}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0944947, y: -0.0031370248, z: 0.008311577, w: 0.9954858}
-  m_LocalPosition: {x: -0.002, y: 0.1041, z: -0.079}
+  m_LocalRotation: {x: -0.043779306, y: -0.0018789717, z: -0.0031627575, w: 0.99903446}
+  m_LocalPosition: {x: -0, y: 0.104, z: -0.108}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5407611864780272455}
-  m_LocalEulerAnglesHint: {x: -10.841, y: -0.456, z: 1}
+  m_LocalEulerAnglesHint: {x: -5.019, y: -0.2, z: -0.354}
 --- !u!1 &1770677531608505373
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +373,7 @@ MonoBehaviour:
   gunID: 1
   gunType: 1
   gunName: AR1
-  range: 100
+  range: 1000
   accuracy: 30
   fireRate: 0.15
   reloadTime: 2
@@ -387,7 +387,9 @@ MonoBehaviour:
   fineSightOriginPos: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   muzzleFlash: {fileID: 1637894244750419815}
-  fire_Sound: {fileID: 0}
+  fire_Sound: {fileID: 8300000, guid: b23fede33878d1c459d8b7eb1f275a77, type: 3}
+  reload_Sound: {fileID: 8300000, guid: 8560ee871570d0e47950b77be4f2ecdb, type: 3}
+  dryFire_Sound: {fileID: 8300000, guid: b414a30d8fdea7f4a9dd75a0892ccf48, type: 3}
 --- !u!114 &3244118640271991058
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -88,6 +88,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     {
         animController = gameObject.GetOrAddComponent<AnimationController>();
         groundLayer = 1 << LayerMask.NameToLayer("Ground");
+        Audio = GetComponent<AudioController>();
     }
     void Start()
     {
@@ -99,7 +100,6 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         killLog = GameObject.FindWithTag("KillLog")?.GetComponent<KillLogPanel>();
         
-        Audio = GetComponent<AudioController>();
         tapEntry = FindObjectOfType<TapEntry>();
 
         Check();

@@ -406,6 +406,7 @@ MonoBehaviour:
   reloadTime: 2
   trailEffect: {fileID: 0}
   damage: 15
+  otherBullet: 0
   currentBulletCount: 25
   maxBulletCount: 25
   retroActionForce: 0.1
@@ -413,7 +414,9 @@ MonoBehaviour:
   fineSightOriginPos: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   muzzleFlash: {fileID: 5424153004134902410}
-  fire_Sound: {fileID: 0}
+  fire_Sound: {fileID: 8300000, guid: 5d19d225542f4db4aa9feb1bba9f4883, type: 3}
+  reload_Sound: {fileID: 8300000, guid: c04b8dbe64e5aff40aca813c3e3094f3, type: 3}
+  dryFire_Sound: {fileID: 8300000, guid: c5ad68158f0afe441828d006800d8037, type: 3}
 --- !u!82 &686888504114998706
 AudioSource:
   m_ObjectHideFlags: 0
@@ -576,7 +579,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 2175254609360078343}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1374,13 +1378,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5347733044933354993}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.10378616, y: -0.00017294515, z: -0.000017627777, w: 0.99459964}
-  m_LocalPosition: {x: -0.0063, y: 0.0621, z: -0.2262}
+  m_LocalRotation: {x: -0.033155173, y: -0.0014215952, z: -0.00004715921, w: 0.9994492}
+  m_LocalPosition: {x: -0.006, y: 0.063, z: -0.192}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1953602893666812674}
-  m_LocalEulerAnglesHint: {x: -11.914, y: -0.02, z: 0}
+  m_LocalEulerAnglesHint: {x: -3.8, y: -0.163, z: 0}
 --- !u!1 &5958153600127772906
 GameObject:
   m_ObjectHideFlags: 0

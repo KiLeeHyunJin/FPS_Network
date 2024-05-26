@@ -25,7 +25,7 @@ public class AnimationController : MonoBehaviourPun
     [SerializeField] MultiParentConstraint[] weaponParents;
     Transform[] currentWeapons;
     InventoryController inventoryController;
-    AudioController audio;
+    new AudioController audio;
     int JumpEnterId;
     int StandId;
     int CrouchId;
@@ -105,7 +105,7 @@ public class AnimationController : MonoBehaviourPun
         }
         if(anim.GetBool(weaponId[(int)type]))
         {
-            if(isKey == true)
+            if(isKey)
             {
                 return false;
             }
@@ -210,7 +210,7 @@ public class AnimationController : MonoBehaviourPun
     [PunRPC]
     void RigIK(int type,int _instanceId, int triggerId)
     {
-        inventoryController.AddItem((AnimatorWeapon)type, _instanceId);
+        inventoryController.ChangePos((AnimatorWeapon)type, _instanceId);
         anim.SetTrigger(triggerId);
         iKAnimation.ChangeWeapon((AnimatorWeapon)type);
     }

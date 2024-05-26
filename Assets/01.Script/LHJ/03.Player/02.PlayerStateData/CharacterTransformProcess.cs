@@ -47,8 +47,8 @@ public class CharacterTransformProcess
         controller = characterController;
         limitAngle = controller.slopeLimit;
         checkRadius = controller.radius * 0.9f;
+        audio = characterController.GetComponent<AudioController>();
         motions = new Action[(int)AnimationController.MoveType.END];
-        audio = characterController.gameObject.GetComponent<AudioController>();
     }
 
     public void InitGroundCheckData(Transform _foot, float _groundCheckLenth, float _ignoreGroundCheckLenth, int _groundLayer, float _jumpHeight, float _gravitySpeed)

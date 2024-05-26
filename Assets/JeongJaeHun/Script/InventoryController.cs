@@ -247,29 +247,36 @@ public class InventoryController : MonoBehaviourPun
     }
     void AddWeapon(AnimationController.AnimatorWeapon weaponType, int id, int currentBullet = -1, int otherBullet = -1)
     {
-        if(photonView.IsMine)
+        if (weapons[(int)weaponType] != null)
         {
-            if (weapons[(int)weaponType] != null)
-                Dequip(weapons[(int)weaponType]);
+            IKWeapon dequipWeapon = Dequip(weapons[(int)weaponType]);
+            if (photonView.IsMine)
+            {
+                CallInstanceWeapon(dequipWeapon);
+            }
         }
 
-        weapons[(int)weaponType] = Equip(weaponType, id);
-        if (currentBullet >= 0   &&
+        ChangePos(weaponType, id);
+        if (currentBullet >= 0 &&
             weaponType == AnimationController.AnimatorWeapon.Pistol ||
             weaponType == AnimationController.AnimatorWeapon.Rifle)
         {
             Gun gun = weapons[(int)weaponType] as Gun;
             gun.SetData(currentBullet, otherBullet);
         }
-        ChangeWeapon?.Invoke(weaponType);
+        if (photonView.IsMine)
+            ChangeWeapon?.Invoke(weaponType);
+    }
+    public void ChangePos(AnimationController.AnimatorWeapon weaponType, int id)
+    {
+        weapons[(int)weaponType] = Equip(weaponType, id);
     }
 
     public void Throw(AnimationController.AnimatorWeapon weaponType)
     {
         Dequip(weapons[(int)weaponType]);
     }
-
-    void Dequip(IKWeapon _weapon)
+    IKWeapon Dequip(IKWeapon _weapon)
     {
         Transform parent = _weapon.weaponType switch
         {
@@ -282,14 +289,19 @@ public class InventoryController : MonoBehaviourPun
         };
         _weapon.transform.SetParent(parent);
         _weapon.gameObject.SetActive(false);
+        weapons[(int)_weapon.weaponType] = null;
+        return _weapon;
+    }
+    void CallInstanceWeapon (IKWeapon _weapon)
+    {
+        if (_weapon == null)
+            return;
         Gun dequipWeapon = _weapon as Gun;
         photonView.RPC(SpawnItem, 
             RpcTarget.MasterClient, 
             _weapon.name, 
             dequipWeapon.currentBulletCount, 
             dequipWeapon.otherBullet);
-
-        weapons[(int)_weapon.weaponType] = null;
     }
 
     [PunRPC]

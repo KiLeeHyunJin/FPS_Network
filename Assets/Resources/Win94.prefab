@@ -60,12 +60,13 @@ MonoBehaviour:
   gunID: 2
   gunType: 1
   gunName: AR2
-  range: 100
+  range: 1000
   accuracy: 0
   fireRate: 0.5
   reloadTime: 0
   trailEffect: {fileID: 0}
   damage: 0
+  otherBullet: 0
   currentBulletCount: 5
   maxBulletCount: 5
   retroActionForce: 0
@@ -73,7 +74,9 @@ MonoBehaviour:
   fineSightOriginPos: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   muzzleFlash: {fileID: 1105805161421302143}
-  fire_Sound: {fileID: 0}
+  fire_Sound: {fileID: 8300000, guid: f8532ba8ea6840e4e861a315e3d09c7a, type: 3}
+  reload_Sound: {fileID: 8300000, guid: 8ae094f01fc584847815912d13804ad0, type: 3}
+  dryFire_Sound: {fileID: 8300000, guid: 0c83e2c3371942d488ee577cd46d975c, type: 3}
 --- !u!82 &1026084152321791690
 AudioSource:
   m_ObjectHideFlags: 0
@@ -236,7 +239,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 6772956957275582136}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
