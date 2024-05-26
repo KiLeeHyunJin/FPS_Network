@@ -4585,7 +4585,7 @@ PrefabInstance:
       objectReference: {fileID: 1078896760}
     - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: countValue
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: roundCount
@@ -4609,7 +4609,7 @@ PrefabInstance:
       objectReference: {fileID: 1218243741}
     - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: roundTimeValue
-      value: 10
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: ShopCanvasPrefab
