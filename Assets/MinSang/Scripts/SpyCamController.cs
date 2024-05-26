@@ -154,10 +154,6 @@ public class SpyCamController : Skill, IPunObservable
                 Debug.LogWarning("Invalid placement position: " + hit.point); // 유효하지 않은 위치 출력
             }
         }
-        else
-        {
-            Debug.LogWarning("Raycast did not hit anything"); // Raycast가 아무것도 맞추지 못한 경우
-        }
     }
 
     // RPC 메소드로 스파이 캠을 배치하는 함수
@@ -198,22 +194,23 @@ public class SpyCamController : Skill, IPunObservable
     bool IsPlacementValid(Vector3 position)
     {
         // 충돌 영역 검사
-        if (Physics.CheckSphere(position, 0.5f))
+        Collider[] colliders = Physics.OverlapSphere(position, 0.5f);
+        foreach (var collider in colliders)
         {
-            Debug.LogWarning("Placement position is colliding with another object");
-            return false;
+            if (collider.GetComponent<CharacterController>() == null) // CharacterController와의 충돌 무시
+            {
+                return false;
+            }
         }
 
         // 지면 검사
         if (!Physics.Raycast(position, Vector3.down, out RaycastHit groundHit, 1.0f))
         {
-            Debug.LogWarning("No ground detected beneath the placement position");
             return false;
         }
 
         if (groundHit.collider.tag != "Ground")
         {
-            Debug.LogWarning("Placement position is not on a valid ground surface");
             return false;
         }
 
