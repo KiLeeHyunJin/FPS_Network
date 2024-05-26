@@ -30,7 +30,7 @@ public class Mine : MonoBehaviourPun
             Debug.Log("지뢰 폭발");
             hasExploded = true;
             Explode();
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
@@ -56,8 +56,6 @@ public class Mine : MonoBehaviourPun
         {
             damagable.TakeDamage((int)damage);
         }
-
-        Destroy(gameObject);
     }
 
     // 사용자 정의를 위한 속성들
