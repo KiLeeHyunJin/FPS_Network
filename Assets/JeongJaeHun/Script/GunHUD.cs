@@ -23,17 +23,13 @@ public class GunHUD : MonoBehaviourPun
     // 총알 개수를 텍스트 ui에 반영 
     public TextMeshProUGUI textBullet;
 
-    [SerializeField ] Controller controller;
-
-    [SerializeField] InventoryController inventoryController;
-
     // 이거 각 컨트롤러 들의 OnEnable을 가지고 있는 방법도 나쁘지 않을 것 같음. --> OnEnable 하는 식으로
     // 정 안되면 Inveontory의 weapons[] 이용해보자. type과 weapon[]로 현재 총 의 ammo  접근이 필요함. 
 
 
     private void OnEnable()
     {
-        Debug.Log(" 건 패널 켜짐. ");
+        
     }
 
     private void Awake() 

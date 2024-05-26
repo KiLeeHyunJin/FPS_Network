@@ -8,6 +8,8 @@ public class InventoryController : MonoBehaviourPun
 
     // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
     [field: SerializeField] public int Gold { get; set; }
+
+    public ShopFind shopFind;
     public TextMeshProUGUI goldText;
     Action<AnimationController.AnimatorWeapon> ChangeWeapon;
     private Item item;
@@ -29,6 +31,7 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] GunHUD gunHud;
     [SerializeField] CloseWeaponHUD CloseWeaponHUD;
     [SerializeField] BombHUD BombHUD;
+    [SerializeField] WeaponCanvasOn weaponCanvas;
     
     
 
@@ -103,27 +106,33 @@ public class InventoryController : MonoBehaviourPun
         weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
 
         armorController = GetComponentInChildren<ArmorController>(); //Player에게 붙어있는 Armor 컨트롤러 가져오기. 
+
     }
+
+
+    
 
     private void Start()
     {
-
+        
         skill = FindObjectOfType<SkillHolder>();
-
 
         if (photonView.IsMine)
         {
-            gunHud = FindObjectOfType<GunHUD>();
-            CloseWeaponHUD = FindObjectOfType<CloseWeaponHUD>();
-            BombHUD = FindObjectOfType<BombHUD>();
-            
+            weaponCanvas = FindObjectOfType<WeaponCanvasOn>();
+
+            gunHud = weaponCanvas.GunHUD;
+            CloseWeaponHUD = weaponCanvas.CloseWeaponhud;
+            BombHUD =weaponCanvas.BombHUD;
+
+            //일단 다 꺼주기.
+            gunHud?.gameObject.SetActive(false);
+            CloseWeaponHUD?.gameObject.SetActive(false);
+            BombHUD?.gameObject.SetActive(false);
             
 
-            gunHud?.gameObject.SetActive(false);
-            CloseWeaponHUD?.gameObject.SetActive(true);
-            BombHUD?.gameObject.SetActive(false);           
-            // GoldText가 시작 되는 시점에 ShopCanvas가 꺼져 있기 때문에 못 찾는 문제가 발생함. 
-            
+            shopFind = FindObjectOfType<ShopFind>();
+            goldText = shopFind.goldText;
 
             if (goldText != null)
                 goldText.text = $"{Gold}";
@@ -182,7 +191,7 @@ public class InventoryController : MonoBehaviourPun
         }
         else if (_item.itemType == Item.ItemType.Armor) // 아머 류 구매. --> 구매 시 골드 비교가 필요함. 
         {
-            Debug.Log("인벤토리 컨트롤러의 AddItem이 발동됨 ");
+            
             Debug.Log(_item.itemID);
             Debug.Log(_item.Defense);
             Debug.Log(_item.Durability);
@@ -346,7 +355,7 @@ public class InventoryController : MonoBehaviourPun
         currentArmor.ArmorDurability--; //내구도 감소 시키기. 
 
 
-
+        Debug.Log("받는 데미지 ->" + _damage);
         if (currentArmor.ArmorDurability > 0)
         {
             _damage -= currentArmor.ArmorDefense; // 데미지 감소시키기.
@@ -418,7 +427,11 @@ public class InventoryController : MonoBehaviourPun
 
     void OnEnable()
     {
-        ChangeWeaponCallback(Test); //메소드 지정
+        if(photonView.IsMine)
+        {
+            ChangeWeaponCallback(Test); //메소드 지정
+        }
+
     }
 
 
@@ -436,13 +449,10 @@ public class InventoryController : MonoBehaviourPun
     }
 
     private void OnDestroy() // 라운드 재시작 시 player 파괴 후 재생성 하는 것 같음. --> hud를 켜줘야함. 
-    {
-        Debug.Log("플레이어 디스트로이");
+    {       
         if (photonView.IsMine)
         {
-            gunHud.gameObject.SetActive(true);
-            BombHUD.gameObject.SetActive(true);
-            CloseWeaponHUD.gameObject.SetActive(true); //일단 다시 켜보기. 
+            weaponCanvas?.WeaponHUDAwake();
         }
 
     }

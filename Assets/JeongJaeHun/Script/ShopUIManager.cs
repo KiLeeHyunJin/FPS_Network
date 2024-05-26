@@ -63,7 +63,7 @@ public class ShopUIManager : MonoBehaviour
         }
         foreach (Button button in shopBtn)
         {
-            Debug.Log(button.name);
+            
             button.interactable = true;
         }
                   

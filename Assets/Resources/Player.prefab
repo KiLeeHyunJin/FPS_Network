@@ -6869,6 +6869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Gold>k__BackingField: 0
+  shopFind: {fileID: 0}
   goldText: {fileID: 0}
   weapons: []
   pistolHolder: {fileID: 6645689630095728053}
@@ -6884,6 +6885,7 @@ MonoBehaviour:
   gunHud: {fileID: 0}
   CloseWeaponHUD: {fileID: 0}
   BombHUD: {fileID: 0}
+  weaponCanvas: {fileID: 0}
   skill: {fileID: 0}
 --- !u!114 &8544027938743297954
 MonoBehaviour:
@@ -19694,6 +19696,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: reloadTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: retroActionForce
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
+      propertyPath: retroActionFineSightForce
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7860277944964364028, guid: 1736895515ad693458cc192d944338ca, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
       objectReference: {fileID: 4060718536210948524}
@@ -19723,6 +19737,22 @@ PrefabInstance:
     - target: {fileID: 188740774871733813, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: m_Name
       value: Win94
+      objectReference: {fileID: 0}
+    - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: damage
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: reloadTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: retroActionForce
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
+      propertyPath: retroActionFineSightForce
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: <WeaponPos>k__BackingField
@@ -19831,6 +19861,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2845813135581164494, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
+      propertyPath: bombFX
+      value: 
+      objectReference: {fileID: 7592836665400797895, guid: c537389c762fa06408efe0df0b98f1d3, type: 3}
+    - target: {fileID: 2845813135581164494, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
+      propertyPath: flashFX
+      value: 
+      objectReference: {fileID: 6464746649472300657, guid: d43763724dc26bb4792431d4589b51b9, type: 3}
     - target: {fileID: 2845813135581164494, guid: edcd5cd19926c744fae20e68c6a906fc, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
@@ -19961,6 +19999,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 2104039700890027392}
     m_Modifications:
     - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
+      propertyPath: reloadTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4714011078597266675, guid: 87c9684d93cf1604abf0773c303246a3, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
       objectReference: {fileID: 7030935662252546636}
@@ -20076,6 +20118,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+      propertyPath: damage
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
+      propertyPath: reloadTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2175254609360078343, guid: 49c19153bdb153846bfa6948d7b7d817, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
       objectReference: {fileID: 2671129392070243133}
@@ -20147,6 +20197,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: damage
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: reloadTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: retroActionForce
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
+      propertyPath: retroActionFineSightForce
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1613478385920128318, guid: 024ecd8e197910e4786af16e85905601, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
       objectReference: {fileID: 2671129392070243133}
@@ -20213,6 +20279,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4116479565944497551, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
+      propertyPath: bombFX
+      value: 
+      objectReference: {fileID: 7592836665400797895, guid: c537389c762fa06408efe0df0b98f1d3, type: 3}
+    - target: {fileID: 4116479565944497551, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
+      propertyPath: flashFX
+      value: 
+      objectReference: {fileID: 6464746649472300657, guid: d43763724dc26bb4792431d4589b51b9, type: 3}
     - target: {fileID: 4116479565944497551, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
