@@ -15,7 +15,10 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
         Collider collider = GetComponent<Collider>();
         this.gameObject.layer = LayerMask.NameToLayer("HitBox");
         if (collider != null && collider.isTrigger == false)
+        {
+            collider.enabled = true;
             collider.isTrigger = true;
+        }
     }
     public void TakeDamage(int _damage)
         => controller.Damage((int)(_damage * multiple));
@@ -25,7 +28,6 @@ public class HitBox : MonoBehaviour, IDamagable, IDamagableNaming
         Debug.Log("TakeDamage");
         controller.Damage((int)(_damage * multiple),_actorNumber);      
     }
-
 
     public enum BodyPartType
     { 

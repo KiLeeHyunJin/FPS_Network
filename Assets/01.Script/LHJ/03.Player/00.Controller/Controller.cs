@@ -219,7 +219,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
         }
     }
     public void SetZoomPosition(Transform _zoom)
-        => cameraController.SetZoomPosition(_zoom);
+        => cameraController?.SetZoomPosition(_zoom);
     void Update()
         => Updates?.Invoke();
     void FixedUpdate()

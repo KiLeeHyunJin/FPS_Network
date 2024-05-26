@@ -345,7 +345,7 @@ public class InventoryController : MonoBehaviourPun
 
         currentArmor.ArmorDurability--; //내구도 감소 시키기. 
 
-
+        Debug.Log("Damage Check");
 
         if (currentArmor.ArmorDurability > 0)
         {
