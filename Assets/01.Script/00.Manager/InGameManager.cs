@@ -16,7 +16,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] Transform redLocation;
     [SerializeField] Transform blueLocation;
     [SerializeField] int readyPlayer;
-    [SerializeField] PhotonView pv;
     [SerializeField] TMP_Text inGameTimer;
     [SerializeField] float countValue;
     [SerializeField] float roundTimeValue;
@@ -44,6 +43,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     [SerializeField] ShopUIManager shopManager;
     Room curRoom = PhotonNetwork.CurrentRoom;
+
+    Coroutine startGameRoutine;
+    Coroutine shoppingRoutine;
 
     [Tooltip("아이템 스폰 관련 스크립트 참조")]
     [SerializeField] ItemSpawnManager itemSpawnManager;
@@ -139,9 +141,10 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Debug.Log("RoundStart");
         if (PhotonNetwork.IsMasterClient)
         {
-            pv.RPC("MessageUp", RpcTarget.All, ($"- {curRound}라운드 - \n 무기 사시고 전투를 준비하세요 {countValue}초드림"));
+            photonView.RPC("MessageUp", RpcTarget.All, ($"- {curRound}라운드 - \n 무기 사시고 전투를 준비하세요 {countValue}초드림"));
             //   PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
 
+           
             PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, true);
 
             itemSpawnManager.ItemSpawn();
@@ -168,7 +171,10 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
-        Debug.Log("OnRoomUpdate");
+        foreach (DictionaryEntry entry in propertiesThatChanged)
+        {
+            Debug.Log($"Property changed - Key: {entry.Key}, Value: {entry.Value}");
+        }
         InGamePropertiesUpdate(propertiesThatChanged);
 
         if (propertiesThatChanged.ContainsKey(DefinePropertyKey.BLUESCORE))
@@ -208,6 +214,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             }
             if (allDead)
                 StartCoroutine(GameOverCall());
+                
 
 
         }
@@ -219,8 +226,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (propertiesThatChanged.ContainsKey(DefinePropertyKey.SHOPPINGTIME))                  //2
             if ((bool)propertiesThatChanged[DefinePropertyKey.SHOPPINGTIME])
             {
-                Debug.Log("isStart");
-                StartCoroutine(ShoppingTime());
+                Debug.Log("Shopping prop true");
+               shoppingRoutine =  StartCoroutine(ShoppingTime());
                 Manager.Game.redTeamSpawner.gameObject.SetActive(true);
                 Manager.Game.blueTeamSpawner.gameObject.SetActive(true);
             }
@@ -235,16 +242,27 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
-        if ((propertiesThatChanged.ContainsKey(DefinePropertyKey.STARTGAME)))           //5
-            if ((bool)propertiesThatChanged[DefinePropertyKey.STARTGAME])
-                StartCoroutine(StartGameTime());
+        if ((propertiesThatChanged.ContainsKey(DefinePropertyKey.STARTGAME)))
+        {
+            if ((bool)propertiesThatChanged[DefinePropertyKey.STARTGAME]&&!PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.SHOPPINGTIME))
+            {
+                Debug.Log($"Prop : stargame is {(bool)propertiesThatChanged[DefinePropertyKey.STARTGAME]}");
+                startGameRoutine = StartCoroutine(StartGameTime());
+            }
+            else
+            {
+                Debug.Log("StartRouine is false");
+            }
+
+        }
+
     }
 
         IEnumerator ShoppingTime()                                                          //3
         {
 
             double loadTime = PhotonNetwork.Time;
-
+        Debug.Log($" shooooping LoadTime is {loadTime} , PT is {PhotonNetwork.Time} , remainTime is {PhotonNetwork.Time - loadTime}");
 
             while (PhotonNetwork.Time - loadTime < countValue)
             {
@@ -253,13 +271,15 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 yield return null;
             }
 
+        Debug.Log($" Shop RemainTime = {(int)(countValue - (PhotonNetwork.Time - loadTime))}");
             if (PhotonNetwork.IsMasterClient)
             {
-                pv.RPC("MessageUp", RpcTarget.All, ($"GAME START "));
+                photonView.RPC("MessageUp", RpcTarget.All, ($"GAME START "));
 
                 PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, false);
                 PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);                          //4
                 PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, true);
+            Debug.Log("StartGame => True");
 
             }
 
@@ -287,8 +307,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                         
                     else
                     {
-                        Debug.Log($"Blue is {remainBlue}");
+                        
                         remainBlue++;
+                        Debug.Log($"Blue is {remainBlue}");
                     }
                 }
                 else if (2 == player.GetPhotonTeam().Code)
@@ -301,8 +322,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                         
                     else
                     {
-                        Debug.Log($"Red is {remainRed}");
+                        
                         remainRed++;
+                        Debug.Log($"Red is {remainRed}");
                     }
                 }
                 else
@@ -310,29 +332,28 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
             }
-
+            Debug.Log($"blueRemain : {remainBlue},redRemain : {remainRed}");
             if (remainBlue > remainRed)
             {
                 int blueScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
                 curRoom.SetProperty(DefinePropertyKey.BLUESCORE, blueScore + 1);
-                pv.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
+                photonView.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
 
             }
             else if (remainRed > remainBlue)
             {
                 int redScore = curRoom.GetProperty<int>(DefinePropertyKey.REDSCORE);
                 curRoom.SetProperty(DefinePropertyKey.REDSCORE, redScore + 1);
-                pv.RPC("MessageUp", RpcTarget.All, ("레드팀 +1점"));
+                photonView.RPC("MessageUp", RpcTarget.All, ("레드팀 +1점"));
             }
             else
             {
-                pv.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
+                photonView.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
             }
         }
         else
         {
             Debug.Log("isnot");
-            MessageUp("i'm NOt Master");
         }
 
 
@@ -340,7 +361,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         IEnumerator StartGameTime()                                                     //6
         {
             double loadTime = PhotonNetwork.Time;
-
+        Debug.Log($"LoadTime is {loadTime} , PT is {PhotonNetwork.Time} , remainTime is {PhotonNetwork.Time - loadTime}");
 
             while (PhotonNetwork.Time - loadTime < roundTimeValue)
             {
@@ -349,7 +370,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 int seconds = Mathf.FloorToInt(remainTime % 60);
 
                 inGameTimer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-
                 yield return null;
             }
         StartCoroutine(GameOverCall());
@@ -357,29 +377,45 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     IEnumerator GameOverCall()
     {
-        GameOver(); shopManager.InitList();
-        if (PhotonNetwork.IsMasterClient)                                           //7
-        {
-            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
+        GameOver();
+        PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
+        if (startGameRoutine != null)
+            StopCoroutine(startGameRoutine);
+        if(shoppingRoutine != null)
+        StopCoroutine(shoppingRoutine);
 
-            yield return new WaitForSeconds(2f);
+        Debug.Log($"Stop GameRoutine { PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.STARTGAME)}");
+
+        shopManager.InitList();
+        if (PhotonNetwork.IsMasterClient)                                           
+        {
+
+            yield return new WaitForSeconds(1f);
+            Debug.Log($"CurRound : {curRound}, roundCount : {roundCount}");
             if (curRound < roundCount)
             {
 
-                pv.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
+                photonView.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
                 
+              
                 yield return new WaitForSeconds(3f);
-                pv.RPC("RoundStart", RpcTarget.All);
+                photonView.RPC("RoundStart", RpcTarget.All);
+                Debug.Log("RoundStart");
                 curRound++;
             }
             else
             {
                 PhotonNetwork.CurrentRoom.SetLoadTime(0);
-                pv.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
+                photonView.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
+                
                 yield return new WaitForSeconds(2f);
-                pv.RPC("RoundOver", RpcTarget.All);
+                photonView.RPC("RoundOver", RpcTarget.All);
 
             }
+        }
+        else
+        {
+            Debug.Log("GameOverCall not Master");
         }
     }
         [PunRPC]

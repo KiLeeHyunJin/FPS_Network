@@ -4325,7 +4325,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 357622187404460590, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 0.000091552734
       objectReference: {fileID: 0}
     - target: {fileID: 667742789749036694, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4349,6 +4349,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2845224366665830185, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845224366665830185, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5225477697030535501, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
@@ -4467,10 +4471,6 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 6890519437209733796, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
-      propertyPath: m_Value
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7216318763057842992, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
       propertyPath: m_Name
       value: UICanvas
@@ -4521,10 +4521,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1001167652597414179, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: m_Name
-      value: InGameManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001167652597414179, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
-      propertyPath: m_TagString
       value: InGameManager
       objectReference: {fileID: 0}
     - target: {fileID: 1880634750319136727, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
@@ -4584,14 +4580,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1078896760}
     - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
-      propertyPath: countValue
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
-      propertyPath: roundCount
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: inGameTimer
       value: 
       objectReference: {fileID: 605212222}
@@ -4607,10 +4595,6 @@ PrefabInstance:
       propertyPath: blueLocation
       value: 
       objectReference: {fileID: 1218243741}
-    - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
-      propertyPath: roundTimeValue
-      value: 180
-      objectReference: {fileID: 0}
     - target: {fileID: 5633368061903827360, guid: 945bd01f26df0c543b5238add2a841df, type: 3}
       propertyPath: ShopCanvasPrefab
       value: 

@@ -159,6 +159,7 @@ public class GameManager : Singleton<GameManager>
             Debug.LogWarning("GameManager is destroyed or inactive, ignoring ShowMessage RPC.");
             return;
         }
+        Debug.Log($"message {message}");
         GameObject instance = Instantiate(systemMessagePrefab, messageTransform);
         TMP_Text text = instance.GetComponentInChildren<TMP_Text>();
         text.text = message;
