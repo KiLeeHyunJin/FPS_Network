@@ -50,19 +50,20 @@ public class ItemSpawnManager : MonoBehaviourPun
             {
                 GameObject items = PhotonNetwork.Instantiate("Coin", coins.position, Quaternion.identity);
 
-                items.transform.parent = coins.transform;
+                //items.transform.parent = coins.transform;
             }
+  
+        }
 
-            foreach (var healpacks in healPackPosition)
+        foreach (var healpacks in healPackPosition)
+        {
+            if (healpacks.childCount == 0)
             {
-                if (healpacks.childCount == 0)
-                {
-                    GameObject heals = (PhotonNetwork.Instantiate("HealPack", healpacks.position, Quaternion.identity));
-                    heals.transform.parent = healpacks.transform;
-
-                }
+                GameObject heals = (PhotonNetwork.Instantiate("HealPack", healpacks.position, Quaternion.identity));
+                //heals.transform.parent = healpacks.transform;
 
             }
+
         }
     }
 }

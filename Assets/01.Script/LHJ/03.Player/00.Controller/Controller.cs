@@ -524,6 +524,10 @@ public class Controller : MonoBehaviourPun, IPunObservable
         hp += newHp;
         if(hp > maxHp)
         { hp = maxHp; }
+        if (HpBar != null)
+        {
+            HpBar.value = Percent(hp, maxHp);
+        }
     }
 
     public void StartCoroutined(IEnumerator routine, ref Coroutine co)
