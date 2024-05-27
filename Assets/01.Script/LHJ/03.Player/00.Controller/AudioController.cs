@@ -16,7 +16,7 @@ public class AudioController : MonoBehaviourPun
     private void Awake()
     {
         audio = GetComponent<AudioSource>();
-        audio.loop = false;
+        audio.loop = true;
         audio.playOnAwake = false;
     }
     void Start()
