@@ -119,6 +119,7 @@ public class SceneManager : Singleton<SceneManager>
             fade.color = Color.Lerp(littleRedColor, fadeInColor, rate);
             yield return null;
         }
+        fade.color = new Color(0, fade.color.g, fade.color.b, 0f);
     }
     public Coroutine StartFadeOut()
     {
