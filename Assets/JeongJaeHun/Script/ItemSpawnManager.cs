@@ -42,25 +42,25 @@ public class ItemSpawnManager : MonoBehaviourPun
             return;
         }
 
-
         Debug.Log("아이템 스폰 함수 진입");
         foreach (var coins in coinPosition)
         {
             if (coins.childCount == 0)
             {
-                GameObject items = PhotonNetwork.Instantiate("Coin", coins.position, Quaternion.identity);
+                GameObject items = PhotonNetwork.Instantiate("Coin", coins.localPosition, Quaternion.identity);
 
                 //items.transform.parent = coins.transform;
             }
   
         }
 
+        }
         foreach (var healpacks in healPackPosition)
         {
             if (healpacks.childCount == 0)
             {
-                GameObject heals = (PhotonNetwork.Instantiate("HealPack", healpacks.position, Quaternion.identity));
-                //heals.transform.parent = healpacks.transform;
+                GameObject heals = (PhotonNetwork.Instantiate("HealPack", healpacks.localPosition, Quaternion.identity));
+                heals.transform.parent = healpacks.transform;
 
             }
 
