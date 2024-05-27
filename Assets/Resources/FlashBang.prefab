@@ -138,6 +138,8 @@ MonoBehaviour:
   flashFX: {fileID: 6464746649472300657, guid: d43763724dc26bb4792431d4589b51b9, type: 3}
   bombSoundClip: {fileID: 8300000, guid: 169f0f113dd5c79448914fbf61723d49, type: 3}
   FlashSoundClip: {fileID: 8300000, guid: f2f4220339a2f9742860d21b41eb61c1, type: 3}
+  bombVoiceClip: {fileID: 8300000, guid: 31a27206eee4f234dbfdc87e7fe3906a, type: 3}
+  flashBangVoiceClip: {fileID: 8300000, guid: 76bc2768a3c53b24892bafc288e4cdd2, type: 3}
 --- !u!54 &7515474590160584201
 Rigidbody:
   m_ObjectHideFlags: 0
