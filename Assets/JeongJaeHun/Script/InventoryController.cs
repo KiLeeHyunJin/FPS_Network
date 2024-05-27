@@ -365,7 +365,14 @@ public class InventoryController : MonoBehaviourPun
         Debug.Log("받는 데미지 ->" + _damage);
         if (currentArmor.ArmorDurability > 0)
         {
+            
+
             _damage -= currentArmor.ArmorDefense; // 데미지 감소시키기.
+
+            if(_damage<=0)
+            {
+                _damage = 1;
+            }
             Debug.Log("감소된 데미지   ->" + _damage);
         }
         else if (currentArmor.ArmorDurability <= 0) // 아머가 파괴된 상태라면 데미지 감소 x 
