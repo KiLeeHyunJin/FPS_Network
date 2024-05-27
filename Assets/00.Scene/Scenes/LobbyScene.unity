@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3578,6 +3578,10 @@ MonoBehaviour:
   roomPanel: {fileID: 5891924588744569418}
   lobbyPanel: {fileID: 8309145697385806136}
   randomPanel: {fileID: 8619607221972272857}
+  titleBGM: {fileID: 8300000, guid: 25af006dd6098d74b991a134383cc551, type: 3}
+  roomBGM: {fileID: 8300000, guid: 35d88b8f61edf1549a5fb4bfdba4cd0c, type: 3}
+  lobbyBGM: {fileID: 8300000, guid: c98005a81b0222a4c9a51f032a7591a4, type: 3}
+  loginBGM: {fileID: 8300000, guid: 12daab322b28c184c9404eea1a367573, type: 3}
 --- !u!114 &392818200
 MonoBehaviour:
   m_ObjectHideFlags: 0
