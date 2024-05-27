@@ -36,7 +36,7 @@ public class InventoryController : MonoBehaviourPun
 
 
     [SerializeField] SkillHolder skill;
-
+    ShopUIManager shopManager;
 
     const string SpawnItem = "DropWeapon";
     public IKWeapon this[AnimationController.AnimatorWeapon weaponType]
@@ -112,7 +112,6 @@ public class InventoryController : MonoBehaviourPun
 
     private void Start()
     {
-
         weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
         skill = FindObjectOfType<SkillHolder>();
 
@@ -136,9 +135,10 @@ public class InventoryController : MonoBehaviourPun
             if (goldText != null)
                 goldText.text = $"{Gold}";
 
-            ShopUIManager shopManager = FindObjectOfType<ShopUIManager>();
+            shopManager = FindObjectOfType<ShopUIManager>();
             if (shopManager != null)
                 shopManager.inventory = this;
+            GetComponent<PlayerInputController>().shop = shopManager.shopCanvas.gameObject;
 
         }
         bombController = throwHolder.gameObject.GetComponent<BombController>();
@@ -391,7 +391,6 @@ public class InventoryController : MonoBehaviourPun
         CloseWeaponHUD.gameObject.SetActive(false);
         gunHud.gameObject.SetActive(false);
 
-
         switch (weapon.weaponType)
         {
             case AnimationController.AnimatorWeapon.Pistol:
@@ -436,10 +435,7 @@ public class InventoryController : MonoBehaviourPun
     {
         if(photonView.IsMine)
         ChangeWeaponCallback(Test); //메소드 지정
-
-
     }
-
 
     Action<IKWeapon> changeWeaponCallback;
     public void ChangeWeaponCallback(Action<IKWeapon> setChangeWeapon) //무기가 바뀔때마다 호출을 원하는 함수를 지정
@@ -448,9 +444,15 @@ public class InventoryController : MonoBehaviourPun
     }
     public void ChangeWeaponUpdate(AnimationController.AnimatorWeapon weaponType) //애니메이션에서 무기가 변경되는 타임에 무기 업데이트호출(지정한 함수 호출)
     {
-        if (weaponType == AnimationController.AnimatorWeapon.Throw)
-            if (weapons[(int)weaponType] == null)
+        if (weapons[(int)weaponType] == null)
+        {
+            if (weaponType == AnimationController.AnimatorWeapon.Throw)
                 weapons[(int)weaponType] = bombController.CurrentBomb;
+            else
+            {
+                ReSetWeapon(weaponType);
+            }
+        }
         changeWeaponCallback?.Invoke(weapons[(int)weaponType]);
     }
 
@@ -461,5 +463,23 @@ public class InventoryController : MonoBehaviourPun
             weaponCanvas?.WeaponHUDAwake();
         }
 
+    }
+
+    void ReSetWeapon(AnimationController.AnimatorWeapon weaponType)
+    {
+        Transform parent = weaponType switch
+        {
+            AnimationController.AnimatorWeapon.Pistol =>pistolHolder,
+            AnimationController.AnimatorWeapon.Rifle => rifleHolder, 
+            AnimationController.AnimatorWeapon.Sword => swordHolder, 
+            AnimationController.AnimatorWeapon.Throw => throwHolder, 
+            AnimationController.AnimatorWeapon.END => null,
+            _ => null,
+        };
+        if(parent != null)
+        {
+            if(parent.childCount > 0)
+                weapons[(int)weaponType] = parent.GetChild(0).GetComponent<IKWeapon>();
+        }
     }
 }

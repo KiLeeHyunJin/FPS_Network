@@ -17,7 +17,7 @@ public class OnShoppingArea : MonoBehaviour
     }
 
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (playerLayer.ContainCheck(other.gameObject.layer)&& PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.SHOPPINGTIME))
         {

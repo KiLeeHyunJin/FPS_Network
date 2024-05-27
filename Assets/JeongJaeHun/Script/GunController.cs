@@ -60,10 +60,15 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
 
     private void OnEnable()   // on off 하므로 이부분에서 할당 등을 진행해야함. 
     {
+        GetWeapon();
+        isActivate = true;
+    }
+    void GetWeapon()
+    {
         int numOfChild = transform.childCount;
         for (int i = 0; i < numOfChild; i++)
         {
-            if(transform.GetChild(i) != null)
+            if (transform.GetChild(i) != null)
             {
                 currentGun = transform.GetChild(i).GetComponent<Gun>();
                 audioSource.clip = currentGun.fire_Sound;
@@ -71,7 +76,6 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
                 // true 체크를 안하기 때문에 break를 걸어줄 필요가 없음 
             }
         }
-        isActivate = true;
     }
     void Start()
     {
@@ -118,6 +122,10 @@ public class GunController : MonoBehaviourPun, Iattackable, IPunObservable
     {
         if (currentFireRate <= 0 && !isReload) //쿨타임 <=0 이고 재장전 중이 아닐 때만 Fire 실행. 
         {
+            if(currentGun == null)
+            {
+                GetWeapon();
+            }
             if (currentGun.currentBulletCount > 0) //재장전 중이 아니면서 동시에 총알이 남아있으면 Shoot()실행. 
             {
                 currentGun.currentBulletCount--; //총알 감소 

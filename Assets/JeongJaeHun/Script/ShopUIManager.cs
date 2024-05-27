@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ShopUIManager : MonoBehaviour
 {
     public PopUpUI purChasePanelPrefab;
-    public GameObject shopCanvas;
+    [field : SerializeField] public GameObject shopCanvas { get; private set; }
     Button[] shopBtn;
     public InventoryController inventory;
     public SkillHolder skillHolder;

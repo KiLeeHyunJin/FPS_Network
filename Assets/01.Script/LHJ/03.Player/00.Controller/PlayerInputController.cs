@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerInputController : MonoBehaviour
 {
     public Vector2 MoveValue { get; private set; }
+    [HideInInspector] public GameObject shop;
     public float MoveY { get; private set; }
     Action[] actions;
     Action<Vector2> moveAction;
@@ -55,6 +57,15 @@ public class PlayerInputController : MonoBehaviour
     }
     void OnLook(InputValue inputValue)
     {
+        if(shop != null)
+        {
+            if (shop.activeSelf)
+            {
+                rotateAction?.Invoke(Vector2.zero);
+                return;
+            }
+        }
+
         rotateAction?.Invoke(inputValue.Get<Vector2>());
     }
     void OnMove(InputValue inputValue)
@@ -103,6 +114,22 @@ public class PlayerInputController : MonoBehaviour
             if(Zoom)
             {
                 StartCoroutine(ReCamePos());
+            }
+        }
+    }
+    void OnESC(InputValue inputValue)
+    {
+        if (shop != null)
+        {
+            if(PhotonNetwork.InRoom)
+            {
+                if(PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.SHOPPINGTIME))
+                {
+                    if (shop.activeSelf)
+                        shop.SetActive(false);
+                    else
+                        shop.SetActive(true);
+                }
             }
         }
     }

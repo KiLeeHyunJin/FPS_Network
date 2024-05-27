@@ -34,6 +34,11 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         audio = GetComponent<AudioSource>();
         audio.loop = true;
     }
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     IEnumerator UpUi()
     {
         yield return new WaitForSeconds(0.5f);

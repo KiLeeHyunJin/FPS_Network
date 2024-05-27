@@ -6895,7 +6895,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1.6
   m_Radius: 0.15
-  m_SlopeLimit: 35
+  m_SlopeLimit: 50
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -6912,6 +6912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1e02754bd992a4a88999443344af6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shop: {fileID: 0}
   <MainFireType>k__BackingField: 0
   <Fire>k__BackingField: 0
 --- !u!114 &264066126754691022
