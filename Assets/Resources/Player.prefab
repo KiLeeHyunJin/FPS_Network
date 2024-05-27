@@ -19942,6 +19942,7 @@ MonoBehaviour:
   currentCloseWeapon: {fileID: 0}
   isAttack: 0
   isSwing: 0
+  poolContainer: {fileID: 0}
 --- !u!114 &7836484150925953477
 MonoBehaviour:
   m_ObjectHideFlags: 0
