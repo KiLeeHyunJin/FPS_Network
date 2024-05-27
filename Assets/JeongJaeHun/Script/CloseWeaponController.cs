@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 [RequireComponent(typeof(AudioSource))]
 public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservable
@@ -27,6 +28,8 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
 
     private float range;
     int HitLayer;
+    [SerializeField] PoolContainer poolContainer;
+    Controller controller;
 
     [Tooltip("스크립트의 활성화 여부")]
     public bool isActivate { get; set; } = true;
@@ -59,6 +62,10 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
         isAttack = false;
         range = currentCloseWeapon.range; //캐싱? 해주기 
         isActivate = true;
+    }
+    void Start()
+    {
+        controller = GetComponentInParent<Controller>();
     }
     private void OnDisable()
     {
@@ -114,9 +121,69 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
     }
 
     [PunRPC]
-    private void AttackTiming(int actorNumber)
+    private void AttackTiming(int actorNumber,Vector3 pos)
     {
-        int size = Physics.OverlapSphereNonAlloc(transform.position,
+        Vector3 dir = (controller.target.position - transform.position).normalized ;
+        Debug.DrawLine(pos + dir, pos + dir * 1, Color.cyan, 2);
+
+
+        if (Physics.Raycast(
+            pos + dir,
+            dir,
+            out hitInfo,
+            1, HitLayer))
+        {
+            bool ishit = false;
+            if (hitInfo.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                //Debug.Log($"Hit Damage {currentGun.damage} ");
+
+                damagable.TakeDamage(currentCloseWeapon.damage, actorNumber); //actorNumber가 laycast의 주인 actorNumber 
+                ishit = true;
+                /*poolContainer.GetBloodEffect(hitInfo.point, Quaternion.LookRotation(hitInfo.normal));*/
+            }
+            else
+            {
+                /*poolContainer.GetbulletMarks(hitInfo.point - (hitInfo.normal * 0.1f), Quaternion.LookRotation(hitInfo.normal));
+                poolContainer.GetBulletSpark(hitInfo.point, Quaternion.LookRotation(-hitInfo.normal));*/
+            }
+            photonView.RPC("HitEffect", RpcTarget.All, hitInfo.point, hitInfo.normal, ishit);
+        }
+
+        [PunRPC]
+        void HitEffect(Vector3 pos, Vector3 nor, bool isHit)
+        {
+            if (isHit)
+                poolContainer.GetBloodEffect(pos, Quaternion.LookRotation(nor));
+            else
+            {
+                poolContainer.GetbulletMarks(pos + (nor * 0.1f), Quaternion.LookRotation(nor));
+                poolContainer.GetBulletSpark(pos, Quaternion.LookRotation(-nor));
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*int size = Physics.OverlapSphereNonAlloc(transform.position,
             range, colliders, HitLayer);
 
         // player 1명 당 IDamagable이 1개면 딱히 큰 상관 안해도 괜찮을듯함. 
@@ -140,7 +207,7 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
             }
                                                                          
         }
-
+*/
     }
 
     [PunRPC]
