@@ -56,6 +56,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] AudioClip faleClip;
     [SerializeField] AudioClip missionClip;
     new AudioSource audio;
+    PhotonView pv;
     void Start()
     {
 
