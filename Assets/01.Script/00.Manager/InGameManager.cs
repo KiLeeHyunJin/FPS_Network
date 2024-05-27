@@ -224,7 +224,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             }
             if (allDead)
                 StartCoroutine(GameOverCall());
-                
 
 
         }
@@ -244,7 +243,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             else
             {
-                
+                StopCoroutine(shoppingRoutine);
                 ShopCanvasPrefab.SetActive(false);
                 Manager.Game.onShop = false;
                 Manager.Game.redTeamSpawner.gameObject.SetActive(false);
@@ -272,7 +271,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
 
             double loadTime = PhotonNetwork.Time;
-        Debug.Log($" shooooping LoadTime is {loadTime} , PT is {PhotonNetwork.Time} , remainTime is {PhotonNetwork.Time - loadTime}");
+        Debug.Log($" shooooping");
 
             while (PhotonNetwork.Time - loadTime < countValue)
             {
@@ -280,16 +279,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 inGameTimer.text = (remainTime + 1).ToString();
                 yield return null;
             }
-
-        Debug.Log($" Shop RemainTime = {(int)(countValue - (PhotonNetwork.Time - loadTime))}");
-            if (PhotonNetwork.IsMasterClient)
+        Debug.Log(" StartGame => True");
+        if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("MessageUp", RpcTarget.All, ($"GAME START "));
-
-                PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, false);
-                PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);                          //4
-                PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, true);
-            Debug.Log("StartGame => True");
+           
+            PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, false);
+           PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, true);
+                
 
             }
 
@@ -392,39 +389,36 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     IEnumerator GameOverCall()
     {
         GameOver();
-        PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
+     PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.STARTGAME, false);
+
         if (startGameRoutine != null)
             StopCoroutine(startGameRoutine);
-        if(shoppingRoutine != null)
-        StopCoroutine(shoppingRoutine);
+        if (shoppingRoutine != null)
+            StopCoroutine(shoppingRoutine);
 
-        Debug.Log($"Stop GameRoutine { PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.STARTGAME)}");
+        Debug.Log($"Stop GameRoutine {PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.STARTGAME)}");
 
         shopManager.InitList();
-        if (PhotonNetwork.IsMasterClient)                                           
-        {
 
-            yield return new WaitForSeconds(1f);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            yield return new WaitForSeconds(1f);  // 게임 오버 후 약간의 대기 시간 추가
             Debug.Log($"CurRound : {curRound}, roundCount : {roundCount}");
+
             if (curRound < roundCount)
             {
-
                 photonView.RPC("MessageUp", RpcTarget.All, ("라운드 종료"));
-                
-              
-                yield return new WaitForSeconds(3f);
-                photonView.RPC("RoundStart", RpcTarget.All);
-                Debug.Log("RoundStart");
                 curRound++;
+                yield return new WaitForSeconds(3f);  // 라운드 종료 메시지 후 대기 시간 추가
+
+                // 다음 라운드 시작
+                yield return StartCoroutine(StartNextRoundAfterDelay());
             }
             else
             {
-                PhotonNetwork.CurrentRoom.SetLoadTime(0);
                 photonView.RPC("MessageUp", RpcTarget.All, ("모든 라운드 종료"));
-                
                 yield return new WaitForSeconds(2f);
                 photonView.RPC("RoundOver", RpcTarget.All);
-
             }
         }
         else
@@ -432,7 +426,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             Debug.Log("GameOverCall not Master");
         }
     }
-        [PunRPC]
+
+    IEnumerator StartNextRoundAfterDelay()
+    {
+        yield return new WaitForSeconds(3f);  // 다음 라운드를 시작하기 전에 대기 시간 추가
+        photonView.RPC("RoundStart", RpcTarget.All);
+        Debug.Log("RoundStart");
+    }
+    [PunRPC]
         void RoundOver()
         {
             int blueTeamScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);

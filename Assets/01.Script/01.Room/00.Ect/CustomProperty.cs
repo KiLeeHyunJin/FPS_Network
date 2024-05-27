@@ -67,7 +67,7 @@ public static class CustomProperty
     }
     public static void SetProperty<T>(this Room room, string str, T value)
     {
-        PhotonHashtable property = room.CustomProperties;//new PhotonHashtable();
+        PhotonHashtable property = new PhotonHashtable();
         if (property.ContainsKey(str) == false)
             /*PhotonHashtable*/
             property = new PhotonHashtable { { str, value } };
