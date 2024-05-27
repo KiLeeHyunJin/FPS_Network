@@ -69,7 +69,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         audio.loop = false;
         audio.playOnAwake = false;
         MessageUp("곧 게임이 시작됩니다");
-        pv = GetComponent<PhotonView>();
+        
 
         if (PhotonNetwork.InRoom == false)
             return;
@@ -152,7 +152,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             photonView.RPC("MessageUp", RpcTarget.All, ($"- {curRound}라운드 - \n 무기 사시고 전투를 준비하세요 {countValue}초드림"));
             //   PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
-            pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Mission);
+            photonView.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Mission);
 
            
             PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, true);
@@ -347,21 +347,21 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 int blueScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
                 curRoom.SetProperty(DefinePropertyKey.BLUESCORE, blueScore + 1);
-                pv.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
-                pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.BlueWin);
+                photonView.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
+                photonView.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.BlueWin);
             }
             else if (remainRed > remainBlue)
             {
                 int redScore = curRoom.GetProperty<int>(DefinePropertyKey.REDSCORE);
                 curRoom.SetProperty(DefinePropertyKey.REDSCORE, redScore + 1);
-                pv.RPC("MessageUp", RpcTarget.All, ("레드팀 +1점"));
-                pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.RedWin);
+                photonView.RPC("MessageUp", RpcTarget.All, ("레드팀 +1점"));
+                photonView.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.RedWin);
 
             }
             else
             {
-                pv.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
-                pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Draw);
+                photonView.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
+                photonView.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Draw);
 
             }
         }
@@ -444,20 +444,20 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     MessageUp("승리!");
                     Manager.Game.SetIncreaseDB("win");
-                    pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Win);
+                    photonView.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Win);
 
             }
             else if (blueTeamScore < redTeamScore)
                 {
                     MessageUp("패배!");
                     Manager.Game.SetIncreaseDB("lose");
-                    pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Fale);
+                    photonView.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Fale);
 
             }
             else if (blueTeamScore == redTeamScore)
                 {
                     MessageUp("무승부!");
-                    pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Draw);
+                    photonView.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Draw);
             }
         }
             else
