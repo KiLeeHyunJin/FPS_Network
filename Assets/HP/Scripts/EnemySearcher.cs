@@ -22,9 +22,10 @@ public class EnemySearcher : MonoBehaviourPun
     }
     public void CheckEnemy()
     {
+        int groundMask = LayerMask.GetMask("Ground");
         int enemyLayerMask = LayerMask.GetMask("SearchEnemyCam");
         int wallLayerMask = LayerMask.GetMask("Wall");
-        int combinedLayerMask = enemyLayerMask | wallLayerMask;
+        int combinedLayerMask = enemyLayerMask | wallLayerMask| groundMask;
         colliders = Physics.OverlapSphere(transform.position, range, enemyLayerMask);
 
         if (colliders.Length > 0)
@@ -38,7 +39,7 @@ public class EnemySearcher : MonoBehaviourPun
                 dir = (collider.transform.position - transform.position).normalized;
                 if (Physics.Raycast(transform.position, dir, out hit, range, combinedLayerMask))
                 {
-                    
+                    Debug.Log(hit.collider.name);
                     EnemyIcon hitIcon = hit.collider.GetComponent<EnemyIcon>();
                     if (hitIcon == null)
                     {

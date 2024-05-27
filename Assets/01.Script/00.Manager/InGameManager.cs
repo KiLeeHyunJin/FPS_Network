@@ -87,6 +87,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         chat.gameObject.SetActive(true);
         if (chatRoutine != null)
             StopCoroutine(chatRoutine);
+
         chatRoutine = StartCoroutine(ChatViewRoutine());
 
         if (chat.gameObject.activeSelf)
