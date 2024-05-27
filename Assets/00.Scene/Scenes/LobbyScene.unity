@@ -25307,7 +25307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 991153811194875236, guid: bc4285c35ff77bb4eabee93d7a28291c, type: 3}
-  gameSceneName: TestMap1
+  gameSceneName: BattleScene
   startButton: {fileID: 278793593139913218}
   leaveButton: {fileID: 9178414751021414072}
   redTeam: {fileID: 8552523552714933666}

@@ -83,9 +83,9 @@ public class GameManager : Singleton<GameManager>
         Vector3 randomPos = randomDir * spawnRadius;
 
         Vector3 redSpawnPos = red.position + randomPos;
-        redSpawnPos.y = 1f;
+        //redSpawnPos.y = 1f;
         Vector3 blueSpawnPos = blue.position + randomPos;
-        blueSpawnPos.y = 1f;
+        //blueSpawnPos.y = 1f;
 
         redTeamSpawner.position = redSpawnPos;
         blueTeamSpawner.position = blueSpawnPos;
