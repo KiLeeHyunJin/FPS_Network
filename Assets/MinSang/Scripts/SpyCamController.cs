@@ -49,6 +49,19 @@ public class SpyCamController : Skill, IPunObservable
         {
             Debug.LogError("spyCamPrefab is not assigned in the Inspector");
         }
+
+        // spyCamVirtualCameraPrefab 할당 여부 확인
+        if (spyCamVirtualCamera == null)
+        {
+            Debug.LogError("spyCamVirtualCameraPrefab is not assigned in the Inspector");
+        }
+        else
+        {
+            // 프리팹 인스턴스화
+            CinemachineVirtualCamera instantiatedCamera = Instantiate(spyCamVirtualCamera,transform.position,Quaternion.identity);
+            spyCamVirtualCamera = instantiatedCamera;
+        }
+
     }
 
     // 스파이 캠을 활성화하는 함수
@@ -76,11 +89,13 @@ public class SpyCamController : Skill, IPunObservable
     // 스파이 캠의 뷰를 설정하는 함수
     private void SetSpyCamView(bool isActive)
     {
-        spyCamVirtualCamera.Priority = isActive ? 120 : 0; // 활성화 시 우선순위를 높임
-        spyCamVirtualCamera.Follow = isActive ? currentSpyCam.transform : null;
-        spyCamVirtualCamera.LookAt = isActive ? currentSpyCam.transform : null; // 활성화 시 스파이 캠을 바라봄
+        spyCamVirtualCamera.Priority = isActive ? 120 : -10; // 활성화 시 우선순위를 높임
+        Debug.Log(spyCamVirtualCamera.Priority);
+        // spyCamVirtualCamera.Follow = isActive ? currentSpyCam.transform : null;
+        // spyCamVirtualCamera.LookAt = isActive ? currentSpyCam.transform : null; // 활성화 시 스파이 캠을 바라봄
         spyCamVirtualCamera.gameObject.SetActive(isActive); // 가상 카메라 활성화/비활성화
         isSpyCamActive = isActive;
+        spyCamVirtualCamera.gameObject.SetActive(isSpyCamActive);
     }
 
     // 매 프레임 호출되는 업데이트 함수
@@ -103,7 +118,7 @@ public class SpyCamController : Skill, IPunObservable
     }
 
     // 스파이 캠의 활성화/비활성화를 토글하는 함수
-    void ToggleSpyCam()
+    public void ToggleSpyCam()
     {
         if (!isSpyCamActive)
         {
@@ -134,7 +149,7 @@ public class SpyCamController : Skill, IPunObservable
         }
     }
 
-    private void TryPlaceSpyCam()
+    public void TryPlaceSpyCam()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // 마우스 위치에서 Ray 발사
         if (Physics.Raycast(ray, out RaycastHit hit))
@@ -147,6 +162,7 @@ public class SpyCamController : Skill, IPunObservable
                 isSpyCamActive = false; // 스파이 캠 활성화 상태 설정
                 isSpyCamPlaced = true; // 스파이 캠 배치 상태 설정
                 spyCamVirtualCamera.Priority = 0; // 가상 카메라 우선순위 낮춤
+                Debug.Log(spyCamVirtualCamera.Priority);
                 StopCoroutine(PlaceSpyCam()); // 코루틴 종료
             }
             else
@@ -158,7 +174,7 @@ public class SpyCamController : Skill, IPunObservable
 
     // RPC 메소드로 스파이 캠을 배치하는 함수
     [PunRPC]
-    void RPC_PlacedSpyCam(Vector3 position, Vector3 normal)
+    public void RPC_PlacedSpyCam(Vector3 position, Vector3 normal)
     {
         Debug.Log("Placing spy cam at position: " + position); // 스파이캠 배치 위치 출력
                                                                // 최대 스파이 캠 수를 초과하면 가장 오래된 스파이 캠을 제거
@@ -172,41 +188,44 @@ public class SpyCamController : Skill, IPunObservable
         // PhotonNetwork.Instantiate 사용
         // 프리팹 이름이 정확히 일치해야 함 (프리팹이 Resources 폴더에 있어야 함)
         Debug.Log("Instantiating spy cam prefab: " + spyCamPrefab.name);
-        currentSpyCam = PhotonNetwork.Instantiate(spyCamPrefab.name, position, Quaternion.LookRotation(normal));
+        currentSpyCam = PhotonNetwork.Instantiate("spyCamPrefab", position, Quaternion.LookRotation(normal));
         if (currentSpyCam == null)
         {
             Debug.LogError("Failed to instantiate spyCamPrefab");
+            return;
         }
         else
         {
             Debug.Log("Spy cam instantiated successfully");
         }
+
         spyCams.Add(currentSpyCam); // 리스트에 추가
-        spyCamVirtualCamera.Follow = currentSpyCam.transform;
-        spyCamVirtualCamera.LookAt = currentSpyCam.transform;
+        // spyCamVirtualCamera.Follow = currentSpyCam.transform;
+        Debug.Log(spyCamVirtualCamera.Follow+"4455");
+        // spyCamVirtualCamera.LookAt = currentSpyCam.transform;
         isSpyCamPlaced = true;
 
         // 스파이 캠의 뷰 설정
         spyCamVirtualCamera.m_Lens.FieldOfView = 60;
-        spyCamVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, -2, 5);
-    }
-
-    bool IsPlacementValid(Vector3 position)
-    {
-        // 충돌 영역 검사
-        Collider[] colliders = Physics.OverlapSphere(position, 0.5f);
-        foreach (var collider in colliders)
+        Debug.Log(spyCamVirtualCamera);
+        CinemachineTransposer aa = spyCamVirtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        if(aa!=null)
         {
-            if (collider.GetComponent<CharacterController>() == null) // CharacterController와의 충돌 무시
-            {
-                return false;
-            }
+            aa.m_FollowOffset = new Vector3(0, 0, 5);
         }
 
+    }
+
+    public bool IsPlacementValid(Vector3 position)
+    {
+        // 충돌 영역 검사
+        Collider[] colliders = Physics.OverlapSphere(position, 5f);
+
+        Debug.Log("설치 함수 진입");
         // 지면 검사
-        if (!Physics.Raycast(position, Vector3.down, out RaycastHit groundHit, 1.0f))
+        if (!Physics.Raycast(position, Vector3.down, out RaycastHit groundHit, 2.0f))
         {
-            return false;
+            return true;
         }
 
         if (groundHit.collider.tag != "Ground")
@@ -232,16 +251,31 @@ public class SpyCamController : Skill, IPunObservable
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            currentSpyCam.transform.Rotate(Vector3.up, -1f); // 왼쪽 화살표 키를 누르면 좌회전
+            currentSpyCam.transform.Rotate(Vector3.up, -3f); // 왼쪽 화살표 키를 누르면 좌회전
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            currentSpyCam.transform.Rotate(Vector3.up, 1f); // 오른쪽 화살표 키를 누르면 우회전
+            currentSpyCam.transform.Rotate(Vector3.up, 3f); // 오른쪽 화살표 키를 누르면 우회전
         }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         throw new System.NotImplementedException();
+    }
+
+    public void SwitchToSpyCam()
+    {
+        if (currentSpyCam != null)
+        {
+            Transform spyCamTransform = currentSpyCam.transform;
+            spyCamVirtualCamera.transform.position = spyCamTransform.position + spyCamTransform.forward * 2; // 스파이 캠 기준 앞쪽으로 카메라 위치 설정
+            spyCamVirtualCamera.transform.rotation = spyCamTransform.rotation;
+            SetSpyCamView(true);
+        }
+        else
+        {
+            Debug.LogWarning("No spy cam is currently placed.");
+        }
     }
 }
