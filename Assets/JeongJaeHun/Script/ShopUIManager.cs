@@ -40,16 +40,6 @@ public class ShopUIManager : MonoBehaviour
             purchase.button = button;
         }
     }
-    
-
-    // input을 이용한 상점 창 열기 -->임시임. 
-    public void OnX(InputValue value)
-    {
-        if (value.isPressed)
-        {
-            shopCanvas.SetActive(!shopCanvas.activeSelf);
-        }
-    }
 
     public void InitList()
     {
