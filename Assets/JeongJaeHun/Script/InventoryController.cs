@@ -103,8 +103,6 @@ public class InventoryController : MonoBehaviourPun
     {
         Gold = 1000;
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
-        weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
-
         armorController = GetComponentInChildren<ArmorController>(); //Player에게 붙어있는 Armor 컨트롤러 가져오기. 
 
     }
@@ -115,6 +113,7 @@ public class InventoryController : MonoBehaviourPun
     private void Start()
     {
 
+        weapons[(int)AnimationController.AnimatorWeapon.Sword] = swordHolder.GetChild(0).GetComponent<IKWeapon>();
         skill = FindObjectOfType<SkillHolder>();
 
         if (photonView.IsMine)
