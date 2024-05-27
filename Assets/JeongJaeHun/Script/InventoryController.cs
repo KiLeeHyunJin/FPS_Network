@@ -32,8 +32,8 @@ public class InventoryController : MonoBehaviourPun
     [SerializeField] CloseWeaponHUD CloseWeaponHUD;
     [SerializeField] BombHUD BombHUD;
     [SerializeField] WeaponCanvasOn weaponCanvas;
-    
-    
+
+
 
     [SerializeField] SkillHolder skill;
 
@@ -110,11 +110,11 @@ public class InventoryController : MonoBehaviourPun
     }
 
 
-    
+
 
     private void Start()
     {
-        
+
         skill = FindObjectOfType<SkillHolder>();
 
         if (photonView.IsMine)
@@ -123,13 +123,13 @@ public class InventoryController : MonoBehaviourPun
 
             gunHud = weaponCanvas.GunHUD;
             CloseWeaponHUD = weaponCanvas.CloseWeaponhud;
-            BombHUD =weaponCanvas.BombHUD;
+            BombHUD = weaponCanvas.BombHUD;
 
             //일단 다 꺼주기.
             gunHud?.gameObject.SetActive(false);
             CloseWeaponHUD?.gameObject.SetActive(false);
             BombHUD?.gameObject.SetActive(false);
-            
+
 
             shopFind = FindObjectOfType<ShopFind>();
             goldText = shopFind.goldText;
@@ -183,9 +183,9 @@ public class InventoryController : MonoBehaviourPun
                     continue;
                 else
                 {
-                    AddSkill(_item,i);
+                    AddSkill(_item, i);
                     Debug.Log($"{_item.itemName} 스킬 추가");
-                    
+
                     return;
                 }
             }
@@ -195,16 +195,16 @@ public class InventoryController : MonoBehaviourPun
         }
         else if (_item.itemType == Item.ItemType.Armor) // 아머 류 구매. --> 구매 시 골드 비교가 필요함. 
         {
-            
+
             Debug.Log(_item.itemID);
             Debug.Log(_item.Defense);
             Debug.Log(_item.Durability);
-                
+
             int ArmorLevel = _item.itemID;
             int armorDe = _item.Defense;
             int armorDu = _item.Durability;
 
-            armorController.ArmorPurChase(ArmorLevel,armorDe,armorDu);
+            armorController.ArmorPurChase(ArmorLevel, armorDe, armorDu);
 
 
 
@@ -226,7 +226,7 @@ public class InventoryController : MonoBehaviourPun
             _weapon.weaponType == AnimationController.AnimatorWeapon.Rifle)
         {
             Gun gun = _weapon as Gun;
-            AddWeapon(_weapon.weaponType, _weapon.InstanceId, gun.currentBulletCount , gun.otherBullet);
+            AddWeapon(_weapon.weaponType, _weapon.InstanceId, gun.currentBulletCount, gun.otherBullet);
         }
         else
             AddWeapon(_weapon.weaponType, _weapon.InstanceId);
@@ -307,21 +307,21 @@ public class InventoryController : MonoBehaviourPun
         weapons[(int)_weapon.weaponType] = null;
         return _weapon;
     }
-    void CallInstanceWeapon (IKWeapon _weapon)
+    void CallInstanceWeapon(IKWeapon _weapon)
     {
         if (_weapon == null)
             return;
         Gun dequipWeapon = _weapon as Gun;
         Debug.Log("DropCall");
-        photonView.RPC(SpawnItem, 
-            RpcTarget.MasterClient, 
-            _weapon.name, 
-            dequipWeapon.currentBulletCount, 
+        photonView.RPC(SpawnItem,
+            RpcTarget.MasterClient,
+            _weapon.name,
+            dequipWeapon.currentBulletCount,
             dequipWeapon.otherBullet);
     }
 
     [PunRPC]
-    void DropWeapon(string _weaponName,int currentBullet, int otherBullet)
+    void DropWeapon(string _weaponName, int currentBullet, int otherBullet)
     {
         Debug.Log("Drop");
         GameObject weapon = PhotonNetwork.Instantiate(_weaponName, transform.position, transform.rotation);
@@ -357,7 +357,7 @@ public class InventoryController : MonoBehaviourPun
 
     public int ShieldCheck(int _damage)
     {
-        
+
         currentArmor = armorController.GetCurrentArmor(); //현재 아머 가져오기.
 
         currentArmor.ArmorDurability--; //내구도 감소 시키기. 
@@ -367,13 +367,13 @@ public class InventoryController : MonoBehaviourPun
         if (currentArmor.ArmorDurability > 0)
         {
             _damage -= currentArmor.ArmorDefense; // 데미지 감소시키기.
-            Debug.Log("감소된 데미지   ->"  + _damage);
+            Debug.Log("감소된 데미지   ->" + _damage);
         }
-        else if(currentArmor.ArmorDurability<=0) // 아머가 파괴된 상태라면 데미지 감소 x 
+        else if (currentArmor.ArmorDurability <= 0) // 아머가 파괴된 상태라면 데미지 감소 x 
         {
-            armorController.ArmorControllerUpdate(currentArmor.ArmorDurability,true); //파괴된 상태 전달. 
+            armorController.ArmorControllerUpdate(currentArmor.ArmorDurability, true); //파괴된 상태 전달. 
         }
-        
+
 
         return _damage;
     }
@@ -436,9 +436,8 @@ public class InventoryController : MonoBehaviourPun
     void OnEnable()
     {
         if(photonView.IsMine)
-        {
-            ChangeWeaponCallback(Test); //메소드 지정
-        }
+        ChangeWeaponCallback(Test); //메소드 지정
+
 
     }
 
@@ -457,7 +456,7 @@ public class InventoryController : MonoBehaviourPun
     }
 
     private void OnDestroy() // 라운드 재시작 시 player 파괴 후 재생성 하는 것 같음. --> hud를 켜줘야함. 
-    {       
+    {
         if (photonView.IsMine)
         {
             weaponCanvas?.WeaponHUDAwake();

@@ -100,7 +100,7 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
         // StartCoroutine(HitCoroutine()); // 실제로 공격데미지가 들어가는 상황
         // 함수로 한 번 실행하는게 나을듯? 
 
-        photonView.RPC("AttackTiming", RpcTarget.MasterClient, photonView.Controller.ActorNumber);
+        photonView.RPC("AttackTiming", RpcTarget.MasterClient, photonView.Controller.ActorNumber,Camera.main.transform.position);
         photonView.RPC("Effect", RpcTarget.All);
         
 
@@ -150,38 +150,6 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
             photonView.RPC("HitEffect", RpcTarget.All, hitInfo.point, hitInfo.normal, ishit);
         }
 
-        [PunRPC]
-        void HitEffect(Vector3 pos, Vector3 nor, bool isHit)
-        {
-            if (isHit)
-                poolContainer.GetBloodEffect(pos, Quaternion.LookRotation(nor));
-            else
-            {
-                poolContainer.GetbulletMarks(pos + (nor * 0.1f), Quaternion.LookRotation(nor));
-                poolContainer.GetBulletSpark(pos, Quaternion.LookRotation(-nor));
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         /*int size = Physics.OverlapSphereNonAlloc(transform.position,
             range, colliders, HitLayer);
@@ -209,6 +177,21 @@ public class CloseWeaponController : MonoBehaviourPun, Iattackable, IPunObservab
         }
 */
     }
+
+    [PunRPC]
+    void HitEffect(Vector3 pos, Vector3 nor, bool isHit)
+    {
+        if (isHit)
+            poolContainer.GetBloodEffect(pos, Quaternion.LookRotation(nor));
+        else
+        {
+            poolContainer.GetbulletMarks(pos + (nor * 0.1f), Quaternion.LookRotation(nor));
+            poolContainer.GetBulletSpark(pos, Quaternion.LookRotation(-nor));
+        }
+    }
+
+
+
 
     [PunRPC]
     private void Effect() //트레일 렌더러 (가능하면 ) + 소리 재생하는 이펙트 관련 함수 
