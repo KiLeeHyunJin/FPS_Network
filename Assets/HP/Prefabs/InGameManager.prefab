@@ -50,7 +50,6 @@ MonoBehaviour:
   redLocation: {fileID: 0}
   blueLocation: {fileID: 0}
   readyPlayer: 0
-  pv: {fileID: 1899894854204855654}
   inGameTimer: {fileID: 0}
   countValue: 20
   roundTimeValue: 180
@@ -66,7 +65,7 @@ MonoBehaviour:
   playerInput: {fileID: 7243008007384791977}
   ShopCanvasPrefab: {fileID: 0}
   shopManager: {fileID: 0}
-  itemSpawnManager: {fileID: 181303860366410747, guid: d37012668c9358a4580cab91449371af, type: 3}
+  itemSpawnManager: {fileID: 0}
   redWinClip: {fileID: 8300000, guid: aedbaae2a9b7b5640845db73a0a95948, type: 3}
   blueWinClip: {fileID: 8300000, guid: 0d7ee49a26edf7a4e83d80233471adde, type: 3}
   drawClip: {fileID: 8300000, guid: a832195855a808242b7a6859bc1aef93, type: 3}
