@@ -260,8 +260,10 @@ public class InventoryController : MonoBehaviourPun
     }
     void AddWeapon(AnimationController.AnimatorWeapon weaponType, int id, int currentBullet = -1, int otherBullet = -1)
     {
+        Debug.Log("Equip");
         if (weapons[(int)weaponType] != null)
         {
+            Debug.Log("Dequip");
             IKWeapon dequipWeapon = Dequip(weapons[(int)weaponType]);
             if (photonView.IsMine)
             {
@@ -287,7 +289,7 @@ public class InventoryController : MonoBehaviourPun
 
     public void Throw(AnimationController.AnimatorWeapon weaponType)
     {
-        Dequip(weapons[(int)weaponType]);
+        CallInstanceWeapon(Dequip(weapons[(int)weaponType]));
     }
     IKWeapon Dequip(IKWeapon _weapon)
     {
@@ -310,6 +312,7 @@ public class InventoryController : MonoBehaviourPun
         if (_weapon == null)
             return;
         Gun dequipWeapon = _weapon as Gun;
+        Debug.Log("DropCall");
         photonView.RPC(SpawnItem, 
             RpcTarget.MasterClient, 
             _weapon.name, 
@@ -320,6 +323,7 @@ public class InventoryController : MonoBehaviourPun
     [PunRPC]
     void DropWeapon(string _weaponName,int currentBullet, int otherBullet)
     {
+        Debug.Log("Drop");
         GameObject weapon = PhotonNetwork.Instantiate(_weaponName, transform.position, transform.rotation);
         weapon?.GetComponent<Gun>().SetData(currentBullet, otherBullet);
     }
