@@ -45,6 +45,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] ShopUIManager shopManager;
     Room curRoom = PhotonNetwork.CurrentRoom;
 
+    [Tooltip("아이템 스폰 관련 스크립트 참조")]
+    [SerializeField] ItemSpawnManager itemSpawnManager;
+
     void Start()
     {
 
@@ -156,6 +159,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             //   PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
 
             PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, true);
+
+            itemSpawnManager.ItemSpawn();
+
         }
     }
     public bool AllReady(string key)
