@@ -51,8 +51,6 @@ public class ItemSpawnManager : MonoBehaviourPun
 
                 //items.transform.parent = coins.transform;
             }
-  
-        }
 
         }
         foreach (var healpacks in healPackPosition)
