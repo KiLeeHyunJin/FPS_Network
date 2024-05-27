@@ -72,10 +72,13 @@ public class PlayerInputController : MonoBehaviour
     {
         if (shop != null)
         {
-            if (shop.activeSelf)
+            if (PhotonNetwork.InRoom)
             {
-                rotateAction?.Invoke(Vector2.zero);
-                return;
+                if (PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.SHOPPINGTIME))
+                {
+                    rotateAction?.Invoke(Vector2.zero);
+                    return;
+                }
             }
         }
 
@@ -130,9 +133,9 @@ public class PlayerInputController : MonoBehaviour
     {
         if (shop != null)
         {
-            if(PhotonNetwork.InRoom)
+            if (PhotonNetwork.InRoom)
             {
-                if(PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.SHOPPINGTIME))
+                if (PhotonNetwork.CurrentRoom.GetProperty<bool>(DefinePropertyKey.SHOPPINGTIME))
                 {
                     if (shop.activeSelf)
                         shop.SetActive(false);
