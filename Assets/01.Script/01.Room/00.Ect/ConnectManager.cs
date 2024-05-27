@@ -19,6 +19,11 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     [SerializeField] LobbyPanel lobbyPanel;
 
     [SerializeField] RandomMatchPanel randomPanel;
+    [SerializeField] AudioClip titleBGM;
+    [SerializeField] AudioClip roomBGM;
+    [SerializeField] AudioClip lobbyBGM;
+    [SerializeField] AudioClip loginBGM;
+    new AudioSource audio;
     LobbyData data;
     private ClientState state;
     private void Awake()
@@ -26,6 +31,7 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         data = GetComponent<LobbyData>();
         StartCoroutine(UpUi());
         Debug.Log("StartOn");
+        audio = GetComponent<AudioSource>();
     }
     IEnumerator UpUi()
     {
@@ -60,8 +66,8 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         roomPanel.gameObject?.SetActive(panel == Panel.Room);
         lobbyPanel.gameObject?.SetActive(panel == Panel.Lobby);
         randomPanel.gameObject?.SetActive(panel == Panel.Random);
-
-        if(Manager.Scene != null)
+        PlaySound(panel);
+        if (Manager.Scene != null)
         Manager.Scene.StartFadeIn();
     }
     public override void OnJoinedRoom()
@@ -89,10 +95,10 @@ public class ConnectManager : MonoBehaviourPunCallbacks
             SetActivePanel(Panel.Random);
         else
             SetActivePanel(Panel.Lobby);
+
     }
     public override void OnLeftLobby()
     {
-       
         SetActivePanel(Panel.Menu);
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -148,4 +154,33 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         Debug.Log("OnDisconnected");
     }
 
+    public void PlaySound(Panel panel)
+    {
+        AudioClip clip = panel switch
+        {
+            Panel.Login => loginBGM,
+            Panel.Menu => titleBGM,
+            Panel.Room => roomBGM,
+            Panel.Lobby => lobbyBGM,
+            _ => null
+        };
+        if(clip != null)
+        {
+            if (audio.clip == clip)
+                return;
+            audio.clip = clip;
+            audio.Play();
+        }
+        else
+        {
+            audio.Stop();
+        }
+    }
+    public enum BGMType
+    {
+        Room,
+        Lobby,
+        Title,
+        Stop
+    }
 }

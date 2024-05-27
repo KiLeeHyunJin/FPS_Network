@@ -135,7 +135,7 @@ MonoBehaviour:
     m_Bits: 64
   damage: 0
   bombFX: {fileID: 7592836665400797895, guid: c537389c762fa06408efe0df0b98f1d3, type: 3}
-  flashFX: {fileID: 7960365579161666208, guid: b2834f004b1c80646bdd73d845389d50, type: 3}
+  flashFX: {fileID: 6464746649472300657, guid: d43763724dc26bb4792431d4589b51b9, type: 3}
   bombSoundClip: {fileID: 8300000, guid: 169f0f113dd5c79448914fbf61723d49, type: 3}
   FlashSoundClip: {fileID: 8300000, guid: f2f4220339a2f9742860d21b41eb61c1, type: 3}
 --- !u!54 &7515474590160584201
@@ -188,7 +188,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -221,7 +221,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
