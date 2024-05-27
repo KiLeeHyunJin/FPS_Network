@@ -58,7 +58,7 @@ public class SpyCamController : Skill, IPunObservable
         else
         {
             // 프리팹 인스턴스화
-            CinemachineVirtualCamera instantiatedCamera = Instantiate(spyCamVirtualCamera);
+            CinemachineVirtualCamera instantiatedCamera = Instantiate(spyCamVirtualCamera,transform.position,Quaternion.identity);
             spyCamVirtualCamera = instantiatedCamera;
         }
 
@@ -91,10 +91,11 @@ public class SpyCamController : Skill, IPunObservable
     {
         spyCamVirtualCamera.Priority = isActive ? 120 : -10; // 활성화 시 우선순위를 높임
         Debug.Log(spyCamVirtualCamera.Priority);
-        spyCamVirtualCamera.Follow = isActive ? currentSpyCam.transform : null;
-        spyCamVirtualCamera.LookAt = isActive ? currentSpyCam.transform : null; // 활성화 시 스파이 캠을 바라봄
+        // spyCamVirtualCamera.Follow = isActive ? currentSpyCam.transform : null;
+        // spyCamVirtualCamera.LookAt = isActive ? currentSpyCam.transform : null; // 활성화 시 스파이 캠을 바라봄
         spyCamVirtualCamera.gameObject.SetActive(isActive); // 가상 카메라 활성화/비활성화
         isSpyCamActive = isActive;
+        spyCamVirtualCamera.gameObject.SetActive(isSpyCamActive);
     }
 
     // 매 프레임 호출되는 업데이트 함수
@@ -199,9 +200,9 @@ public class SpyCamController : Skill, IPunObservable
         }
 
         spyCams.Add(currentSpyCam); // 리스트에 추가
-        spyCamVirtualCamera.Follow = currentSpyCam.transform;
+        // spyCamVirtualCamera.Follow = currentSpyCam.transform;
         Debug.Log(spyCamVirtualCamera.Follow+"4455");
-        spyCamVirtualCamera.LookAt = currentSpyCam.transform;
+        // spyCamVirtualCamera.LookAt = currentSpyCam.transform;
         isSpyCamPlaced = true;
 
         // 스파이 캠의 뷰 설정
@@ -218,11 +219,11 @@ public class SpyCamController : Skill, IPunObservable
     public bool IsPlacementValid(Vector3 position)
     {
         // 충돌 영역 검사
-        Collider[] colliders = Physics.OverlapSphere(position, 0.5f);
+        Collider[] colliders = Physics.OverlapSphere(position, 5f);
 
         Debug.Log("설치 함수 진입");
         // 지면 검사
-        if (!Physics.Raycast(position, Vector3.down, out RaycastHit groundHit, 1.0f))
+        if (!Physics.Raycast(position, Vector3.down, out RaycastHit groundHit, 2.0f))
         {
             return true;
         }
@@ -261,5 +262,20 @@ public class SpyCamController : Skill, IPunObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         throw new System.NotImplementedException();
+    }
+
+    public void SwitchToSpyCam()
+    {
+        if (currentSpyCam != null)
+        {
+            Transform spyCamTransform = currentSpyCam.transform;
+            spyCamVirtualCamera.transform.position = spyCamTransform.position + spyCamTransform.forward * 2; // 스파이 캠 기준 앞쪽으로 카메라 위치 설정
+            spyCamVirtualCamera.transform.rotation = spyCamTransform.rotation;
+            SetSpyCamView(true);
+        }
+        else
+        {
+            Debug.LogWarning("No spy cam is currently placed.");
+        }
     }
 }
