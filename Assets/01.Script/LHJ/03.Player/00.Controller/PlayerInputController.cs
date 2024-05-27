@@ -70,6 +70,15 @@ public class PlayerInputController : MonoBehaviour
     }
     void OnMove(InputValue inputValue)
     {
+        if (shop != null)
+        {
+            if (shop.activeSelf)
+            {
+                rotateAction?.Invoke(Vector2.zero);
+                return;
+            }
+        }
+
         Vector2 MoveValue = inputValue.Get<Vector2>().normalized;
         moveAction.Invoke(MoveValue);
         MoveY = MoveValue.y;
