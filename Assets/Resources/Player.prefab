@@ -6895,7 +6895,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1.6
   m_Radius: 0.15
-  m_SlopeLimit: 35
+  m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -7052,10 +7052,10 @@ MonoBehaviour:
   groundCheckLength: 1.2
   ignoreGroundCheckLength: 0.8
   jumpHeight: 1.5
-  walkStandSpeed: 2.1
-  runStandSpeed: 5.98
-  walkCrouchSpeed: 0.5
-  runCrouchSpeed: 1.7
+  walkStandSpeed: 5
+  runStandSpeed: 8
+  walkCrouchSpeed: 1
+  runCrouchSpeed: 2
   gravitySpeed: 2
   groundLayer:
     serializedVersion: 2
@@ -19700,7 +19700,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0030000322, y: 0.11400008, z: 0.09000014}
+  m_LocalPosition: {x: 0.0030000191, y: 0.11400001, z: 0.090000115}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

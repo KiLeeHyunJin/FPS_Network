@@ -23,7 +23,7 @@ public class OnShoppingArea : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Debug.Log("ShopOpen");
+            //Debug.Log("ShopOpen");
             ShopCanvasPrefab.SetActive(true);
             Manager.Game.onShop = true;
             //Open ShopList  
