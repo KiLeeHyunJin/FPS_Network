@@ -32,6 +32,7 @@ public class ConnectManager : MonoBehaviourPunCallbacks
         StartCoroutine(UpUi());
         Debug.Log("StartOn");
         audio = GetComponent<AudioSource>();
+        audio.loop = true;
     }
     IEnumerator UpUi()
     {
