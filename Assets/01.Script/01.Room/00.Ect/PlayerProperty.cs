@@ -100,7 +100,7 @@ public class PlayerProperty : MonoBehaviour
     }
     async void PlayerInfo()
     {
-        Manager.UI.ShowPopUpUI(infoUI);
+        
        PlayerInfo info = infoUI.gameObject.GetComponent<PlayerInfo>();
         await PlayerInfoAsync(player,info);
         
@@ -108,12 +108,13 @@ public class PlayerProperty : MonoBehaviour
     async Task PlayerInfoAsync(Player player,PlayerInfo info)
     {
         UserData userData = await Manager.Game.LoadPlayerDataAsync(player);
-        info.playerName.text = $"{userData.NickName}";
+        info.playerName.text = $"{player.NickName}";
         info.playerKill.text = $"Kill Count : {userData.KillCount}";
         info.playerDeath.text = $"Death Count : {userData.DeathCount}";
         info.playerAssist.text = $"Assist Count : {userData.AssistCount}";
         info.playerPlayCount.text = $"Play Count : {userData.PlayCount}";
         info.winRate.text = $"WinRate : {userData.GetWinRate()}%";
+        Manager.UI.ShowPopUpUI(infoUI);
     }
 
     void TeamChange()
