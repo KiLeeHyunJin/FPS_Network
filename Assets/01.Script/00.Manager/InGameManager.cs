@@ -47,7 +47,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     [Tooltip("아이템 스폰 관련 스크립트 참조")]
     [SerializeField] ItemSpawnManager itemSpawnManager;
-
+    [SerializeField] AudioClip redWinClip;
+    [SerializeField] AudioClip blueWinClip;
+    [SerializeField] AudioClip drawClip;
+    [SerializeField] AudioClip winClip;
+    [SerializeField] AudioClip faleClip;
+    [SerializeField] AudioClip missionClip;
+    new AudioSource audio;
     void Start()
     {
 
@@ -56,9 +62,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         redPlayerList = new List<Player>();
         EntryListInit();
         Manager.Scene.StartFadeIn();
-
+        audio = GetComponent<AudioSource>();
+        audio.loop = false;
+        audio.playOnAwake = false;
         MessageUp("곧 게임이 시작됩니다");
-
+        pv = GetComponent<PhotonView>();
 
         if (PhotonNetwork.InRoom == false)
             return;
@@ -141,6 +149,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             pv.RPC("MessageUp", RpcTarget.All, ($"- {curRound}라운드 - \n 무기 사시고 전투를 준비하세요 {countValue}초드림"));
             //   PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
+            pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Mission);
 
             PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, true);
 
@@ -316,17 +325,21 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 int blueScore = curRoom.GetProperty<int>(DefinePropertyKey.BLUESCORE);
                 curRoom.SetProperty(DefinePropertyKey.BLUESCORE, blueScore + 1);
                 pv.RPC("MessageUp", RpcTarget.All, ("블루팀 +1점"));
-
+                pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.BlueWin);
             }
             else if (remainRed > remainBlue)
             {
                 int redScore = curRoom.GetProperty<int>(DefinePropertyKey.REDSCORE);
                 curRoom.SetProperty(DefinePropertyKey.REDSCORE, redScore + 1);
                 pv.RPC("MessageUp", RpcTarget.All, ("레드팀 +1점"));
+                pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.RedWin);
+
             }
             else
             {
                 pv.RPC("MessageUp", RpcTarget.All, ("이번 라운드는 무승부입니다"));
+                pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Draw);
+
             }
         }
         else
@@ -394,20 +407,22 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     MessageUp("승리!");
                     Manager.Game.SetIncreaseDB("win");
+                    pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Win);
 
-                }
-                else if (blueTeamScore < redTeamScore)
+            }
+            else if (blueTeamScore < redTeamScore)
                 {
                     MessageUp("패배!");
                     Manager.Game.SetIncreaseDB("lose");
+                    pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Fale);
 
-                }
-                else if (blueTeamScore == redTeamScore)
+            }
+            else if (blueTeamScore == redTeamScore)
                 {
                     MessageUp("무승부!");
-
-                }
+                    pv.RPC("PlayInfoSound", RpcTarget.All, (int)InfoType.Draw);
             }
+        }
             else
             {
                 if (blueTeamScore > redTeamScore)
@@ -441,6 +456,35 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public void AttackedEffect()
     {
        StartCoroutine(Manager.Scene.AtkedEffect());
+    }
+    [PunRPC]
+    void PlayInfoSound(int num)
+    {
+        InfoType info = (InfoType)num;
+        AudioClip clip = info switch
+        {
+            InfoType.BlueWin => blueWinClip,
+            InfoType.RedWin => redWinClip,
+            InfoType.Draw => drawClip,
+            InfoType.Mission => missionClip,
+            InfoType.Win => winClip,
+            InfoType.Fale => faleClip,
+            _ => null
+        };
+        if(clip != null)
+        {
+            audio.clip = clip;
+            audio.Play();
+        }
+    }
+    enum InfoType
+    {
+        BlueWin,
+        RedWin,
+        Draw,
+        Mission,
+        Win,
+        Fale,
     }
 }
 

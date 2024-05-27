@@ -36,6 +36,7 @@ public class ItemSpawnManager : MonoBehaviour
    
     public void ItemSpawn()
     {
+        return;
         if (!PhotonNetwork.IsMasterClient)  //호스트에서만 아이템 생성 가능 
         {
             return;
