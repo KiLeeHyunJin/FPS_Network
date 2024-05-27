@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class PurchasePrefab : MonoBehaviour
 {
-    public TextMeshProUGUI sucessText;
-    public TextMeshProUGUI failText;
+    public GameObject sucessText;
+    public GameObject failText;
 
     public InventoryController inventory; 
 
@@ -20,8 +20,8 @@ public class PurchasePrefab : MonoBehaviour
     public Button button;
     private void OnEnable()
     {
-        sucessText.enabled = false;
-        failText.enabled = false;
+        sucessText.gameObject.SetActive(false);
+        failText.gameObject.SetActive(false);
     }
 
 
@@ -53,7 +53,7 @@ public class PurchasePrefab : MonoBehaviour
         // 일단 정보를 저장해두고. --> 실제 구매시에 Gold를 체크해주는 방안을 실시해줘야함. 
     }
 
-    private void CanPurchase() //구매 가능 
+    private void CanPurchase() //구매 가능 --> yes 버튼 클릭시 진행 
     {
         if (inventory == null)
             return;
@@ -74,9 +74,16 @@ public class PurchasePrefab : MonoBehaviour
             inventory.AddItem(item);
             if(item.itemType == Item.ItemType.Skill)
                 button.interactable = false;
-           
+
 
             this.ReStartCoroutine(SucessPurchase(), ref coroutine);//만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 
+
+           /* if (coroutine != null)
+            {
+                StopCoroutine(coroutine); //만약 진행중인 코루틴이 있으면 중지시키고 코루틴을 실행해줘야함. 
+            }
+
+            coroutine =StartCoroutine(SucessPurchase());*/
 
             Manager.UI?.ClosePopUpUI(); //구매 창 닫아주기. 
                                       // 프리팹을 인벤토리에 추가해줘야함. --> 내가 보유중인 아이템 목록의 최신화 
@@ -87,20 +94,22 @@ public class PurchasePrefab : MonoBehaviour
         }
     }
 
-
     Coroutine coroutine;
     IEnumerator LackMoney() //구매시 yes ->구매실패 (부족 메시지 ) 
     {
-        failText.enabled = true;
-        yield return new WaitForSeconds(0.5f);
-        failText.enabled = false;
-    }
+        Debug.Log("부족코루틴진입");
+        failText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.7f);
+        failText.gameObject.SetActive(false);
 
+    }
     IEnumerator SucessPurchase() //yes -> 구매성공 
     {
-        sucessText.enabled = true;
-        yield return new WaitForSeconds(0.5f);
-        sucessText.enabled = false;
+        Debug.Log("성공코루틴진입");
+        sucessText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.7f);
+        sucessText.gameObject.SetActive(false);
+
     }
 
 }

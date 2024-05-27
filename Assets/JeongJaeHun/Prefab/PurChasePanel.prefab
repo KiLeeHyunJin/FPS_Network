@@ -106,8 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f663d9db83b91d74195a5f9e9a1c39a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sucessText: {fileID: 2309662241811081966}
-  failText: {fileID: 2275828427351203842}
+  sucessText: {fileID: 6872366956432894158}
+  failText: {fileID: 8480885342509888045}
   inventory: {fileID: 0}
   item: {fileID: 0}
   itemPickUp: {fileID: 0}

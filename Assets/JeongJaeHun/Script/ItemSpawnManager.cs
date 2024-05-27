@@ -31,9 +31,9 @@ public class ItemSpawnManager : MonoBehaviour
 
     private void Start()
     {
-        ItemSpawn();
+        //ItemSpawn();
     }
-   
+
     public void ItemSpawn()
     {
         if (!PhotonNetwork.IsMasterClient)  //호스트에서만 아이템 생성 가능 
@@ -41,12 +41,6 @@ public class ItemSpawnManager : MonoBehaviour
             return;
         }
 
-        if (coinPosition.Count <= 0 && healPackPosition.Count <= 0)
-        {
-            return;
-        }
-
-        Debug.Log("아이템 스폰 함수 진입");
         foreach (var coins in coinPosition)
         {
             if (coins.childCount == 0)
@@ -55,17 +49,17 @@ public class ItemSpawnManager : MonoBehaviour
 
                 items.transform.parent = coins.transform;
             }
-
-            foreach (var healpacks in healPackPosition)
+        }
+        foreach (var healpacks in healPackPosition)
+        {
+            if (healpacks.childCount == 0)
             {
-                if (healpacks.childCount == 0)
-                {
-                    GameObject heals = (PhotonNetwork.Instantiate("HealPack", healpacks.position, Quaternion.identity));
-                    heals.transform.parent = healpacks.transform;
-
-                }
+                GameObject heals = (PhotonNetwork.Instantiate("HealPack", healpacks.position, Quaternion.identity));
+                heals.transform.parent = healpacks.transform;
+                //transform 시에 실제 상태여야 자식객체로 생성 가능 (프리팹 불가능 ) --> 프리팹 언팩. 
 
             }
+
         }
     }
 }
