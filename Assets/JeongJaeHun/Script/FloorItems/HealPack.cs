@@ -22,10 +22,10 @@ public class HealPack : MonoBehaviourPun,IInteractable
         }
     }
 
-
     [PunRPC]
     private void DestroyItem()
     {
+        ItemSpawnManager.OnItemCollected(transform.position);
         PhotonNetwork.Destroy(gameObject);
     }
 

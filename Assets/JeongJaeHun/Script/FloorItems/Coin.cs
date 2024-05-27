@@ -46,7 +46,8 @@ public class Coin : MonoBehaviourPun, IInteractable
     [PunRPC]
     private void DestroyItem()
     {
+        ItemSpawnManager.OnItemCollected(transform.position); //아이템의 위치를 전달. 
         PhotonNetwork.Destroy(gameObject);
-        Debug.Log("마스터가 아이템 삭제 함.");
+        
     }
 }
