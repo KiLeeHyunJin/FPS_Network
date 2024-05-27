@@ -91,7 +91,53 @@ public class GameManager : Singleton<GameManager>
         blueTeamSpawner.position = blueSpawnPos;
     }
 
+    public void LoadProfileImage(Image img,Player player)
+    {
+        dbLoad = true;
+        
+        FireBaseManager.db
+            .GetReference("UserData")
+            .Child(player.GetProperty<string>(DefinePropertyKey.USERID))
+            .Child("profileImageName")
+            .GetValueAsync().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCanceled)
+                {
+                    Debug.Log("cancle");
+                    return;
+                }
+                else if (task.IsFaulted)
+                {
+                    Debug.Log("fault");
+                    return;
+                }
+                DataSnapshot snapshot = task.Result;
+                if (snapshot.Exists)
+                {
+                    string value = (string)snapshot.Value;
+                    Debug.Log($"value is {value}");
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        Sprite profileImage = Resources.Load<Sprite>($"ProfileImage/{value}");
+                        if (profileImage != null)
+                        {
+                            img.GetComponent<Image>().sprite = profileImage;
+                            
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Failed to load profile image from resources: " + value);
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.Log("snapShop is null ");
+                }
+            });
+        dbLoad = false;
 
+    }
     public void StartGame(Transform b, Transform r)
     {
         if(localPlayerIns != null)
