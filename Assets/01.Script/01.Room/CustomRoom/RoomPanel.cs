@@ -79,6 +79,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         deathCount.text = $"Death Count : {Manager.Game.UserData.DeathCount}";
         assistCount.text = $"Assist Count : {Manager.Game.UserData.AssistCount}";
         playCount.text = $"Play Count : {Manager.Game.UserData.PlayCount}";
+        winRate.text = $"WinRate : {Manager.Game.UserData.GetWinRate()}%";
 
         string profileImageName = Manager.Game.UserData.profileImageName;
         if (!string.IsNullOrEmpty(profileImageName))

@@ -22,6 +22,15 @@ public class UserData
         this.win = 0;
         this.lose = 0;
     }
-
+    public float GetWinRate()
+    {
+        int totalGames = win + lose;
+        if (totalGames == 0)
+        {
+            return 0f;
+        }
+        float winRate = (float)win / totalGames * 100;
+        return (float)Math.Round(winRate, 2);
+    }
 }
 

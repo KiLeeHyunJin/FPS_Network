@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -90,7 +91,28 @@ public class GameManager : Singleton<GameManager>
         redTeamSpawner.position = redSpawnPos;
         blueTeamSpawner.position = blueSpawnPos;
     }
+    public async Task<UserData> LoadPlayerDataAsync(Player player)
+    {
+       
+        var userId = player.GetProperty<string>(DefinePropertyKey.USERID);
+        var userDataReference = FireBaseManager.db.GetReference("UserData").Child(userId);
 
+        var snapshot = await userDataReference.GetValueAsync();
+
+        if (snapshot.Exists)
+        {
+            string json = snapshot.GetRawJsonValue();
+            UserData userData = JsonUtility.FromJson<UserData>(json);
+            
+            return userData;
+        }
+        else
+        {
+            Debug.Log("Snapshot is null");
+            
+            return null;
+        }
+    }
     public void LoadProfileImage(Image img,Player player)
     {
         dbLoad = true;

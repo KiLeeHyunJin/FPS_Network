@@ -1,6 +1,8 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +14,15 @@ public class PlayerProperty : MonoBehaviour
     [SerializeField] Button whisper; //귓속말 버튼
     [SerializeField] Button getOut; //추방 버튼
     [SerializeField] Button teamChange; //팀 이동 버튼
+    [SerializeField] Button playerInfo;
     [SerializeField] Button windowClick;
 
+
+    [SerializeField] PopUpUI infoUI;
     [SerializeField] TMP_Text whisperText;
     private void Awake()
     {
+        playerInfo.onClick.AddListener(PlayerInfo);
         windowClick.onClick.AddListener(Close);
         whisper.onClick.AddListener(Whisper); //귓속말 버튼에 귓속말 함수 연결
         getOut.onClick.AddListener(GetOut); //추방 버튼에 추방 함수 연결
@@ -70,6 +76,10 @@ public class PlayerProperty : MonoBehaviour
 
     void Close()
     {
+        if (infoUI != null)
+        {
+            infoUI.Close();
+        }
         gameObject.SetActive(false);
     }
     void Whisper()
@@ -87,6 +97,23 @@ public class PlayerProperty : MonoBehaviour
         PhotonNetwork.CloseConnection(player);
         //임무를 마쳤기에 비활성화
         gameObject.SetActive(false);
+    }
+    async void PlayerInfo()
+    {
+        Manager.UI.ShowPopUpUI(infoUI);
+       PlayerInfo info = infoUI.gameObject.GetComponent<PlayerInfo>();
+        await PlayerInfoAsync(player,info);
+        
+    }
+    async Task PlayerInfoAsync(Player player,PlayerInfo info)
+    {
+        UserData userData = await Manager.Game.LoadPlayerDataAsync(player);
+        info.playerName.text = $"{userData.NickName}";
+        info.playerKill.text = $"Kill Count : {userData.KillCount}";
+        info.playerDeath.text = $"Death Count : {userData.DeathCount}";
+        info.playerAssist.text = $"Assist Count : {userData.AssistCount}";
+        info.playerPlayCount.text = $"Play Count : {userData.PlayCount}";
+        info.winRate.text = $"WinRate : {userData.GetWinRate()}%";
     }
 
     void TeamChange()
