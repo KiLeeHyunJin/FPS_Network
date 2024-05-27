@@ -69,6 +69,8 @@ public class Bomb : IKWeapon
     public AudioClip bombSoundClip;
     [Tooltip("섬광탄 폭발 소리 ")]
     public AudioClip FlashSoundClip;
+    public AudioClip bombVoiceClip;
+    public AudioClip flashBangVoiceClip;
 
 
     new Rigidbody rigidbody;

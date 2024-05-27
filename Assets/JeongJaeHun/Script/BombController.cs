@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
+using static Bomb;
 
 public class BombController : MonoBehaviourPun, Iattackable
 {
@@ -15,11 +16,18 @@ public class BombController : MonoBehaviourPun, Iattackable
 
     private GameObject instanceBomb; //실제 날리는게 아니라 생성해서 날려줄 폭탄. 
 
-    private Slot slot; 
+    private Slot slot;
+    new AudioSource audio;
 
     // throw 발동시에.--> 딜레이 주기 (막 던지기 불가능하도록 애니메이션과 맞춤)
     // 무기 전환 시에 무기 투척 불가능하도록 해야함. 
+    void Awake()
+    {
+        audio = GetComponent<AudioSource>();
+        audio.playOnAwake = false;
+        audio.loop = false;
 
+    }
     public Bomb CurrentBomb 
     { 
         get 
@@ -101,6 +109,7 @@ public class BombController : MonoBehaviourPun, Iattackable
         startPosition.y += startPosition.y + 1f;
 
         photonView.RPC("ThrowBomb", RpcTarget.MasterClient, startPosition, startVelocity, (int)currentBomb.bombType);
+        photonView.RPC("EffectVoice", RpcTarget.MasterClient, (int)currentBomb.bombType);
 
         // 실제 인벤토리의 아이템을 투척하는 것이 아니라 인스턴스를 생성하고 그것을 투척함. 
 
@@ -121,6 +130,20 @@ public class BombController : MonoBehaviourPun, Iattackable
             return false;
         }
         return true;
+    }
+    [PunRPC]
+    void EffectVoice(int num)
+    {
+        BombType bombType = (BombType)num;
+        
+        audio.clip = bombType switch
+        {
+            BombType.GRENADE => currentBomb.bombVoiceClip,
+            BombType.FLASHBANG => currentBomb.flashBangVoiceClip,
+            _ => null
+        };
+        if (audio.clip != null)
+            audio.Play();
     }
 
     [PunRPC]

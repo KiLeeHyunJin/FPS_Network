@@ -19700,7 +19700,7 @@ Transform:
   m_GameObject: {fileID: 8941206275231212833}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0030000191, y: 0.11400001, z: 0.090000115}
+  m_LocalPosition: {x: 0.0030000322, y: 0.11400008, z: 0.09000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20147,7 +20147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: damage
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6772956957275582136, guid: f83cc445d46f9604e98fc1d6bea9f901, type: 3}
       propertyPath: reloadTime
@@ -20703,9 +20703,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4116479565944497551, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
+      propertyPath: bombVoiceClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 31a27206eee4f234dbfdc87e7fe3906a, type: 3}
+    - target: {fileID: 4116479565944497551, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
+      propertyPath: flashBangVoiceClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 76bc2768a3c53b24892bafc288e4cdd2, type: 3}
+    - target: {fileID: 4116479565944497551, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: <WeaponPos>k__BackingField
       value: 
       objectReference: {fileID: 6018253840433533113}
+    - target: {fileID: 7579393447868919905, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
+      propertyPath: sceneViewId
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7831276082611668189, guid: eca403eb14e23fd4cbf8a5d6f9c4686a, type: 3}
       propertyPath: m_Name
       value: FlashBang
