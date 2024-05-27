@@ -19939,7 +19939,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b5c06b051d2194f91679da94687bba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentCloseWeapon: {fileID: 0}
+  currentCloseWeapon: {fileID: 2052427345127219892}
   isAttack: 0
   isSwing: 0
   poolContainer: {fileID: 0}

@@ -435,7 +435,7 @@ public class InventoryController : MonoBehaviourPun
 
     void OnEnable()
     {
-
+        if(photonView.IsMine)
         ChangeWeaponCallback(Test); //메소드 지정
 
 
