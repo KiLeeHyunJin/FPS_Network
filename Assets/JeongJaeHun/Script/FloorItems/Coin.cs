@@ -12,7 +12,7 @@ public class Coin : MonoBehaviourPun, IInteractable
         Coin4 = 200
     }
 
-    int coinValue;
+    [SerializeField] int coinValue;
 
     private void Start()
     {
@@ -29,13 +29,24 @@ public class Coin : MonoBehaviourPun, IInteractable
 
     public void Interaction(GameObject player)
     {
-        InventoryController inventory = player.GetComponent<InventoryController>();
 
-        if(photonView.IsMine)
+        InventoryController inventory = player.GetComponentInParent<InventoryController>();
+
+        if (photonView == null) return;
+
+        if (inventory != null)
         {
             inventory.GetCoin(coinValue);
-            PhotonNetwork.Destroy(gameObject);
+
+            photonView.RPC("DestroyItem", RpcTarget.MasterClient);
         }
 
+    }
+
+    [PunRPC]
+    private void DestroyItem()
+    {
+        PhotonNetwork.Destroy(gameObject);
+        Debug.Log("마스터가 아이템 삭제 함.");
     }
 }

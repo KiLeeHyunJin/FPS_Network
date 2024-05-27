@@ -147,6 +147,8 @@ public class InventoryController : MonoBehaviourPun
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
     {
+        if (!photonView.IsMine) return;
+
         if (goldText != null)
         {
             Gold += coin; //골드 추가. 
@@ -159,6 +161,8 @@ public class InventoryController : MonoBehaviourPun
     }
     public void LoseCoin(int coin) //상점 아이템 구매 등
     {
+        if (!photonView.IsMine) return;
+
         if (goldText == null)
             return;
         Gold -= coin;

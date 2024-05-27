@@ -12,18 +12,22 @@ public class HealPack : MonoBehaviourPun,IInteractable
 
     public void Interaction(GameObject player)
     {
-        Controller controller= player.GetComponent<Controller>();
+        Controller controller= player.GetComponentInParent<Controller>();
         
         //Controller 컴포넌트가 있다면
-        if(controller != null && photonView.IsMine)
+        if(controller != null)
         {
             controller.AddHp(heal);
+            photonView.RPC("DestroyItem", RpcTarget.MasterClient);
         }
-
-        PhotonNetwork.Destroy(gameObject);
     }
 
-  
+
+    [PunRPC]
+    private void DestroyItem()
+    {
+        PhotonNetwork.Destroy(gameObject);
+    }
 
 
 }
