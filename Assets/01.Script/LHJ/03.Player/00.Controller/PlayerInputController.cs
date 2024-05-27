@@ -111,10 +111,15 @@ public class PlayerInputController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         zoomAction?.Invoke(true);
     }
-
+    bool chek = false;
     void OnInteraction(InputValue inputValue)
     {
         actions[(int)Define.Key.F]?.Invoke();
+        //if (chek)
+        //    GetComponent<AudioSource>().volume = 1;
+        //else if (chek == false)
+        //    GetComponent<AudioSource>().volume = 0;
+        //chek = !chek;
     }
     void OnC(InputValue inputValue)
     {
