@@ -114,6 +114,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         //로컬 플레이어 프로퍼티 초기화
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.READY, false);
         PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.LOAD, false);
+        PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.USERID, FireBaseManager.Auth.CurrentUser.UserId);
         currentRoom.SetProperty(DefinePropertyKey.START, false);
         
 
@@ -167,7 +168,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         }
         //객체를 복사해서 해당 부모객체의 자식으로 설정
         PlayerEntry playerEntry = Instantiate(playerEntryPrefab, parent);
-        
+       
         //객체에 초기 데이터를 설정
         playerEntry.SetPlayer(newPlayer, playerProperty, ChangeTeam, teamType);
         //플레이어 목록에 추가
@@ -274,34 +275,21 @@ public class RoomPanel : MonoBehaviourShowInfo
 
         while (PhotonNetwork.LevelLoadingProgress<1f)
         {
-
             float progress = PhotonNetwork.LevelLoadingProgress;
-            
-           
             player.SetProperty(DefinePropertyKey.LOADVALUE, progress);
-            Debug.Log($"loadProgress player {player.ActorNumber} : {(progress)}");
-
             yield return null;
-
-
             if (progress >= 0.9f)
             {
                 Debug.Log("i'mDone");
                 player.SetProperty(DefinePropertyKey.LOADVALUE,1f);
                 break;
-            }
-                
-           
+            }  
         }
         player.SetProperty(DefinePropertyKey.LOAD, true);
-
-
         while (!AllLoadComplete(DefinePropertyKey.LOAD))
         {
             yield return null;
         }
-
-        
         Debug.Log("Complete");
         
         yield return new WaitForSeconds(2f);
@@ -316,11 +304,7 @@ public class RoomPanel : MonoBehaviourShowInfo
         {
             
             if (!entry.Player.GetProperty<bool>(key))
-            {
-                Debug.Log(entry.Player.ActorNumber);
-                Debug.Log($"{entry.Player.NickName} is false");
                 return false;
-            }
         }
         return true;
     }
@@ -383,12 +367,15 @@ public class RoomPanel : MonoBehaviourShowInfo
             LoadingPlayerEntry LPEP = Instantiate(loadPlayerEntryPrefab, loadTransform);
             LPEP.SetPlayer(player);
             loadingPlayerList.Add(LPEP);
-            Debug.Log($"{player.ActorNumber} is On");
         }
-        StartCoroutine(LoadScene(PhotonNetwork.LocalPlayer));
+        StartCoroutine(dbLoader());
         isLoaded = true;
-
-        
+    }
+    IEnumerator dbLoader()
+    {
+        while(Manager.Game.dbLoad)
+        yield return null;
+        StartCoroutine(LoadScene(PhotonNetwork.LocalPlayer));
     }
     public void GameLoadPropertiesUpdate(Player targetPlayer,PhotonHashtable changedProps)
     {

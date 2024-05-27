@@ -477,8 +477,6 @@ MonoBehaviour:
   go_BulletHUD: {fileID: 4609781988719572643}
   gunImage: {fileID: 1452410285165245552}
   textBullet: {fileID: 3350504533379877911}
-  controller: {fileID: 0}
-  inventoryController: {fileID: 0}
 --- !u!1 &4774074298799921999
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,6 +716,7 @@ GameObject:
   - component: {fileID: 2409263794664792515}
   - component: {fileID: 2258150169368989002}
   - component: {fileID: 4353334978486498094}
+  - component: {fileID: 4223139341776443412}
   m_Layer: 5
   m_Name: WeaponCanvas
   m_TagString: Untagged
@@ -811,6 +810,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4223139341776443412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5823509001122650286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d8c65b5e325814b93b1e70eca86d84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GunHUD: {fileID: 5226542278695832754}
+  CloseWeaponhud: {fileID: 8857876149310064023}
+  BombHUD: {fileID: 3080685017446479605}
 --- !u!1 &6171626418464862254
 GameObject:
   m_ObjectHideFlags: 0

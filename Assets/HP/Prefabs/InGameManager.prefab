@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7243008007384791977}
   m_Layer: 0
   m_Name: InGameManager
-  m_TagString: Untagged
+  m_TagString: InGameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001167652597414179}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.68, y: 3.0500002, z: 6.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   pv: {fileID: 1899894854204855654}
   inGameTimer: {fileID: 0}
   countValue: 20
-  roundTimeValue: 20
+  roundTimeValue: 180
   blueTeamEntryList: {fileID: 0}
   redTeamEntryList: {fileID: 0}
   inGameEntryPrefab: {fileID: 7539548104374328566, guid: f7dd40e7c5ce6d646a9fb54698b606ae, type: 3}
@@ -60,10 +60,12 @@ MonoBehaviour:
   chat: {fileID: 0}
   chatViewTime: 10
   curRound: 1
-  roundCount: 2
+  roundCount: 3
   tapUi: {fileID: 0}
   playerInput: {fileID: 7243008007384791977}
   ShopCanvasPrefab: {fileID: 0}
+  shopManager: {fileID: 0}
+  itemSpawnManager: {fileID: 181303860366410747, guid: d37012668c9358a4580cab91449371af, type: 3}
 --- !u!114 &1899894854204855654
 MonoBehaviour:
   m_ObjectHideFlags: 0

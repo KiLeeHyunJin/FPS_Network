@@ -45,6 +45,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] ShopUIManager shopManager;
     Room curRoom = PhotonNetwork.CurrentRoom;
 
+    [Tooltip("아이템 스폰 관련 스크립트 참조")]
+    [SerializeField] ItemSpawnManager itemSpawnManager;
+
     void Start()
     {
 
@@ -111,23 +114,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             (teamCode == 1 ? bluePlayerList : redPlayerList).Add(player);
 
-            string profileImageName = Manager.Game.UserData.profileImageName;
-            if (!string.IsNullOrEmpty(profileImageName))
-            {
-                Sprite profileImage = Resources.Load<Sprite>($"ProfileImage/{profileImageName}");
-                if (profileImage != null)
-                {
-                    ins.GetComponent<Image>().sprite = profileImage;
-                }
-                else
-                {
-                    Debug.LogWarning("Failed to load profile image from resources: " + profileImageName);
-                }
-            }
-            else
-            {
-                Debug.Log("Image is Null");
-            }
+            Manager.Game.LoadProfileImage(ins.GetComponent<Image>(), player);
         }
 
     }
@@ -156,6 +143,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             //   PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.Time);
 
             PhotonNetwork.CurrentRoom.SetProperty(DefinePropertyKey.SHOPPINGTIME, true);
+
+            itemSpawnManager.ItemSpawn();
+
         }
     }
     public bool AllReady(string key)

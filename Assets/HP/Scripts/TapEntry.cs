@@ -20,20 +20,14 @@ public class TapEntry : MonoBehaviour
     {
         this.player = player;
         playerName.text = player.NickName;
-        SetProfileImage();
+        SetProfileImage(player);
         SetKill(0);
         SetDeath(0);
         SetAssist(0);
     }
-    void SetProfileImage()
+    void SetProfileImage(Player player)
     {
-        string profileImageName = Manager.Game.UserData.profileImageName;
-        if (!string.IsNullOrEmpty(profileImageName))
-        {
-            Sprite profileImage = Resources.Load<Sprite>($"ProfileImage/{profileImageName}");
-            if (profileImage != null)
-                entryProfileImage.sprite = profileImage;
-        }
+        Manager.Game.LoadProfileImage(entryProfileImage, player);
     }
     public void SetKill(int killCount)
     {

@@ -111,6 +111,7 @@ MonoBehaviour:
   inventory: {fileID: 0}
   item: {fileID: 0}
   itemPickUp: {fileID: 0}
+  button: {fileID: 0}
 --- !u!1 &717878405843606855
 GameObject:
   m_ObjectHideFlags: 0
