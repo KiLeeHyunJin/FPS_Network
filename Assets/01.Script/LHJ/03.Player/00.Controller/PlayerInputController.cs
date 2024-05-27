@@ -179,11 +179,25 @@ public class PlayerInputController : MonoBehaviour
     }
     void OnFireOne(InputValue inputValue)
     {
+        if (shop != null)
+        {
+            if (shop.activeSelf)
+            {
+                return;
+            }
+        }
         if (Define.FireType.One == Fire)
             actions[(int)Define.Key.Press]?.Invoke();
     }
     void OnFirePress(InputValue inputValue)
     {
+        if (shop != null)
+        {
+            if (shop.activeSelf)
+            {
+                return;
+            }
+        }
         if (Define.FireType.One == Fire)
         {
             return;
