@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -25307,7 +25307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: {fileID: 991153811194875236, guid: bc4285c35ff77bb4eabee93d7a28291c, type: 3}
-  gameSceneName: TestMap1
+  gameSceneName: BattleScene
   startButton: {fileID: 278793593139913218}
   leaveButton: {fileID: 9178414751021414072}
   redTeam: {fileID: 8552523552714933666}
