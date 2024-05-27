@@ -8,13 +8,15 @@ public class ItemSpawnManager : MonoBehaviourPun
     // 라운드 때 재생성 해야하나? 나중에 생각해보기.
 
     // 생성될 위치 저장 해 둘 트랜스폼 리스트 
-    [SerializeField] List<Transform> coinPosition;
-    [SerializeField] List<Transform> healPackPosition;
+    [SerializeField] Transform[] coinPosition;
+    [SerializeField] Transform[] healPackPosition;
 
-    [SerializeField] GameObject coin;
-    [SerializeField] GameObject heal;
+    [SerializeField] GameObject[] coinArr;
+    [SerializeField] GameObject[] healArr;
 
 
+
+    Dictionary<GameObject,Transform> dic = new Dictionary<GameObject,Transform>();
 
     public enum ItemType
     {
@@ -23,45 +25,42 @@ public class ItemSpawnManager : MonoBehaviourPun
 
     public ItemType itemType;
 
-    [SerializeField] List<(GameObject, Vector3)> itemsList = new List<(GameObject, Vector3)>();
 
-    // 여기서 재생성 시에 만약 List가 False 라면 재생성 시에 생성해주기. 
-
-    // 아이템이 삭제되면 transform 위치가 missing이 된다. -->이거이용 
+    private void Awake()
+    {
+        Debug.Log("코인 ARR 어웨이크에서 널이니??" + coinArr[0]);
+    }
 
     private void Start()
     {
         ItemSpawn();
     }
-   
+
     public void ItemSpawn()
     {
-        
+
         if (!PhotonNetwork.IsMasterClient)  //호스트에서만 아이템 생성 가능 
         {
             return;
         }
 
-        Debug.Log("아이템 스폰 함수 진입");
-        foreach (var coins in coinPosition)
+        for (int i = 0; i < coinPosition.Length; i++)
         {
-            if (coins.childCount == 0)
-            {
-                GameObject items = PhotonNetwork.Instantiate("Coin", coins.localPosition, Quaternion.identity);
+            GameObject coinItem = PhotonNetwork.Instantiate("Coin", coinPosition[i].localPosition,
+                Quaternion.identity);
 
-                //items.transform.parent = coins.transform;
-            }
 
         }
-        foreach (var healpacks in healPackPosition)
+
+        for(int i=0;i<healPackPosition.Length;i++)
         {
-            if (healpacks.childCount == 0)
-            {
-                GameObject heals = (PhotonNetwork.Instantiate("HealPack", healpacks.localPosition, Quaternion.identity));
-                heals.transform.parent = healpacks.transform;
-
-            }
-
+            GameObject healItem = (PhotonNetwork.Instantiate("HealPack", healPackPosition[i].localPosition,
+                Quaternion.identity));
         }
+
+        
     }
 }
+
+//items.transform.parent = coins.transform; --> 자식으로 생성하던 방법에서 수정. 
+/*if (healpacks.childCount == 0)*/
