@@ -35429,6 +35429,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1750944245564948913, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
+      propertyPath: chatPanel
+      value: 
+      objectReference: {fileID: 2136706740}
     - target: {fileID: 2845224366665830185, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -60308,6 +60312,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000012973412514, guid: 7664aa771caa1ce42965283fa24dbbd2, type: 3}
   m_PrefabInstance: {fileID: 2136706288}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2136706740 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3488212861632635207, guid: 30d627d86e6428b46a71c2f5e7015760, type: 3}
+  m_PrefabInstance: {fileID: 1206023751}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206023755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2137671888
 PrefabInstance:
   m_ObjectHideFlags: 0

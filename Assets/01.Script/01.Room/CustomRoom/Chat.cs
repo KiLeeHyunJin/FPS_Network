@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,11 +15,11 @@ public class Chat : MonoBehaviourPun
     [SerializeField] Button chatResetButton; //대화창 초기화 버튼
     [SerializeField] TMP_InputField inputField; //입력창
     [SerializeField] RectTransform content; //대화목록 부모
-    [SerializeField] ScrollRect scrollRect; //스크롤
+    [SerializeField] ScrollRect chatPanel; //스크롤
     [SerializeField] TMP_Text chatTextPrefab; //대화를 복사할 객체
     [SerializeField] ChatType chatTarget; //전송 타입
     Player currentMessageTarget; //전송 타겟
-
+    Coroutine chatRoutine;
     private void Awake()
     {
         inputField.onSubmit.AddListener(SendChat); //엔터할때 전송하도록 이벤트 붙여넣는다.
@@ -138,17 +139,27 @@ public class Chat : MonoBehaviourPun
         RectTransform rect = newMessage.transform as RectTransform;
         if (rect != null) // 스케일을 1로 변경
             rect.localScale = Vector3.one;
-        scrollRect.verticalScrollbar.value = 0; //스크롤 뷰를 맨 밑으로 설정
+
+        chatPanel.verticalScrollbar.value = 0; //스크롤 뷰를 맨 밑으로 설정
         if (inChatType == InChatType.InGame)
         {
+            StartCoroutine(ChatViewRoutine());
             inputField.gameObject.SetActive(false);
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
             
     }
+ 
+    IEnumerator ChatViewRoutine()
+    {
 
+        chatPanel.gameObject.SetActive(true);
+        yield return new WaitForSeconds(10f);
+        chatPanel.gameObject.SetActive(false);
 
+    }
+    
     // 클라이언트 변조로 인하여 도청의 위험이 존재
     void SendMessageToTarget(string chat)
     {

@@ -22984,7 +22984,7 @@ MonoBehaviour:
   chatResetButton: {fileID: 1866380416}
   inputField: {fileID: 666546011780734601}
   content: {fileID: 4819830896158351524}
-  scrollRect: {fileID: 7080261409317201813}
+  chatPanel: {fileID: 7080261409317201813}
   chatTextPrefab: {fileID: 6609752605871491764, guid: 7366ddc0b28280549b86596a41ee65cf, type: 3}
   chatTarget: 0
 --- !u!224 &3991244641438073817
