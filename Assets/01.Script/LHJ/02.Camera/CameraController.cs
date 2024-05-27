@@ -37,13 +37,13 @@ public class CameraController //: MonoBehaviour
     const float shakeDuration = 0.4f; // 쉐이킹 지속 시간
 
     bool isFire;
-
+    SniperAim specialAim;
     public Vector2 InputDir { private get; set; }
     public float MouseSensitivity { set { mouseSensitivity = value; } }
     public int CameraPriority { set { cam.Priority = value; } }
     Action updateAction;
     Transform ZoomPosition;
-    public CameraController (Transform _aim, Controller _owner, CinemachineVirtualCamera _cam, Transform _root, Transform _zoomIn, Transform _zoomOut)
+    public CameraController (Transform _aim, Controller _owner, CinemachineVirtualCamera _cam, Transform _root, Transform _zoomIn, Transform _zoomOut, SniperAim sniperAim)
     {
         target = _aim;
         owner = _owner;
@@ -53,6 +53,7 @@ public class CameraController //: MonoBehaviour
         noise = _cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         zoomInPos = _zoomIn;
         zoomOutPos = _zoomOut;
+        specialAim = sniperAim;
     }
     public void Init(Action<int,int> _layerMethod,  Camera _overlayCam, float _mouseSensitivity)
     {
@@ -107,6 +108,10 @@ public class CameraController //: MonoBehaviour
 
         overlay.transform.localPosition = Vector3.zero;
         overlay.transform.localRotation = Quaternion.identity;
+    }
+    public void SnipeAim(bool state)
+    {
+        specialAim.OnAim(state);
     }
     void UpdateMethod()
     {

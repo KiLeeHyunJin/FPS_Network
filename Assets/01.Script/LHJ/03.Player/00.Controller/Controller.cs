@@ -67,6 +67,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     InventoryController inventoryController;
     AnimationController animController;
     ProcessingController processingController;
+    SniperAim sniperAim;
 
     RequestController requestController;
     event Action Updates;
@@ -102,19 +103,22 @@ public class Controller : MonoBehaviourPun, IPunObservable
         
         tapEntry = FindObjectOfType<TapEntry>();
 
-        Check();
-        CallDefaultPose();
+
 
         if (photonView.IsMine)
         {
             pv = GameObject.FindWithTag("InGameManager")?.GetComponent<PhotonView>();
             HpBar = GameObject.FindWithTag("HpBar")?.GetComponent<Slider>();
+            sniperAim = FindObjectOfType<SniperAim>();
+
             if (HpBar != null)
             {
                 Debug.Log("Hp init");
                 HpBar.value = maxHp; //hp가 SetData에서 maxHp로 할당되므로 
             }
         }
+        Check();
+        CallDefaultPose();
     }
 
     void Check()
@@ -125,6 +129,8 @@ public class Controller : MonoBehaviourPun, IPunObservable
         MoveProcessInit();
         SetUpdateAction();
     }
+    public void SnipeZoom(bool state)
+        => cameraController.SnipeAim(state);
 
     void CheckMine()
     {
@@ -139,7 +145,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
         requestController = GetComponent<RequestController>();
         inventoryController = GetComponent<InventoryController>();
-        cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut);
+        cameraController = new CameraController(target, this, cam, cameraRoot, zoomIn, zoomOut, sniperAim);
         inventoryController.SetChangePose((_weaponType) =>
         {
             animController.ChangeWeapon(_weaponType, ref currentAttackable, false);
@@ -346,6 +352,9 @@ public class Controller : MonoBehaviourPun, IPunObservable
         inputController.SetZoomType(cameraController.ZoomChange);
         inputController.SetKey(CallFire, Define.Key.Press);
         inputController.SetKey(CallChangeFireType, Define.Key.V);
+
+        cameraController.ZoomChange(false);
+        SnipeZoom(false);
     }
     void MoveProcessInit()
     {
@@ -461,16 +470,19 @@ public class Controller : MonoBehaviourPun, IPunObservable
         {
             Debug.Log("you killed ");
             Player deathPlayer = photonView.Owner;
-            Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
-            deathPlayer.SetProperty(DefinePropertyKey.DEAD, true);
 
-            photonView.RPC("LogMessage", RpcTarget.All, lastShooterPlayer.NickName,deathPlayer.NickName);
+            if (_actorNumber != 0)
+            {
+                Player lastShooterPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_actorNumber);
+                deathPlayer.SetProperty(DefinePropertyKey.DEAD, true);
 
-            pv.RPC("MessageUp", photonView.Owner, ($"당신이 {lastShooterPlayer.NickName}에게 사망하였습니다. "));
-            pv.RPC("MessageUp", lastShooterPlayer, ($"당신이 {deathPlayer.NickName}를 처치했습니다. "));
+                photonView.RPC("LogMessage", RpcTarget.All, lastShooterPlayer.NickName, deathPlayer.NickName);
 
+                pv.RPC("MessageUp", photonView.Owner, ($"당신이 {lastShooterPlayer.NickName}에게 사망하였습니다. "));
+                pv.RPC("MessageUp", lastShooterPlayer, ($"당신이 {deathPlayer.NickName}를 처치했습니다. "));
+                lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
+            }
             deathPlayer.SetProperty(DefinePropertyKey.DEATH, deathPlayer.GetProperty<int>(DefinePropertyKey.DEATH) + 1);
-            lastShooterPlayer.SetProperty(DefinePropertyKey.KILL, lastShooterPlayer.GetProperty<int>(DefinePropertyKey.KILL) + 1);
 
             sensor.StopRoutine();
             animController.Die();

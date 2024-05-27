@@ -16,6 +16,7 @@ public class PlayerInputController : MonoBehaviour
     Action<bool> zoomAction;
     Controller owner;
     InputActionAsset inputs;
+    InventoryController inventory;
     public Controller Owner { set { owner = value; } }
     public AnimationController.AnimatorWeapon CurrentWeapon { get; private set; }
     [field : SerializeField] public Define.FireType MainFireType { get; private set; }
@@ -50,6 +51,7 @@ public class PlayerInputController : MonoBehaviour
 
     public void Init()
     {
+        inventory = GetComponent<InventoryController>();
         inputs = GetComponent<PlayerInput>().actions;
         ChangeFireType = Define.FireType.One;
         actions = new Action[(int)Define.Key.END];
@@ -123,7 +125,16 @@ public class PlayerInputController : MonoBehaviour
         {
             Zoom = !Zoom;
             zoomAction?.Invoke(Zoom);
-            if(Zoom)
+            if (CurrentWeapon == AnimationController.AnimatorWeapon.Rifle)
+            {
+                if ((inventory[CurrentWeapon] as Gun).gunType == Gun.GunType.SNIPER)
+                {
+                    owner.SnipeZoom(Zoom);
+                    return;
+                }
+            }
+            owner.SnipeZoom(false);
+            if (Zoom)
             {
                 StartCoroutine(ReCamePos());
             }
