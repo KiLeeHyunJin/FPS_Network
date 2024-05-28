@@ -143,7 +143,7 @@ public class Chat : MonoBehaviourPun
         chatPanel.verticalScrollbar.value = 0; //스크롤 뷰를 맨 밑으로 설정
         if (inChatType == InChatType.InGame)
         {
-            StartCoroutine(ChatViewRoutine());
+            chatRoutine= StartCoroutine(ChatViewRoutine());
             inputField.gameObject.SetActive(false);
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -153,7 +153,8 @@ public class Chat : MonoBehaviourPun
  
     IEnumerator ChatViewRoutine()
     {
-
+        if(chatRoutine!=null)
+            StopCoroutine(chatRoutine); 
         chatPanel.gameObject.SetActive(true);
         yield return new WaitForSeconds(10f);
         chatPanel.gameObject.SetActive(false);
