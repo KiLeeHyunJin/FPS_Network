@@ -6,8 +6,6 @@ using UnityEngine;
 public class InventoryController : MonoBehaviourPun
 {
 
-    // 여기서 골드 관리 및 상점 연계 (골드쓰니까)
-    [field: SerializeField] public int Gold { get; set; }
 
     public ShopFind shopFind;
     public TextMeshProUGUI goldText;
@@ -101,7 +99,7 @@ public class InventoryController : MonoBehaviourPun
 
     private void Awake()
     {
-        Gold = 500;
+        
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
         armorController = GetComponentInChildren<ArmorController>(); //Player에게 붙어있는 Armor 컨트롤러 가져오기. 
 
@@ -133,7 +131,7 @@ public class InventoryController : MonoBehaviourPun
             goldText = shopFind.goldText;
 
             if (goldText != null)
-                goldText.text = $"{Gold}";
+                goldText.text = $"{PhotonNetwork.LocalPlayer.GetProperty<int>(DefinePropertyKey.GOLD)}";
 
             shopManager = FindObjectOfType<ShopUIManager>();
             if (shopManager != null)
@@ -146,12 +144,14 @@ public class InventoryController : MonoBehaviourPun
 
     public void GetCoin(int coin) //골드 획득 기능 -->text 업데이트 연계
     {
+        int Gold = PhotonNetwork.LocalPlayer.GetProperty<int>(DefinePropertyKey.GOLD);
         if (!photonView.IsMine) return;
 
         if (goldText != null)
         {
-            Gold += coin; //골드 추가. 
-            goldText.text = $"{Gold}";
+            int resultGold = Gold + coin;
+            
+            PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.GOLD, resultGold);
         }
     }
     public void SetChangePose(Action<AnimationController.AnimatorWeapon> action)
@@ -160,13 +160,14 @@ public class InventoryController : MonoBehaviourPun
     }
     public void LoseCoin(int coin) //상점 아이템 구매 등
     {
+        int Gold = PhotonNetwork.LocalPlayer.GetProperty<int>(DefinePropertyKey.GOLD);
         if (!photonView.IsMine) return;
 
         if (goldText == null)
             return;
-        Gold -= coin;
-        if (Gold < 0) Gold = 0; //최소값 0으로 제한 
-        goldText.text = $"{Gold}"; //골드텍스트 초기화 
+        int resultGold = Gold - coin;
+        if (resultGold < 0) resultGold = 0; //최소값 0으로 제한 
+        PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.GOLD, resultGold);
     }
 
     //버튼 클릭시 가격 비교 후 AddItem 실행. 

@@ -7019,7 +7019,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad5188acd37e9a4aa43d51ea0d71607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Gold>k__BackingField: 0
   shopFind: {fileID: 0}
   goldText: {fileID: 0}
   weapons: []

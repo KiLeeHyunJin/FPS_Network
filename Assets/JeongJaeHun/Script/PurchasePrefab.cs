@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -59,7 +60,7 @@ public class PurchasePrefab : MonoBehaviour
             return;
         int price = itemPickUp.item.price; //아이템의 가격을 저장.
 
-        if (price > inventory.Gold) //보유 중인 골드보다 샵 아이템의 가격이 더 비싸면. 
+        if (price > PhotonNetwork.LocalPlayer.GetProperty<int>(DefinePropertyKey.GOLD)) //보유 중인 골드보다 샵 아이템의 가격이 더 비싸면. 
         {
             if (coroutine != null)
             {

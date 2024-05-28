@@ -60,8 +60,6 @@ public static class CustomProperty
         //프로퍼티를 저장
         player.SetCustomProperties(property);
     }
-
-
     public static T GetProperty<T>(this Room room, string key)
     {
         PhotonHashtable property = room.CustomProperties;

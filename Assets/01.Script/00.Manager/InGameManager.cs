@@ -42,6 +42,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] GameObject ShopCanvasPrefab;
 
     [SerializeField] ShopUIManager shopManager;
+    [SerializeField] ShopFind goldTextFinder;
     Room curRoom = PhotonNetwork.CurrentRoom;
 
     InventoryController inventoryController;
@@ -60,7 +61,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     PhotonView pv;
     void Start()
     {
-
+        
         tapUi.SetTapList();
         bluePlayerList = new List<Player>();
         redPlayerList = new List<Player>();
@@ -71,7 +72,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         audio.loop = false;
         audio.playOnAwake = false;
         MessageUp("곧 게임이 시작됩니다");
-        
+        PhotonNetwork.LocalPlayer.SetProperty(DefinePropertyKey.GOLD, 300);
 
         if (PhotonNetwork.InRoom == false)
             return;
@@ -227,13 +228,20 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             }
             if (allDead)
                 StartCoroutine(GameOverCall());
-
-
         }
-
+        if (changedProps.ContainsKey(DefinePropertyKey.GOLD))
+            if (targetPlayer.IsLocal)
+                UpdateGoldText();
 
     }
-
+    public void UpdateGoldText()
+    {
+        if (goldTextFinder.goldText != null)
+        {
+            goldTextFinder.goldText.text = $"{PhotonNetwork.LocalPlayer.GetProperty<int>(DefinePropertyKey.GOLD)}";
+            tapUi.gold.text = $"GOLD : {PhotonNetwork.LocalPlayer.GetProperty<int>(DefinePropertyKey.GOLD)}";
+        }
+    }
     public void InGamePropertiesUpdate(Hashtable propertiesThatChanged)
     {
         if (propertiesThatChanged.ContainsKey(DefinePropertyKey.SHOPPINGTIME))                  //2
