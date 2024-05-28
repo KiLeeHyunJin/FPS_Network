@@ -101,7 +101,7 @@ public class InventoryController : MonoBehaviourPun
 
     private void Awake()
     {
-        Gold = 1000;
+        Gold = 500;
         weapons = new IKWeapon[(int)AnimationController.AnimatorWeapon.END];
         armorController = GetComponentInChildren<ArmorController>(); //Player에게 붙어있는 Armor 컨트롤러 가져오기. 
 

@@ -68,7 +68,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
     AnimationController animController;
     ProcessingController processingController;
     SniperAim sniperAim;
-
+    
     RequestController requestController;
     event Action Updates;
 
@@ -87,6 +87,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
 
     private void Awake()
     {
+        
         animController = gameObject.GetOrAddComponent<AnimationController>();
         groundLayer = 1 << LayerMask.NameToLayer("Ground");
         Audio = GetComponent<AudioController>();

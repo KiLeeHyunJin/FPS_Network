@@ -30,6 +30,8 @@ public static class DefinePropertyKey
 
     public static string USERID = "UserId";
 
+    public static string GOLD = "Gold";
+
 
   
 

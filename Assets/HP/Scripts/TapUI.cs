@@ -22,7 +22,7 @@ public class TapUI : MonoBehaviour
     [SerializeField]public TMP_Text blueScore;
 
 
-
+    
     public void SetTapList()
     {
         for(int i = 0;i< PhotonNetwork.PlayerList.Length; i++)

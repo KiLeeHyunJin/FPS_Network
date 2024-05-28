@@ -44,6 +44,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] ShopUIManager shopManager;
     Room curRoom = PhotonNetwork.CurrentRoom;
 
+    InventoryController inventoryController;
     Coroutine startGameRoutine;
     Coroutine shoppingRoutine;
 
@@ -65,6 +66,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         redPlayerList = new List<Player>();
         EntryListInit();
         Manager.Scene.StartFadeIn();
+        inventoryController = GetComponent<InventoryController>();
         audio = GetComponent<AudioSource>();
         audio.loop = false;
         audio.playOnAwake = false;
@@ -228,6 +230,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
         }
+
 
     }
 

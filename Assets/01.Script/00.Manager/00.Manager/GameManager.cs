@@ -14,7 +14,7 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] public Transform redTeamSpawner;
     [SerializeField] public Transform blueTeamSpawner;
-    [SerializeField] int spawnRadius = 5;
+    [SerializeField] int spawnRadius = 3;
     [SerializeField] GameObject systemMessagePrefab;
     [SerializeField] Transform messageTransform;
     [SerializeField] ScrollRect systemRect;
@@ -83,9 +83,9 @@ public class GameManager : Singleton<GameManager>
         Vector3 randomDir = Random.onUnitSphere;
         Vector3 randomPos = randomDir * spawnRadius;
 
-        Vector3 redSpawnPos = red.position + randomPos + new Vector3(0,5,0);
+        Vector3 redSpawnPos = red.position + randomPos + new Vector3(0,3,0);
         //redSpawnPos.y = 1f;
-        Vector3 blueSpawnPos = blue.position + randomPos + new Vector3(0, 5, 0); ;
+        Vector3 blueSpawnPos = blue.position + randomPos + new Vector3(0, 3, 0); ;
         //blueSpawnPos.y = 1f;
 
         redTeamSpawner.position = redSpawnPos;
