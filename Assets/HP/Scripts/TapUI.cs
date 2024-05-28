@@ -20,6 +20,7 @@ public class TapUI : MonoBehaviour
 
     [SerializeField]public TMP_Text redScore;
     [SerializeField]public TMP_Text blueScore;
+    [SerializeField]public TMP_Text gold;
 
 
     
@@ -38,6 +39,7 @@ public class TapUI : MonoBehaviour
                 m_Entry = tapIns;
         }
     }
+
     public void SetUpKDA( string scoreType,Player player,int value)
     {
         foreach(TapEntry entry in entryList)
