@@ -115,7 +115,7 @@ public class Controller : MonoBehaviourPun, IPunObservable
             if (HpBar != null)
             {
                 Debug.Log("Hp init");
-                HpBar.value = maxHp; //hp가 SetData에서 maxHp로 할당되므로 
+                HpBar.value = 1; //hp가 SetData에서 maxHp로 할당되므로 
             }
         }
         Check();
