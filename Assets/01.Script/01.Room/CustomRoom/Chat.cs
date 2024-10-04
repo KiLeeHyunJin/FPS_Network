@@ -57,15 +57,21 @@ public class Chat : MonoBehaviourPun
         else
             return false;
     }
+
     public void SendTarget(Player target)
     {
-        //타겟이 비어있다면 덮어쓴다.
-        if (currentMessageTarget == null)
+        if (currentMessageTarget == null &&
+            currentMessageTarget.ActorNumber != target.ActorNumber)
+        {
+            //현재 타겟 귓속말로 설정한다.
             currentMessageTarget = target;
-        else //타겟이 현재 설정되어있는 타겟과 동일하다면 비운다.
-            currentMessageTarget = currentMessageTarget.ActorNumber == target.ActorNumber ? null : target;
-        //현재 타겟이 비워저있으면 전체채팅으로 있다면 귓속말로 설정한다.
-        chatTarget = currentMessageTarget == null ? ChatType.ALL : ChatType.TARGET;
+            chatTarget = ChatType.TARGET;
+        }
+        else
+        {//타겟이 현재 설정되어있는 타겟과 동일하다면 비운다.
+            currentMessageTarget = null;
+            chatTarget = ChatType.ALL;
+        }
     }
     void SendChat(string chat)
     {

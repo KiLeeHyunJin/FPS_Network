@@ -116,7 +116,6 @@ public class ConnectManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("isConnect");
         PhotonNetwork.NickName = FireBaseManager.Auth.CurrentUser.DisplayName;
-        
         SetActivePanel(Panel.Menu);
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

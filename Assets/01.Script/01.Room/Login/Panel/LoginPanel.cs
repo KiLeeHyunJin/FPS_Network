@@ -14,9 +14,9 @@ public class LoginPanel : MonoBehaviourShowInfo
     [SerializeField] TMP_InputField emailInputField;
     [SerializeField] TMP_InputField passInputField; 
 
-    [SerializeField] Button signUpButton; //È¸¿ø°¡ÀÔ ¹öÆ°
-    [SerializeField] Button loginButton; //·Î±×ÀÎ ¹öÆ°
-    [SerializeField] Button resetPasswordButton; //ºñ¹Ğ¹øÈ£ Àç¼³Á¤ ¹öÆ°
+    [SerializeField] Button signUpButton; //íšŒì›ê°€ì… ë²„íŠ¼
+    [SerializeField] Button loginButton; //ë¡œê·¸ì¸ ë²„íŠ¼
+    [SerializeField] Button resetPasswordButton; //ë¹„ë°€ë²ˆí˜¸ ì¬ì„¤ì • ë²„íŠ¼
 
 
     private void Awake()
@@ -43,7 +43,7 @@ public class LoginPanel : MonoBehaviourShowInfo
     {
         string id = emailInputField.text;
         string pw = passInputField.text;
-        passInputField.text = ""; //ºñ¹Ğ¹øÈ£ ÀÔ·Â¶õ ÃÊ±âÈ­
+        passInputField.text = ""; //ë¹„ë°€ë²ˆí˜¸ ì…ë ¥ë€ ì´ˆê¸°í™”
 
         SetInteractable(false);
 
@@ -51,13 +51,13 @@ public class LoginPanel : MonoBehaviourShowInfo
         {
             if (task.IsCanceled)
             {
-                ShowInfo("Á¢¼Ó ½Ãµµ°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù.");
+                ShowInfo("ì ‘ì† ì‹œë„ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.");
                 SetInteractable(true);
                 return;
             }
             if (task.IsFaulted)
             {
-                ShowError(task.Exception.InnerExceptions, "Á¢¼Ó¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+                ShowError(task.Exception.InnerExceptions, "ì ‘ì†ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
                 SetInteractable(true);
                 return;
             }

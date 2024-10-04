@@ -109,10 +109,12 @@ public class CameraController //: MonoBehaviour
         overlay.transform.localPosition = Vector3.zero;
         overlay.transform.localRotation = Quaternion.identity;
     }
+
     public void SnipeAim(bool state)
     {
         specialAim.OnAim(state);
     }
+
     void UpdateMethod()
     {
         target.position = Camera.main.transform.position + Camera.main.transform.forward * distance;// 바라볼 방향

@@ -29,21 +29,22 @@ public class VerifyPanel : MonoBehaviourShowInfo
     private void SendVerifyMail()
     {
         SetInteractable(false);
-        FireBaseManager.Auth.CurrentUser.SendEmailVerificationAsync().ContinueWithOnMainThread(task =>
+        FireBaseManager.Auth.CurrentUser.SendEmailVerificationAsync().
+            ContinueWithOnMainThread(task =>
         {
             if(task.IsCanceled)
             {
-                ShowInfo("¸ŞÀÏ Àü¼Û Ãë¼ÒµÇ¾ú½À´Ï´Ù.");
+                ShowInfo("ë©”ì¼ ì „ì†¡ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.");
                 SetInteractable(true);
                 return;
             }
             else if(task.IsFaulted)
             {
-                ShowError(task.Exception.InnerExceptions,"¸ŞÀÏ Àü¼Û ½ÇÆĞÇÏ¿´½À´Ï´Ù."); 
+                ShowError(task.Exception.InnerExceptions,"ë©”ì¼ ì „ì†¡ ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤."); 
                 SetInteractable(true);
                 return;
             }
-            ShowInfo("¸ŞÀÏ Àü¼Û ¼º°øÇÏ¿´½À´Ï´Ù.");
+            ShowInfo("ë©”ì¼ ì „ì†¡ ì„±ê³µí•˜ì˜€ìŠµë‹ˆë‹¤.");
             SetInteractable(true);
         });
     }
@@ -53,12 +54,12 @@ public class VerifyPanel : MonoBehaviourShowInfo
     {
         if (FireBaseManager.Auth == null)
             return;
-        /*verifyCo = */StartCoroutine(VerifyCheckRoutine()); //ÀÎÁõ È®ÀÎ ÄÚ·çÆ¾
-        SendVerifyMail(); //ÀÌ¸ŞÀÏ Àü¼Û ÇÔ¼ö
+        /*verifyCo = */StartCoroutine(VerifyCheckRoutine()); //ì¸ì¦ í™•ì¸ ì½”ë£¨í‹´
+        SendVerifyMail(); //ì´ë©”ì¼ ì „ì†¡ í•¨ìˆ˜
     }
     void OnDisable()
     {
-        StopAllCoroutines(); //ÀÎÁõ È®ÀÎ ÄÚ·çÆ¾ Á¾·á
+        StopAllCoroutines(); //ì¸ì¦ í™•ì¸ ì½”ë£¨í‹´ ì¢…ë£Œ
         //StopCoroutine(verifyCo);
     }
     IEnumerator VerifyCheckRoutine()
@@ -74,11 +75,11 @@ public class VerifyPanel : MonoBehaviourShowInfo
                 }
                 else if (task.IsFaulted)
                 {
-                    ShowError(task.Exception.InnerExceptions, "ÀÎÁõ¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+                    ShowError(task.Exception.InnerExceptions, "ì¸ì¦ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
                 }
                 else if (FireBaseManager.Auth.CurrentUser.IsEmailVerified)
                 {
-                    ShowInfo("ÀÎÁõµÇ¾ú½À´Ï´Ù.");
+                    ShowInfo("ì¸ì¦ë˜ì—ˆìŠµë‹ˆë‹¤.");
                     panelController.SetActivePanel(LoginPanelController.Panel.CreateNickName);
                 }
                 return;

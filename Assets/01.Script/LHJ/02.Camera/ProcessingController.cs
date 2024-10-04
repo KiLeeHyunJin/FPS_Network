@@ -156,11 +156,12 @@ public class ProcessingController : MonoBehaviour
         volumeParameter.value = 0;
 
         float time = 0;
+        float timeValue = 0;
         float outTime = flashEffectCurve[flashEffectCurve.length - 1].time;
-
+        
         while (outTime >= time)
         {
-            float timeValue = Mathf.Lerp(0, 1f, flashEffectCurve.Evaluate(time));
+            timeValue = Mathf.Lerp(0, 1f, flashEffectCurve.Evaluate(time));
             volumeParameter.value = timeValue;
             lensDistortion.intensity.SetValue(volumeParameter);
             yield return null;

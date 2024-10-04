@@ -312,8 +312,6 @@ public class RoomPanel : MonoBehaviourShowInfo
     #endregion
     public void RoomPropertiesUpdate(PhotonHashtable changedProps)
     {
-        
-        
         if (currentRoom.GetProperty<bool>(DefinePropertyKey.START) && !isLoaded)
         {
             PhotonNetwork.AsyncLoadLevelOperation.allowSceneActivation = false;
@@ -406,11 +404,12 @@ public class RoomPanel : MonoBehaviourShowInfo
     }
     public void PlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
-        //플레이어 리스트를 돌면서 
         foreach (PlayerEntry player in playerList)
         {
             if(player.isMasterSymbol.gameObject !=null)
-            player.isMasterSymbol.gameObject.SetActive(player.Player == PhotonNetwork.MasterClient);
+            {
+                player.isMasterSymbol.gameObject.SetActive(player.Player.IsMasterClient);
+            }
             //플레이어 액터가 같을 경우
             if (player.Player.ActorNumber == targetPlayer.ActorNumber)
             {
@@ -421,8 +420,6 @@ public class RoomPanel : MonoBehaviourShowInfo
         }
         //모든 플레이어가 준비되었는지 확인
         AllPlayerReadyCheck();
-
-
     }
 
     void AllPlayerReadyCheck()

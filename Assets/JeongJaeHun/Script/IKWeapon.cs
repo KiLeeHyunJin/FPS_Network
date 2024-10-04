@@ -31,9 +31,8 @@ public class IKWeapon : MonoBehaviourPun
     public void PickUp()
     {
         if (photonView == null)
-        {
             return;
-        }
+
         photonView.RPC("RPC_DestroyObject", photonView.Owner);
     }
 

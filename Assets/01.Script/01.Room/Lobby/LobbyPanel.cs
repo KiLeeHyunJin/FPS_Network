@@ -18,8 +18,8 @@ public class LobbyPanel : MonoBehaviour
     private void Awake()
     {
         roomDictionary = new Dictionary<string, RoomEntry>();
-        createButton.onClick.AddListener(CreateRoomMenu); //πÊ ª˝º∫ πˆ∆∞ø° «ÿ¥Á ¿Ã∫•∆Æ ø¨∞·
-        leaveButton.onClick.AddListener((LeaveLobby)); //∑Œ∫Ò ≥™∞°±‚ πˆ∆∞ø° ∑Œ∫Ò ≥™∞°±‚ ¿Ã∫•∆Æ ø¨∞·
+        createButton.onClick.AddListener(CreateRoomMenu); //Î∞© ÏÉùÏÑ± Î≤ÑÌäºÏóê Ìï¥Îãπ Ïù¥Î≤§Ìä∏ Ïó∞Í≤∞
+        leaveButton.onClick.AddListener((LeaveLobby)); //Î°úÎπÑ ÎÇòÍ∞ÄÍ∏∞ Î≤ÑÌäºÏóê Î°úÎπÑ ÎÇòÍ∞ÄÍ∏∞ Ïù¥Î≤§Ìä∏ Ïó∞Í≤∞
     }
     private void OnDisable()
     {
@@ -41,15 +41,7 @@ public class LobbyPanel : MonoBehaviour
         {
             if (roomDictionary.ContainsKey(room.Name))
             {
-               if (room.RemovedFromList || room.IsOpen == false || room.IsVisible == false)
-               {
-                   RoomEntry roomEntry = roomDictionary[room.Name];
-                   if (roomEntry != null)
-                       Destroy(roomEntry.gameObject);
-                   roomDictionary.Remove(room.Name);
-               }
-               else
-                   roomDictionary[room.Name].SetRoomInfo(room);
+                ChangeRoomData(room);
             }
             else
             {
@@ -58,6 +50,19 @@ public class LobbyPanel : MonoBehaviour
                 roomDictionary.Add(room.Name, entry);
             }
         }
+    }
+
+    void ChangeRoomData(RoomInfo room)
+    {
+        if (room.RemovedFromList || room.IsOpen == false || room.IsVisible == false)
+        {
+            RoomEntry roomEntry = roomDictionary[room.Name];
+            if (roomEntry != null)
+                Destroy(roomEntry.gameObject);
+            roomDictionary.Remove(room.Name);
+        }
+        else
+            roomDictionary[room.Name].SetRoomInfo(room);
     }
 
 

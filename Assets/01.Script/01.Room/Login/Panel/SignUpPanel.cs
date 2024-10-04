@@ -40,27 +40,32 @@ public class SignUpPanel : MonoBehaviourShowInfo
             return;
         }
         SetInteractable(false);
-        FireBaseManager.Auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread((task) => {
-            if (task.IsCanceled)
-            {
-                ShowInfo($"계정 생성이 취소되었습니다.");
-                SetInteractable(true);
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                ShowError(task.Exception.InnerExceptions, "사용할 수 없습니다.");
-                SetInteractable(true);
-                return;
-            }
-            Firebase.Auth.AuthResult result = task.Result;
-            panelController.SetActivePanel(LoginPanelController.Panel.Login);
-            ShowInfo("계정이 생성되었습니다.");
+
+        FireBaseManager.Auth.CreateUserWithEmailAndPasswordAsync(email, password).
+            ContinueWithOnMainThread(CheckCreateUser);
+    }
+
+    void CheckCreateUser(System.Threading.Tasks.Task<AuthResult> task)
+    {
+        if (task.IsCanceled)
+        {
+            ShowInfo($"계정 생성이 취소되었습니다.");
             SetInteractable(true);
-            Debug.LogFormat("Firebase user created successfully: {0} ({1})",
-                result.User.DisplayName, result.User.UserId);
-            Manager.Game.CreateUserData();
-        });
+            return;
+        }
+        if (task.IsFaulted)
+        {
+            ShowError(task.Exception.InnerExceptions, "사용할 수 없습니다.");
+            SetInteractable(true);
+            return;
+        }
+        Firebase.Auth.AuthResult result = task.Result;
+        panelController.SetActivePanel(LoginPanelController.Panel.Login);
+        ShowInfo("계정이 생성되었습니다.");
+        SetInteractable(true);
+        Debug.LogFormat("Firebase user created successfully: {0} ({1})",
+            result.User.DisplayName, result.User.UserId);
+        Manager.Game.CreateUserData();
     }
 
     public void Cancel()
